@@ -145,10 +145,10 @@ const App: React.FC = () => {
                     <div className="flex items-center gap-6">
                         <div className="flex gap-4 items-center">
                             <div className="text-right">
-                                <p className="text-[10px] font-black text-slate-900 uppercase">ENGLABS PROJECTS</p>
-                                <p className="text-[9px] font-bold text-slate-400 uppercase">Fleet Commander</p>
+                                <p className="text-[10px] font-black text-slate-900 uppercase">GAURAV PANCHAL</p>
+                                <p className="text-[9px] font-bold text-slate-400 uppercase">PROJECT HEAD</p>
                             </div>
-                            <div className="w-10 h-10 bg-[#0F172A] rounded-full flex items-center justify-center font-black text-emerald-500 shadow-lg border-2 border-white">EP</div>
+                            <div className="w-10 h-10 bg-[#0F172A] rounded-full flex items-center justify-center font-black text-emerald-500 shadow-lg border-2 border-white">GP</div>
                         </div>
                     </div>
                 </header>
@@ -248,6 +248,24 @@ const App: React.FC = () => {
                                             <a href="https://in.linkedin.com/company/englabs-limited" target="_blank" className="flex-1 bg-slate-100 p-4 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest hover:bg-slate-200">LinkedIn</a>
                                             <a href="https://www.instagram.com/englabs_india/" target="_blank" className="flex-1 bg-slate-100 p-4 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest hover:bg-slate-200">Instagram</a>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)]">
+                                    <h3 className="text-xl font-black text-slate-900 mb-6 flex items-center gap-3">
+                                        <Users className="w-6 h-6 text-emerald-500" /> Project Team
+                                    </h3>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        {[
+                                            "Thakur", "Rajinder", "Roshni", "Poonam", 
+                                            "Arjun", "Kunwarlal", "Anurag", "Shubham", 
+                                            "Ratnesh", "Devarshu", "Shiv Kumar", "Uditanshu", "RAM"
+                                        ].map(name => (
+                                            <div key={name} className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg border border-slate-100">
+                                                <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                                                <span className="text-[10px] font-bold text-slate-700 uppercase">{name}</span>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
