@@ -1,0 +1,2679 @@
+[
+  {
+    "name": "Thakur",
+    "summary": {
+      "name": "Thakur",
+      "period": "April 2026",
+      "workingDays": 25,
+      "totalHours": "232.81",
+      "otHours": "11.01",
+      "dailyRate": 1000,
+      "otHourlyRate": 150,
+      "basicSalary": 25000,
+      "otPay": 1651.5,
+      "netPay": 26651.5
+    },
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:05 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.17",
+        "ot": "0.17",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:05 AM",
+        "out": "07:10 PM",
+        "totalHours": "10.08",
+        "ot": "1.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "09:40 AM",
+        "out": "06:20 PM",
+        "totalHours": "8.67",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "09:10 AM",
+        "out": "09:30 PM",
+        "totalHours": "12.33",
+        "ot": "3.33",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-05",
+        "in": "09:30 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:07 AM",
+        "out": "06:13 PM",
+        "totalHours": "9.10",
+        "ot": "0.10",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "08:57 AM",
+        "out": "06:00 PM",
+        "totalHours": "9.05",
+        "ot": "0.05",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:00 AM",
+        "out": "06:07 PM",
+        "totalHours": "9.12",
+        "ot": "0.12",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:05 AM",
+        "out": "06:05 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:05 AM",
+        "out": "06:08 PM",
+        "totalHours": "9.05",
+        "ot": "0.05",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:10 AM",
+        "out": "06:10 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:10 AM",
+        "out": "06:10 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:00 AM",
+        "out": "06:13 PM",
+        "totalHours": "9.22",
+        "ot": "0.22",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:00 AM",
+        "out": "07:00 PM",
+        "totalHours": "10.00",
+        "ot": "1.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:00 AM",
+        "out": "06:10 PM",
+        "totalHours": "9.17",
+        "ot": "0.17",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "09:00 AM",
+        "out": "07:00 PM",
+        "totalHours": "10.00",
+        "ot": "1.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "09:00 AM",
+        "out": "06:13 PM",
+        "totalHours": "9.22",
+        "ot": "0.22",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "12:00 PM",
+        "out": "06:08 PM",
+        "totalHours": "6.13",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "09:10 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.08",
+        "ot": "0.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:00 AM",
+        "out": "06:37 PM",
+        "totalHours": "9.62",
+        "ot": "0.62",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "09:00 AM",
+        "out": "06:18 PM",
+        "totalHours": "9.30",
+        "ot": "0.30",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:00 AM",
+        "out": "06:40 PM",
+        "totalHours": "9.67",
+        "ot": "0.67",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:10 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.08",
+        "ot": "0.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "09:05 AM",
+        "out": "06:40 PM",
+        "totalHours": "9.58",
+        "ot": "0.58",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "09:10 AM",
+        "out": "07:20 PM",
+        "totalHours": "10.17",
+        "ot": "1.17",
+        "status": "Present"
+      }
+    ]
+  },
+  {
+    "name": "Rajinder",
+    "summary": {
+      "name": "Rajinder",
+      "period": "April 2026",
+      "workingDays": 26,
+      "totalHours": "251.36",
+      "otHours": "17.36",
+      "dailyRate": 1100,
+      "otHourlyRate": 165,
+      "basicSalary": 28600,
+      "otPay": 2864.4000000000005,
+      "netPay": 31464.4
+    },
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:00 AM",
+        "out": "06:05 PM",
+        "totalHours": "9.08",
+        "ot": "0.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:15 AM",
+        "out": "07:10 PM",
+        "totalHours": "9.92",
+        "ot": "0.92",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "09:00 AM",
+        "out": "06:05 PM",
+        "totalHours": "9.08",
+        "ot": "0.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "09:00 AM",
+        "out": "09:30 PM",
+        "totalHours": "12.50",
+        "ot": "3.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-05",
+        "in": "09:10 AM",
+        "out": "06:50 PM",
+        "totalHours": "9.67",
+        "ot": "0.67",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "09:00 AM",
+        "out": "08:00 PM",
+        "totalHours": "11.00",
+        "ot": "2.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:00 AM",
+        "out": "06:20 PM",
+        "totalHours": "9.33",
+        "ot": "0.33",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "09:15 AM",
+        "out": "06:40 PM",
+        "totalHours": "9.42",
+        "ot": "0.42",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "09:00 AM",
+        "out": "06:00 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:00 AM",
+        "out": "06:07 PM",
+        "totalHours": "9.12",
+        "ot": "0.12",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:00 AM",
+        "out": "06:40 PM",
+        "totalHours": "9.67",
+        "ot": "0.67",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:00 AM",
+        "out": "06:08 PM",
+        "totalHours": "9.13",
+        "ot": "0.13",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.25",
+        "ot": "0.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:00 AM",
+        "out": "07:10 PM",
+        "totalHours": "10.17",
+        "ot": "1.17",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.25",
+        "ot": "0.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:00 AM",
+        "out": "07:00 PM",
+        "totalHours": "10.00",
+        "ot": "1.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:00 AM",
+        "out": "06:18 PM",
+        "totalHours": "9.30",
+        "ot": "0.30",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-19",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.50",
+        "ot": "0.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "09:00 AM",
+        "out": "07:10 PM",
+        "totalHours": "10.17",
+        "ot": "1.17",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "08:50 AM",
+        "out": "07:58 PM",
+        "totalHours": "11.13",
+        "ot": "2.13",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "09:00 AM",
+        "out": "06:22 PM",
+        "totalHours": "9.37",
+        "ot": "0.37",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-26",
+        "in": "09:00 AM",
+        "out": "06:00 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:00 AM",
+        "out": "06:25 PM",
+        "totalHours": "9.42",
+        "ot": "0.42",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:00 AM",
+        "out": "06:18 PM",
+        "totalHours": "9.30",
+        "ot": "0.30",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "09:00 AM",
+        "out": "06:05 PM",
+        "totalHours": "9.08",
+        "ot": "0.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.50",
+        "ot": "0.50",
+        "status": "Present"
+      }
+    ]
+  },
+  {
+    "name": "Roshni",
+    "summary": {
+      "name": "Roshni",
+      "period": "April 2026",
+      "workingDays": 4,
+      "totalHours": "34.33",
+      "otHours": "0.00",
+      "dailyRate": 800,
+      "otHourlyRate": 120,
+      "basicSalary": 3200,
+      "otPay": 0,
+      "netPay": 3200
+    },
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "08:00 AM",
+        "out": "Missing",
+        "totalHours": "0.00",
+        "ot": "0.00",
+        "status": "Absent"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "08:10 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.83",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      }
+    ]
+  },
+  {
+    "name": "Poonam",
+    "summary": {
+      "name": "Poonam",
+      "period": "April 2026",
+      "workingDays": 25,
+      "totalHours": "218.81",
+      "otHours": "1.91",
+      "dailyRate": 800,
+      "otHourlyRate": 120,
+      "basicSalary": 20000,
+      "otPay": 229.20000000000002,
+      "netPay": 20229.2
+    },
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:00 AM",
+        "out": "Missing",
+        "totalHours": "0.00",
+        "ot": "0.00",
+        "status": "Absent"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "08:00 AM",
+        "out": "05:00 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "08:00 AM",
+        "out": "05:00 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "08:30 AM",
+        "out": "05:30 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "08:30 AM",
+        "out": "05:58 PM",
+        "totalHours": "9.47",
+        "ot": "0.47",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "08:21 AM",
+        "out": "05:52 PM",
+        "totalHours": "9.52",
+        "ot": "0.52",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "08:30 AM",
+        "out": "05:24 PM",
+        "totalHours": "8.90",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-26",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "08:30 AM",
+        "out": "05:53 PM",
+        "totalHours": "9.38",
+        "ot": "0.38",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "08:30 AM",
+        "out": "05:52 PM",
+        "totalHours": "9.37",
+        "ot": "0.37",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "08:20 AM",
+        "out": "05:30 PM",
+        "totalHours": "9.17",
+        "ot": "0.17",
+        "status": "Present"
+      }
+    ]
+  },
+  {
+    "name": "Arjun",
+    "summary": {
+      "name": "Arjun",
+      "period": "April 2026",
+      "workingDays": 27,
+      "totalHours": "253.36",
+      "otHours": "10.77",
+      "dailyRate": 1050,
+      "otHourlyRate": 155,
+      "basicSalary": 28350,
+      "otPay": 1669.35,
+      "netPay": 30019.35
+    },
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:06 AM",
+        "out": "06:24 PM",
+        "totalHours": "9.30",
+        "ot": "0.30",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:05 AM",
+        "out": "07:10 PM",
+        "totalHours": "10.08",
+        "ot": "1.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "09:13 AM",
+        "out": "06:08 PM",
+        "totalHours": "8.92",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "09:05 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.42",
+        "ot": "0.42",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-05",
+        "in": "09:30 AM",
+        "out": "06:10 PM",
+        "totalHours": "8.67",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "09:00 AM",
+        "out": "06:28 PM",
+        "totalHours": "9.47",
+        "ot": "0.47",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:00 AM",
+        "out": "06:13 PM",
+        "totalHours": "9.22",
+        "ot": "0.22",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.25",
+        "ot": "0.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "08:57 AM",
+        "out": "06:00 PM",
+        "totalHours": "9.05",
+        "ot": "0.05",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:00 AM",
+        "out": "06:07 PM",
+        "totalHours": "9.12",
+        "ot": "0.12",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:00 AM",
+        "out": "06:08 PM",
+        "totalHours": "9.13",
+        "ot": "0.13",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:00 AM",
+        "out": "06:08 PM",
+        "totalHours": "9.13",
+        "ot": "0.13",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.25",
+        "ot": "0.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.25",
+        "ot": "0.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:00 AM",
+        "out": "06:13 PM",
+        "totalHours": "9.22",
+        "ot": "0.22",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:00 AM",
+        "out": "07:10 PM",
+        "totalHours": "10.17",
+        "ot": "1.17",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:00 AM",
+        "out": "06:08 PM",
+        "totalHours": "9.13",
+        "ot": "0.13",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "09:00 AM",
+        "out": "07:10 PM",
+        "totalHours": "10.17",
+        "ot": "1.17",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "09:00 AM",
+        "out": "06:13 PM",
+        "totalHours": "9.22",
+        "ot": "0.22",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "09:00 AM",
+        "out": "06:08 PM",
+        "totalHours": "9.13",
+        "ot": "0.13",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.25",
+        "ot": "0.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:00 AM",
+        "out": "06:53 PM",
+        "totalHours": "9.88",
+        "ot": "0.88",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "09:00 AM",
+        "out": "06:22 PM",
+        "totalHours": "9.37",
+        "ot": "0.37",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:00 AM",
+        "out": "06:25 PM",
+        "totalHours": "9.42",
+        "ot": "0.42",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:00 AM",
+        "out": "06:18 PM",
+        "totalHours": "9.30",
+        "ot": "0.30",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "09:00 AM",
+        "out": "06:40 PM",
+        "totalHours": "9.67",
+        "ot": "0.67",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "09:00 AM",
+        "out": "07:10 PM",
+        "totalHours": "10.17",
+        "ot": "1.17",
+        "status": "Present"
+      }
+    ]
+  },
+  {
+    "name": "Kunwarlal",
+    "summary": {
+      "name": "Kunwarlal",
+      "period": "April 2026",
+      "workingDays": 28,
+      "totalHours": "263.81",
+      "otHours": "11.98",
+      "dailyRate": 900,
+      "otHourlyRate": 135,
+      "basicSalary": 25200,
+      "otPay": 1617.2999999999997,
+      "netPay": 26817.3
+    },
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:00 AM",
+        "out": "06:12 PM",
+        "totalHours": "9.20",
+        "ot": "0.20",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.50",
+        "ot": "0.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "09:00 AM",
+        "out": "06:50 PM",
+        "totalHours": "9.83",
+        "ot": "0.83",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-05",
+        "in": "09:10 AM",
+        "out": "06:00 PM",
+        "totalHours": "8.83",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "09:00 AM",
+        "out": "06:00 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.50",
+        "ot": "0.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "09:00 AM",
+        "out": "06:40 PM",
+        "totalHours": "9.67",
+        "ot": "0.67",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "09:00 AM",
+        "out": "06:00 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:00 AM",
+        "out": "06:50 PM",
+        "totalHours": "9.83",
+        "ot": "0.83",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.50",
+        "ot": "0.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.50",
+        "ot": "0.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:00 AM",
+        "out": "06:50 PM",
+        "totalHours": "9.83",
+        "ot": "0.83",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:00 AM",
+        "out": "06:50 PM",
+        "totalHours": "9.83",
+        "ot": "0.83",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:00 AM",
+        "out": "06:05 PM",
+        "totalHours": "9.08",
+        "ot": "0.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:00 AM",
+        "out": "06:16 PM",
+        "totalHours": "9.27",
+        "ot": "0.27",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:00 AM",
+        "out": "06:08 PM",
+        "totalHours": "9.13",
+        "ot": "0.13",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-19",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.50",
+        "ot": "0.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "09:00 AM",
+        "out": "06:19 PM",
+        "totalHours": "9.32",
+        "ot": "0.32",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "09:00 AM",
+        "out": "06:50 PM",
+        "totalHours": "9.83",
+        "ot": "0.83",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "09:00 AM",
+        "out": "06:00 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.25",
+        "ot": "0.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:00 AM",
+        "out": "07:30 PM",
+        "totalHours": "10.50",
+        "ot": "1.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "09:00 AM",
+        "out": "06:20 PM",
+        "totalHours": "9.33",
+        "ot": "0.33",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-26",
+        "in": "09:00 AM",
+        "out": "06:02 PM",
+        "totalHours": "9.03",
+        "ot": "0.03",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:00 AM",
+        "out": "06:25 PM",
+        "totalHours": "9.42",
+        "ot": "0.42",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:00 AM",
+        "out": "06:18 PM",
+        "totalHours": "9.30",
+        "ot": "0.30",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "09:00 AM",
+        "out": "06:05 PM",
+        "totalHours": "9.08",
+        "ot": "0.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "09:00 AM",
+        "out": "06:45 PM",
+        "totalHours": "9.75",
+        "ot": "0.75",
+        "status": "Present"
+      }
+    ]
+  },
+  {
+    "name": "Anurag",
+    "summary": {
+      "name": "Anurag",
+      "period": "April 2026",
+      "workingDays": 25,
+      "totalHours": "228.58",
+      "otHours": "10.16",
+      "dailyRate": 1500,
+      "otHourlyRate": 225,
+      "basicSalary": 37500,
+      "otPay": 2286,
+      "netPay": 39786
+    },
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.50",
+        "ot": "0.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:45 AM",
+        "out": "06:25 PM",
+        "totalHours": "8.67",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "09:40 AM",
+        "out": "06:30 PM",
+        "totalHours": "8.83",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "10:00 AM",
+        "out": "09:50 PM",
+        "totalHours": "11.83",
+        "ot": "2.83",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "09:30 AM",
+        "out": "08:10 PM",
+        "totalHours": "10.67",
+        "ot": "1.67",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:30 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "09:00 AM",
+        "out": "06:00 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "09:20 AM",
+        "out": "06:20 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "10:30 AM",
+        "out": "07:00 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:45 AM",
+        "out": "06:50 PM",
+        "totalHours": "9.08",
+        "ot": "0.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:55 AM",
+        "out": "06:30 PM",
+        "totalHours": "8.58",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "10:00 AM",
+        "out": "06:40 PM",
+        "totalHours": "8.67",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:50 AM",
+        "out": "06:35 PM",
+        "totalHours": "8.75",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:30 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:30 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "09:30 AM",
+        "out": "07:30 PM",
+        "totalHours": "10.00",
+        "ot": "1.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "09:15 AM",
+        "out": "06:45 PM",
+        "totalHours": "9.50",
+        "ot": "0.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "09:35 AM",
+        "out": "06:40 PM",
+        "totalHours": "9.08",
+        "ot": "0.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "09:30 AM",
+        "out": "09:30 PM",
+        "totalHours": "12.00",
+        "ot": "3.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:30 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "09:30 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:30 AM",
+        "out": "04:40 PM",
+        "totalHours": "7.17",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:45 AM",
+        "out": "06:00 PM",
+        "totalHours": "8.25",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "09:30 AM",
+        "out": "07:00 PM",
+        "totalHours": "9.50",
+        "ot": "0.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "11:00 AM",
+        "out": "06:00 PM",
+        "totalHours": "7.00",
+        "ot": "0.00",
+        "status": "Present"
+      }
+    ]
+  },
+  {
+    "name": "Shubham",
+    "summary": {
+      "name": "Shubham",
+      "period": "April 2026",
+      "workingDays": 24,
+      "totalHours": "237.77",
+      "otHours": "30.83",
+      "dailyRate": 1400,
+      "otHourlyRate": 210,
+      "basicSalary": 33600,
+      "otPay": 6474.300000000001,
+      "netPay": 40074.3
+    },
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:15 AM",
+        "out": "06:40 PM",
+        "totalHours": "9.42",
+        "ot": "0.42",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:00 AM",
+        "out": "06:50 PM",
+        "totalHours": "9.83",
+        "ot": "0.83",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.50",
+        "ot": "0.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "08:50 AM",
+        "out": "09:30 PM",
+        "totalHours": "12.67",
+        "ot": "3.67",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "09:15 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:05 AM",
+        "out": "06:40 PM",
+        "totalHours": "9.58",
+        "ot": "0.58",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "08:50 AM",
+        "out": "06:50 PM",
+        "totalHours": "10.00",
+        "ot": "1.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "08:50 AM",
+        "out": "09:00 PM",
+        "totalHours": "12.17",
+        "ot": "3.17",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:00 AM",
+        "out": "01:00 AM",
+        "totalHours": "-8.00",
+        "ot": "0.00",
+        "status": "Absent"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:50 AM",
+        "out": "06:21 PM",
+        "totalHours": "8.52",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "08:45 AM",
+        "out": "06:50 PM",
+        "totalHours": "10.08",
+        "ot": "1.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "08:50 AM",
+        "out": "08:10 PM",
+        "totalHours": "11.33",
+        "ot": "2.33",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "08:55 AM",
+        "out": "08:15 PM",
+        "totalHours": "11.33",
+        "ot": "2.33",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "08:50 AM",
+        "out": "07:10 PM",
+        "totalHours": "10.33",
+        "ot": "1.33",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "08:50 AM",
+        "out": "05:15 PM",
+        "totalHours": "8.42",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "08:35 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.92",
+        "ot": "0.92",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "08:45 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.75",
+        "ot": "0.75",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "08:45 AM",
+        "out": "06:05 PM",
+        "totalHours": "9.33",
+        "ot": "0.33",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "08:45 AM",
+        "out": "08:25 PM",
+        "totalHours": "11.67",
+        "ot": "2.67",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "08:30 AM",
+        "out": "06:50 PM",
+        "totalHours": "10.33",
+        "ot": "1.33",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "08:45 AM",
+        "out": "08:25 PM",
+        "totalHours": "11.67",
+        "ot": "2.67",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "08:50 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.67",
+        "ot": "0.67",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "08:50 AM",
+        "out": "08:20 PM",
+        "totalHours": "11.50",
+        "ot": "2.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "08:55 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.58",
+        "ot": "0.58",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "08:50 AM",
+        "out": "07:00 PM",
+        "totalHours": "10.17",
+        "ot": "1.17",
+        "status": "Present"
+      }
+    ]
+  },
+  {
+    "name": "Ratnesh",
+    "summary": {
+      "name": "Ratnesh",
+      "period": "April 2026",
+      "workingDays": 27,
+      "totalHours": "282.62",
+      "otHours": "47.05",
+      "dailyRate": 1200,
+      "otHourlyRate": 180,
+      "basicSalary": 32400,
+      "otPay": 8469,
+      "netPay": 40869
+    },
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:20 AM",
+        "out": "07:25 PM",
+        "totalHours": "10.08",
+        "ot": "1.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:25 AM",
+        "out": "08:30 AM",
+        "totalHours": "-0.92",
+        "ot": "0.00",
+        "status": "Absent"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "04:30 PM",
+        "out": "09:30 PM",
+        "totalHours": "5.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "06:30 AM",
+        "out": "10:00 PM",
+        "totalHours": "15.50",
+        "ot": "6.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-05",
+        "in": "10:30 AM",
+        "out": "08:00 PM",
+        "totalHours": "9.50",
+        "ot": "0.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "08:30 AM",
+        "out": "09:30 PM",
+        "totalHours": "13.00",
+        "ot": "4.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "08:45 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.75",
+        "ot": "0.75",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "08:30 AM",
+        "out": "06:30 PM",
+        "totalHours": "10.00",
+        "ot": "1.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "08:30 AM",
+        "out": "09:30 PM",
+        "totalHours": "13.00",
+        "ot": "4.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:00 AM",
+        "out": "06:20 PM",
+        "totalHours": "9.33",
+        "ot": "0.33",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "10:00 AM",
+        "out": "06:15 PM",
+        "totalHours": "8.25",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "10:00 AM",
+        "out": "08:30 PM",
+        "totalHours": "10.50",
+        "ot": "1.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:05 AM",
+        "out": "09:00 PM",
+        "totalHours": "11.92",
+        "ot": "2.92",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:40 AM",
+        "out": "06:30 PM",
+        "totalHours": "8.83",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:55 AM",
+        "out": "06:30 PM",
+        "totalHours": "8.58",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "10:00 AM",
+        "out": "06:30 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:55 AM",
+        "out": "06:30 PM",
+        "totalHours": "8.58",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "10:15 AM",
+        "out": "10:00 PM",
+        "totalHours": "11.75",
+        "ot": "2.75",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "10:00 AM",
+        "out": "07:00 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "10:30 AM",
+        "out": "08:15 PM",
+        "totalHours": "9.75",
+        "ot": "0.75",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "10:00 AM",
+        "out": "08:20 PM",
+        "totalHours": "10.33",
+        "ot": "1.33",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:40 AM",
+        "out": "09:40 PM",
+        "totalHours": "12.00",
+        "ot": "3.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "09:50 AM",
+        "out": "10:40 PM",
+        "totalHours": "12.83",
+        "ot": "3.83",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-26",
+        "in": "10:05 AM",
+        "out": "10:10 PM",
+        "totalHours": "12.08",
+        "ot": "3.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "10:10 AM",
+        "out": "10:20 PM",
+        "totalHours": "12.17",
+        "ot": "3.17",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "10:55 AM",
+        "out": "07:40 PM",
+        "totalHours": "8.75",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "11:00 AM",
+        "out": "09:50 PM",
+        "totalHours": "10.83",
+        "ot": "1.83",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "10:05 AM",
+        "out": "11:49 PM",
+        "totalHours": "13.73",
+        "ot": "4.73",
+        "status": "Present"
+      }
+    ]
+  },
+  {
+    "name": "Devarshu",
+    "summary": {
+      "name": "Devarshu",
+      "period": "April 2026",
+      "workingDays": 24,
+      "totalHours": "210.25",
+      "otHours": "11.25",
+      "dailyRate": 950,
+      "otHourlyRate": 140,
+      "basicSalary": 22800,
+      "otPay": 1575,
+      "netPay": 24375
+    },
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:15 AM",
+        "out": "07:00 PM",
+        "totalHours": "9.75",
+        "ot": "0.75",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:05 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.42",
+        "ot": "0.42",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "09:20 AM",
+        "out": "06:10 PM",
+        "totalHours": "8.83",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "09:15 AM",
+        "out": "07:30 PM",
+        "totalHours": "10.25",
+        "ot": "1.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-05",
+        "in": "09:30 AM",
+        "out": "07:15 PM",
+        "totalHours": "9.75",
+        "ot": "0.75",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "09:40 AM",
+        "out": "08:25 PM",
+        "totalHours": "10.75",
+        "ot": "1.75",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:20 AM",
+        "out": "01:15 PM",
+        "totalHours": "3.92",
+        "ot": "0.00",
+        "status": "Half-day"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:15 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-12",
+        "in": "10:00 AM",
+        "out": "06:00 PM",
+        "totalHours": "8.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:15 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:05 AM",
+        "out": "06:10 PM",
+        "totalHours": "9.08",
+        "ot": "0.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:20 AM",
+        "out": "07:10 PM",
+        "totalHours": "9.83",
+        "ot": "0.83",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "10:00 AM",
+        "out": "06:30 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:00 AM",
+        "out": "07:00 PM",
+        "totalHours": "10.00",
+        "ot": "1.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:00 AM",
+        "out": "01:00 PM",
+        "totalHours": "4.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "01:00 PM",
+        "out": "06:15 PM",
+        "totalHours": "5.25",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "09:00 AM",
+        "out": "06:20 PM",
+        "totalHours": "9.33",
+        "ot": "0.33",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:00 AM",
+        "out": "07:40 PM",
+        "totalHours": "10.67",
+        "ot": "1.67",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "09:00 AM",
+        "out": "06:40 PM",
+        "totalHours": "9.67",
+        "ot": "0.67",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-26",
+        "in": "10:30 AM",
+        "out": "06:00 PM",
+        "totalHours": "7.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:00 AM",
+        "out": "07:10 PM",
+        "totalHours": "10.17",
+        "ot": "1.17",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:05 AM",
+        "out": "06:20 PM",
+        "totalHours": "9.25",
+        "ot": "0.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "09:05 AM",
+        "out": "06:10 PM",
+        "totalHours": "9.08",
+        "ot": "0.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.25",
+        "ot": "0.25",
+        "status": "Present"
+      }
+    ]
+  },
+  {
+    "name": "Shiv Kumar",
+    "summary": {
+      "name": "Shiv Kumar",
+      "period": "April 2026",
+      "workingDays": 18,
+      "totalHours": "160.49",
+      "otHours": "6.72",
+      "dailyRate": 850,
+      "otHourlyRate": 125,
+      "basicSalary": 15300,
+      "otPay": 840,
+      "netPay": 16140
+    },
+    "records": [
+      {
+        "date": "2026-04-06",
+        "in": "09:10 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.08",
+        "ot": "0.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:20 AM",
+        "out": "07:30 PM",
+        "totalHours": "10.17",
+        "ot": "1.17",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "10:40 AM",
+        "out": "06:00 PM",
+        "totalHours": "7.33",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "09:30 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:30 AM",
+        "out": "04:45 PM",
+        "totalHours": "7.25",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:30 AM",
+        "out": "06:20 PM",
+        "totalHours": "8.83",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:40 AM",
+        "out": "06:20 PM",
+        "totalHours": "8.67",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:30 AM",
+        "out": "07:50 PM",
+        "totalHours": "10.33",
+        "ot": "1.33",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:15 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:50 AM",
+        "out": "06:20 PM",
+        "totalHours": "8.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:50 AM",
+        "out": "04:20 PM",
+        "totalHours": "6.50",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "09:15 AM",
+        "out": "06:18 PM",
+        "totalHours": "9.05",
+        "ot": "0.05",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:40 AM",
+        "out": "06:12 PM",
+        "totalHours": "8.53",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "10:00 AM",
+        "out": "06:20 PM",
+        "totalHours": "8.33",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:30 AM",
+        "out": "06:20 PM",
+        "totalHours": "8.83",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:25 AM",
+        "out": "06:35 PM",
+        "totalHours": "9.17",
+        "ot": "0.17",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "09:50 AM",
+        "out": "10:00 PM",
+        "totalHours": "12.17",
+        "ot": "3.17",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "10:00 AM",
+        "out": "07:45 PM",
+        "totalHours": "9.75",
+        "ot": "0.75",
+        "status": "Present"
+      }
+    ]
+  },
+  {
+    "name": "Uditanshu",
+    "summary": {
+      "name": "Uditanshu",
+      "period": "April 2026",
+      "workingDays": 28,
+      "totalHours": "255.78",
+      "otHours": "11.94",
+      "dailyRate": 900,
+      "otHourlyRate": 135,
+      "basicSalary": 25200,
+      "otPay": 1611.9000000000003,
+      "netPay": 26811.9
+    },
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:18 AM",
+        "out": "07:09 PM",
+        "totalHours": "9.85",
+        "ot": "0.85",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:24 AM",
+        "out": "12:48 PM",
+        "totalHours": "3.40",
+        "ot": "0.00",
+        "status": "Half-day"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "09:15 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.25",
+        "ot": "0.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "09:14 AM",
+        "out": "09:30 PM",
+        "totalHours": "12.27",
+        "ot": "3.27",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-05",
+        "in": "09:30 AM",
+        "out": "06:20 PM",
+        "totalHours": "8.83",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "09:10 AM",
+        "out": "08:30 PM",
+        "totalHours": "11.33",
+        "ot": "2.33",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:18 AM",
+        "out": "06:35 PM",
+        "totalHours": "9.28",
+        "ot": "0.28",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "09:06 AM",
+        "out": "06:35 PM",
+        "totalHours": "9.48",
+        "ot": "0.48",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "09:15 AM",
+        "out": "06:12 PM",
+        "totalHours": "8.95",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:15 AM",
+        "out": "06:35 PM",
+        "totalHours": "9.33",
+        "ot": "0.33",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:20 AM",
+        "out": "06:35 PM",
+        "totalHours": "9.25",
+        "ot": "0.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:15 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.25",
+        "ot": "0.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:25 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.08",
+        "ot": "0.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:10 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.33",
+        "ot": "0.33",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:30 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:15 AM",
+        "out": "06:12 PM",
+        "totalHours": "8.95",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:22 AM",
+        "out": "06:12 PM",
+        "totalHours": "8.83",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "09:50 AM",
+        "out": "06:35 PM",
+        "totalHours": "8.75",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "09:43 AM",
+        "out": "08:16 PM",
+        "totalHours": "10.55",
+        "ot": "1.55",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "09:41 AM",
+        "out": "06:40 PM",
+        "totalHours": "8.98",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "09:35 AM",
+        "out": "06:50 PM",
+        "totalHours": "9.25",
+        "ot": "0.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:23 AM",
+        "out": "07:01 PM",
+        "totalHours": "9.63",
+        "ot": "0.63",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "10:21 AM",
+        "out": "06:30 PM",
+        "totalHours": "8.15",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-26",
+        "in": "09:29 AM",
+        "out": "06:43 PM",
+        "totalHours": "9.23",
+        "ot": "0.23",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:32 AM",
+        "out": "06:35 PM",
+        "totalHours": "9.05",
+        "ot": "0.05",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:24 AM",
+        "out": "06:45 PM",
+        "totalHours": "9.35",
+        "ot": "0.35",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "10:02 AM",
+        "out": "06:02 PM",
+        "totalHours": "8.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "09:54 AM",
+        "out": "07:05 PM",
+        "totalHours": "9.18",
+        "ot": "0.18",
+        "status": "Present"
+      }
+    ]
+  },
+  {
+    "name": "RAM",
+    "summary": {
+      "name": "RAM",
+      "period": "April 2026",
+      "workingDays": 22,
+      "totalHours": "206.28",
+      "otHours": "8.45",
+      "dailyRate": 850,
+      "otHourlyRate": 125,
+      "basicSalary": 18700,
+      "otPay": 1056.25,
+      "netPay": 19756.25
+    },
+    "records": [
+      {
+        "date": "2026-04-08",
+        "in": "09:10 AM",
+        "out": "06:00 PM",
+        "totalHours": "8.83",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "09:00 AM",
+        "out": "06:00 PM",
+        "totalHours": "9.00",
+        "ot": "0.00",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:00 AM",
+        "out": "06:07 PM",
+        "totalHours": "9.12",
+        "ot": "0.12",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.25",
+        "ot": "0.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:00 AM",
+        "out": "06:08 PM",
+        "totalHours": "9.13",
+        "ot": "0.13",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:05 AM",
+        "out": "06:10 PM",
+        "totalHours": "9.08",
+        "ot": "0.08",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.25",
+        "ot": "0.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:00 AM",
+        "out": "06:12 PM",
+        "totalHours": "9.20",
+        "ot": "0.20",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:00 AM",
+        "out": "06:16 PM",
+        "totalHours": "9.27",
+        "ot": "0.27",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:00 AM",
+        "out": "06:08 PM",
+        "totalHours": "9.13",
+        "ot": "0.13",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-19",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.50",
+        "ot": "0.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "09:00 AM",
+        "out": "06:19 PM",
+        "totalHours": "9.32",
+        "ot": "0.32",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "totalHours": "9.50",
+        "ot": "0.50",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.25",
+        "ot": "0.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "09:00 AM",
+        "out": "06:50 PM",
+        "totalHours": "9.83",
+        "ot": "0.83",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:00 AM",
+        "out": "07:15 PM",
+        "totalHours": "10.25",
+        "ot": "1.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "09:00 AM",
+        "out": "06:25 PM",
+        "totalHours": "9.42",
+        "ot": "0.42",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-26",
+        "in": "09:00 AM",
+        "out": "06:02 PM",
+        "totalHours": "9.03",
+        "ot": "0.03",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "totalHours": "9.25",
+        "ot": "0.25",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:00 AM",
+        "out": "06:40 PM",
+        "totalHours": "9.67",
+        "ot": "0.67",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "09:00 AM",
+        "out": "06:40 PM",
+        "totalHours": "9.67",
+        "ot": "0.67",
+        "status": "Present"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "09:00 AM",
+        "out": "07:20 PM",
+        "totalHours": "10.33",
+        "ot": "1.33",
+        "status": "Present"
+      }
+    ]
+  }
+]

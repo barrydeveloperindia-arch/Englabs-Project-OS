@@ -1,0 +1,66 @@
+{
+  "projectId": "C3020",
+  "client": "IDEAFORGE",
+  "planning": {
+    "value": 74276.88,
+    "budget": 51994,
+    "deliveryTerms": "ToPay",
+    "poConfirmed": true,
+    "startDate": "2023-06-12"
+  },
+  "production": {
+    "currentStage": "Workshop Fabrication",
+    "stages": [
+      {
+        "name": "Engineering Design",
+        "status": "Completed",
+        "lead": "Gaurav Panchal"
+      },
+      {
+        "name": "Machine Processing",
+        "status": "Completed",
+        "lead": "Paras"
+      },
+      {
+        "name": "Workshop Fabrication",
+        "status": "Completed",
+        "lead": "Parth"
+      },
+      {
+        "name": "Sanding",
+        "status": "In Progress",
+        "lead": "Parth"
+      },
+      {
+        "name": "Painting",
+        "status": "Pending",
+        "lead": "Parth"
+      },
+      {
+        "name": "Drying",
+        "status": "Pending",
+        "lead": "Parth"
+      },
+      {
+        "name": "Finishing",
+        "status": "Pending",
+        "lead": "Parth"
+      },
+      {
+        "name": "Final Packaging",
+        "status": "Pending",
+        "lead": "Parth"
+      }
+    ]
+  },
+  "metrics": {
+    "totalComponents": 32,
+    "materialConsumption": "Aluminum 6061, MS Sheet",
+    "workforce": [
+      "Gaurav Panchal",
+      "Paras",
+      "Parth",
+      "Sandeep"
+    ]
+  }
+}
