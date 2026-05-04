@@ -41,8 +41,13 @@ const App: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
     const [gateEntries, setGateEntries] = useState<any[]>(() => {
-        const saved = localStorage.getItem('englabs_gate_react');
-        return saved ? JSON.parse(saved) : [];
+        try {
+            const saved = localStorage.getItem('englabs_gate_react');
+            return saved ? JSON.parse(saved) : [];
+        } catch (e) {
+            console.error("Failed to parse gate entries:", e);
+            return [];
+        }
     });
     const [currentView, setCurrentView] = useState<'PROJECTS' | 'GATE_REGISTER' | 'SHOWROOM' | 'FOOD_REGISTER' | 'SYSTEM_GUARD' | 'BILLING' | 'QA_TESTER' | 'DIGITAL_VAULT'>('PROJECTS');
 
