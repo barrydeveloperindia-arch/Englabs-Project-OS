@@ -1,0 +1,25 @@
+{
+  "projectId": "ENGLABS-01",
+  "client": "ENGLABS INDIA PVT LTD",
+  "planning": {
+    "value": 10000000,
+    "budget": 7500000,
+    "deliveryTerms": "Ex-Works",
+    "poConfirmed": true,
+    "startDate": "2026-05-04"
+  },
+  "production": {
+    "currentStage": "Engineering Design",
+    "stages": [
+      { "name": "Engineering Design", "status": "In Progress", "lead": "Devanshu Madke" },
+      { "name": "Material Sourcing", "status": "Pending", "lead": "Shubham Rohilla" },
+      { "name": "Machining & Fab", "status": "Pending", "lead": "Anurag Sahani" },
+      { "name": "QA & Testing", "status": "Pending", "lead": "Shiv Kumar" }
+    ]
+  },
+  "metrics": {
+    "totalComponents": 0,
+    "materialConsumption": "INITIALIZING...",
+    "workforce": ["SAM", "Gaurav Panchal"]
+  }
+}

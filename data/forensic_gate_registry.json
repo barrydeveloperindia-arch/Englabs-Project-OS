@@ -1,0 +1,42 @@
+[
+  {
+    "id": "OUT-002",
+    "timestamp": "2026-05-04T12:27:11.367Z",
+    "type": "OUTWARD",
+    "materialName": "REGISTER",
+    "quantity": 2,
+    "unit": "Nos",
+    "partyName": "BRIGHT KIDS PRESCHOOL",
+    "vehicleNumber": "WLKING",
+    "fromLocation": "ENGLABS OFFICE",
+    "toLocation": "PANCHKULA",
+    "driverName": "STAFF",
+    "employeeName": "SAM",
+    "supervisorName": "Gaurav Panchal",
+    "invoiceNumber": "N/A",
+    "amount": 0,
+    "remarks": "HANDOVER COMPLETE",
+    "gatePassNumber": "GP-001",
+    "isLocked": true,
+    "status": "VERIFIED"
+  },
+  {
+    "id": "IN-001",
+    "timestamp": "2026-05-04T12:06:00.000Z",
+    "type": "INWARD",
+    "materialName": "EPE ROLL-392119 2MM",
+    "quantity": 2,
+    "unit": "Roll",
+    "partyName": "M/S BALA JI ENTERPRISES",
+    "invoiceNumber": "543",
+    "vehicleNumber": "CH01TE7319",
+    "fromLocation": "INDUSTRIAL AREA, CHANDIGARH",
+    "toLocation": "MDC PANCHKULA",
+    "amount": 8024,
+    "employeeName": "SAM",
+    "supervisorName": "Gaurav Panchal",
+    "remarks": "GOOD CONDITION / SEALED",
+    "isLocked": true,
+    "status": "VERIFIED"
+  }
+]

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Plus, Target, DollarSign, Calendar } from 'lucide-react';
 import { ProjectData, STAGES } from '../lib/project';
+import { saveProjectToFirebase } from '../lib/database_service';
 
 interface NewProjectModalProps {
     isOpen: boolean;
@@ -43,6 +44,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({ isOpen, onClose, onAd
                 workforce: ["TBD"]
             }
         };
+        saveProjectToFirebase(newProject);
         onAdd(newProject);
         onClose();
     };

@@ -1,0 +1,290 @@
+import React, { useState } from 'react';
+import { 
+    X, 
+    Save, 
+    Utensils, 
+    CreditCard, 
+    FileText, 
+    User, 
+    Briefcase,
+    AlertCircle,
+    Camera
+} from 'lucide-react';
+import { 
+    FoodOrder, 
+    FoodPlatform, 
+    OrderType, 
+    Purpose, 
+    PaymentMode, 
+    PaidBy,
+    PLATFORMS,
+    ORDER_TYPES,
+    PURPOSES,
+    PAYMENT_MODES,
+    PAID_BY_OPTIONS,
+    DEPARTMENTS,
+    generateFoodId
+} from '../lib/food_system';
+
+interface Props {
+    onClose: () => void;
+    onSubmit: (order: FoodOrder) => void;
+    orderCount: number;
+    initialData?: FoodOrder;
+}
+
+const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initialData }) => {
+    const [formData, setFormData] = useState<Partial<FoodOrder>>(initialData || {
+        entryId: generateFoodId(orderCount),
+        timestamp: new Date().toISOString(),
+        platform: 'Sky-5',
+        orderType: 'Individual',
+        purpose: 'Official Work',
+        paymentMode: 'UPI',
+        paidBy: 'Employee',
+        hasBill: true,
+        status: 'Pending',
+        attachmentUrl: initialData?.attachmentUrl || ''
+    });
+
+    const [previewUrl, setPreviewUrl] = useState<string>(initialData?.attachmentUrl || '');
+
+    const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const url = URL.createObjectURL(file);
+            setPreviewUrl(url);
+            setFormData({...formData, attachmentUrl: url});
+        }
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (onSubmit) onSubmit(formData as FoodOrder);
+    };
+
+    return (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-6 sm:p-12">
+            <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={onClose} />
+            
+            <div className="relative w-full max-w-4xl bg-white rounded-[3rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+                {/* HEADER */}
+                <div className="px-10 py-8 bg-slate-900 text-white flex justify-between items-center">
+                    <div className="flex items-center gap-4">
+                        <div className="p-3 bg-emerald-500 rounded-2xl">
+                            <Utensils className="w-6 h-6 text-slate-900" />
+                        </div>
+                        <div>
+                            <h2 className="text-xl font-black tracking-tight">{initialData ? 'EDIT FOOD ORDER' : 'LOG FOOD ORDER'}</h2>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-0.5">{initialData ? `Adjusting ${initialData.entryId}` : 'Expediting Official Sustenance'}</p>
+                        </div>
+                    </div>
+                    <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-xl transition-colors">
+                        <X className="w-6 h-6" />
+                    </button>
+                </div>
+
+                <form onSubmit={handleSubmit} className="p-10 max-h-[75vh] overflow-y-auto custom-scrollbar">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        
+                        {/* SECTION 1: BASIC & ORDER */}
+                        <div className="space-y-8">
+                            <div className="flex items-center gap-3 pb-2 border-b border-slate-100">
+                                <User className="w-4 h-4 text-emerald-500" />
+                                <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">Requester Details</h3>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Employee Name</label>
+                                    <input 
+                                        required
+                                        type="text" 
+                                        className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                        placeholder="Enter name..."
+                                        value={formData.employeeName || ''}
+                                        onChange={e => setFormData({...formData, employeeName: e.target.value})}
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Department</label>
+                                    <select 
+                                        className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                        value={formData.department}
+                                        onChange={e => setFormData({...formData, department: e.target.value as any})}
+                                    >
+                                        {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="space-y-8 pt-4">
+                                <div className="flex items-center gap-3 pb-2 border-b border-slate-100">
+                                    <Briefcase className="w-4 h-4 text-emerald-500" />
+                                    <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">Order Specification</h3>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Platform</label>
+                                        <select 
+                                            className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                            value={formData.platform}
+                                            onChange={e => setFormData({...formData, platform: e.target.value as FoodPlatform})}
+                                        >
+                                            {PLATFORMS.map(p => <option key={p} value={p}>{p}</option>)}
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Vendor Name</label>
+                                        <input 
+                                            required
+                                            type="text" 
+                                            className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                            placeholder="e.g. Sky Kitchen"
+                                            value={formData.vendorName || ''}
+                                            onChange={e => setFormData({...formData, vendorName: e.target.value})}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Food Items (Brief)</label>
+                                    <textarea 
+                                        required
+                                        className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all h-24 resize-none"
+                                        placeholder="e.g. 2x Thali, 4x Samosas"
+                                        value={formData.items || ''}
+                                        onChange={e => setFormData({...formData, items: e.target.value})}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* SECTION 2: PURPOSE & FINANCE */}
+                        <div className="space-y-8">
+                            <div className="flex items-center gap-3 pb-2 border-b border-slate-100">
+                                <AlertCircle className="w-4 h-4 text-emerald-500" />
+                                <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">Purpose & Justification</h3>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Purpose</label>
+                                    <select 
+                                        className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                        value={formData.purpose}
+                                        onChange={e => setFormData({...formData, purpose: e.target.value as Purpose})}
+                                    >
+                                        {PURPOSES.map(p => <option key={p} value={p}>{p}</option>)}
+                                    </select>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Project Code (Optional)</label>
+                                    <input 
+                                        type="text" 
+                                        className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                        placeholder="e.g. C2931"
+                                        value={formData.projectCode || ''}
+                                        onChange={e => setFormData({...formData, projectCode: e.target.value})}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Business Justification</label>
+                                <textarea 
+                                    required
+                                    className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all h-24 resize-none"
+                                    placeholder="Why is this order being placed?"
+                                    value={formData.justification || ''}
+                                    onChange={e => setFormData({...formData, justification: e.target.value})}
+                                />
+                            </div>
+
+                            <div className="space-y-8 pt-4">
+                                <div className="flex items-center gap-3 pb-2 border-b border-slate-100">
+                                    <CreditCard className="w-4 h-4 text-emerald-500" />
+                                    <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">Financial Settlement</h3>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Total Bill Amount (₹)</label>
+                                        <input 
+                                            required
+                                            type="number" 
+                                            className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-black focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                            placeholder="0.00"
+                                            value={formData.amount || ''}
+                                            onChange={e => setFormData({...formData, amount: parseFloat(e.target.value)})}
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Paid By</label>
+                                        <select 
+                                            className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                            value={formData.paidBy}
+                                            onChange={e => setFormData({...formData, paidBy: e.target.value as PaidBy})}
+                                        >
+                                            {PAID_BY_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                    <div className="flex-1">
+                                        <p className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Bill Verification</p>
+                                        <p className="text-[9px] font-bold text-slate-400 uppercase mt-0.5">Physical or digital receipt available</p>
+                                    </div>
+                                    
+                                    <div className="relative group shrink-0">
+                                        <input 
+                                            type="file" 
+                                            accept="image/*" 
+                                            className="absolute inset-0 opacity-0 cursor-pointer z-10" 
+                                            onChange={handlePhotoChange}
+                                        />
+                                        {previewUrl ? (
+                                            <div className="w-12 h-12 rounded-xl overflow-hidden border-2 border-white shadow-md relative">
+                                                <img src={previewUrl} className="w-full h-full object-cover" alt="Bill" />
+                                            </div>
+                                        ) : (
+                                            <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center group-hover:border-emerald-500 transition-all">
+                                                <Camera className="w-4 h-4 text-slate-300 group-hover:text-emerald-500" />
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <label className="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" className="sr-only peer" checked={formData.hasBill} onChange={e => setFormData({...formData, hasBill: e.target.checked})} />
+                                        <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* ACTIONS */}
+                    <div className="mt-12 flex gap-4">
+                        <button 
+                            type="button"
+                            onClick={onClose}
+                            className="flex-1 py-4 border-2 border-slate-100 rounded-2xl text-[10px] font-black text-slate-400 uppercase tracking-widest hover:bg-slate-50 transition-all"
+                        >
+                            CANCEL LOG
+                        </button>
+                        <button 
+                            type="submit"
+                            className="flex-[2] py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-900 rounded-2xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest shadow-lg shadow-emerald-500/20 transition-all active:scale-95"
+                        >
+                            <Save className="w-4 h-4" /> {initialData ? 'UPDATE LEDGER' : 'COMMIT TO LEDGER'}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
+
+export default FoodOrderForm;
