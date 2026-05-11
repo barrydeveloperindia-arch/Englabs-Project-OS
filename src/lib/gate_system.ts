@@ -1,22 +1,31 @@
 export type EntryType = 'INWARD' | 'OUTWARD';
 
+export interface GateItem {
+    id: number;
+    name: string;
+    quantity: number;
+    unit: string;
+    amount: number;
+}
+
 export interface GateEntry {
     id: string;
     type: EntryType;
     timestamp: string;
-    materialName: string;
-    quantity: number;
+    materialName: string; // Summary of items for bulk entries
+    quantity: number; // Total quantity for bulk entries
     unit: string;
     vehicleNumber: string;
     partyName: string;
     fromLocation: string;
     toLocation: string;
     invoiceNumber: string;
-    amount: number;
+    amount: number; // Total amount for bulk entries
     employeeName: string; // Issued/Received By
     supervisorName: string; // Authorized By
     driverName: string; // Carrier / Driver Name
     remarks: string;
+    items?: GateItem[]; // Array for bulk entries
     gatePassNumber?: string; // Mandatory for OUTWARD
     deliveryType?: string; // For OUTWARD
     photoUrl?: string; // URL to uploaded material photo

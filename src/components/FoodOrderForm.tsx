@@ -34,17 +34,20 @@ interface Props {
 }
 
 const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initialData }) => {
-    const [formData, setFormData] = useState<Partial<FoodOrder>>(initialData || {
-        entryId: generateFoodId(orderCount),
-        timestamp: new Date().toISOString(),
-        platform: 'Sky-5',
-        orderType: 'Individual',
-        purpose: 'Official Work',
-        paymentMode: 'UPI',
-        paidBy: 'Employee',
-        hasBill: true,
-        status: 'Pending',
-        attachmentUrl: initialData?.attachmentUrl || ''
+    const [formData, setFormData] = useState<Partial<FoodOrder>>(() => {
+        if (initialData) return initialData;
+        return {
+            entryId: generateFoodId(orderCount),
+            timestamp: new Date().toISOString(),
+            platform: 'Sky-5',
+            orderType: 'Individual',
+            purpose: 'Official Work',
+            paymentMode: 'UPI',
+            paidBy: 'Employee',
+            hasBill: true,
+            status: 'Pending',
+            attachmentUrl: ''
+        };
     });
 
     const [previewUrl, setPreviewUrl] = useState<string>(initialData?.attachmentUrl || '');

@@ -23,6 +23,7 @@ import GateEntryForm from './GateEntryForm';
 import GatePassSlip from './GatePassSlip';
 import { GateEntry, generateId, generateGatePassId, UNITS, DELIVERY_TYPES } from '../lib/gate_system';
 import { syncLocalToFirebase } from '../lib/database_service';
+import { AuditLog } from '../lib/system_guard';
 
 interface Props {
     entries: GateEntry[];
@@ -78,23 +79,30 @@ const GateRegister: React.FC<Props> = ({ entries, setEntries, onLog }) => {
     };
 
     const shareOnWhatsApp = (entry: GateEntry) => {
+        let itemsDetail = '';
+        const entryAny = entry as any;
+        if (entryAny.items && entryAny.items.length > 0) {
+            itemsDetail = '\n*ITEMIZED BREAKDOWN:*\n';
+            entryAny.items.forEach((item: any, idx: number) => {
+                const hsn = item.hsnCode ? ` [HSN: ${item.hsnCode}]` : '';
+                itemsDetail += `${idx + 1}. ${item.name}${hsn} | ${item.quantity} ${item.unit} @ ₹${item.rate || 0} = ₹${(item.amount || 0).toLocaleString()}\n`;
+            });
+            itemsDetail += `--------------------------------\n`;
+        }
+
         const text = encodeURIComponent(
             `*ENGLABS GATE PASS - ${entry.id}*\n` +
             `--------------------------------\n` +
             `*Type:* ${entry.type}\n` +
             `*Date:* ${new Date(entry.timestamp).toLocaleDateString()}\n` +
-            `*Time:* ${new Date(entry.timestamp).toLocaleTimeString()}\n` +
-            `*Material:* ${entry.materialName}\n` +
-            `*Qty:* ${entry.quantity} ${entry.unit}\n` +
+            `*Vendor/Party:* ${entry.partyName}\n` +
             `*Vehicle:* ${entry.vehicleNumber}\n` +
-            `*Carrier/Driver:* ${entry.driverName}\n` +
-            `*Party:* ${entry.partyName}\n` +
-            `*From:* ${entry.fromLocation}\n` +
-            `*To:* ${entry.toLocation}\n` +
-            `*Ref:* ${entry.invoiceNumber}\n` +
-            `*Issued By:* ${entry.employeeName}\n` +
-            `*Authorized By:* ${entry.supervisorName}\n` +
-            `*Status:* VERIFIED\n` +
+            `*Invoice:* ${entry.invoiceNumber}\n` +
+            itemsDetail +
+            `*GRAND TOTAL: ₹${(entry.amount || 0).toLocaleString()}*\n` +
+            `--------------------------------\n` +
+            `*Verified By:* ${entry.employeeName}\n` +
+            `*Supervisor:* ${entry.supervisorName}\n` +
             `--------------------------------\n` +
             `_Official Gate Registry System_`
         );
@@ -375,7 +383,7 @@ const EntryTable = ({ entries, onEdit, onDelete, onPrint, onShare }: any) => (
                         <td className="py-6 px-4">
                             <div className="flex items-center gap-2">
                                 <p className="font-bold text-slate-900 text-sm leading-tight">{entry.partyName}</p>
-                                {entry.invoicePhotoUrl && <FileText className="w-3 h-3 text-emerald-500" title="Invoice Uploaded" />}
+                                {entry.invoicePhotoUrl && <FileText className="w-3 h-3 text-emerald-500" />}
                             </div>
                             <p className="text-[10px] font-black text-emerald-500 uppercase mt-1 tracking-widest">{entry.vehicleNumber}</p>
                         </td>

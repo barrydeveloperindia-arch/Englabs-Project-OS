@@ -1,5 +1,37 @@
 [
   {
+    "id": "IN-002",
+    "timestamp": "2026-05-11T12:58:30Z",
+    "type": "INWARD",
+    "materialName": "Bulk: COLIN, Harpic, Dishwasher, Floor Cleener...",
+    "quantity": 106,
+    "items": [
+      { "id": 1, "name": "COLIN", "hsnCode": "", "quantity": 5, "unit": "Nos", "rate": 50, "amount": 250 },
+      { "id": 2, "name": "Harpic", "hsnCode": "", "quantity": 5, "unit": "Nos", "rate": 55, "amount": 275 },
+      { "id": 3, "name": "Dishwasher", "hsnCode": "", "quantity": 5, "unit": "Nos", "rate": 80, "amount": 400 },
+      { "id": 4, "name": "Floor Cleener (Fernal)", "hsnCode": "", "quantity": 5, "unit": "Nos", "rate": 38, "amount": 190 },
+      { "id": 5, "name": "Handwash", "hsnCode": "", "quantity": 5, "unit": "Nos", "rate": 68, "amount": 340 },
+      { "id": 6, "name": "Room Freshner 270 ml", "hsnCode": "", "quantity": 12, "unit": "Nos", "rate": 140, "amount": 1680 },
+      { "id": 7, "name": "Flour Duster", "hsnCode": "", "quantity": 1, "unit": "Nos", "rate": 280, "amount": 280 },
+      { "id": 8, "name": "Kitchen Duster", "hsnCode": "", "quantity": 12, "unit": "Nos", "rate": 60, "amount": 720 },
+      { "id": 9, "name": "Toilet brush", "hsnCode": "", "quantity": 2, "unit": "Nos", "rate": 60, "amount": 120 },
+      { "id": 10, "name": "Mortin", "hsnCode": "", "quantity": 12, "unit": "Nos", "rate": 90, "amount": 1080 },
+      { "id": 11, "name": "Garbaj bag small", "hsnCode": "", "quantity": 12, "unit": "Nos", "rate": 70, "amount": 840 },
+      { "id": 12, "name": "Garbaj Bag Large kg", "hsnCode": "", "quantity": 30, "unit": "Kg", "rate": 130, "amount": 3900 }
+    ],
+    "partyName": "Mr. Parmod Behl",
+    "invoiceNumber": "SLIP-2026-05-11",
+    "vehicleNumber": "LOCAL",
+    "fromLocation": "CHANDIGARH",
+    "toLocation": "ENGLABS MDC",
+    "amount": 10075,
+    "employeeName": "Uditanshu",
+    "supervisorName": "Gaurav Panchal",
+    "remarks": "INWARD MATERIAL RECEIVED AND VERIFIED",
+    "isLocked": true,
+    "status": "VERIFIED"
+  },
+  {
     "id": "OUT-002",
     "timestamp": "2026-05-04T12:27:11.367Z",
     "type": "OUTWARD",

@@ -33,6 +33,10 @@ import QADashboard from './components/QADashboard';
 import DigitalEvidence from './components/DigitalEvidence';
 import { ProjectData, STAGES, ProjectStage } from './lib/project';
 import { logAction, AuditLog } from './lib/system_guard';
+import { fetchGateEntries } from './lib/database_service';
+import forensicRegistry from '../data/forensic_gate_registry.json';
+
+const projectFiles = import.meta.glob('/data/*.json');
 
 const App: React.FC = () => {
     const [projects, setProjects] = useState<ProjectData[]>([]);
@@ -42,8 +46,10 @@ const App: React.FC = () => {
     const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
     const [gateEntries, setGateEntries] = useState<any[]>(() => {
         try {
-            const saved = localStorage.getItem('englabs_gate_react');
-            return saved ? JSON.parse(saved) : [];
+            const saved = localStorage.getItem('englabs_gate_v2');
+            console.log("Retrieved from localStorage (englabs_gate_v2):", saved);
+            if (!saved || saved === 'undefined') return [];
+            return JSON.parse(saved);
         } catch (e) {
             console.error("Failed to parse gate entries:", e);
             return [];
@@ -52,28 +58,57 @@ const App: React.FC = () => {
     const [currentView, setCurrentView] = useState<'PROJECTS' | 'GATE_REGISTER' | 'SHOWROOM' | 'FOOD_REGISTER' | 'SYSTEM_GUARD' | 'BILLING' | 'QA_TESTER' | 'DIGITAL_VAULT'>('PROJECTS');
 
     useEffect(() => {
-        const projectFiles = import.meta.glob('../data/*.json');
+        console.log("Found project files:", Object.keys(projectFiles));
+        
         const loadProjects = async () => {
             const loadedProjects: ProjectData[] = [];
             for (const path in projectFiles) {
                 try {
-                    const module = await projectFiles[path]() as { default: ProjectData };
-                    loadedProjects.push(module.default);
+                    const module = await projectFiles[path]() as { default: any };
+                    const data = module.default;
+                    if (data && typeof data === 'object' && !Array.isArray(data) && data.projectId) {
+                        loadedProjects.push(data as ProjectData);
+                    } else {
+                        console.log(`Skipping non-project file: ${path}`);
+                    }
                 } catch (e) {
                     console.error("Error loading project:", path, e);
                 }
             }
+            
+            console.log("Loaded projects:", loadedProjects.length);
             if (loadedProjects.length > 0) {
                 setProjects(loadedProjects);
                 const defaultProject = loadedProjects.find(p => p.projectId === 'C001') || loadedProjects[0];
                 setSelectedProject(defaultProject);
+            } else {
+                console.warn("No projects loaded from ../data/*.json");
             }
         };
         loadProjects();
     }, []);
     
     useEffect(() => {
-        localStorage.setItem('englabs_gate_react', JSON.stringify(gateEntries));
+        const syncFromCloud = async () => {
+            try {
+                const cloudEntries = await fetchGateEntries();
+                if (cloudEntries && cloudEntries.length > 0) {
+                    console.log(`Cloud Sync: Fetched ${cloudEntries.length} entries from Firebase.`);
+                    setGateEntries(cloudEntries);
+                } else if (forensicRegistry && forensicRegistry.length > 0) {
+                    // Fallback to disk-based registry if cloud is empty
+                    console.log(`Disk Sync: Loading ${forensicRegistry.length} entries from forensic_gate_registry.json`);
+                    setGateEntries(forensicRegistry as any[]);
+                }
+            } catch (e) {
+                console.error("Cloud hydration failed:", e);
+            }
+        };
+        syncFromCloud();
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('englabs_gate_v2', JSON.stringify(gateEntries));
     }, [gateEntries]);
 
     const filteredProjects = projects.filter(p => 
@@ -93,7 +128,7 @@ const App: React.FC = () => {
         setSelectedProject(updatedProject);
         setProjects(prev => prev.map(p => p.projectId === updatedProject.projectId ? updatedProject : p));
         
-        const log = logAction('STAGE_UPDATE', `Updated ${stageName} to ${newStatus} for ${updatedProject.projectId}`);
+        const log = logAction('UPDATE', updatedProject.projectId, `Updated ${stageName} to ${newStatus}`, 'GAURAV PANCHAL');
         setAuditLogs(prev => [log, ...prev]);
     };
 

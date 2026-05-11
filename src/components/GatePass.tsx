@@ -38,7 +38,7 @@ const GatePass: React.FC<GatePassProps> = ({ entry }) => {
                     </div>
                     <div>
                         <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-1">Destination</label>
-                        <p className="font-bold border-b border-slate-200 pb-1">{entry.location}</p>
+                        <p className="font-bold border-b border-slate-200 pb-1">{entry.toLocation}</p>
                     </div>
                 </div>
 

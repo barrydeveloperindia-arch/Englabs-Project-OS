@@ -38,7 +38,9 @@ const BillingDashboard: React.FC = () => {
             status: 'PAID',
             creator: 'Admin',
             createdAt: '2026-05-01T10:00:00Z',
-            updatedAt: '2026-05-01T10:00:00Z'
+            updatedAt: '2026-05-01T10:00:00Z',
+            isLocked: true,
+            version: 1
         }
     ]);
 
