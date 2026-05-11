@@ -33,7 +33,7 @@ import QADashboard from './components/QADashboard';
 import DigitalEvidence from './components/DigitalEvidence';
 import { ProjectData, STAGES, ProjectStage } from './lib/project';
 import { logAction, AuditLog } from './lib/system_guard';
-import { fetchGateEntries } from './lib/database_service';
+import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase } from './lib/database_service';
 import forensicRegistry from '../data/forensic_gate_registry.json';
 
 const projectFiles = import.meta.glob('/data/*.json');
@@ -55,7 +55,7 @@ const App: React.FC = () => {
             return [];
         }
     });
-    const [currentView, setCurrentView] = useState<'PROJECTS' | 'GATE_REGISTER' | 'SHOWROOM' | 'FOOD_REGISTER' | 'SYSTEM_GUARD' | 'BILLING' | 'QA_TESTER' | 'DIGITAL_VAULT'>('PROJECTS');
+    const [currentView, setCurrentView] = useState<'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'SYSTEM_GUARD' | 'BILLING' | 'QA_TESTER'>('PROJECTS');
 
     useEffect(() => {
         console.log("Found project files:", Object.keys(projectFiles));
@@ -132,6 +132,18 @@ const App: React.FC = () => {
         setAuditLogs(prev => [log, ...prev]);
     };
 
+    const handleFullSync = async () => {
+        try {
+            console.log("FULL SYSTEM SYNC INITIATED...");
+            const entriesSuccess = await syncLocalToFirebase(gateEntries);
+            const projectsSuccess = await syncAllProjectsToFirebase(projects);
+            return entriesSuccess && projectsSuccess;
+        } catch (e) {
+            console.error("Full System Sync failed:", e);
+            return false;
+        }
+    };
+
     if (!selectedProject) return <div className="h-screen w-screen bg-slate-900 flex items-center justify-center text-white font-black text-4xl">INITIALIZING...</div>;
 
     return (
@@ -165,12 +177,6 @@ const App: React.FC = () => {
                         <Shield className="w-4 h-4" /> LOGISTICS COMMAND
                     </button>
                     <button 
-                        onClick={() => setCurrentView('SHOWROOM')}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-xl font-black text-xs transition-all ${currentView === 'SHOWROOM' ? 'bg-emerald-500 text-slate-900 shadow-lg shadow-emerald-500/20' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
-                    >
-                        <Box className="w-4 h-4" /> ASSET SHOWCASE
-                    </button>
-                    <button 
                         onClick={() => setCurrentView('FOOD_REGISTER')}
                         className={`flex items-center gap-3 px-4 py-3 rounded-xl font-black text-xs transition-all ${currentView === 'FOOD_REGISTER' ? 'bg-emerald-500 text-slate-900 shadow-lg shadow-emerald-500/20' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
                     >
@@ -187,12 +193,6 @@ const App: React.FC = () => {
                         className={`flex items-center gap-3 px-4 py-3 rounded-xl font-black text-xs transition-all ${currentView === 'QA_TESTER' ? 'bg-emerald-500 text-slate-900 shadow-lg shadow-emerald-500/20' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
                     >
                         <Shield className="w-4 h-4" /> ZERO-ERROR AUDIT
-                    </button>
-                    <button 
-                        onClick={() => setCurrentView('DIGITAL_VAULT')}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-xl font-black text-xs transition-all ${currentView === 'DIGITAL_VAULT' ? 'bg-emerald-500 text-slate-900 shadow-lg shadow-emerald-500/20' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
-                    >
-                        <FileText className="w-4 h-4" /> DIGITAL EVIDENCE
                     </button>
                 </div>
 
@@ -394,11 +394,12 @@ const App: React.FC = () => {
                     entries={gateEntries} 
                     setEntries={setGateEntries} 
                     onLog={(log) => setAuditLogs(prev => [log, ...prev])} 
+                    onFullSync={handleFullSync}
                 />
             ) : currentView === 'SHOWROOM' ? (
                 <Showroom />
             ) : currentView === 'FOOD_REGISTER' ? (
-                <FoodRegister />
+                <FoodRegister onLog={(log) => setAuditLogs(prev => [log, ...prev])} />
             ) : currentView === 'BILLING' ? (
                 <BillingDashboard />
             ) : currentView === 'QA_TESTER' ? (

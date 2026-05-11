@@ -28,10 +28,10 @@ const GatePassSlip: React.FC<Props> = ({ entry, onClose }) => {
                 {/* SLIP HEADER */}
                 <div className="bg-[#0F172A] p-8 text-white flex justify-between items-center print:bg-white print:text-slate-900 print:border-b-2 print:border-slate-900">
                     <div className="flex items-center gap-4">
-                        <img src={logo} alt="Englabs" className="h-10 print:h-12" />
+                        <img src={logo} alt="Englabs" className="h-16 print:h-20 object-contain" />
                         <div>
                             <h2 className="text-xl font-black tracking-tighter">ENGLABS</h2>
-                            <p className="text-[8px] font-black uppercase tracking-[0.2em] opacity-60">India Pvt Ltd • Logistics Command</p>
+                            <p className="text-[8px] font-black uppercase tracking-[0.2em] opacity-60">India Private Limited • Logistics Command</p>
                         </div>
                     </div>
                     <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-xl transition-colors print:hidden">
@@ -169,6 +169,15 @@ const GatePassSlip: React.FC<Props> = ({ entry, onClose }) => {
             {/* Custom print styles */}
             <style dangerouslySetInnerHTML={{ __html: `
                 @media print {
+                    @page {
+                        size: A4;
+                        margin: 0;
+                    }
+                    body {
+                        margin: 0;
+                        padding: 0;
+                        background: white !important;
+                    }
                     body * {
                         visibility: hidden;
                     }
@@ -179,8 +188,10 @@ const GatePassSlip: React.FC<Props> = ({ entry, onClose }) => {
                         position: absolute;
                         left: 0;
                         top: 0;
-                        width: 100%;
-                        padding: 2cm;
+                        width: 210mm;
+                        min-height: 297mm;
+                        padding: 20mm !important;
+                        margin: 0;
                     }
                 }
             `}} />

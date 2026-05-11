@@ -1,4 +1,6 @@
 export type EntryType = 'INWARD' | 'OUTWARD';
+export type PaymentStatus = 'PAID' | 'UNPAID' | 'PARTIAL';
+export type PaymentMode = 'UPI' | 'CASH' | 'NEFT' | 'CHEQUE' | 'OTHER';
 
 export interface GateItem {
     id: number;
@@ -32,6 +34,9 @@ export interface GateEntry {
     invoicePhotoUrl?: string; // URL to uploaded invoice photo
     isLocked: boolean; // Prevent edits after completion
     version: number;
+    paymentStatus?: PaymentStatus;
+    paymentMode?: PaymentMode;
+    transactionId?: string;
     history?: any[]; // Store previous versions for rollback
 }
 

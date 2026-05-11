@@ -15,7 +15,8 @@ import {
     Loader2,
     Save,
     Trash2,
-    MessageSquare
+    MessageSquare,
+    CreditCard
 } from 'lucide-react';
 import { GateEntry, UNITS, DELIVERY_TYPES, generateId, generateGatePassId } from '../lib/gate_system';
 import { AuditLog } from '../lib/system_guard';
@@ -49,7 +50,10 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
             remarks: '',
             deliveryType: 'Standard',
             photoUrl: '',
-            invoicePhotoUrl: ''
+            invoicePhotoUrl: '',
+            paymentStatus: 'UNPAID',
+            paymentMode: 'UPI',
+            transactionId: ''
         };
 
         if (initialData) {
@@ -128,7 +132,10 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                 remarks: '',
                 deliveryType: 'Standard',
                 photoUrl: '',
-                invoicePhotoUrl: ''
+                invoicePhotoUrl: '',
+                paymentStatus: 'UNPAID',
+                paymentMode: 'UPI',
+                transactionId: ''
             });
         }
     };
@@ -563,6 +570,56 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                                             </label>
                                         )}
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* FORENSIC PAYMENT SECTION */}
+                        <div className="bg-emerald-50/50 border border-emerald-100 rounded-[2rem] p-10 mt-12">
+                            <h3 className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.3em] flex items-center gap-3 mb-8">
+                                <CreditCard className="w-4 h-4" /> Forensic Financial Verification
+                            </h3>
+                            <div className="grid grid-cols-3 gap-8">
+                                <div>
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 block">Payment Status</label>
+                                    <div className="flex gap-2">
+                                        {['PAID', 'UNPAID', 'PARTIAL'].map((status) => (
+                                            <button
+                                                key={status}
+                                                type="button"
+                                                onClick={() => setFormData({...formData, paymentStatus: status})}
+                                                className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black transition-all ${
+                                                    formData.paymentStatus === status 
+                                                    ? 'bg-emerald-500 text-slate-900 shadow-lg shadow-emerald-500/20' 
+                                                    : 'bg-white border border-slate-200 text-slate-400 hover:border-emerald-500'
+                                                }`}
+                                            >
+                                                {status}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 block">Payment Channel</label>
+                                    <select 
+                                        value={formData.paymentMode}
+                                        onChange={e => setFormData({...formData, paymentMode: e.target.value})}
+                                        className="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 font-black text-slate-900 outline-none focus:border-emerald-500 shadow-sm appearance-none cursor-pointer"
+                                    >
+                                        <option value="UPI">UPI (GPay/PhonePe)</option>
+                                        <option value="CASH">CASH</option>
+                                        <option value="NEFT">NEFT / BANK TRANSFER</option>
+                                        <option value="CHEQUE">CHEQUE</option>
+                                        <option value="OTHER">OTHER</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 block">Transaction Ref / ID</label>
+                                    <input 
+                                        value={formData.transactionId}
+                                        onChange={e => setFormData({...formData, transactionId: e.target.value})}
+                                        className="w-full bg-white border border-slate-200 rounded-xl py-3 px-6 font-bold text-slate-900 outline-none focus:border-emerald-500 shadow-sm"
+                                        placeholder="UTR / ID / Receipt No"
+                                    />
                                 </div>
                             </div>
                         </div>

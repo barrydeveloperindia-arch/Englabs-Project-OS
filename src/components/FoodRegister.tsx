@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     Utensils, 
     Plus, 
@@ -16,10 +16,14 @@ import {
     PieChart,
     Edit2,
     MessageSquare,
-    Image as ImageIcon
+    Image as ImageIcon,
+    Printer
 } from 'lucide-react';
 import { FoodOrder, PLATFORMS, generateFoodId } from '../lib/food_system';
 import FoodOrderForm from './FoodOrderForm';
+import FoodReceiptSlip from './FoodReceiptSlip';
+import { AuditLog } from '../lib/system_guard';
+import { Trash2 } from 'lucide-react';
 
 const MOCK_ORDERS: FoodOrder[] = [
     {
@@ -62,11 +66,46 @@ const MOCK_ORDERS: FoodOrder[] = [
     }
 ];
 
-const FoodRegister: React.FC = () => {
-    const [orders, setOrders] = useState<FoodOrder[]>(MOCK_ORDERS);
+interface Props {
+    onLog?: (log: AuditLog) => void;
+}
+
+const FoodRegister: React.FC<Props> = ({ onLog }) => {
+    const [orders, setOrders] = useState<FoodOrder[]>(() => {
+        const saved = localStorage.getItem('englabs_food_ledger');
+        if (saved) return JSON.parse(saved);
+        return MOCK_ORDERS;
+    });
     const [showForm, setShowForm] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [editingOrder, setEditingOrder] = useState<FoodOrder | null>(null);
+    const [selectedReceipt, setSelectedReceipt] = useState<FoodOrder | null>(null);
+
+    // 💾 PERSISTENCE
+    useEffect(() => {
+        localStorage.setItem('englabs_food_ledger', JSON.stringify(orders));
+    }, [orders]);
+
+    const handleDelete = (order: FoodOrder) => {
+        const password = window.prompt("CRITICAL: ADMIN AUTHORIZATION REQUIRED\nEnter Deletion Protocol Key:");
+        
+        if (password === 'ADMIN2026') {
+            setOrders(prev => prev.filter(o => o.entryId !== order.entryId));
+            if (onLog) {
+                onLog({
+                    id: `LOG-${Date.now()}`,
+                    timestamp: new Date().toISOString(),
+                    user: 'ADMIN-OVERRIDE',
+                    action: 'DELETE',
+                    targetId: order.entryId,
+                    details: `PERMANENT DELETION: Food order ${order.entryId} for ${order.employeeName} (₹${order.amount}) removed.`
+                });
+            }
+            alert("ORDER RECORD DELETED PERMANENTLY.");
+        } else if (password !== null) {
+            alert("INVALID PROTOCOL KEY.");
+        }
+    };
 
     const shareOnWhatsApp = (order: FoodOrder) => {
         const text = encodeURIComponent(
@@ -124,197 +163,219 @@ const FoodRegister: React.FC = () => {
             </header>
 
             <main className="flex-1 overflow-y-auto p-10 custom-scrollbar">
-                <div className="max-w-[1400px] mx-auto space-y-8">
-                    
-                    {/* DASHBOARD SUMMARY */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col justify-between h-44">
-                            <div className="flex justify-between items-start">
-                                <div className="p-3 bg-emerald-500 rounded-2xl">
-                                    <DollarSign className="w-5 h-5 text-white" />
+                {showForm || editingOrder ? (
+                    <FoodOrderForm 
+                        onClose={() => {
+                            setShowForm(false);
+                            setEditingOrder(null);
+                        }} 
+                        onSubmit={(newOrder) => {
+                            if (editingOrder) {
+                                setOrders(prev => prev.map(o => o.entryId === newOrder.entryId ? newOrder : o));
+                            } else {
+                                setOrders(prev => [newOrder, ...prev]);
+                            }
+                            setShowForm(false);
+                            setEditingOrder(null);
+                        }}
+                        orderCount={orders.length}
+                        initialData={editingOrder || undefined}
+                    />
+                ) : (
+                    <div className="max-w-[1400px] mx-auto space-y-8">
+                        
+                        {/* DASHBOARD SUMMARY */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col justify-between h-44">
+                                <div className="flex justify-between items-start">
+                                    <div className="p-3 bg-emerald-500 rounded-2xl">
+                                        <DollarSign className="w-5 h-5 text-white" />
+                                    </div>
+                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Spend</span>
                                 </div>
-                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Spend</span>
+                                <div>
+                                    <p className="text-3xl font-black text-slate-900">₹{totalExpense.toLocaleString('en-IN')}</p>
+                                    <p className="text-[10px] font-bold text-emerald-500 uppercase mt-1">Current Month</p>
+                                </div>
                             </div>
-                            <div>
-                                <p className="text-3xl font-black text-slate-900">₹{totalExpense.toLocaleString('en-IN')}</p>
-                                <p className="text-[10px] font-bold text-emerald-500 uppercase mt-1">Current Month</p>
+
+                            <div className="bg-[#0F172A] p-8 rounded-[2.5rem] text-white shadow-xl flex flex-col justify-between h-44">
+                                <div className="flex justify-between items-start">
+                                    <div className="p-3 bg-white/10 rounded-2xl">
+                                        <TrendingUp className="w-5 h-5 text-emerald-400" />
+                                    </div>
+                                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Official Work</span>
+                                </div>
+                                <div>
+                                    <p className="text-3xl font-black text-white">₹{officialExpense.toLocaleString('en-IN')}</p>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase mt-1">Reimbursable</p>
+                                </div>
+                            </div>
+
+                            <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col justify-between h-44">
+                                <div className="flex justify-between items-start">
+                                    <div className="p-3 bg-slate-100 rounded-2xl">
+                                        <Utensils className="w-5 h-5 text-slate-900" />
+                                    </div>
+                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Orders</span>
+                                </div>
+                                <div>
+                                    <p className="text-3xl font-black text-slate-900">{orders.length}</p>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase mt-1">Transactions</p>
+                                </div>
+                            </div>
+
+                            <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col justify-between h-44">
+                                <div className="flex justify-between items-start">
+                                    <div className="p-3 bg-orange-500 rounded-2xl">
+                                        <PieChart className="w-5 h-5 text-white" />
+                                    </div>
+                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Top Platform</span>
+                                </div>
+                                <div>
+                                    <p className="text-3xl font-black text-slate-900">Sky-5</p>
+                                    <p className="text-[10px] font-bold text-orange-500 uppercase mt-1">Preferred Vendor</p>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="bg-[#0F172A] p-8 rounded-[2.5rem] text-white shadow-xl flex flex-col justify-between h-44">
-                            <div className="flex justify-between items-start">
-                                <div className="p-3 bg-white/10 rounded-2xl">
-                                    <TrendingUp className="w-5 h-5 text-emerald-400" />
+                        {/* REGISTER TABLE */}
+                        <div className="bg-white rounded-[3rem] border border-slate-100 shadow-sm overflow-hidden">
+                            <div className="p-8 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                                <div className="flex items-center gap-4">
+                                    <div className="relative">
+                                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                        <input 
+                                            type="text" 
+                                            placeholder="Search Orders..."
+                                            className="bg-white border border-slate-200 rounded-xl py-2.5 pl-11 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 w-64 transition-all"
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                        />
+                                    </div>
+                                    <button className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-black text-slate-600 hover:bg-slate-50">
+                                        <Filter className="w-3.5 h-3.5" /> FILTERS
+                                    </button>
                                 </div>
-                                <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Official Work</span>
-                            </div>
-                            <div>
-                                <p className="text-3xl font-black text-white">₹{officialExpense.toLocaleString('en-IN')}</p>
-                                <p className="text-[10px] font-bold text-slate-400 uppercase mt-1">Reimbursable</p>
-                            </div>
-                        </div>
-
-                        <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col justify-between h-44">
-                            <div className="flex justify-between items-start">
-                                <div className="p-3 bg-slate-100 rounded-2xl">
-                                    <Utensils className="w-5 h-5 text-slate-900" />
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mr-2">Quick Reports:</span>
+                                    <button className="px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-black uppercase hover:bg-emerald-100 transition-colors">Daily PDF</button>
+                                    <button className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-black uppercase hover:bg-blue-100 transition-colors">Master Excel</button>
                                 </div>
-                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Orders</span>
                             </div>
-                            <div>
-                                <p className="text-3xl font-black text-slate-900">{orders.length}</p>
-                                <p className="text-[10px] font-bold text-slate-400 uppercase mt-1">Transactions</p>
-                            </div>
-                        </div>
 
-                        <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col justify-between h-44">
-                            <div className="flex justify-between items-start">
-                                <div className="p-3 bg-orange-500 rounded-2xl">
-                                    <PieChart className="w-5 h-5 text-white" />
-                                </div>
-                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Top Platform</span>
-                            </div>
-                            <div>
-                                <p className="text-3xl font-black text-slate-900">Sky-5</p>
-                                <p className="text-[10px] font-bold text-orange-500 uppercase mt-1">Preferred Vendor</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* REGISTER TABLE */}
-                    <div className="bg-white rounded-[3rem] border border-slate-100 shadow-sm overflow-hidden">
-                        <div className="p-8 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-                            <div className="flex items-center gap-4">
-                                <div className="relative">
-                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                    <input 
-                                        type="text" 
-                                        placeholder="Search Orders..."
-                                        className="bg-white border border-slate-200 rounded-xl py-2.5 pl-11 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 w-64 transition-all"
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                    />
-                                </div>
-                                <button className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-black text-slate-600 hover:bg-slate-50">
-                                    <Filter className="w-3.5 h-3.5" /> FILTERS
-                                </button>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mr-2">Quick Reports:</span>
-                                <button className="px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-black uppercase hover:bg-emerald-100 transition-colors">Daily PDF</button>
-                                <button className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-black uppercase hover:bg-blue-100 transition-colors">Master Excel</button>
-                            </div>
-                        </div>
-
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left border-collapse">
-                                <thead>
-                                    <tr className="bg-slate-50/50 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                                        <th className="px-8 py-5 border-b border-slate-100">Entry ID</th>
-                                        <th className="px-8 py-5 border-b border-slate-100">Employee</th>
-                                        <th className="px-8 py-5 border-b border-slate-100">Platform / Vendor</th>
-                                        <th className="px-8 py-5 border-b border-slate-100">Amount</th>
-                                        <th className="px-8 py-5 border-b border-slate-100">Purpose</th>
-                                        <th className="px-8 py-5 border-b border-slate-100">Status</th>
-                                        <th className="px-8 py-5 border-b border-slate-100 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-slate-50">
-                                    {orders.map((order) => (
-                                        <tr key={order.entryId} className="hover:bg-slate-50/50 transition-colors group">
-                                            <td className="px-8 py-6">
-                                                <div className="flex items-center gap-3">
-                                                    {order.attachmentUrl ? (
-                                                        <div className="w-8 h-8 rounded-lg overflow-hidden border border-slate-100 shrink-0">
-                                                            <img src={order.attachmentUrl} className="w-full h-full object-cover" alt="Bill" />
-                                                        </div>
-                                                    ) : (
-                                                        <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
-                                                            <ImageIcon className="w-3 h-3 text-slate-300" />
-                                                        </div>
-                                                    )}
-                                                    <span className="text-[10px] font-black bg-slate-100 text-slate-600 px-2 py-1 rounded-md">{order.entryId}</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-8 py-6">
-                                                <div>
-                                                    <p className="text-sm font-black text-slate-900">{order.employeeName}</p>
-                                                    <p className="text-[10px] font-bold text-slate-400 uppercase">{order.department}</p>
-                                                </div>
-                                            </td>
-                                            <td className="px-8 py-6">
-                                                <div>
-                                                    <p className="text-sm font-bold text-slate-900">{order.vendorName}</p>
-                                                    <p className="text-[10px] font-black text-emerald-500 uppercase">{order.platform}</p>
-                                                </div>
-                                            </td>
-                                            <td className="px-8 py-6">
-                                                <p className="text-sm font-black text-slate-900">₹{order.amount.toLocaleString('en-IN')}</p>
-                                            </td>
-                                            <td className="px-8 py-6">
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="text-[10px] font-black text-slate-600 uppercase">{order.purpose}</span>
-                                                    {order.projectCode && <span className="text-[9px] font-bold text-blue-500">PROJ: {order.projectCode}</span>}
-                                                </div>
-                                            </td>
-                                            <td className="px-8 py-6">
-                                                <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase ${
-                                                    order.status === 'Approved' ? 'bg-emerald-50 text-emerald-600' :
-                                                    order.status === 'Rejected' ? 'bg-red-50 text-red-600' :
-                                                    'bg-blue-50 text-blue-600 animate-pulse'
-                                                }`}>
-                                                    {order.status === 'Approved' ? <CheckCircle2 className="w-3 h-3" /> :
-                                                     order.status === 'Rejected' ? <XCircle className="w-3 h-3" /> :
-                                                     <Clock className="w-3 h-3" />}
-                                                    {order.status}
-                                                </div>
-                                            </td>
-                                            <td className="px-8 py-6 text-right">
-                                                <div className="flex justify-end gap-2">
-                                                    <button 
-                                                        onClick={() => shareOnWhatsApp(order)}
-                                                        className="p-2 hover:bg-emerald-50 text-slate-400 hover:text-emerald-500 rounded-lg transition-all"
-                                                        title="Share Slip on WhatsApp"
-                                                    >
-                                                        <MessageSquare className="w-4 h-4" />
-                                                    </button>
-                                                    <button 
-                                                        onClick={() => setEditingOrder(order)}
-                                                        className="p-2 hover:bg-emerald-50 text-slate-400 hover:text-emerald-500 rounded-lg transition-all"
-                                                    >
-                                                        <Edit2 className="w-4 h-4" />
-                                                    </button>
-                                                    <button className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
-                                                        <MoreHorizontal className="w-5 h-5 text-slate-400" />
-                                                    </button>
-                                                </div>
-                                            </td>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr className="bg-slate-50/50 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                            <th className="px-8 py-5 border-b border-slate-100">Entry ID</th>
+                                            <th className="px-8 py-5 border-b border-slate-100">Employee</th>
+                                            <th className="px-8 py-5 border-b border-slate-100">Platform / Vendor</th>
+                                            <th className="px-8 py-5 border-b border-slate-100">Amount</th>
+                                            <th className="px-8 py-5 border-b border-slate-100">Purpose</th>
+                                            <th className="px-8 py-5 border-b border-slate-100">Status</th>
+                                            <th className="px-8 py-5 border-b border-slate-100 text-right">Actions</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-50">
+                                        {orders.map((order) => (
+                                            <tr key={order.entryId} className="hover:bg-slate-50/50 transition-colors group">
+                                                <td className="px-8 py-6">
+                                                    <div className="flex items-center gap-3">
+                                                        {order.attachmentUrl ? (
+                                                            <div className="w-8 h-8 rounded-lg overflow-hidden border border-slate-100 shrink-0">
+                                                                <img src={order.attachmentUrl} className="w-full h-full object-cover" alt="Bill" />
+                                                            </div>
+                                                        ) : (
+                                                            <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                                                                <ImageIcon className="w-3 h-3 text-slate-300" />
+                                                            </div>
+                                                        )}
+                                                        <span className="text-[10px] font-black bg-slate-100 text-slate-600 px-2 py-1 rounded-md">{order.entryId}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-8 py-6">
+                                                    <div>
+                                                        <p className="text-sm font-black text-slate-900">{order.employeeName}</p>
+                                                        <p className="text-[10px] font-bold text-slate-400 uppercase">{order.department}</p>
+                                                    </div>
+                                                </td>
+                                                <td className="px-8 py-6">
+                                                    <div>
+                                                        <p className="text-sm font-bold text-slate-900">{order.vendorName}</p>
+                                                        <p className="text-[10px] font-black text-emerald-500 uppercase">{order.platform}</p>
+                                                    </div>
+                                                </td>
+                                                <td className="px-8 py-6">
+                                                    <p className="text-sm font-black text-slate-900">₹{order.amount.toLocaleString('en-IN')}</p>
+                                                </td>
+                                                <td className="px-8 py-6">
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="text-[10px] font-black text-slate-600 uppercase">{order.purpose}</span>
+                                                        {order.projectCode && <span className="text-[9px] font-bold text-blue-500">PROJ: {order.projectCode}</span>}
+                                                    </div>
+                                                </td>
+                                                <td className="px-8 py-6">
+                                                    <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase ${
+                                                        order.status === 'Approved' ? 'bg-emerald-50 text-emerald-600' :
+                                                        order.status === 'Rejected' ? 'bg-red-50 text-red-600' :
+                                                        'bg-blue-50 text-blue-600 animate-pulse'
+                                                    }`}>
+                                                        {order.status === 'Approved' ? <CheckCircle2 className="w-3 h-3" /> :
+                                                         order.status === 'Rejected' ? <XCircle className="w-3 h-3" /> :
+                                                         <Clock className="w-3 h-3" />}
+                                                        {order.status}
+                                                    </div>
+                                                </td>
+                                                <td className="px-8 py-6 text-right">
+                                                    <div className="flex justify-end gap-1.5">
+                                                        <button 
+                                                            onClick={() => setSelectedReceipt(order)}
+                                                            className="p-3 hover:bg-emerald-50 text-slate-400 hover:text-emerald-500 rounded-xl transition-all group"
+                                                            title="Print Receipt"
+                                                        >
+                                                            <Printer className="w-4.5 h-4.5 group-hover:scale-110 transition-transform" />
+                                                        </button>
+                                                        <button 
+                                                            onClick={() => shareOnWhatsApp(order)}
+                                                            className="p-3 hover:bg-emerald-50 text-slate-400 hover:text-emerald-500 rounded-xl transition-all group"
+                                                            title="Share Slip on WhatsApp"
+                                                        >
+                                                            <MessageSquare className="w-4.5 h-4.5 group-hover:scale-110 transition-transform" />
+                                                        </button>
+                                                        <button 
+                                                            onClick={() => setEditingOrder(order)}
+                                                            className="p-3 hover:bg-emerald-50 text-slate-400 hover:text-emerald-500 rounded-xl transition-all group"
+                                                            title="Edit Order"
+                                                        >
+                                                            <Edit2 className="w-4.5 h-4.5 group-hover:scale-110 transition-transform" />
+                                                        </button>
+                                                        <button 
+                                                            onClick={() => handleDelete(order)}
+                                                            className="p-3 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-xl transition-all group"
+                                                            title="Admin Delete"
+                                                        >
+                                                            <Trash2 className="w-4.5 h-4.5 group-hover:scale-110 transition-transform" />
+                                                        </button>
+                                                        <button className="p-3 hover:bg-slate-100 rounded-xl transition-colors">
+                                                            <MoreHorizontal className="w-5 h-5 text-slate-400" />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
             </main>
 
-            {(showForm || editingOrder) && (
-                <FoodOrderForm 
-                    onClose={() => {
-                        setShowForm(false);
-                        setEditingOrder(null);
-                    }} 
-                    onSubmit={(newOrder) => {
-                        if (editingOrder) {
-                            setOrders(prev => prev.map(o => o.entryId === newOrder.entryId ? newOrder : o));
-                        } else {
-                            setOrders(prev => [newOrder, ...prev]);
-                        }
-                        setShowForm(false);
-                        setEditingOrder(null);
-                    }}
-                    orderCount={orders.length}
-                    initialData={editingOrder || undefined}
+            {selectedReceipt && (
+                <FoodReceiptSlip 
+                    order={selectedReceipt} 
+                    onClose={() => setSelectedReceipt(null)} 
                 />
             )}
         </div>

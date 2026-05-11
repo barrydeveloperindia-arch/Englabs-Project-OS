@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import GateEntryForm from './GateEntryForm';
 import GatePassSlip from './GatePassSlip';
+import GateInvoiceSlip from './GateInvoiceSlip';
 import { GateEntry, generateId, generateGatePassId, UNITS, DELIVERY_TYPES } from '../lib/gate_system';
 import { syncLocalToFirebase } from '../lib/database_service';
 import { AuditLog } from '../lib/system_guard';
@@ -29,13 +30,15 @@ interface Props {
     entries: GateEntry[];
     setEntries: React.Dispatch<React.SetStateAction<GateEntry[]>>;
     onLog?: (log: AuditLog) => void;
+    onFullSync?: () => Promise<boolean>;
 }
 
-const GateRegister: React.FC<Props> = ({ entries, setEntries, onLog }) => {
+const GateRegister: React.FC<Props> = ({ entries, setEntries, onLog, onFullSync }) => {
     const [view, setView] = useState<'DASHBOARD' | 'INWARD_LIST' | 'OUTWARD_LIST' | 'NEW_ENTRY'>('DASHBOARD');
     const [searchQuery, setSearchQuery] = useState('');
     const [editingEntry, setEditingEntry] = useState<GateEntry | null>(null);
     const [selectedSlip, setSelectedSlip] = useState<GateEntry | null>(null);
+    const [selectedInvoice, setSelectedInvoice] = useState<GateEntry | null>(null);
     const [isSyncing, setIsSyncing] = useState(false);
     const [dbStatus, setDbStatus] = useState<'CONNECTED' | 'SYNCING' | 'SECURE'>('SECURE');
 
@@ -137,7 +140,7 @@ const GateRegister: React.FC<Props> = ({ entries, setEntries, onLog }) => {
         setIsSyncing(true);
         setDbStatus('SYNCING');
         try {
-            const success = await syncLocalToFirebase(entries);
+            const success = onFullSync ? await onFullSync() : await syncLocalToFirebase(entries);
             if (success) {
                 setDbStatus('SECURE');
                 alert("DATABASE SYNC COMPLETE: All records backed up to Firebase Cloud.");
@@ -192,90 +195,7 @@ const GateRegister: React.FC<Props> = ({ entries, setEntries, onLog }) => {
             </header>
 
             <main className="flex-1 overflow-y-auto p-10 custom-scrollbar">
-                {view === 'DASHBOARD' && (
-                    <div className="max-w-[1400px] mx-auto space-y-10">
-                        {/* STATS GRID */}
-                        <div className="grid grid-cols-4 gap-8">
-                            <StatCard icon={<LogIn />} label="Inward Entries" value={stats.totalInwardToday} color="emerald" />
-                            <StatCard icon={<LogOut />} label="Outward Entries" value={stats.totalOutwardToday} color="blue" />
-                            <StatCard icon={<TrendingUp />} label="Total Valuation" value={`₹${stats.totalValue.toLocaleString('en-IN')}`} color="purple" />
-                            <StatCard icon={<AlertTriangle />} label="Pending Pass" value={stats.pendingApprovals} color="amber" />
-                        </div>
-
-                        {/* LIVE FEED */}
-                        <div className="bg-white rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)] overflow-hidden">
-                            <div className="p-10 border-b border-slate-100 flex justify-between items-center">
-                                <h2 className="text-2xl font-black text-slate-900 flex items-center gap-3">
-                                    <Shield className="w-6 h-6 text-emerald-500" /> Recent Movements
-                                </h2>
-                                <div className="flex gap-4">
-                                    <button 
-                                        onClick={shareMonthlySummary}
-                                        className="px-6 py-3 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-xl hover:bg-emerald-100 transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest shadow-sm"
-                                    >
-                                        <MessageSquare className="w-4 h-4" /> MONTHLY SHARE
-                                    </button>
-                                    <button className="p-3 bg-slate-50 border border-slate-100 rounded-xl hover:bg-slate-100 transition-all text-slate-500">
-                                        <Printer className="w-4 h-4" />
-                                    </button>
-                                    <button className="p-3 bg-slate-50 border border-slate-100 rounded-xl hover:bg-slate-100 transition-all text-slate-500">
-                                        <Download className="w-4 h-4" />
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div className="p-10 overflow-x-auto">
-                                <EntryTable 
-                                    entries={entries.slice(0, 10)}
-                                    onEdit={setEditingEntry}
-                                    onDelete={handleDelete}
-                                    onPrint={setSelectedSlip}
-                                    onShare={shareOnWhatsApp}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {(view === 'INWARD_LIST' || view === 'OUTWARD_LIST') && (
-                    <div className="max-w-[1400px] mx-auto space-y-10">
-                        <div className="bg-white rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)] overflow-hidden">
-                            <div className="p-10 border-b border-slate-100 flex justify-between items-center">
-                                <h2 className="text-2xl font-black text-slate-900 flex items-center gap-3">
-                                    <Shield className="w-6 h-6 text-emerald-500" /> 
-                                    {view === 'INWARD_LIST' ? 'Inward Registry' : 'Outward Registry'}
-                                </h2>
-                                <div className="relative w-96">
-                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                    <input 
-                                        type="text"
-                                        placeholder="Search by ID, Material or Party..."
-                                        className="w-full bg-slate-50 border border-slate-100 rounded-xl py-3 pl-12 pr-4 text-sm font-bold outline-none focus:border-emerald-500 transition-all"
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                    />
-                                </div>
-                            </div>
-                            
-                            <div className="p-10 overflow-x-auto">
-                                <EntryTable 
-                                    entries={entries.filter(e => 
-                                        (view === 'INWARD_LIST' ? e.type === 'INWARD' : e.type === 'OUTWARD') &&
-                                        (e.materialName.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                         e.partyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                         e.id.toLowerCase().includes(searchQuery.toLowerCase()))
-                                    )}
-                                    onEdit={setEditingEntry}
-                                    onDelete={handleDelete}
-                                    onPrint={setSelectedSlip}
-                                    onShare={shareOnWhatsApp}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {(view === 'NEW_ENTRY' || editingEntry) && (
+                {editingEntry || view === 'NEW_ENTRY' ? (
                     <GateEntryForm 
                         onClose={() => {
                             setView('DASHBOARD');
@@ -295,12 +215,106 @@ const GateRegister: React.FC<Props> = ({ entries, setEntries, onLog }) => {
                         }}
                         onLog={onLog}
                     />
+                ) : (
+                    <>
+                        {view === 'DASHBOARD' && (
+                            <div className="max-w-[1400px] mx-auto space-y-10">
+                                {/* STATS GRID */}
+                                <div className="grid grid-cols-4 gap-8">
+                                    <StatCard icon={<LogIn />} label="Inward Entries" value={stats.totalInwardToday} color="emerald" />
+                                    <StatCard icon={<LogOut />} label="Outward Entries" value={stats.totalOutwardToday} color="blue" />
+                                    <StatCard icon={<TrendingUp />} label="Total Valuation" value={`₹${stats.totalValue.toLocaleString('en-IN')}`} color="purple" />
+                                    <StatCard icon={<AlertTriangle />} label="Pending Pass" value={stats.pendingApprovals} color="amber" />
+                                </div>
+
+                                {/* LIVE FEED */}
+                                <div className="bg-white rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)] overflow-hidden">
+                                    <div className="p-10 border-b border-slate-100 flex justify-between items-center">
+                                        <h2 className="text-2xl font-black text-slate-900 flex items-center gap-3">
+                                            <Shield className="w-6 h-6 text-emerald-500" /> Recent Movements
+                                        </h2>
+                                        <div className="flex gap-4">
+                                            <button 
+                                                onClick={shareMonthlySummary}
+                                                className="px-6 py-3 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-xl hover:bg-emerald-100 transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest shadow-sm"
+                                            >
+                                                <MessageSquare className="w-4 h-4" /> MONTHLY SHARE
+                                            </button>
+                                            <button className="p-3 bg-slate-50 border border-slate-100 rounded-xl hover:bg-slate-100 transition-all text-slate-500">
+                                                <Printer className="w-4 h-4" />
+                                            </button>
+                                            <button className="p-3 bg-slate-50 border border-slate-100 rounded-xl hover:bg-slate-100 transition-all text-slate-500">
+                                                <Download className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="p-10 overflow-x-auto">
+                                        <EntryTable 
+                                            entries={entries.slice(0, 10)}
+                                            onEdit={setEditingEntry}
+                                            onDelete={handleDelete}
+                                            onPrint={setSelectedSlip}
+                                            onInvoice={setSelectedInvoice}
+                                            onShare={shareOnWhatsApp}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {(view === 'INWARD_LIST' || view === 'OUTWARD_LIST') && (
+                            <div className="max-w-[1400px] mx-auto space-y-10">
+                                <div className="bg-white rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)] overflow-hidden">
+                                    <div className="p-10 border-b border-slate-100 flex justify-between items-center">
+                                        <h2 className="text-2xl font-black text-slate-900 flex items-center gap-3">
+                                            <Shield className="w-6 h-6 text-emerald-500" /> 
+                                            {view === 'INWARD_LIST' ? 'Inward Registry' : 'Outward Registry'}
+                                        </h2>
+                                        <div className="relative w-96">
+                                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                            <input 
+                                                type="text"
+                                                placeholder="Search by ID, Material or Party..."
+                                                className="w-full bg-slate-50 border border-slate-100 rounded-xl py-3 pl-12 pr-4 text-sm font-bold outline-none focus:border-emerald-500 transition-all"
+                                                value={searchQuery}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
+                                            />
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="p-10 overflow-x-auto">
+                                        <EntryTable 
+                                            entries={entries.filter(e => 
+                                                (view === 'INWARD_LIST' ? e.type === 'INWARD' : e.type === 'OUTWARD') &&
+                                                (e.materialName.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                                e.partyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                                e.id.toLowerCase().includes(searchQuery.toLowerCase()))
+                                            )}
+                                            onEdit={setEditingEntry}
+                                            onDelete={handleDelete}
+                                            onPrint={setSelectedSlip}
+                                            onInvoice={setSelectedInvoice}
+                                            onShare={shareOnWhatsApp}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </>
                 )}
 
                 {selectedSlip && (
                     <GatePassSlip 
                         entry={selectedSlip} 
                         onClose={() => setSelectedSlip(null)} 
+                    />
+                )}
+
+                {selectedInvoice && (
+                    <GateInvoiceSlip 
+                        entry={selectedInvoice} 
+                        onClose={() => setSelectedInvoice(null)} 
                     />
                 )}
             </main>
@@ -329,7 +343,7 @@ const StatCard = ({ icon, label, value, color }: any) => {
 
 export default GateRegister;
 
-const EntryTable = ({ entries, onEdit, onDelete, onPrint, onShare }: any) => (
+const EntryTable = ({ entries, onEdit, onDelete, onPrint, onInvoice, onShare }: any) => (
     <table className="w-full text-left border-collapse">
         <thead>
             <tr className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-50">
@@ -337,7 +351,7 @@ const EntryTable = ({ entries, onEdit, onDelete, onPrint, onShare }: any) => (
                 <th className="pb-6 px-4">Type</th>
                 <th className="pb-6 px-4">Material</th>
                 <th className="pb-6 px-4">Party / Vehicle</th>
-                <th className="pb-6 px-4">Status</th>
+                <th className="pb-6 px-4">Payment</th>
                 <th className="pb-6 px-4 text-right">Gate Pass</th>
             </tr>
         </thead>
@@ -388,13 +402,27 @@ const EntryTable = ({ entries, onEdit, onDelete, onPrint, onShare }: any) => (
                             <p className="text-[10px] font-black text-emerald-500 uppercase mt-1 tracking-widest">{entry.vehicleNumber}</p>
                         </td>
                         <td className="py-6 px-4">
-                            <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-                                <span className="text-[10px] font-bold text-slate-600 uppercase">Verified</span>
+                            <div className="flex flex-col gap-1">
+                                <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest w-fit ${
+                                    entry.paymentStatus === 'PAID' ? 'bg-emerald-500 text-white' : 
+                                    entry.paymentStatus === 'PARTIAL' ? 'bg-orange-500 text-white' : 'bg-red-500 text-white'
+                                }`}>
+                                    {entry.paymentStatus || 'UNPAID'}
+                                </span>
+                                <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">
+                                    {entry.paymentMode || 'UPI'}
+                                </span>
                             </div>
                         </td>
                         <td className="py-6 px-4 text-right">
                             <div className="flex justify-end gap-2">
+                                <button 
+                                    onClick={() => onInvoice(entry)}
+                                    className="p-2 hover:bg-blue-50 text-slate-400 hover:text-blue-500 rounded-lg transition-all"
+                                    title="Generate Professional Invoice"
+                                >
+                                    <FileText className="w-4 h-4" />
+                                </button>
                                 <button 
                                     onClick={() => onPrint(entry)}
                                     className="p-2 hover:bg-emerald-50 text-slate-400 hover:text-emerald-500 rounded-lg transition-all"

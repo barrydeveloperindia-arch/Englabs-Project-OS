@@ -58,7 +58,7 @@ const DocumentPreview: React.FC<Props> = ({ doc, onClose }) => {
                         {/* CORPORATE HEADER */}
                         <div className="flex justify-between items-start border-b-2 border-slate-900 pb-10 mb-10">
                             <div className="max-w-[60%]">
-                                <img src={logo} alt="Englabs" className="h-16 mb-6" />
+                                <img src={logo} alt="Englabs" className="h-20 mb-8 object-contain" />
                                 <h1 className="text-4xl font-black tracking-tighter text-slate-900 mb-2">{COMPANY_DETAILS.name}</h1>
                                 <p className="text-[10px] font-bold text-slate-600 leading-relaxed uppercase tracking-wide">
                                     {COMPANY_DETAILS.address}

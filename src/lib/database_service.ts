@@ -50,3 +50,8 @@ export const saveProjectToFirebase = async (project: any) => {
         return { success: false, error: e };
     }
 };
+
+export const syncAllProjectsToFirebase = async (projects: any[]) => {
+    const results = await Promise.all(projects.map(p => saveProjectToFirebase(p)));
+    return results.every(r => r.success);
+};
