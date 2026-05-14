@@ -11,6 +11,8 @@ import {
     Eye
 } from 'lucide-react';
 
+import { extractInvoiceData } from '../lib/extraction_service';
+
 interface Props {
     onAutoRegister: (data: any) => void;
 }
@@ -20,35 +22,43 @@ const DigitalEvidence: React.FC<Props> = ({ onAutoRegister }) => {
     const [previewData, setPreviewData] = useState<any | null>(null);
     const [uploadedFile, setUploadedFile] = useState<string | null>(null);
 
-    const handleUpload = () => {
+    const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
         setIsUploading(true);
-        // Simulate AI Processing
-        setTimeout(() => {
-            setIsUploading(false);
-            const extractedData = {
-                type: 'INWARD',
-                materialName: 'EPE ROLL-392119 2MM',
-                quantity: 2,
-                unit: 'Roll',
-                partyName: 'M/S BALA JI ENTERPRISES',
-                invoiceNumber: '543',
-                vehicleNumber: 'CH01TE7319',
-                driverName: 'Ramesh Kumar',
-                fromLocation: 'INDUSTRIAL AREA, CHANDIGARH',
-                toLocation: 'MDC PANCHKULA',
-                amount: 8024,
-                timestamp: new Date().toLocaleString()
+        try {
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+                const dataUrl = reader.result as string;
+                setUploadedFile(dataUrl);
+                
+                try {
+                    const extractedData = await extractInvoiceData(dataUrl);
+                    setPreviewData({
+                        ...extractedData,
+                        timestamp: new Date().toISOString()
+                    });
+                } catch (err) {
+                    console.error("AI Extraction Error:", err);
+                    alert("AI CORE ERROR: Failed to extract forensic data from this document. Manual entry required.");
+                } finally {
+                    setIsUploading(false);
+                }
             };
-            setPreviewData(extractedData);
-            setUploadedFile('https://images.unsplash.com/photo-1586769852836-bc069f19e1b6?w=400&h=400&fit=crop'); // Placeholder for invoice
-        }, 2000);
+            reader.readAsDataURL(file);
+        } catch (error) {
+            console.error("Upload Error:", error);
+            setIsUploading(false);
+        }
     };
 
     const confirmRegistration = () => {
         if (previewData) {
+            const prefix = previewData.type === 'OUTWARD' ? 'OUT' : 'IN';
             onAutoRegister({
                 ...previewData,
-                id: `IN-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`,
+                id: `${prefix}-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`,
                 invoicePhotoUrl: uploadedFile
             });
             setPreviewData(null);
@@ -81,10 +91,13 @@ const DigitalEvidence: React.FC<Props> = ({ onAutoRegister }) => {
                     
                     {/* UPLOAD ZONE */}
                     {!previewData ? (
-                        <div 
-                            onClick={handleUpload}
-                            className="bg-white border-4 border-dashed border-slate-100 rounded-[3rem] p-20 flex flex-col items-center justify-center text-center cursor-pointer hover:border-emerald-500/30 hover:bg-emerald-50/10 transition-all group"
-                        >
+                        <label className="bg-white border-4 border-dashed border-slate-100 rounded-[3rem] p-20 flex flex-col items-center justify-center text-center cursor-pointer hover:border-emerald-500/30 hover:bg-emerald-50/10 transition-all group">
+                            <input 
+                                type="file" 
+                                className="hidden" 
+                                onChange={handleUpload}
+                                accept="image/*,application/pdf"
+                            />
                             <div className="w-24 h-24 bg-slate-50 rounded-3xl flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all">
                                 {isUploading ? <Loader2 className="w-10 h-10 animate-spin" /> : <Upload className="w-10 h-10 text-slate-300 group-hover:text-white" />}
                             </div>
@@ -94,7 +107,7 @@ const DigitalEvidence: React.FC<Props> = ({ onAutoRegister }) => {
                             <p className="text-sm font-bold text-slate-400 max-w-sm">
                                 {isUploading ? 'Extracting material metadata and forensic values from invoice...' : 'Upload PDF or Invoice Image to automatically populate the movement register.'}
                             </p>
-                        </div>
+                        </label>
                     ) : (
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 animate-in slide-in-from-bottom-4 duration-500">
                             {/* DOCUMENT PREVIEW */}

@@ -5,8 +5,10 @@ export type PaymentMode = 'UPI' | 'CASH' | 'NEFT' | 'CHEQUE' | 'OTHER';
 export interface GateItem {
     id: number;
     name: string;
+    hsnCode: string;
     quantity: number;
     unit: string;
+    rate: number;
     amount: number;
 }
 
@@ -51,3 +53,29 @@ export const generateId = (type: EntryType, count: number): string => {
 export const generateGatePassId = (count: number): string => {
     return `GP-${new Date().getFullYear()}-${(count + 1).toString().padStart(4, '0')}`;
 };
+
+export interface InventoryItem {
+    itemCode: string;
+    name: string;
+    category: string;
+    unit: string;
+    currentStock: number;
+    totalInward: number;
+    totalOutward: number;
+    minThreshold: number;
+    lastUpdated: string;
+    location?: string;
+}
+
+export interface StockTransaction {
+    id: string;
+    itemId: string;
+    type: 'INWARD' | 'OUTWARD';
+    quantity: number;
+    previousStock: number;
+    newStock: number;
+    timestamp: string;
+    referenceId: string; // ID of the GateEntry
+    partyName: string;
+    invoiceNumber: string;
+}

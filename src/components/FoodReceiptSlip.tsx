@@ -1,12 +1,11 @@
 import React from 'react';
 import { 
-    Utensils, 
-    Printer, 
     X, 
+    Printer, 
     Download,
-    QrCode,
-    Receipt,
-    CheckCircle2
+    CheckCircle2,
+    MessageSquare,
+    Share2
 } from 'lucide-react';
 import { FoodOrder } from '../lib/food_system';
 import logo from '../assets/englabs_logo.png';
@@ -21,169 +20,230 @@ const FoodReceiptSlip: React.FC<Props> = ({ order, onClose }) => {
         window.print();
     };
 
+    const handleWhatsAppShare = () => {
+        const subtotal = (order?.rate || 0) * (order?.quantity || 1);
+        const text = `*📄 ENGLABS SETTLEMENT SLIP*
+---------------------------------
+*ID:* ${order?.entryId || 'N/A'}
+*STAFF:* ${order?.employeeName?.toUpperCase() || 'N/A'}
+*DEPT:* ${order?.department?.toUpperCase() || 'N/A'}
+---------------------------------
+*ITEMS:* ${order?.items?.toUpperCase() || 'N/A'}
+*QTY:* ${order?.quantity || 1} ${order?.unit || 'Nos'}
+---------------------------------
+*SUBTOTAL:* ₹${subtotal.toFixed(2)}
+*TOTAL:* ₹${(order?.amount || 0).toFixed(2)}
+*PAYMENT:* ${order?.paymentMode?.toUpperCase() || 'N/A'}
+*STATUS:* ${order?.status?.toUpperCase() || 'PENDING'}
+---------------------------------
+_Verified by Englabs OS_`;
+
+        const encodedText = encodeURIComponent(text);
+        window.open(`https://wa.me/?text=${encodedText}`, '_blank');
+    };
+
+    const subtotal = (order?.rate || 0) * (order?.quantity || 1);
+    const discountAmount = order?.discountType === 'Percentage' 
+        ? (subtotal * (order?.discount || 0) / 100)
+        : (order?.discount || 0);
+
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="bg-white w-full max-w-[450px] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-300 print:shadow-none print:w-full print:max-w-none">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300">
+            <div className="relative bg-[#F8F9FA] w-full max-w-[400px] shadow-2xl flex flex-col animate-in zoom-in-95 duration-300 thermal-slip">
                 
-                {/* SLIP HEADER */}
-                <div className="bg-emerald-600 p-8 text-white flex justify-between items-center print:bg-white print:text-slate-900 print:border-b-2 print:border-slate-900">
-                    <div className="flex items-center gap-4">
-                        <div className="bg-white/20 p-2 rounded-xl backdrop-blur-md print:bg-slate-100">
-                            <Utensils className="w-6 h-6 text-white print:text-emerald-600" />
-                        </div>
-                        <div>
-                            <h2 className="text-xl font-black tracking-tighter">ENGLABS PANTRY</h2>
-                            <p className="text-[8px] font-black uppercase tracking-[0.2em] opacity-80">Food Expense & Welfare Receipt</p>
-                        </div>
-                    </div>
-                    <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-xl transition-colors print:hidden">
-                        <X className="w-5 h-5" />
-                    </button>
-                </div>
+                {/* JAGGED TOP EDGE */}
+                <div className="thermal-edge-top"></div>
 
-                {/* THE SLIP CONTENT */}
-                <div id="food-receipt-print-area" className="p-10 flex-1 relative overflow-hidden bg-white">
-                    {/* Background Watermark */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none rotate-[-30deg]">
-                        <h1 className="text-[100px] font-black">RECEIPT</h1>
+                <button 
+                    onClick={onClose} 
+                    className="absolute right-4 top-4 p-2 bg-slate-100 hover:bg-rose-50 text-slate-400 hover:text-rose-500 rounded-full transition-all z-20 print:hidden shadow-sm"
+                >
+                    <X className="w-5 h-5" />
+                </button>
+
+                {/* THE THERMAL CONTENT */}
+                <div id="food-receipt-print-area" className="p-10 flex-1 font-mono text-slate-900 bg-white">
+                    
+                    <div className="text-center mb-8">
+                        <img 
+                            src={logo} 
+                            className="h-12 mx-auto mb-4 grayscale contrast-125 brightness-90" 
+                            alt="Englabs" 
+                        />
+                        <h2 className="text-2xl font-black tracking-tight mb-1">ENGLABS INDIA</h2>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Official Pantry Ledger</p>
+                        <p className="text-[9px] mt-2">1021-1022, Disha Arcade, MDC Sector 4, Panchkula</p>
+                        <div className="my-4 border-b border-dashed border-slate-300"></div>
                     </div>
 
-                    <div className="flex justify-between items-start mb-10 relative z-10">
-                        <div>
-                            <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-[9px] font-black uppercase tracking-widest">
-                                OFFICIAL RECEIPT
+                    <div className="flex justify-between text-[11px] mb-6">
+                        <span>DATE: {new Date(order?.timestamp).toLocaleDateString()}</span>
+                        <span>TIME: {new Date(order?.timestamp).toLocaleTimeString()}</span>
+                    </div>
+
+                    <div className="text-[11px] space-y-1 mb-6">
+                        <p className="font-black">RECEIPT #: {order?.entryId || 'N/A'}</p>
+                        <p>STAFF: {order?.employeeName?.toUpperCase() || 'N/A'}</p>
+                        <p>DEPT: {order?.department?.toUpperCase() || 'GENERAL'}</p>
+                        <p className="border-t border-dotted border-slate-300 pt-1 mt-1">PURPOSE: {order?.purpose?.toUpperCase() || 'N/A'}</p>
+                        <p className="text-[10px] text-slate-500 leading-tight">JUSTIFICATION: {order?.justification || 'No justification provided.'}</p>
+                    </div>
+
+                    <div className="border-b-2 border-dashed border-slate-900 my-4"></div>
+
+                    <div className="space-y-4 text-[12px]">
+                        <div className="flex justify-between font-black border-b border-slate-100 pb-2">
+                            <span className="w-12 text-[10px]">QTY</span>
+                            <span className="flex-1 text-[10px]">DESCRIPTION</span>
+                            <span className="w-20 text-right text-[10px]">TOTAL</span>
+                        </div>
+                        
+                        <div className="flex justify-between items-start">
+                            <span className="w-12 pt-0.5">{order?.quantity || 1}</span>
+                            <span className="flex-1 text-[11px] leading-tight pr-4">
+                                <span className="font-black">{order?.items?.toUpperCase() || 'ITEMS SUMMARY'}</span><br/>
+                                <span className="text-[9px] text-slate-500 uppercase">Rate: ₹{(order?.rate || order?.amount).toFixed(2)} | Unit: {order?.unit || 'Nos'}</span>
                             </span>
-                            <h1 className="text-3xl font-black text-slate-900 tracking-tighter mt-4">{order.entryId}</h1>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Date: {new Date(order.timestamp).toLocaleString()}</p>
-                        </div>
-                        <div className="text-right">
-                            <div className="bg-slate-50 border border-slate-100 p-2 rounded-xl mb-2 inline-block">
-                                <QrCode className="w-12 h-12 text-slate-900" />
-                            </div>
-                            <p className="text-[9px] font-black text-slate-400 uppercase">Verification QR</p>
+                            <span className="w-20 text-right font-bold">₹{subtotal.toFixed(2)}</span>
                         </div>
                     </div>
 
-                    <div className="space-y-8 relative z-10">
-                        {/* EMPLOYEE SECTION */}
-                        <div className="border-t-2 border-dashed border-slate-100 pt-8">
-                            <div className="grid grid-cols-2 gap-y-6">
-                                <div>
-                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Employee Name</p>
-                                    <p className="text-sm font-black text-slate-900 mt-1">{order.employeeName}</p>
-                                </div>
-                                <div>
-                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Department</p>
-                                    <p className="text-sm font-black text-slate-900 mt-1">{order.department}</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div className="border-b-2 border-dashed border-slate-900 my-6"></div>
 
-                        {/* ORDER SECTION */}
-                        <div className="border-t-2 border-dashed border-slate-100 pt-8">
-                            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Order Specifications</h3>
-                            <div className="grid grid-cols-2 gap-y-6">
-                                <div>
-                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Platform / Vendor</p>
-                                    <p className="text-sm font-black text-slate-900 mt-1">{order.vendorName} ({order.platform})</p>
-                                </div>
-                                <div>
-                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Order Type</p>
-                                    <p className="text-sm font-black text-slate-900 mt-1">{order.orderType}</p>
-                                </div>
-                                <div className="col-span-2">
-                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Items Ordered</p>
-                                    <p className="text-sm font-bold text-slate-700 mt-1 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                                        {order.items}
-                                    </p>
-                                </div>
-                            </div>
+                    <div className="space-y-2 text-[12px]">
+                        <div className="flex justify-between">
+                            <span className="text-slate-500">SUBTOTAL:</span>
+                            <span>₹{subtotal.toFixed(2)}</span>
                         </div>
-
-                        {/* FINANCIAL SECTION */}
-                        <div className="bg-slate-900 text-white p-8 rounded-[2rem] shadow-xl relative overflow-hidden">
-                            <div className="absolute right-0 bottom-0 opacity-10 translate-x-1/4 translate-y-1/4">
-                                <Receipt className="w-32 h-32" />
+                        {discountAmount > 0 && (
+                            <div className="flex justify-between text-rose-600 font-bold">
+                                <span>
+                                    REBATE {order?.discountType === 'Percentage' ? `(${order?.discount}%)` : ''}:
+                                </span>
+                                <span>-₹{discountAmount.toFixed(2)}</span>
                             </div>
-                            <div className="relative z-10">
-                                <div className="flex justify-between items-center mb-6">
-                                    <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Total Amount Paid</span>
-                                    <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-full text-[9px] font-black uppercase tracking-widest border border-emerald-500/20">
-                                        {order.paymentMode}
-                                    </span>
-                                </div>
-                                <div className="flex items-baseline gap-2">
-                                    <span className="text-xl font-black text-emerald-400">₹</span>
-                                    <span className="text-5xl font-black tracking-tighter">{order.amount.toLocaleString('en-IN')}</span>
-                                </div>
-                                <div className="mt-6 flex items-center gap-2">
-                                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-emerald-400">Payment {order.status}</p>
-                                </div>
-                            </div>
+                        )}
+                        <div className="border-b border-slate-200 my-2"></div>
+                        <div className="flex justify-between text-xl font-black pt-2">
+                            <span>TOTAL:</span>
+                            <span>₹{(order?.amount || 0).toFixed(2)}</span>
                         </div>
+                    </div>
 
-                        {/* PURPOSE SECTION */}
-                        <div className="border-t-2 border-dashed border-slate-100 pt-8">
-                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Business Justification</p>
-                            <p className="text-xs font-bold text-slate-600 italic">"{order.justification || 'Official welfare sustenance'}"</p>
-                            {order.projectCode && (
-                                <p className="text-[9px] font-black text-blue-500 uppercase tracking-widest mt-3">Charge to Project: {order.projectCode}</p>
+                    <div className="mt-8 pt-4 border-t border-dashed border-slate-300 text-[10px] space-y-1">
+                        <div className="flex justify-between">
+                            <span className="text-slate-500 uppercase">Payment Mode:</span>
+                            <span className="font-black">{order?.paymentMode?.toUpperCase() || 'CASH'}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="text-slate-500 uppercase">Settled By:</span>
+                            <span className="font-black">{order?.paidBy?.toUpperCase() || 'EMPLOYEE'}</span>
+                        </div>
+                        <div className="flex justify-between items-center pt-2 mt-2 border-t border-slate-100">
+                            <span className="text-slate-500 uppercase">Audit Status:</span>
+                            <span className={`px-2 py-0.5 rounded-full font-black text-[8px] uppercase ${
+                                order?.status === 'Approved' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                            }`}>
+                                {order?.status?.toUpperCase() || 'PENDING'}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="mt-12 text-center">
+                        <div className="flex justify-center mb-4">
+                            {order?.platform === 'Sky-5' && order?.paymentMode === 'UPI' ? (
+                                <div className="p-3 bg-white border-2 border-slate-900 rounded-3xl shadow-sm relative">
+                                    <img 
+                                        src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=Q15213511@ybl&pn=Sky5%20Hotel&am=${order?.amount || 0}&cu=INR`} 
+                                        alt="Sky-5 Payment QR" 
+                                        className="w-32 h-32"
+                                    />
+                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-slate-900 text-white text-[8px] font-black uppercase rounded-full">
+                                        PAYMENT SCAN
+                                    </div>
+                                </div>
+                            ) : (
+                                <img 
+                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${order?.entryId || 'N/A'}`} 
+                                    alt="Entry Barcode" 
+                                    className="w-24 h-24 opacity-80"
+                                />
                             )}
                         </div>
+                        <p className="text-[8px] font-black tracking-[0.5em] opacity-30 mb-8">****************************</p>
+                        
+                        {order?.platform === 'Sky-5' && order?.paymentMode === 'UPI' && (
+                            <p className="text-[9px] font-black mb-6 text-emerald-600">
+                                MERCHANT: SKY5 HOTEL<br/>
+                                <span className="text-[7px] text-slate-400">ID: Q15213511@ybl</span>
+                            </p>
+                        )}
+                        
+                        <div className="mt-12 border-t border-slate-400 pt-2 w-48 mx-auto">
+                            <p className="text-[9px] font-black uppercase">Authorized Signature</p>
+                        </div>
+                        
+                        <p className="mt-12 text-[10px] font-bold">THANK YOU FOR YOUR WORK!</p>
+                        <p className="text-[8px] text-slate-400 mt-1">Englabs India Pvt Ltd - 2026</p>
                     </div>
 
-                    {/* Footer Verification */}
-                    <div className="mt-12 pt-8 border-t border-slate-100 flex justify-between items-center">
-                        <div className="flex items-center gap-3">
-                            <img src={logo} alt="Englabs" className="h-10 object-contain" />
-                            <p className="text-[8px] font-black uppercase tracking-widest text-slate-400">Englabs India Private Limited</p>
-                        </div>
-                        <p className="text-[8px] font-black uppercase tracking-widest tracking-[0.3em] text-slate-300">Verified Document</p>
-                    </div>
+                    {/* JAGGED BOTTOM EDGE */}
+                    <div className="thermal-edge-bottom"></div>
                 </div>
 
                 {/* FOOTER ACTIONS */}
-                <div className="bg-slate-50 p-8 border-t border-slate-100 flex gap-4 print:hidden">
+                <div className="bg-slate-900 p-6 flex flex-col gap-3 print:hidden">
+                    <div className="flex gap-3">
+                        <button 
+                            onClick={handlePrint}
+                            className="flex-1 bg-white text-slate-900 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-slate-50 transition-all"
+                        >
+                            <Printer className="w-4 h-4" /> PRINT SLIP
+                        </button>
+                        <button 
+                            onClick={handleWhatsAppShare}
+                            className="flex-1 bg-[#25D366] text-white py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[#20bd5a] transition-all shadow-lg shadow-emerald-500/20"
+                        >
+                            <MessageSquare className="w-4 h-4" /> SHARE WHATSAPP
+                        </button>
+                    </div>
                     <button 
                         onClick={handlePrint}
-                        className="flex-1 bg-[#0F172A] text-white py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10"
+                        className="w-full py-3 bg-white/10 text-white rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-white/20 transition-all border border-white/10"
                     >
-                        <Printer className="w-4 h-4 text-emerald-500" /> PRINT RECEIPT / PDF
-                    </button>
-                    <button className="px-6 py-4 bg-white border border-slate-200 text-slate-900 rounded-2xl hover:bg-slate-50 transition-all shadow-sm">
-                        <Download className="w-4 h-4" />
+                        <Download className="w-4 h-4" /> SAVE PDF / JPG
                     </button>
                 </div>
             </div>
 
-            {/* Custom print styles */}
             <style dangerouslySetInnerHTML={{ __html: `
+                .thermal-slip {
+                    position: relative;
+                    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.2));
+                }
+                .thermal-edge-top {
+                    position: absolute;
+                    top: -10px;
+                    left: 0;
+                    right: 0;
+                    height: 10px;
+                    background: white;
+                    clip-path: polygon(0 100%, 5% 0, 10% 100%, 15% 0, 20% 100%, 25% 0, 30% 100%, 35% 0, 40% 100%, 45% 0, 50% 100%, 55% 0, 60% 100%, 65% 0, 70% 100%, 75% 0, 80% 100%, 85% 0, 90% 100%, 95% 0, 100% 100%);
+                }
+                .thermal-edge-bottom {
+                    position: absolute;
+                    bottom: -10px;
+                    left: 0;
+                    right: 0;
+                    height: 10px;
+                    background: white;
+                    clip-path: polygon(0 0, 5% 100%, 10% 0, 15% 100%, 20% 0, 25% 100%, 30% 0, 35% 100%, 40% 0, 45% 100%, 50% 0, 55% 100%, 60% 0, 65% 100%, 70% 0, 75% 100%, 80% 0, 85% 100%, 90% 0, 95% 100%, 100% 0);
+                }
                 @media print {
-                    @page {
-                        size: A4;
-                        margin: 0;
-                    }
-                    body {
-                        margin: 0;
-                        padding: 0;
-                        background: white !important;
-                    }
-                    body * {
-                        visibility: hidden;
-                    }
-                    #food-receipt-print-area, #food-receipt-print-area * {
-                        visibility: visible;
-                    }
-                    #food-receipt-print-area {
-                        position: absolute;
-                        left: 0;
-                        top: 0;
-                        width: 210mm;
-                        min-height: 297mm;
-                        padding: 20mm !important;
-                        margin: 0;
-                    }
+                    @page { size: auto; margin: 0; }
+                    body { background: white !important; }
+                    .thermal-slip { filter: none !important; width: 100% !important; max-width: none !important; margin: 0 !important; }
+                    .thermal-edge-top, .thermal-edge-bottom { display: none; }
                 }
             `}} />
         </div>

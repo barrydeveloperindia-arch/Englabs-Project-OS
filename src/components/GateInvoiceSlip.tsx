@@ -128,8 +128,10 @@ const GateInvoiceSlip: React.FC<Props> = ({ entry, onClose }) => {
                         <div className="col-span-5 bg-slate-900 p-10 rounded-[2.5rem] text-white flex flex-col justify-center relative overflow-hidden shadow-2xl">
                             <TrendingUp className="absolute -right-4 -bottom-4 w-32 h-32 opacity-10" />
                             <p className="text-[9px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-2">Grand Total Amount</p>
-                            <p className="text-5xl font-black tracking-tighter">₹{(entry.amount || 0).toLocaleString('en-IN')}</p>
-                            <p className="text-[9px] font-bold text-slate-400 mt-4 uppercase tracking-widest">Inclusive of all logistics taxes</p>
+                            <p className="text-5xl font-black tracking-tighter">
+                                ₹{((entry.amount || 0) * 1.18).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                            </p>
+                            <p className="text-[9px] font-bold text-slate-400 mt-4 uppercase tracking-widest">Inclusive of all logistics taxes (GST @18%)</p>
                         </div>
                     </div>
 
@@ -152,7 +154,7 @@ const GateInvoiceSlip: React.FC<Props> = ({ entry, onClose }) => {
                                         <tr key={idx} className="print:break-inside-avoid">
                                             <td className="py-5 text-sm font-bold text-slate-400">{String(idx + 1).padStart(2, '0')}</td>
                                             <td className="py-5 text-sm font-black text-slate-900">{item.name}</td>
-                                            <td className="py-5 text-center text-xs font-bold text-slate-400">{(item as any).hsnCode || '—'}</td>
+                                            <td className="py-5 text-center text-xs font-black text-slate-900">{(item as any).hsnCode || '32082090'}</td>
                                             <td className="py-5 text-center text-sm font-bold text-slate-700">{item.quantity} {item.unit}</td>
                                             <td className="py-5 text-right text-sm font-bold text-slate-700">₹{(item as any).rate?.toLocaleString('en-IN') || '0'}</td>
                                             <td className="py-5 text-right text-sm font-black text-slate-900">₹{item.amount.toLocaleString('en-IN')}</td>
@@ -169,10 +171,20 @@ const GateInvoiceSlip: React.FC<Props> = ({ entry, onClose }) => {
                                     </tr>
                                 )}
                             </tbody>
-                            <tfoot>
-                                <tr className="border-t-2 border-slate-900 bg-slate-50 font-black">
-                                    <td colSpan={5} className="py-4 text-right text-[10px] uppercase tracking-widest">Total Valuation</td>
-                                    <td className="py-4 text-right text-sm text-slate-900">₹{(entry.amount || 0).toLocaleString('en-IN')}</td>
+                            <tfoot className="border-t-2 border-slate-900">
+                                <tr>
+                                    <td colSpan={5} className="py-4 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">Taxable Sub-Total</td>
+                                    <td className="py-4 text-right text-sm font-black text-slate-900">₹{(entry.amount || 0).toLocaleString('en-IN')}</td>
+                                </tr>
+                                <tr>
+                                    <td colSpan={5} className="py-2 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">IGST @18%</td>
+                                    <td className="py-2 text-right text-sm font-black text-slate-900">₹{((entry.amount || 0) * 0.18).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                </tr>
+                                <tr className="bg-slate-50 border-t border-slate-100">
+                                    <td colSpan={5} className="py-4 text-right text-[10px] font-black text-slate-900 uppercase tracking-widest">Grand Total (Inclusive)</td>
+                                    <td className="py-4 text-right text-lg font-black text-emerald-600">
+                                        ₹{((entry.amount || 0) * 1.18).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                    </td>
                                 </tr>
                             </tfoot>
                         </table>

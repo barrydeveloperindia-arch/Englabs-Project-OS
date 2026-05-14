@@ -21,7 +21,8 @@ import {
     Shield,
     Utensils,
     CreditCard,
-    FileText
+    FileText,
+    ChefHat
 } from 'lucide-react';
 import NewProjectModal from './components/NewProjectModal';
 import GateRegister from './components/GateRegister';
@@ -31,9 +32,12 @@ import SystemGuardDashboard from './components/SystemGuardDashboard';
 import BillingDashboard from './components/BillingDashboard';
 import QADashboard from './components/QADashboard';
 import DigitalEvidence from './components/DigitalEvidence';
+import InventoryManager from './components/InventoryManager';
+import Sky5Terminal from './components/Sky5Terminal';
 import { ProjectData, STAGES, ProjectStage } from './lib/project';
 import { logAction, AuditLog } from './lib/system_guard';
-import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase } from './lib/database_service';
+import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry } from './lib/database_service';
+import { processInventoryUpdate } from './lib/inventory_service';
 import forensicRegistry from '../data/forensic_gate_registry.json';
 
 const projectFiles = import.meta.glob('/data/*.json');
@@ -55,7 +59,7 @@ const App: React.FC = () => {
             return [];
         }
     });
-    const [currentView, setCurrentView] = useState<'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'SYSTEM_GUARD' | 'BILLING' | 'QA_TESTER'>('PROJECTS');
+    const [currentView, setCurrentView] = useState<'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'SYSTEM_GUARD' | 'BILLING' | 'QA_TESTER' | 'SKY5_TERMINAL' | 'INVENTORY'>('PROJECTS');
 
     useEffect(() => {
         console.log("Found project files:", Object.keys(projectFiles));
@@ -92,14 +96,43 @@ const App: React.FC = () => {
         const syncFromCloud = async () => {
             try {
                 const cloudEntries = await fetchGateEntries();
-                if (cloudEntries && cloudEntries.length > 0) {
-                    console.log(`Cloud Sync: Fetched ${cloudEntries.length} entries from Firebase.`);
-                    setGateEntries(cloudEntries);
-                } else if (forensicRegistry && forensicRegistry.length > 0) {
-                    // Fallback to disk-based registry if cloud is empty
-                    console.log(`Disk Sync: Loading ${forensicRegistry.length} entries from forensic_gate_registry.json`);
-                    setGateEntries(forensicRegistry as any[]);
-                }
+                const forensicData = forensicRegistry as any[];
+                
+                setGateEntries(prev => {
+                    // Create a map of existing entries for quick lookup
+                    const entryMap = new Map();
+                    
+                    // 1. Start with Forensic Data (Baseline)
+                    forensicData.forEach(e => entryMap.set(e.id, e));
+                    
+                    // 2. Overlay Cloud Data (Priority)
+                    cloudEntries.forEach(e => entryMap.set(e.id, e));
+                    
+                    // 3. Merge Local State (Priority for active session changes)
+                    prev.forEach(e => {
+                        const existing = entryMap.get(e.id);
+                        if (!existing) {
+                            entryMap.set(e.id, e);
+                        } else {
+                            // If it exists, prefer the one with a newer timestamp or specific update flag
+                            // We use a simple timestamp comparison or just assume local is more recent if it was just edited
+                            const localTime = new Date(e.timestamp).getTime();
+                            const cloudTime = new Date(existing.timestamp).getTime();
+                            
+                            // If local has been updated or is same age, keep local
+                            if (localTime >= cloudTime) {
+                                entryMap.set(e.id, e);
+                            }
+                        }
+                    });
+
+                    const merged = Array.from(entryMap.values()).sort((a, b) => 
+                        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+                    );
+                    
+                    console.log(`Forensic Sync: ${forensicData.length} disk, ${cloudEntries.length} cloud, total ${merged.length} entries.`);
+                    return merged;
+                });
             } catch (e) {
                 console.error("Cloud hydration failed:", e);
             }
@@ -144,6 +177,27 @@ const App: React.FC = () => {
         }
     };
 
+    const handleNewGateEntry = async (entry: any) => {
+        setGateEntries(prev => [entry, ...prev]);
+        // Background Cloud Sync & Inventory Processing
+        await Promise.all([
+            saveGateEntry(entry),
+            processInventoryUpdate(entry)
+        ]);
+    };
+
+    const handleUpdateGateEntry = async (entry: any) => {
+        setGateEntries(prev => prev.map(e => e.id === entry.id ? entry : e));
+        await Promise.all([
+            saveGateEntry(entry),
+            processInventoryUpdate(entry)
+        ]);
+    };
+
+    const handleDeleteGateEntry = (id: string) => {
+        setGateEntries(prev => prev.filter(e => e.id !== id));
+    };
+
     if (!selectedProject) return <div className="h-screen w-screen bg-slate-900 flex items-center justify-center text-white font-black text-4xl">INITIALIZING...</div>;
 
     return (
@@ -154,46 +208,70 @@ const App: React.FC = () => {
                 style={{ width: '320px', minWidth: '320px', maxWidth: '320px' }}
             >
                 <div className="p-8">
-                    <div className="flex items-center gap-3 mb-2">
-                        <div className="p-2 bg-emerald-500 rounded-lg">
-                            <Layers className="w-6 h-6 text-slate-900" />
+                    <div className="flex items-center gap-4 mb-3">
+                        <div className="relative group">
+                            <div className="absolute inset-0 bg-emerald-500/20 blur-xl group-hover:bg-emerald-500/40 transition-all rounded-full" />
+                            <div className="relative p-2.5 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl shadow-lg shadow-emerald-500/20">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-900">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                                </svg>
+                            </div>
                         </div>
-                        <span className="text-xl font-black text-white tracking-tighter">ENGLABS INDIA PVT LTD</span>
+                        <div className="flex flex-col">
+                            <span className="text-lg font-black text-white tracking-tighter leading-none">ENGLABS INDIA</span>
+                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mt-1">PVT LTD</span>
+                        </div>
                     </div>
-                    <p className="text-[10px] font-black text-emerald-500 tracking-[0.2em] uppercase">Enterprise Operational OS</p>
+                    <p className="text-[9px] font-black text-emerald-500/80 tracking-[0.25em] uppercase pl-1">Enterprise Operational OS</p>
                 </div>
 
-                <div className="px-6 mb-8 flex flex-col gap-2">
+                <div className="px-6 mb-8 flex flex-col gap-2.5">
                     <button 
                         onClick={() => setCurrentView('PROJECTS')}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-xl font-black text-xs transition-all ${currentView === 'PROJECTS' ? 'bg-emerald-500 text-slate-900 shadow-lg shadow-emerald-500/20' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
+                        className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 ${currentView === 'PROJECTS' ? 'bg-emerald-500 text-slate-900 shadow-[0_0_25px_rgba(16,185,129,0.35)] scale-[1.02]' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                     >
-                        <Layers className="w-4 h-4" /> PROJECTS
+                        <Layers className="w-4.5 h-4.5" /> PROJECTS
                     </button>
                     <button 
                         onClick={() => setCurrentView('GATE_REGISTER')}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-xl font-black text-xs transition-all ${currentView === 'GATE_REGISTER' ? 'bg-emerald-500 text-slate-900 shadow-lg shadow-emerald-500/20' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
+                        className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 ${currentView === 'GATE_REGISTER' ? 'bg-emerald-500 text-slate-900 shadow-[0_0_25px_rgba(16,185,129,0.35)] scale-[1.02]' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                     >
-                        <Shield className="w-4 h-4" /> LOGISTICS COMMAND
+                        <Shield className="w-4.5 h-4.5" /> LOGISTICS COMMAND
                     </button>
                     <button 
                         onClick={() => setCurrentView('FOOD_REGISTER')}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-xl font-black text-xs transition-all ${currentView === 'FOOD_REGISTER' ? 'bg-emerald-500 text-slate-900 shadow-lg shadow-emerald-500/20' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
+                        className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 ${currentView === 'FOOD_REGISTER' ? 'bg-emerald-500 text-slate-900 shadow-[0_0_25px_rgba(16,185,129,0.35)] scale-[1.02]' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                     >
-                        <Utensils className="w-4 h-4" /> PANTRY CONTROL
+                        <Utensils className="w-4.5 h-4.5" /> PANTRY CONTROL
+                    </button>
+                    <button 
+                        onClick={() => setCurrentView('INVENTORY')}
+                        className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 ${currentView === 'INVENTORY' ? 'bg-emerald-500 text-slate-900 shadow-[0_0_25px_rgba(16,185,129,0.35)] scale-[1.02]' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                    >
+                        <Box className="w-4.5 h-4.5" /> INVENTORY MASTER
                     </button>
                     <button 
                         onClick={() => setCurrentView('BILLING')}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-xl font-black text-xs transition-all ${currentView === 'BILLING' ? 'bg-emerald-500 text-slate-900 shadow-lg shadow-emerald-500/20' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
+                        className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 ${currentView === 'BILLING' ? 'bg-emerald-500 text-slate-900 shadow-[0_0_25px_rgba(16,185,129,0.35)] scale-[1.02]' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                     >
-                        <CreditCard className="w-4 h-4" /> FINANCE COMMAND
+                        <CreditCard className="w-4.5 h-4.5" /> FINANCE COMMAND
                     </button>
                     <button 
                         onClick={() => setCurrentView('QA_TESTER')}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-xl font-black text-xs transition-all ${currentView === 'QA_TESTER' ? 'bg-emerald-500 text-slate-900 shadow-lg shadow-emerald-500/20' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
+                        className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 ${currentView === 'QA_TESTER' ? 'bg-emerald-500 text-slate-900 shadow-[0_0_25px_rgba(16,185,129,0.35)] scale-[1.02]' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                     >
-                        <Shield className="w-4 h-4" /> ZERO-ERROR AUDIT
+                        <Shield className="w-4.5 h-4.5" /> ZERO-ERROR AUDIT
                     </button>
+
+                    <div className="mt-8 pt-8 border-t border-white/5">
+                        <p className="px-5 text-[9px] font-black text-slate-600 uppercase tracking-[0.25em] mb-5">Vendor Channels</p>
+                        <button 
+                            onClick={() => setCurrentView('SKY5_TERMINAL')}
+                            className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 ${currentView === 'SKY5_TERMINAL' ? 'bg-amber-500 text-slate-900 shadow-[0_0_25px_rgba(245,158,11,0.35)] scale-[1.02]' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                        >
+                            <ChefHat className="w-4.5 h-4.5" /> SKY-5 KITCHEN
+                        </button>
+                    </div>
                 </div>
 
                 {currentView === 'PROJECTS' && (
@@ -392,7 +470,9 @@ const App: React.FC = () => {
             ) : currentView === 'GATE_REGISTER' ? (
                 <GateRegister 
                     entries={gateEntries} 
-                    setEntries={setGateEntries} 
+                    onNewEntry={handleNewGateEntry}
+                    onUpdateEntry={handleUpdateGateEntry}
+                    onDeleteEntry={handleDeleteGateEntry}
                     onLog={(log) => setAuditLogs(prev => [log, ...prev])} 
                     onFullSync={handleFullSync}
                 />
@@ -404,8 +484,12 @@ const App: React.FC = () => {
                 <BillingDashboard />
             ) : currentView === 'QA_TESTER' ? (
                 <QADashboard currentData={gateEntries} />
+            ) : currentView === 'SKY5_TERMINAL' ? (
+                <Sky5Terminal />
+            ) : currentView === 'INVENTORY' ? (
+                <InventoryManager />
             ) : (
-                <DigitalEvidence onAutoRegister={(newEntry) => setGateEntries(prev => [newEntry, ...prev])} />
+                <DigitalEvidence onAutoRegister={handleNewGateEntry} />
             )}
 
             <NewProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onAdd={(newProj) => setProjects(prev => [...prev, newProj])} />

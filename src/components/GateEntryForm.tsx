@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { GateEntry, UNITS, DELIVERY_TYPES, generateId, generateGatePassId } from '../lib/gate_system';
 import { AuditLog } from '../lib/system_guard';
+import { extractInvoiceData } from '../lib/extraction_service';
 
 interface Props {
     onSave: (entry: GateEntry) => void;
@@ -31,6 +32,31 @@ interface Props {
 }
 
 const DRAFT_KEY = 'englabs_gate_entry_draft';
+
+// 🏢 CORPORATE VENDOR INTELLIGENCE DATABASE
+const VENDOR_PROFILES: Record<string, any> = {
+    'Mr. Parmod Behl': {
+        vehicleNumber: 'LOCAL',
+        fromLocation: 'CHANDIGARH',
+        toLocation: 'ENGLABS FACILITY',
+        driverName: 'Mr. Parmod Behl',
+        remarks: 'INWARD MATERIAL RECEIVED IN GOOD CONDITION',
+        items: [
+            { id: 1, name: '25mm CPVC Pipe (FlowGuard)', hsnCode: '3917', quantity: 10, unit: 'Nos', rate: 180, amount: 1800 },
+            { id: 2, name: '25mm CPVC Elbow', hsnCode: '3917', quantity: 20, unit: 'Nos', rate: 45, amount: 900 }
+        ]
+    },
+    'Ridhan': {
+        vehicleNumber: 'PB-65-AX-9921',
+        fromLocation: 'ZIRAKPUR',
+        toLocation: 'ENGLABS FACILITY',
+        driverName: 'Satish Kumar',
+        remarks: 'PURCHASE INVOICE ATTACHED / RIDHAN LOGISTICS',
+        items: [
+            { id: 1, name: 'Industrial Hardware Kit', hsnCode: '7318', quantity: 5, unit: 'Nos', rate: 450, amount: 2250 }
+        ]
+    }
+};
 
 const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount, initialData, onLog }) => {
     const [isScanning, setIsScanning] = useState(false);
@@ -116,10 +142,10 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
     };
 
     const clearDraft = () => {
-        if (confirm("Are you sure you want to clear this entire entry? This cannot be undone.")) {
+        if (window.confirm("FORENSIC WIPE INITIATED: Are you sure you want to clear this entire entry? This cannot be undone.")) {
             localStorage.removeItem(DRAFT_KEY);
-            setFormData({
-                items: [{ id: 1, name: '', quantity: 0, unit: 'Nos', rate: 0, amount: 0 }],
+            const resetState = {
+                items: [{ id: 1, name: '', hsnCode: '', quantity: 0, unit: 'Nos', rate: 0, amount: 0 }],
                 partyName: '',
                 vehicleNumber: '',
                 fromLocation: '',
@@ -136,7 +162,19 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                 paymentStatus: 'UNPAID',
                 paymentMode: 'UPI',
                 transactionId: ''
-            });
+            };
+            setFormData(resetState);
+            
+            if (onLog) {
+                onLog({
+                    id: `LOG-${Date.now()}`,
+                    timestamp: new Date().toISOString(),
+                    user: formData.employeeName || 'System',
+                    action: 'DELETE',
+                    targetId: 'DRAFT',
+                    details: 'Manual draft purge executed via Forensic Trash protocol.'
+                });
+            }
         }
     };
 
@@ -166,38 +204,28 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
         const file = e.target.files?.[0];
         if (file) {
             const reader = new FileReader();
-            reader.onloadend = () => {
+            reader.onloadend = async () => {
                 const dataUrl = reader.result as string;
                 setFormData((prev: any) => ({ ...prev, [field]: dataUrl }));
 
                 // 🤖 TRIGGER AUTO-FILL IF INVOICE IS UPLOADED
                 if (field === 'invoicePhotoUrl') {
                     setIsScanning(true);
-                    setTimeout(() => {
+                    try {
+                        const extracted = await extractInvoiceData(dataUrl);
                         setFormData((prev: any) => ({
                             ...prev,
-                            items: [
-                                { id: 1, name: '25mm CPVC Pipe (FlowGuard)', hsnCode: '3917', quantity: 10, unit: 'Nos', rate: 180, amount: 1800 },
-                                { id: 2, name: '25mm CPVC Elbow', hsnCode: '3917', quantity: 20, unit: 'Nos', rate: 45, amount: 900 },
-                                { id: 3, name: '25mm CPVC Tee', hsnCode: '3917', quantity: 15, unit: 'Nos', rate: 65, amount: 975 },
-                                { id: 4, name: '25mm CPVC MTA', hsnCode: '3917', quantity: 10, unit: 'Nos', rate: 55, amount: 550 },
-                                { id: 5, name: '25mm CPVC FTA', hsnCode: '3917', quantity: 10, unit: 'Nos', rate: 58, amount: 580 },
-                                { id: 6, name: 'CPVC Solvent (118ml)', hsnCode: '3506', quantity: 2, unit: 'Nos', rate: 125, amount: 250 },
-                                { id: 7, name: 'Teflon Tape', hsnCode: '3920', quantity: 5, unit: 'Nos', rate: 15, amount: 75 }
-                            ],
-                            partyName: 'Mr. Parmod Behl',
-                            invoiceNumber: 'SLIP-11-05-26',
-                            vehicleNumber: 'LOCAL',
-                            fromLocation: 'CHANDIGARH',
-                            toLocation: 'ENGLABS FACILITY',
-                            amount: 0,
-                            employeeName: 'UDITANSHU',
-                            driverName: 'Mr. Parmod Behl',
-                            remarks: 'INWARD MATERIAL RECEIVED IN GOOD CONDITION'
+                            ...extracted,
+                            // Ensure items have internal IDs for React keys
+                            items: extracted.items.map((item, idx) => ({ ...item, id: Date.now() + idx }))
                         }));
+                        alert(`INTEL ATTACHED: Forensic details for ${extracted.partyName} extracted and verified.`);
+                    } catch (err) {
+                        console.error("AI Extraction Error:", err);
+                        alert("AI CORE ERROR: Failed to extract forensic data. Falling back to manual verification.");
+                    } finally {
                         setIsScanning(false);
-                        alert("AI EXTRACTION COMPLETE: Bulk items auto-populated from slip.");
-                    }, 1500);
+                    }
                 }
             };
             reader.readAsDataURL(file);
@@ -298,10 +326,10 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                         <button 
                             type="button"
                             onClick={clearDraft}
-                            className="p-4 bg-white border border-slate-200 text-slate-400 hover:text-red-500 rounded-full transition-all"
-                            title="Clear All Entries"
+                            className="p-4 bg-white border border-slate-200 text-slate-400 hover:bg-rose-500 hover:text-white hover:border-rose-500 rounded-full transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-rose-500/20 hover:scale-110 group"
+                            title="FORENSIC WIPE: Clear All Entries"
                         >
-                            <Trash2 className="w-5 h-5" />
+                            <Trash2 className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                         </button>
                         <div className="flex bg-white p-2 rounded-2xl border border-slate-200 shadow-sm">
                             <button 
@@ -337,7 +365,14 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                                     <input 
                                         required
                                         value={formData.partyName}
-                                        onChange={e => setFormData({...formData, partyName: e.target.value})}
+                                        onChange={e => {
+                                            const val = e.target.value;
+                                            setFormData({...formData, partyName: val});
+                                            // 🏢 AUTO-FILL ON VENDOR MATCH
+                                            if (VENDOR_PROFILES[val]) {
+                                                setFormData(prev => ({ ...prev, ...VENDOR_PROFILES[val], partyName: val }));
+                                            }
+                                        }}
                                         className="w-full bg-transparent border-b-2 border-slate-700 py-3 pl-8 font-black text-2xl text-white placeholder:text-slate-600 focus:border-emerald-500 outline-none transition-all"
                                         placeholder="Vendor Name"
                                     />
@@ -538,20 +573,51 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                                 <div className="grid grid-cols-2 gap-6">
                                     <div className="relative group">
                                         <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 block text-center">Slip / Invoice</label>
-                                        {formData.invoicePhotoUrl ? (
-                                            <div className="relative w-full h-24 rounded-2xl overflow-hidden border border-slate-100">
-                                                <img src={formData.invoicePhotoUrl} className="w-full h-full object-cover" />
-                                                <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 transition-opacity">
-                                                    <label className="p-2 bg-white rounded-full cursor-pointer"><Camera className="w-4 h-4"/><input type="file" className="hidden" onChange={e => handlePhotoChange(e, 'invoicePhotoUrl')}/></label>
-                                                    <button onClick={() => setFormData({...formData, invoicePhotoUrl: ''})} className="p-2 bg-white rounded-full text-red-500"><X className="w-4 h-4"/></button>
+                                        <div className="flex flex-col gap-4">
+                                            {formData.invoicePhotoUrl ? (
+                                                <div className="relative w-full h-32 rounded-[2rem] overflow-hidden border-2 border-slate-100 shadow-inner bg-slate-50">
+                                                    <img src={formData.invoicePhotoUrl} className="w-full h-full object-contain" />
+                                                    <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-3 transition-all duration-300 backdrop-blur-sm">
+                                                        <label className="p-3 bg-white text-slate-900 rounded-full cursor-pointer hover:scale-110 transition-transform shadow-xl">
+                                                            <Camera className="w-5 h-5"/>
+                                                            <input type="file" className="hidden" onChange={e => handlePhotoChange(e, 'invoicePhotoUrl')}/>
+                                                        </label>
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => setFormData({...formData, invoicePhotoUrl: ''})} 
+                                                            className="p-3 bg-rose-500 text-white rounded-full hover:scale-110 transition-transform shadow-xl"
+                                                        >
+                                                            <Trash2 className="w-5 h-5"/>
+                                                        </button>
+                                                    </div>
                                                 </div>
+                                            ) : (
+                                                <div className="relative w-full h-32 rounded-[2rem] border-2 border-dashed border-slate-200 bg-slate-50/50 hover:bg-emerald-50/30 hover:border-emerald-500 transition-all duration-300 flex flex-col items-center justify-center group/box">
+                                                    <div className="p-4 bg-white rounded-2xl shadow-sm mb-2 group-hover/box:scale-110 transition-transform duration-500">
+                                                        <FileText className="w-8 h-8 text-slate-300 group-hover/box:text-emerald-500" />
+                                                    </div>
+                                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Attach Invoice</span>
+                                                    <input 
+                                                        type="file" 
+                                                        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10" 
+                                                        onChange={e => handlePhotoChange(e, 'invoicePhotoUrl')}
+                                                    />
+                                                </div>
+                                            )}
+                                            <div className="relative">
+                                                <Hash className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                                                <input 
+                                                    required
+                                                    value={formData.invoiceNumber}
+                                                    onChange={e => setFormData({...formData, invoiceNumber: e.target.value})}
+                                                    className="w-full bg-white border-2 border-slate-100 rounded-2xl py-5 pl-12 pr-6 font-black text-slate-900 text-lg outline-none focus:border-emerald-500 focus:ring-8 focus:ring-emerald-500/10 shadow-xl transition-all placeholder:text-slate-200"
+                                                    placeholder="INV-000000"
+                                                />
                                             </div>
-                                        ) : (
-                                            <label className="flex flex-col items-center justify-center w-full h-24 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 hover:border-emerald-500 cursor-pointer transition-all">
-                                                <FileText className="w-6 h-6 text-slate-300" />
-                                                <input type="file" className="hidden" onChange={e => handlePhotoChange(e, 'invoicePhotoUrl')}/>
-                                            </label>
-                                        )}
+                                            <p className="text-[8px] text-slate-400 text-center font-black uppercase tracking-[0.2em] leading-tight px-4">
+                                                Verification Path: G:\\Englabs Inventory 2026-27\\MAY-2026
+                                            </p>
+                                        </div>
                                     </div>
                                     <div className="relative group">
                                         <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 block text-center">Material Photo</label>

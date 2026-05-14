@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     X, 
     Save, 
@@ -23,6 +23,7 @@ import {
     PAYMENT_MODES,
     PAID_BY_OPTIONS,
     DEPARTMENTS,
+    STAFF_LIST,
     generateFoodId
 } from '../lib/food_system';
 
@@ -46,9 +47,31 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
             paidBy: 'Employee',
             hasBill: true,
             status: 'Pending',
-            attachmentUrl: ''
+            attachmentUrl: '',
+            rate: 0,
+            discount: 0,
+            discountType: 'Flat',
+            quantity: 1,
+            unit: 'Nos',
+            trackingStatus: 'Order Placed'
         };
     });
+
+    useEffect(() => {
+        const rate = formData.rate || 0;
+        const quantity = formData.quantity || 1;
+        const discount = formData.discount || 0;
+        const subtotal = rate * quantity;
+        
+        let calculatedAmount = 0;
+        if (formData.discountType === 'Percentage') {
+            calculatedAmount = Math.max(0, subtotal * (1 - discount / 100));
+        } else {
+            calculatedAmount = Math.max(0, subtotal - discount);
+        }
+        
+        setFormData(prev => ({ ...prev, amount: Math.round(calculatedAmount) }));
+    }, [formData.rate, formData.quantity, formData.discount, formData.discountType]);
 
     const [previewUrl, setPreviewUrl] = useState<string>(initialData?.attachmentUrl || '');
 
@@ -70,11 +93,11 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-6 sm:p-12">
             <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={onClose} />
             
-            <div className="relative w-full max-w-4xl bg-white rounded-[3rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+            <div className="relative w-full max-w-4xl bg-white rounded-[3rem] shadow-2xl overflow-hidden animate-spring-zoom">
                 {/* HEADER */}
                 <div className="px-10 py-8 bg-slate-900 text-white flex justify-between items-center">
                     <div className="flex items-center gap-4">
-                        <div className="p-3 bg-emerald-500 rounded-2xl">
+                        <div className="p-3 bg-emerald-500 rounded-2xl shadow-lg shadow-emerald-500/20">
                             <Utensils className="w-6 h-6 text-slate-900" />
                         </div>
                         <div>
@@ -100,14 +123,17 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Employee Name</label>
-                                    <input 
+                                    <select 
                                         required
-                                        type="text" 
                                         className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
-                                        placeholder="Enter name..."
                                         value={formData.employeeName || ''}
                                         onChange={e => setFormData({...formData, employeeName: e.target.value})}
-                                    />
+                                    >
+                                        <option value="">Select Employee...</option>
+                                        {STAFF_LIST.map(name => (
+                                            <option key={name} value={name}>{name}</option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Department</label>
@@ -148,6 +174,37 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
                                             value={formData.vendorName || ''}
                                             onChange={e => setFormData({...formData, vendorName: e.target.value})}
                                         />
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Quantity (Nos)</label>
+                                        <input 
+                                            required
+                                            type="number" 
+                                            className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                            placeholder="e.g. 2"
+                                            value={formData.quantity || ''}
+                                            onChange={e => setFormData({...formData, quantity: parseInt(e.target.value) || 0})}
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Unit</label>
+                                        <select 
+                                            className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                            value={formData.unit || 'Nos'}
+                                            onChange={e => setFormData({...formData, unit: e.target.value})}
+                                        >
+                                            <option value="Nos">Nos</option>
+                                            <option value="Plate">Plate</option>
+                                            <option value="Portion">Portion</option>
+                                            <option value="Packet">Packet</option>
+                                            <option value="Kg">Kg</option>
+                                            <option value="Ltr">Ltr</option>
+                                            <option value="Box">Box</option>
+                                            <option value="Other">Other</option>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -205,34 +262,159 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
                                 />
                             </div>
 
-                            <div className="space-y-8 pt-4">
+                            <div className="space-y-6 pt-4">
                                 <div className="flex items-center gap-3 pb-2 border-b border-slate-100">
                                     <CreditCard className="w-4 h-4 text-emerald-500" />
                                     <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">Financial Settlement</h3>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Total Bill Amount (₹)</label>
-                                        <input 
-                                            required
-                                            type="number" 
-                                            className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-black focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
-                                            placeholder="0.00"
-                                            value={formData.amount || ''}
-                                            onChange={e => setFormData({...formData, amount: parseFloat(e.target.value)})}
-                                        />
+                                    {/* TRANSPARENT BILLING INTELLIGENCE */}
+                                    <div className="bg-[#0F172A] rounded-[2rem] p-6 flex justify-between items-center border-b-4 border-emerald-500/30 shadow-xl">
+                                        <div className="flex flex-col">
+                                            <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Gross Total</span>
+                                            <span className="text-sm font-black text-white/40 line-through tracking-widest">₹{((formData.rate || 0) * (formData.quantity || 1)).toLocaleString('en-IN')}</span>
+                                        </div>
+                                        <div className="flex flex-col text-center">
+                                            <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">
+                                                {formData.discountType === 'Percentage' ? 'Off (%)' : 'Discount'}
+                                            </span>
+                                            <span className="text-sm font-black text-rose-500 tracking-widest">
+                                                {formData.discountType === 'Percentage' ? `-${formData.discount}%` : `-₹${(formData.discount || 0).toLocaleString('en-IN')}`}
+                                            </span>
+                                        </div>
+                                        <div className="flex flex-col text-right">
+                                            <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest mb-1">Net Payable</span>
+                                            <div className="flex items-center gap-2 justify-end">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                                <span className="text-2xl font-black text-emerald-500 tracking-tighter">₹{(formData.amount || 0).toLocaleString('en-IN')}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Paid By</label>
-                                        <select 
-                                            className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
-                                            value={formData.paidBy}
-                                            onChange={e => setFormData({...formData, paidBy: e.target.value as PaidBy})}
-                                        >
-                                            {PAID_BY_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
-                                        </select>
+
+                                    <div className="grid grid-cols-12 gap-4">
+                                        <div className="col-span-3 space-y-2">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Unit Rate (₹)</label>
+                                            <input 
+                                                type="number" 
+                                                className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                                placeholder="0.00"
+                                                value={formData.rate || ''}
+                                                onChange={e => setFormData({...formData, rate: parseFloat(e.target.value) || 0})}
+                                            />
+                                        </div>
+                                        <div className="col-span-3 space-y-2">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Discount Mode</label>
+                                            <div className="flex bg-slate-50 p-1 rounded-xl border border-slate-100 h-[46px]">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setFormData({...formData, discountType: 'Flat'})}
+                                                    className={`flex-1 rounded-lg text-[9px] font-black transition-all ${
+                                                        formData.discountType === 'Flat' 
+                                                        ? 'bg-white text-slate-900 shadow-sm' 
+                                                        : 'text-slate-400 hover:text-slate-600'
+                                                    }`}
+                                                >
+                                                    ₹ CASH
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setFormData({...formData, discountType: 'Percentage'})}
+                                                    className={`flex-1 rounded-lg text-[9px] font-black transition-all ${
+                                                        formData.discountType === 'Percentage' 
+                                                        ? 'bg-white text-slate-900 shadow-sm' 
+                                                        : 'text-slate-400 hover:text-slate-600'
+                                                    }`}
+                                                >
+                                                    % PERCENT
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className="col-span-3 space-y-2">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                                                {formData.discountType === 'Percentage' ? 'Quick Off (%)' : 'Discount (₹)'}
+                                            </label>
+                                            {formData.discountType === 'Percentage' ? (
+                                                <select 
+                                                    className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-rose-500"
+                                                    value={formData.discount || 0}
+                                                    onChange={e => setFormData({...formData, discount: parseFloat(e.target.value) || 0})}
+                                                >
+                                                    {[0, 10, 20, 30, 50].map(val => (
+                                                        <option key={val} value={val}>{val}% Discount</option>
+                                                    ))}
+                                                </select>
+                                            ) : (
+                                                <input 
+                                                    type="number" 
+                                                    className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-rose-500"
+                                                    placeholder="0"
+                                                    value={formData.discount || ''}
+                                                    onChange={e => setFormData({...formData, discount: parseFloat(e.target.value) || 0})}
+                                                />
+                                            )}
+                                        </div>
+                                        <div className="col-span-3 space-y-2">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 text-emerald-500">Final Payable (₹)</label>
+                                            <div className="w-full h-[46px] bg-emerald-50 border border-emerald-100 rounded-xl px-2 flex items-center justify-center text-sm font-black text-emerald-600">
+                                                ₹{(formData.amount || 0).toLocaleString('en-IN')}
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    <div className="grid grid-cols-1 gap-4 pt-2">
+                                        <div className="space-y-3">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Rapid Payment Matrix</label>
+                                            <div className="grid grid-cols-4 gap-2">
+                                                {PAYMENT_MODES.map(mode => (
+                                                    <button
+                                                        key={mode}
+                                                        type="button"
+                                                        onClick={() => setFormData({...formData, paymentMode: mode})}
+                                                        className={`py-3 rounded-xl text-[9px] font-black transition-all border flex items-center justify-center gap-2 ${
+                                                            formData.paymentMode === mode 
+                                                            ? 'bg-emerald-500 border-emerald-400 text-slate-900 shadow-lg shadow-emerald-500/10' 
+                                                            : 'bg-slate-50 border-slate-100 text-slate-400 hover:bg-slate-100'
+                                                        }`}
+                                                    >
+                                                        {mode === 'UPI' && <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />}
+                                                        {mode}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Settlement Responsibility</label>
+                                            <select 
+                                                className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                                value={formData.paidBy}
+                                                onChange={e => setFormData({...formData, paidBy: e.target.value as PaidBy})}
+                                            >
+                                                {PAID_BY_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    {/* SKY-5 DIRECT SCANNER */}
+                                    {formData.platform === 'Sky-5' && formData.paymentMode === 'UPI' && (
+                                        <div className="mt-4 p-6 bg-slate-900 rounded-[2rem] border-2 border-emerald-500/30 flex flex-col items-center gap-4 animate-in slide-in-from-top-4 duration-300">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Sky-5 Direct Payment Active</span>
+                                            </div>
+                                            <div className="bg-white p-4 rounded-3xl shadow-2xl">
+                                                <img 
+                                                    src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=Q15213511@ybl&pn=Sky5%20Hotel&am=0" 
+                                                    alt="Sky-5 QR" 
+                                                    className="w-32 h-32"
+                                                />
+                                            </div>
+                                            <p className="text-[9px] font-bold text-slate-400 uppercase text-center leading-relaxed">
+                                                Scan to Pay Directly to Sky-5 Hotel<br/>
+                                                <span className="text-emerald-400">Merchant ID: Q15213511@ybl</span>
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
@@ -266,7 +448,6 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
                                 </div>
                             </div>
                         </div>
-                    </div>
 
                     {/* ACTIONS */}
                     <div className="mt-12 flex gap-4">

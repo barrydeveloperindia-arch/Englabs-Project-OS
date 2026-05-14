@@ -28,12 +28,14 @@ import { AuditLog } from '../lib/system_guard';
 
 interface Props {
     entries: GateEntry[];
-    setEntries: React.Dispatch<React.SetStateAction<GateEntry[]>>;
+    onNewEntry: (entry: GateEntry) => void;
+    onUpdateEntry: (entry: GateEntry) => void;
+    onDeleteEntry: (id: string) => void;
     onLog?: (log: AuditLog) => void;
     onFullSync?: () => Promise<boolean>;
 }
 
-const GateRegister: React.FC<Props> = ({ entries, setEntries, onLog, onFullSync }) => {
+const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onDeleteEntry, onLog, onFullSync }) => {
     const [view, setView] = useState<'DASHBOARD' | 'INWARD_LIST' | 'OUTWARD_LIST' | 'NEW_ENTRY'>('DASHBOARD');
     const [searchQuery, setSearchQuery] = useState('');
     const [editingEntry, setEditingEntry] = useState<GateEntry | null>(null);
@@ -46,7 +48,7 @@ const GateRegister: React.FC<Props> = ({ entries, setEntries, onLog, onFullSync 
         const password = window.prompt("CRITICAL: ADMIN AUTHORIZATION REQUIRED\nEnter Deletion Protocol Key:");
         
         if (password === 'ADMIN2026') {
-            setEntries(prev => prev.filter(e => e.id !== entry.id));
+            onDeleteEntry(entry.id);
             if (onLog) {
                 onLog({
                     id: `LOG-${Date.now()}`,
@@ -206,9 +208,9 @@ const GateRegister: React.FC<Props> = ({ entries, setEntries, onLog, onFullSync 
                         initialData={editingEntry || undefined}
                         onSave={(entry) => {
                             if (editingEntry) {
-                                setEntries(prev => prev.map(e => e.id === entry.id ? entry : e));
+                                onUpdateEntry(entry);
                             } else {
-                                setEntries(prev => [entry, ...prev]);
+                                onNewEntry(entry);
                             }
                             setView('DASHBOARD');
                             setEditingEntry(null);

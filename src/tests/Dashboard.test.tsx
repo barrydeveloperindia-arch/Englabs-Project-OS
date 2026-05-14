@@ -3,34 +3,84 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import App from '../App';
 import React from 'react';
 
-// Mock Lucide icons to avoid rendering issues in tests
+// 🛡️ ICON MOCKS: Common icons used in the dashboard
 vi.mock('lucide-react', () => ({
-    Search: () => <div data-testid="search-icon" />,
-    Plus: () => <div data-testid="plus-icon" />,
-    Activity: () => <div data-testid="activity-icon" />,
-    DollarSign: () => <div data-testid="dollar-icon" />,
-    Users: () => <div data-testid="users-icon" />,
-    Package: () => <div data-testid="package-icon" />,
-    ChevronRight: () => <div data-testid="chevron-icon" />,
-    CheckCircle2: () => <div data-testid="check-icon" />,
-    Clock: () => <div data-testid="clock-icon" />,
-    AlertCircle: () => <div data-testid="alert-icon" />,
-    X: () => <div data-testid="x-icon" />,
-    Save: () => <div data-testid="save-icon" />,
-    Layers: () => <div data-testid="layers-icon" />,
-    Box: () => <div data-testid="box-icon" />,
-    Layout: () => <div data-testid="layout-icon" />,
-    Settings: () => <div data-testid="settings-icon" />,
-    Bell: () => <div data-testid="bell-icon" />,
-    ExternalLink: () => <div data-testid="link-icon" />,
-    TrendingUp: () => <div data-testid="trending-icon" />,
-    Target: () => <div data-testid="target-icon" />,
-    Calendar: () => <div data-testid="calendar-icon" />,
-    Shield: () => <div data-testid="shield-icon" />,
-    Utensils: () => <div data-testid="utensils-icon" />,
-    CreditCard: () => <div data-testid="credit-card-icon" />,
-    FileText: () => <div data-testid="file-text-icon" />,
-    Loader2: () => <div data-testid="loader-icon" />
+    Search: () => <div data-testid="icon-search" />,
+    Plus: () => <div data-testid="icon-plus" />,
+    Activity: () => <div data-testid="icon-activity" />,
+    Box: () => <div data-testid="icon-box" />,
+    Shield: () => <div data-testid="icon-shield" />,
+    Utensils: () => <div data-testid="icon-utensils" />,
+    ChefHat: () => <div data-testid="icon-chef-hat" />,
+    TrendingUp: () => <div data-testid="icon-trending" />,
+    AlertCircle: () => <div data-testid="icon-alert" />,
+    Clock: () => <div data-testid="icon-clock" />,
+    Users: () => <div data-testid="icon-users" />,
+    DollarSign: () => <div data-testid="icon-dollar" />,
+    Package: () => <div data-testid="icon-package" />,
+    ChevronRight: () => <div data-testid="icon-chevron" />,
+    CheckCircle2: () => <div data-testid="icon-check" />,
+    X: () => <div data-testid="icon-x" />,
+    Save: () => <div data-testid="icon-save" />,
+    Layers: () => <div data-testid="icon-layers" />,
+    Layout: () => <div data-testid="icon-layout" />,
+    Settings: () => <div data-testid="icon-settings" />,
+    Bell: () => <div data-testid="icon-bell" />,
+    ExternalLink: () => <div data-testid="icon-link" />,
+    Target: () => <div data-testid="icon-target" />,
+    Calendar: () => <div data-testid="icon-calendar" />,
+    CreditCard: () => <div data-testid="icon-credit" />,
+    FileText: () => <div data-testid="icon-file" />,
+    Loader2: () => <div data-testid="icon-loader" />,
+    History: () => <div data-testid="icon-history" />,
+    LogIn: () => <div data-testid="icon-login" />,
+    LogOut: () => <div data-testid="icon-logout" />,
+    MessageSquare: () => <div data-testid="icon-message" />,
+    Edit2: () => <div data-testid="icon-edit" />,
+    Trash2: () => <div data-testid="icon-trash" />,
+    Printer: () => <div data-testid="icon-printer" />,
+    Download: () => <div data-testid="icon-download" />,
+    ShieldCheck: () => <div data-testid="icon-shield-check" />,
+    ArrowUpRight: () => <div data-testid="icon-arrow-up" />,
+    ArrowDownRight: () => <div data-testid="icon-arrow-down" />,
+    ArrowRight: () => <div data-testid="icon-arrow-right" />,
+    Database: () => <div data-testid="icon-database" />
+}));
+
+// 🛡️ SERVICE MOCKS: Decouple UI from backend logic
+vi.mock('../lib/database_service', () => ({
+    fetchGateEntries: vi.fn(() => Promise.resolve([])),
+    saveGateEntry: vi.fn(() => Promise.resolve({ success: true })),
+    syncLocalToFirebase: vi.fn(() => Promise.resolve(true)),
+    syncAllProjectsToFirebase: vi.fn(() => Promise.resolve(true))
+}));
+
+vi.mock('../lib/inventory_service', () => ({
+    processInventoryUpdate: vi.fn(() => Promise.resolve([{ success: true }])),
+    fetchInventoryMaster: vi.fn(() => Promise.resolve([])),
+    fetchStockMovement: vi.fn(() => Promise.resolve([]))
+}));
+
+vi.mock('../lib/system_guard', () => ({
+    logAction: vi.fn(),
+    AuditLog: vi.fn()
+}));
+
+vi.mock('@google/generative-ai', () => ({
+    GoogleGenerativeAI: vi.fn().mockImplementation(() => ({
+        getGenerativeModel: vi.fn().mockImplementation(() => ({
+            generateContent: vi.fn().mockResolvedValue({
+                response: {
+                    text: () => JSON.stringify({
+                        partyName: 'MOCK VENDOR',
+                        invoiceNumber: 'INV-001',
+                        date: '2026-05-14',
+                        items: []
+                    })
+                }
+            })
+        }))
+    }))
 }));
 
 describe('Antigravity Dashboard UI', () => {
