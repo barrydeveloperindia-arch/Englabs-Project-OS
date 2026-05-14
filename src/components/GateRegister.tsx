@@ -19,6 +19,7 @@ import {
     Image as ImageIcon,
     Trash2
 } from 'lucide-react';
+import * as XLSX from 'xlsx';
 import GateEntryForm from './GateEntryForm';
 import GatePassSlip from './GatePassSlip';
 import GateInvoiceSlip from './GateInvoiceSlip';
@@ -43,11 +44,12 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
     const [selectedInvoice, setSelectedInvoice] = useState<GateEntry | null>(null);
     const [isSyncing, setIsSyncing] = useState(false);
     const [dbStatus, setDbStatus] = useState<'CONNECTED' | 'SYNCING' | 'SECURE'>('SECURE');
+    const [showDeleteModal, setShowDeleteModal] = useState<GateEntry | null>(null);
+    const [deletePasscode, setDeletePasscode] = useState('');
 
-    const handleDelete = (entry: GateEntry) => {
-        const password = window.prompt("CRITICAL: ADMIN AUTHORIZATION REQUIRED\nEnter Deletion Protocol Key:");
-        
-        if (password === 'ADMIN2026') {
+    const executeDelete = () => {
+        if (deletePasscode === 'ADMIN2026') {
+            const entry = showDeleteModal!;
             onDeleteEntry(entry.id);
             if (onLog) {
                 onLog({
@@ -59,20 +61,15 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                     details: `PERMANENT DELETION: ${entry.materialName} record for ${entry.partyName} removed from registry.`
                 });
             }
-            alert("RECORD DELETED PERMANENTLY. SYSTEM LOG UPDATED.");
-        } else if (password !== null) {
+            setShowDeleteModal(null);
+            setDeletePasscode('');
+        } else {
             alert("INVALID PROTOCOL KEY. ACCESS DENIED.");
-            if (onLog) {
-                onLog({
-                    id: `LOG-${Date.now()}`,
-                    timestamp: new Date().toISOString(),
-                    user: 'UNAUTHORIZED-USER',
-                    action: 'SYSTEM',
-                    targetId: entry.id,
-                    details: `FAILED DELETION ATTEMPT: Incorrect protocol key provided for record ${entry.id}`
-                });
-            }
         }
+    };
+
+    const handleDelete = (entry: GateEntry) => {
+        setShowDeleteModal(entry);
     };
     
     // Summary Stats
@@ -112,6 +109,58 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
             `_Official Gate Registry System_`
         );
         window.open(`https://wa.me/?text=${text}`, '_blank');
+    };
+
+    const exportToExcel = () => {
+        const flatData = entries.flatMap(entry => {
+            const entryAny = entry as any;
+            if (entryAny.items && entryAny.items.length > 0) {
+                return entryAny.items.map((item: any) => ({
+                    'Date': new Date(entry.timestamp).toLocaleDateString(),
+                    'Entry ID': entry.id,
+                    'Type': entry.type,
+                    'Party Name': entry.partyName,
+                    'Vehicle/Mode': entry.vehicleNumber,
+                    'Item Name': item.name,
+                    'HSN Code': item.hsnCode || '',
+                    'Qty': item.quantity,
+                    'Unit': item.unit,
+                    'Rate': item.rate || 0,
+                    'Amount': item.amount || 0,
+                    'Invoice No': entry.invoiceNumber,
+                    'Verified By': entry.employeeName,
+                    'Supervisor': entry.supervisorName
+                }));
+            }
+            return [{
+                'Date': new Date(entry.timestamp).toLocaleDateString(),
+                'Entry ID': entry.id,
+                'Type': entry.type,
+                'Party Name': entry.partyName,
+                'Vehicle/Mode': entry.vehicleNumber,
+                'Item Name': entry.materialName,
+                'HSN Code': '',
+                'Qty': entry.quantity,
+                'Unit': entry.unit || 'Nos',
+                'Rate': 0,
+                'Amount': entry.amount || 0,
+                'Invoice No': entry.invoiceNumber,
+                'Verified By': entry.employeeName,
+                'Supervisor': entry.supervisorName
+            }];
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(flatData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Logistics Registry");
+        
+        // Auto-size columns
+        const maxWidths = Object.keys(flatData[0] || {}).map(key => ({
+            wch: Math.max(key.length, ...flatData.map(row => String(row[key as keyof typeof row]).length)) + 2
+        }));
+        worksheet['!cols'] = maxWidths;
+
+        XLSX.writeFile(workbook, `Englabs_Logistics_Audit_${new Date().toISOString().split('T')[0]}.xlsx`);
     };
 
     const shareMonthlySummary = () => {
@@ -188,6 +237,14 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                         <Shield className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
                     </button>
                     <button 
+                        onClick={exportToExcel}
+                        className="p-3 bg-white border border-slate-200 text-slate-600 rounded-xl hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 transition-all shadow-sm flex items-center gap-2 px-4"
+                        title="Master Excel Export (All Invoices)"
+                    >
+                        <Download className="w-4 h-4" />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Master Export</span>
+                    </button>
+                    <button 
                         onClick={() => setView('NEW_ENTRY')}
                         className="bg-[#0F172A] text-emerald-500 hover:bg-slate-800 font-black px-6 py-3 rounded-xl flex items-center gap-2 text-xs transition-all shadow-lg"
                     >
@@ -223,8 +280,8 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                             <div className="max-w-[1400px] mx-auto space-y-10">
                                 {/* STATS GRID */}
                                 <div className="grid grid-cols-4 gap-8">
-                                    <StatCard icon={<LogIn />} label="Inward Entries" value={stats.totalInwardToday} color="emerald" />
-                                    <StatCard icon={<LogOut />} label="Outward Entries" value={stats.totalOutwardToday} color="blue" />
+                                    <StatCard icon={<LogIn />} label="Inward Entries" value={stats.totalInwardToday} color="emerald" onClick={() => setView('INWARD_LIST')} />
+                                    <StatCard icon={<LogOut />} label="Outward Entries" value={stats.totalOutwardToday} color="blue" onClick={() => setView('OUTWARD_LIST')} />
                                     <StatCard icon={<TrendingUp />} label="Total Valuation" value={`₹${stats.totalValue.toLocaleString('en-IN')}`} color="purple" />
                                     <StatCard icon={<AlertTriangle />} label="Pending Pass" value={stats.pendingApprovals} color="amber" />
                                 </div>
@@ -244,9 +301,6 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                                             </button>
                                             <button className="p-3 bg-slate-50 border border-slate-100 rounded-xl hover:bg-slate-100 transition-all text-slate-500">
                                                 <Printer className="w-4 h-4" />
-                                            </button>
-                                            <button className="p-3 bg-slate-50 border border-slate-100 rounded-xl hover:bg-slate-100 transition-all text-slate-500">
-                                                <Download className="w-4 h-4" />
                                             </button>
                                         </div>
                                     </div>
@@ -319,12 +373,49 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                         onClose={() => setSelectedInvoice(null)} 
                     />
                 )}
+
+                {showDeleteModal && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300">
+                        <div className="bg-white rounded-[3rem] w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+                            <div className="p-10 border-b border-slate-100 flex justify-between items-center bg-red-50/30">
+                                <h3 className="text-xl font-black text-slate-900 uppercase tracking-tighter flex items-center gap-3">
+                                    <AlertTriangle className="w-6 h-6 text-red-500" /> Authorized Deletion
+                                </h3>
+                                <button onClick={() => setShowDeleteModal(null)} className="p-2 hover:bg-slate-200 rounded-full transition-all text-slate-400">
+                                    <Plus className="w-5 h-5 rotate-45" />
+                                </button>
+                            </div>
+                            <div className="p-10 space-y-6 text-center">
+                                <p className="text-sm text-slate-500">You are about to permanently remove entry <span className="font-black text-slate-900">{showDeleteModal.id}</span> from the forensic registry.</p>
+                                
+                                <div className="space-y-3">
+                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest text-left">Enter Deletion Protocol Key</label>
+                                    <input 
+                                        type="password" 
+                                        value={deletePasscode}
+                                        onChange={(e) => setDeletePasscode(e.target.value)}
+                                        className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-4 px-6 text-xl font-black text-slate-900 outline-none focus:border-red-500 transition-all text-center tracking-[0.5em]"
+                                        placeholder="••••••••"
+                                        autoFocus
+                                    />
+                                </div>
+
+                                <button 
+                                    onClick={executeDelete}
+                                    className="w-full py-4 bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-red-700 transition-all shadow-xl shadow-red-600/20"
+                                >
+                                    Confirm Permanent Deletion
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </main>
         </div>
     );
 };
 
-const StatCard = ({ icon, label, value, color }: any) => {
+const StatCard = ({ icon, label, value, color, onClick }: any) => {
     const colors: any = {
         emerald: "text-emerald-500 bg-emerald-50 border-emerald-100",
         blue: "text-blue-500 bg-blue-50 border-blue-100",
@@ -333,7 +424,10 @@ const StatCard = ({ icon, label, value, color }: any) => {
     };
 
     return (
-        <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_10px_40px_rgba(0,0,0,0.01)] hover:shadow-lg transition-all group">
+        <div 
+            onClick={onClick}
+            className={`bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_10px_40px_rgba(0,0,0,0.01)] hover:shadow-lg transition-all group ${onClick ? 'cursor-pointer hover:-translate-y-1' : ''}`}
+        >
             <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110 ${colors[color]}`}>
                 {React.cloneElement(icon, { className: "w-6 h-6" })}
             </div>
@@ -420,38 +514,38 @@ const EntryTable = ({ entries, onEdit, onDelete, onPrint, onInvoice, onShare }: 
                             <div className="flex justify-end gap-2">
                                 <button 
                                     onClick={() => onInvoice(entry)}
-                                    className="p-2 hover:bg-blue-50 text-slate-400 hover:text-blue-500 rounded-lg transition-all"
+                                    className="p-3 bg-slate-50 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all border border-transparent hover:border-blue-100"
                                     title="Generate Professional Invoice"
                                 >
-                                    <FileText className="w-4 h-4" />
+                                    <FileText className="w-5 h-5" />
                                 </button>
                                 <button 
                                     onClick={() => onPrint(entry)}
-                                    className="p-2 hover:bg-emerald-50 text-slate-400 hover:text-emerald-500 rounded-lg transition-all"
+                                    className="p-3 bg-slate-50 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all border border-transparent hover:border-emerald-100"
                                     title="View Receipt Slip"
                                 >
-                                    <Printer className="w-4 h-4" />
+                                    <Printer className="w-5 h-5" />
                                 </button>
                                 <button 
                                     onClick={() => onShare(entry)}
-                                    className="p-2 hover:bg-emerald-50 text-slate-400 hover:text-emerald-500 rounded-lg transition-all"
+                                    className="p-3 bg-slate-50 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all border border-transparent hover:border-emerald-100"
                                     title="Share Slip on WhatsApp"
                                 >
-                                    <MessageSquare className="w-4 h-4" />
+                                    <MessageSquare className="w-5 h-5" />
                                 </button>
                                 <button 
                                     onClick={() => onEdit(entry)}
-                                    className="p-2 hover:bg-emerald-50 text-slate-400 hover:text-emerald-500 rounded-lg transition-all"
+                                    className="p-3 bg-slate-50 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all border border-transparent hover:border-emerald-100"
                                     title="Edit Entry"
                                 >
-                                    <Edit2 className="w-4 h-4" />
+                                    <Edit2 className="w-5 h-5" />
                                 </button>
                                 <button 
                                     onClick={() => onDelete(entry)}
-                                    className="p-2 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-lg transition-all"
+                                    className="p-3 bg-slate-50 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all border border-transparent hover:border-red-100"
                                     title="Admin Delete (Requires Authorization)"
                                 >
-                                    <Trash2 className="w-4 h-4" />
+                                    <Trash2 className="w-5 h-5" />
                                 </button>
                                 {entry.gatePassNumber && (
                                     <span className="font-black text-slate-900 text-xs self-center ml-2">{entry.gatePassNumber}</span>

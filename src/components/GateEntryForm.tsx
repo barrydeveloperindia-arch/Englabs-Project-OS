@@ -262,11 +262,18 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
         e.preventDefault();
         
         // 📊 GENERATE SUMMARY FOR BULK ENTRIES
-        const totalQty = formData.items.reduce((sum: number, item: any) => sum + item.quantity, 0);
-        const totalAmount = formData.items.reduce((sum: number, item: any) => sum + item.amount, 0);
-        const summaryName = formData.items.length > 1 
-            ? `Bulk: ${formData.items.map((i: any) => i.name).join(', ').substring(0, 50)}...`
-            : formData.items[0]?.name || 'Unknown Material';
+        const activeItems = formData.items.filter((i: any) => i.name.trim() !== '');
+        const totalQty = formData.items.reduce((sum: number, item: any) => sum + (Number(item.quantity) || 0), 0);
+        const totalAmount = formData.items.reduce((sum: number, item: any) => sum + (Number(item.amount) || 0), 0);
+        
+        let summaryName = 'Unknown Material';
+        if (activeItems.length > 1) {
+            summaryName = `Bulk: ${activeItems.map((i: any) => i.name).join(', ').substring(0, 60)}...`;
+        } else if (activeItems.length === 1) {
+            summaryName = activeItems[0].name;
+        } else if (formData.items[0]?.name) {
+            summaryName = formData.items[0].name;
+        }
 
         const entry: GateEntry = {
             id: initialData?.id || generateId(type, currentCount),

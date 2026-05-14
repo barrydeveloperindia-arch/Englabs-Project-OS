@@ -18,19 +18,31 @@ const Sky5Terminal: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState("");
 
     // SYNC WITH ENGLABS MASTER LEDGER
-    useEffect(() => {
-        const syncData = () => {
+    const syncData = () => {
+        try {
             const saved = localStorage.getItem('englabs_food_ledger');
             if (saved) {
                 const allOrders = JSON.parse(saved) as FoodOrder[];
-                // Only show Sky-5 orders
-                setOrders(allOrders.filter(o => o.platform === 'Sky-5'));
+                // Only show Sky-5 orders for this terminal
+                const filtered = allOrders.filter(o => o.platform === 'Sky-5');
+                setOrders(filtered);
+                console.log(`[SKY-5 SYNC] ${filtered.length} orders detected at ${new Date().toLocaleTimeString()}`);
             }
-        };
+        } catch (e) {
+            console.error("[SKY-5 SYNC ERROR]", e);
+        }
+    };
 
+    useEffect(() => {
         syncData();
-        const interval = setInterval(syncData, 5000); // Polling for real-time feel
-        return () => clearInterval(interval);
+        const interval = setInterval(syncData, 3000); // Increased polling frequency
+        
+        // Listen for storage changes from other tabs (Pantry Control)
+        window.addEventListener('storage', syncData);
+        return () => {
+            clearInterval(interval);
+            window.removeEventListener('storage', syncData);
+        };
     }, []);
 
     const updateStatus = (id: string, nextStatus: TrackingStatus) => {
@@ -90,9 +102,17 @@ const Sky5Terminal: React.FC = () => {
                 <div className="flex-1 flex flex-col gap-6 overflow-y-auto custom-scrollbar pr-4">
                     <div className="flex items-center justify-between mb-2">
                         <h2 className="text-xs font-black text-slate-500 uppercase tracking-[0.2em]">Incoming Requirements</h2>
-                        <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                            <span className="text-[9px] font-black text-emerald-500 uppercase">Live Sync Active</span>
+                        <div className="flex items-center gap-4">
+                            <button 
+                                onClick={syncData}
+                                className="flex items-center gap-2 px-3 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-[9px] font-black text-slate-400 hover:text-white transition-all uppercase tracking-widest"
+                            >
+                                <RefreshCw className="w-3 h-3" /> Force Refresh
+                            </button>
+                            <div className="flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                <span className="text-[9px] font-black text-emerald-500 uppercase">Live Sync Active</span>
+                            </div>
                         </div>
                     </div>
 
@@ -122,7 +142,7 @@ const Sky5Terminal: React.FC = () => {
                                             </span>
                                         </div>
                                         <div>
-                                            <h3 className="text-xl font-bold text-slate-200">{order.items}</h3>
+                                            <h3 className="text-xl font-bold text-slate-200">{order.items || "ITEMS NOT SPECIFIED"}</h3>
                                             <div className="flex items-center gap-4 mt-3">
                                                 <div className="flex items-center gap-2 text-orange-500 bg-orange-500/10 px-3 py-1.5 rounded-xl border border-orange-500/20">
                                                     <Clock className="w-4 h-4" />

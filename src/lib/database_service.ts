@@ -7,9 +7,12 @@ const COLLECTION_NAME = "gate_entries";
 export const saveGateEntry = async (entry: GateEntry) => {
     if (!db) return { success: false, error: "Database not initialized" };
     try {
+        // CLEAN UNDEFINED VALUES FOR FIREBASE
+        const cleanEntry = JSON.parse(JSON.stringify(entry));
+        
         const docRef = doc(db, COLLECTION_NAME, entry.id);
         await setDoc(docRef, {
-            ...entry,
+            ...cleanEntry,
             syncedAt: new Date().toISOString()
         });
         return { success: true };
@@ -39,9 +42,12 @@ export const syncLocalToFirebase = async (entries: GateEntry[]) => {
 export const saveProjectToFirebase = async (project: any) => {
     if (!db) return { success: false, error: "Database not initialized" };
     try {
+        // CLEAN UNDEFINED VALUES FOR FIREBASE
+        const cleanProject = JSON.parse(JSON.stringify(project));
+        
         const docRef = doc(db, "projects", project.projectId);
         await setDoc(docRef, {
-            ...project,
+            ...cleanProject,
             syncedAt: new Date().toISOString()
         });
         return { success: true };

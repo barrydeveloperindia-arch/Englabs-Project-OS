@@ -41,6 +41,8 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
             entryId: generateFoodId(orderCount),
             timestamp: new Date().toISOString(),
             platform: 'Sky-5',
+            vendorName: '',
+            items: '',
             orderType: 'Individual',
             purpose: 'Official Work',
             paymentMode: 'UPI',

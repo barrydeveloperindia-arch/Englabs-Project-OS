@@ -145,3 +145,75 @@
 .animate-shimmer {
   animation: shimmer 2s infinite;
 }
+
+/* Clinical Printing Protocol */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .flex-1 {
+    display: block !important;
+  }
+
+  main {
+    padding: 20px !important;
+    overflow: visible !important;
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  th, td {
+    border-bottom: 1px solid #E2E8F0 !important;
+    padding: 12px 8px !important;
+    font-size: 10px !important;
+  }
+
+  .bg-white {
+    background: white !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .rounded-\[2\.5rem\] {
+    border-radius: 0 !important;
+  }
+
+  /* Force text colors for readability in print */
+  .text-slate-900 { color: black !important; }
+  .text-slate-400 { color: #64748b !important; }
+  .text-emerald-500 { color: #10b981 !important; }
+  .text-amber-500 { color: #f59e0b !important; }
+}
+
+.no-print {
+  transition: opacity 0.3s ease;
+}
+
+/* Industrial Grid Overlay */
+.industrial-grid {
+  background-image: radial-gradient(#E2E8F0 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dark .industrial-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+}
+
+.animate-spin-slow {
+  animation: spin 8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

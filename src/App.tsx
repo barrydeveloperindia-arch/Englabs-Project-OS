@@ -34,6 +34,7 @@ import QADashboard from './components/QADashboard';
 import DigitalEvidence from './components/DigitalEvidence';
 import InventoryManager from './components/InventoryManager';
 import Sky5Terminal from './components/Sky5Terminal';
+import StoreStockReport from './components/StoreStockReport';
 import { ProjectData, STAGES, ProjectStage } from './lib/project';
 import { logAction, AuditLog } from './lib/system_guard';
 import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry } from './lib/database_service';
@@ -41,6 +42,31 @@ import { processInventoryUpdate } from './lib/inventory_service';
 import forensicRegistry from '../data/forensic_gate_registry.json';
 
 const projectFiles = import.meta.glob('/data/*.json');
+
+interface SidebarButtonProps {
+    active: boolean;
+    onClick: () => void;
+    icon: React.ReactNode;
+    label: string;
+    color?: 'emerald' | 'amber';
+}
+
+const SidebarButton: React.FC<SidebarButtonProps> = ({ active, onClick, icon, label, color = 'emerald' }) => {
+    const activeClass = color === 'emerald' 
+        ? 'bg-emerald-500 text-slate-900 shadow-[0_0_25px_rgba(16,185,129,0.35)] scale-[1.02]' 
+        : 'bg-amber-500 text-slate-900 shadow-[0_0_25px_rgba(245,158,11,0.35)] scale-[1.02]';
+        
+    return (
+        <button 
+            type="button"
+            onClick={onClick}
+            className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 w-full text-left ${active ? activeClass : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+        >
+            {React.cloneElement(icon as React.ReactElement, { className: 'w-4.5 h-4.5' })}
+            {label}
+        </button>
+    );
+};
 
 const App: React.FC = () => {
     const [projects, setProjects] = useState<ProjectData[]>([]);
@@ -59,7 +85,7 @@ const App: React.FC = () => {
             return [];
         }
     });
-    const [currentView, setCurrentView] = useState<'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'SYSTEM_GUARD' | 'BILLING' | 'QA_TESTER' | 'SKY5_TERMINAL' | 'INVENTORY'>('PROJECTS');
+    const [currentView, setCurrentView] = useState<'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'SYSTEM_GUARD' | 'BILLING' | 'QA_TESTER' | 'SKY5_TERMINAL' | 'INVENTORY' | 'STOCK_REPORT'>('PROJECTS');
 
     useEffect(() => {
         console.log("Found project files:", Object.keys(projectFiles));
@@ -205,7 +231,7 @@ const App: React.FC = () => {
             {/* SIDEBAR LEDGER */}
             <aside 
                 className="bg-[#0F172A] flex flex-col shadow-2xl shrink-0 border-r border-slate-800"
-                style={{ width: '320px', minWidth: '320px', maxWidth: '320px' }}
+                style={{ width: '320px', minWidth: '320px', maxWidth: '320px', zIndex: 50 }}
             >
                 <div className="p-8">
                     <div className="flex items-center gap-4 mb-3">
@@ -226,51 +252,58 @@ const App: React.FC = () => {
                 </div>
 
                 <div className="px-6 mb-8 flex flex-col gap-2.5">
-                    <button 
-                        onClick={() => setCurrentView('PROJECTS')}
-                        className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 ${currentView === 'PROJECTS' ? 'bg-emerald-500 text-slate-900 shadow-[0_0_25px_rgba(16,185,129,0.35)] scale-[1.02]' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
-                    >
-                        <Layers className="w-4.5 h-4.5" /> PROJECTS
-                    </button>
-                    <button 
-                        onClick={() => setCurrentView('GATE_REGISTER')}
-                        className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 ${currentView === 'GATE_REGISTER' ? 'bg-emerald-500 text-slate-900 shadow-[0_0_25px_rgba(16,185,129,0.35)] scale-[1.02]' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
-                    >
-                        <Shield className="w-4.5 h-4.5" /> LOGISTICS COMMAND
-                    </button>
-                    <button 
-                        onClick={() => setCurrentView('FOOD_REGISTER')}
-                        className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 ${currentView === 'FOOD_REGISTER' ? 'bg-emerald-500 text-slate-900 shadow-[0_0_25px_rgba(16,185,129,0.35)] scale-[1.02]' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
-                    >
-                        <Utensils className="w-4.5 h-4.5" /> PANTRY CONTROL
-                    </button>
-                    <button 
-                        onClick={() => setCurrentView('INVENTORY')}
-                        className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 ${currentView === 'INVENTORY' ? 'bg-emerald-500 text-slate-900 shadow-[0_0_25px_rgba(16,185,129,0.35)] scale-[1.02]' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
-                    >
-                        <Box className="w-4.5 h-4.5" /> INVENTORY MASTER
-                    </button>
-                    <button 
-                        onClick={() => setCurrentView('BILLING')}
-                        className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 ${currentView === 'BILLING' ? 'bg-emerald-500 text-slate-900 shadow-[0_0_25px_rgba(16,185,129,0.35)] scale-[1.02]' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
-                    >
-                        <CreditCard className="w-4.5 h-4.5" /> FINANCE COMMAND
-                    </button>
-                    <button 
-                        onClick={() => setCurrentView('QA_TESTER')}
-                        className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 ${currentView === 'QA_TESTER' ? 'bg-emerald-500 text-slate-900 shadow-[0_0_25px_rgba(16,185,129,0.35)] scale-[1.02]' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
-                    >
-                        <Shield className="w-4.5 h-4.5" /> ZERO-ERROR AUDIT
-                    </button>
+                    <SidebarButton 
+                        active={currentView === 'PROJECTS'} 
+                        onClick={() => setCurrentView('PROJECTS')} 
+                        icon={<Layers className="w-4.5 h-4.5" />} 
+                        label="PROJECTS" 
+                    />
+                    <SidebarButton 
+                        active={currentView === 'GATE_REGISTER'} 
+                        onClick={() => setCurrentView('GATE_REGISTER')} 
+                        icon={<Shield className="w-4.5 h-4.5" />} 
+                        label="LOGISTICS COMMAND" 
+                    />
+                    <SidebarButton 
+                        active={currentView === 'FOOD_REGISTER'} 
+                        onClick={() => setCurrentView('FOOD_REGISTER')} 
+                        icon={<Utensils className="w-4.5 h-4.5" />} 
+                        label="PANTRY CONTROL" 
+                    />
+                    <SidebarButton 
+                        active={currentView === 'INVENTORY'} 
+                        onClick={() => setCurrentView('INVENTORY')} 
+                        icon={<Box className="w-4.5 h-4.5" />} 
+                        label="INVENTORY MASTER" 
+                    />
+                    <SidebarButton 
+                        active={currentView === 'STOCK_REPORT'} 
+                        onClick={() => setCurrentView('STOCK_REPORT')} 
+                        icon={<FileText className="w-4.5 h-4.5" />} 
+                        label="STORE STOCK REPORT" 
+                    />
+                    <SidebarButton 
+                        active={currentView === 'BILLING'} 
+                        onClick={() => setCurrentView('BILLING')} 
+                        icon={<CreditCard className="w-4.5 h-4.5" />} 
+                        label="FINANCE COMMAND" 
+                    />
+                    <SidebarButton 
+                        active={currentView === 'QA_TESTER'} 
+                        onClick={() => setCurrentView('QA_TESTER')} 
+                        icon={<Shield className="w-4.5 h-4.5" />} 
+                        label="ZERO-ERROR AUDIT" 
+                    />
 
                     <div className="mt-8 pt-8 border-t border-white/5">
                         <p className="px-5 text-[9px] font-black text-slate-600 uppercase tracking-[0.25em] mb-5">Vendor Channels</p>
-                        <button 
-                            onClick={() => setCurrentView('SKY5_TERMINAL')}
-                            className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 ${currentView === 'SKY5_TERMINAL' ? 'bg-amber-500 text-slate-900 shadow-[0_0_25px_rgba(245,158,11,0.35)] scale-[1.02]' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
-                        >
-                            <ChefHat className="w-4.5 h-4.5" /> SKY-5 KITCHEN
-                        </button>
+                        <SidebarButton 
+                            active={currentView === 'SKY5_TERMINAL'} 
+                            onClick={() => setCurrentView('SKY5_TERMINAL')} 
+                            icon={<ChefHat className="w-4.5 h-4.5" />} 
+                            label="SKY-5 KITCHEN" 
+                            color="amber"
+                        />
                     </div>
                 </div>
 
@@ -476,8 +509,6 @@ const App: React.FC = () => {
                     onLog={(log) => setAuditLogs(prev => [log, ...prev])} 
                     onFullSync={handleFullSync}
                 />
-            ) : currentView === 'SHOWROOM' ? (
-                <Showroom />
             ) : currentView === 'FOOD_REGISTER' ? (
                 <FoodRegister onLog={(log) => setAuditLogs(prev => [log, ...prev])} />
             ) : currentView === 'BILLING' ? (
@@ -488,6 +519,8 @@ const App: React.FC = () => {
                 <Sky5Terminal />
             ) : currentView === 'INVENTORY' ? (
                 <InventoryManager />
+            ) : currentView === 'STOCK_REPORT' ? (
+                <StoreStockReport />
             ) : (
                 <DigitalEvidence onAutoRegister={handleNewGateEntry} />
             )}
