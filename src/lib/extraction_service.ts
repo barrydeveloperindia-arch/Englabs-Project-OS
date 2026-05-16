@@ -23,6 +23,18 @@ export interface ExtractedInvoice {
     }>;
 }
 
+export interface ExtractedPorterTrip {
+    date: string;
+    porterName: string;
+    vehicleNumber: string;
+    fromLocation: string;
+    toLocation: string;
+    materialDescription: string;
+    distanceKm: number;
+    ratePerKm: number;
+    remarks: string;
+}
+
 export async function extractInvoiceData(fileDataUrl: string): Promise<ExtractedInvoice> {
     try {
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -80,6 +92,50 @@ export async function extractInvoiceData(fileDataUrl: string): Promise<Extracted
         return extracted as ExtractedInvoice;
     } catch (error) {
         console.error("Forensic Extraction Failure:", error);
+        throw error;
+    }
+}
+
+export async function extractPorterData(fileDataUrl: string): Promise<ExtractedPorterTrip> {
+    try {
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const base64Data = fileDataUrl.split(",")[1];
+        const mimeType = fileDataUrl.split(";")[0].split(":")[1];
+
+        const prompt = `
+            Extract porter/delivery trip details from this screenshot, WhatsApp image, or delivery slip.
+            Return data strictly in JSON format with these keys:
+            {
+                "date": "YYYY-MM-DD",
+                "porterName": "Name of the driver/porter",
+                "vehicleNumber": "Vehicle number",
+                "fromLocation": "Starting point",
+                "toLocation": "Drop-off point",
+                "materialDescription": "Items being carried",
+                "distanceKm": total distance in km (number),
+                "ratePerKm": rate per km (number, default to 15 if not found),
+                "remarks": "Any notes from the image"
+            }
+            Search specifically for maps, trip summaries, or handwritten logbook entries.
+        `;
+
+        const result = await model.generateContent([
+            prompt,
+            {
+                inlineData: {
+                    data: base64Data,
+                    mimeType: mimeType
+                }
+            }
+        ]);
+
+        const response = await result.response;
+        const text = response.text();
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error("No JSON found in AI response");
+        return JSON.parse(jsonMatch[0]) as ExtractedPorterTrip;
+    } catch (error) {
+        console.error("Porter Extraction Failure:", error);
         throw error;
     }
 }

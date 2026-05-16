@@ -22,7 +22,8 @@ import {
     Utensils,
     CreditCard,
     FileText,
-    ChefHat
+    ChefHat,
+    Truck
 } from 'lucide-react';
 import NewProjectModal from './components/NewProjectModal';
 import GateRegister from './components/GateRegister';
@@ -35,11 +36,13 @@ import DigitalEvidence from './components/DigitalEvidence';
 import InventoryManager from './components/InventoryManager';
 import Sky5Terminal from './components/Sky5Terminal';
 import StoreStockReport from './components/StoreStockReport';
+import PorterRegister from './components/PorterRegister';
 import { ProjectData, STAGES, ProjectStage } from './lib/project';
 import { logAction, AuditLog } from './lib/system_guard';
 import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry } from './lib/database_service';
 import { processInventoryUpdate } from './lib/inventory_service';
 import forensicRegistry from '../data/forensic_gate_registry.json';
+import porterForensic from '../data/porter_missions_forensic.json';
 
 const projectFiles = import.meta.glob('/data/*.json');
 
@@ -51,6 +54,8 @@ interface SidebarButtonProps {
     color?: 'emerald' | 'amber';
 }
 
+type View = 'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'BILLING' | 'QA_TESTER' | 'EVIDENCE' | 'INVENTORY' | 'SKY5_TERMINAL' | 'STOCK_REPORT' | 'PORTER_SERVICE';
+
 const SidebarButton: React.FC<SidebarButtonProps> = ({ active, onClick, icon, label, color = 'emerald' }) => {
     const activeClass = color === 'emerald' 
         ? 'bg-emerald-500 text-slate-900 shadow-[0_0_25px_rgba(16,185,129,0.35)] scale-[1.02]' 
@@ -60,6 +65,7 @@ const SidebarButton: React.FC<SidebarButtonProps> = ({ active, onClick, icon, la
         <button 
             type="button"
             onClick={onClick}
+            data-testid={`sidebar-btn-${label.toLowerCase().replace(/\s+/g, '-')}`}
             className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 w-full text-left ${active ? activeClass : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
         >
             {React.cloneElement(icon as React.ReactElement, { className: 'w-4.5 h-4.5' })}
@@ -74,18 +80,62 @@ const App: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
+    const [porterTrips, setPorterTrips] = useState<any[]>(() => {
+        try {
+            const saved = localStorage.getItem('englabs_porter_v1');
+            const forensic = porterForensic as any[];
+            let trips = saved && saved !== 'undefined' ? JSON.parse(saved) : [];
+            
+            const forensicMap = new Map(forensic.map(f => [f.id, f]));
+            const userTrips = trips.filter((t: any) => !forensicMap.has(t.id));
+            const merged = [...forensic, ...userTrips];
+            
+            return merged.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+        } catch (e) {
+            console.error("Porter initialization failed:", e);
+            return porterForensic as any[];
+        }
+    });
     const [gateEntries, setGateEntries] = useState<any[]>(() => {
         try {
             const saved = localStorage.getItem('englabs_gate_v2');
-            console.log("Retrieved from localStorage (englabs_gate_v2):", saved);
-            if (!saved || saved === 'undefined') return [];
-            return JSON.parse(saved);
+            const forensic = forensicRegistry as any[];
+            let local = (saved && saved !== 'undefined') ? JSON.parse(saved) : [];
+            
+            const entryMap = new Map();
+            forensic.forEach(e => entryMap.set(e.id, e));
+            local.forEach((e: any) => {
+                const existing = entryMap.get(e.id);
+                if (existing) {
+                    entryMap.set(e.id, { ...existing, ...e });
+                } else {
+                    entryMap.set(e.id, e);
+                }
+            });
+            
+            return Array.from(entryMap.values()).sort((a: any, b: any) => 
+                new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+            );
         } catch (e) {
             console.error("Failed to parse gate entries:", e);
-            return [];
+            return forensicRegistry as any[];
         }
     });
-    const [currentView, setCurrentView] = useState<'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'SYSTEM_GUARD' | 'BILLING' | 'QA_TESTER' | 'SKY5_TERMINAL' | 'INVENTORY' | 'STOCK_REPORT'>('PROJECTS');
+
+    // REACTIVE FORENSIC SYNC: Ensures disk-based updates (like new JSON entries) are merged into state
+    useEffect(() => {
+        setPorterTrips(prev => {
+            const forensic = porterForensic as any[];
+            const entryMap = new Map();
+            prev.forEach(e => entryMap.set(e.id, e));
+            forensic.forEach(e => entryMap.set(e.id, e)); // Forensic takes priority for matched IDs
+            return Array.from(entryMap.values()).sort((a: any, b: any) => 
+                new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+            );
+        });
+    }, []);
+
+    const [currentView, setCurrentView] = useState<View>('PROJECTS');
 
     useEffect(() => {
         console.log("Found project files:", Object.keys(projectFiles));
@@ -131,8 +181,20 @@ const App: React.FC = () => {
                     // 1. Start with Forensic Data (Baseline)
                     forensicData.forEach(e => entryMap.set(e.id, e));
                     
-                    // 2. Overlay Cloud Data (Priority)
-                    cloudEntries.forEach(e => entryMap.set(e.id, e));
+                    // 2. Overlay Cloud Data (Field-level Merge to preserve Forensic metadata)
+                    cloudEntries.forEach(e => {
+                        const existing = entryMap.get(e.id);
+                        if (existing) {
+                            // Smart Merge: Don't overwrite existing positive financial data with 0 or undefined
+                            const merged = { ...existing, ...e };
+                            if (!e.paidAmount && existing.paidAmount) merged.paidAmount = existing.paidAmount;
+                            if (!e.remainingAmount && existing.remainingAmount) merged.remainingAmount = existing.remainingAmount;
+                            if (!e.paymentStatus && existing.paymentStatus) merged.paymentStatus = existing.paymentStatus;
+                            entryMap.set(e.id, merged);
+                        } else {
+                            entryMap.set(e.id, e);
+                        }
+                    });
                     
                     // 3. Merge Local State (Priority for active session changes)
                     prev.forEach(e => {
@@ -145,9 +207,9 @@ const App: React.FC = () => {
                             const localTime = new Date(e.timestamp).getTime();
                             const cloudTime = new Date(existing.timestamp).getTime();
                             
-                            // If local has been updated or is same age, keep local
+                            // If local has been updated or is same age, merge local fields
                             if (localTime >= cloudTime) {
-                                entryMap.set(e.id, e);
+                                entryMap.set(e.id, { ...existing, ...e });
                             }
                         }
                     });
@@ -295,6 +357,14 @@ const App: React.FC = () => {
                         label="ZERO-ERROR AUDIT" 
                     />
 
+                    <SidebarButton 
+                        active={currentView === 'PORTER_SERVICE'} 
+                        onClick={() => setCurrentView('PORTER_SERVICE')} 
+                        icon={<Truck className="w-4.5 h-4.5" />} 
+                        label="PORTER SERVICE" 
+                        color="emerald"
+                    />
+
                     <div className="mt-8 pt-8 border-t border-white/5">
                         <p className="px-5 text-[9px] font-black text-slate-600 uppercase tracking-[0.25em] mb-5">Vendor Channels</p>
                         <SidebarButton 
@@ -347,6 +417,7 @@ const App: React.FC = () => {
                 <div className="p-6 border-t border-slate-800 shrink-0">
                     <button 
                         onClick={() => setIsModalOpen(true)}
+                        data-testid="btn-new-mission"
                         className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-emerald-500/10"
                     >
                         <Plus className="w-5 h-5" /> NEW MISSION
@@ -521,6 +592,13 @@ const App: React.FC = () => {
                 <InventoryManager />
             ) : currentView === 'STOCK_REPORT' ? (
                 <StoreStockReport />
+            ) : currentView === 'PORTER_SERVICE' ? (
+                <PorterRegister 
+                    trips={porterTrips}
+                    onNewTrip={(trip) => setPorterTrips(prev => [trip, ...prev])}
+                    onUpdateTrip={(updated) => setPorterTrips(prev => prev.map(t => t.id === updated.id ? updated : t))}
+                    onDeleteTrip={(id) => setPorterTrips(prev => prev.filter(t => t.id !== id))}
+                />
             ) : (
                 <DigitalEvidence onAutoRegister={handleNewGateEntry} />
             )}

@@ -39,6 +39,10 @@ export interface GateEntry {
     paymentStatus?: PaymentStatus;
     paymentMode?: PaymentMode;
     transactionId?: string;
+    paidAmount?: number;
+    remainingAmount?: number;
+    paymentDate?: string;
+    paymentRemarks?: string;
     history?: any[]; // Store previous versions for rollback
 }
 

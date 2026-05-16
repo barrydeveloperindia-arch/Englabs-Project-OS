@@ -11,10 +11,14 @@ export default defineConfig({
   server: {
     port: 3000,
     strictPort: true,
+    watch: {
+      ignored: ['**/playwright-report/**', '**/test-results/**']
+    }
   },
   test: {
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/tests/setup.ts',
+    exclude: ['**/node_modules/**', '**/dist/**', '**/src/tests/e2e/**'],
   },
 })

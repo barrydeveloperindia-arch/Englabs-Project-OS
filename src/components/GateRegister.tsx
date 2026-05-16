@@ -17,7 +17,9 @@ import {
     Edit2,
     MessageSquare,
     Image as ImageIcon,
-    Trash2
+    Trash2,
+    CreditCard,
+    Hash
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import GateEntryForm from './GateEntryForm';
@@ -76,7 +78,32 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
     const stats = {
         totalInwardToday: entries.filter(e => e.type === 'INWARD').length,
         totalOutwardToday: entries.filter(e => e.type === 'OUTWARD').length,
-        totalValue: entries.reduce((acc, curr) => acc + (curr.amount || 0), 0),
+        inwardValue: entries.filter(e => e.type === 'INWARD').reduce((acc, curr) => acc + (curr.amount || 0), 0),
+        inwardPaid: entries.filter(e => e.type === 'INWARD').reduce((acc, curr) => acc + (curr.paidAmount || 0), 0),
+        inwardPending: entries.filter(e => e.type === 'INWARD').reduce((acc, curr) => {
+            const totalGross = (curr.amount || 0) * 1.18;
+            return acc + (curr.remainingAmount !== undefined ? curr.remainingAmount : (curr.paymentStatus === 'PAID' ? 0 : totalGross - (curr.paidAmount || 0)));
+        }, 0),
+        
+        outwardValue: entries.filter(e => e.type === 'OUTWARD').reduce((acc, curr) => acc + (curr.amount || 0), 0),
+        outwardPaid: entries.filter(e => e.type === 'OUTWARD').reduce((acc, curr) => acc + (curr.paidAmount || 0), 0),
+        outwardPending: entries.filter(e => e.type === 'OUTWARD').reduce((acc, curr) => {
+            const totalGross = (curr.amount || 0) * 1.18;
+            return acc + (curr.remainingAmount !== undefined ? curr.remainingAmount : (curr.paymentStatus === 'PAID' ? 0 : totalGross - (curr.paidAmount || 0)));
+        }, 0),
+        
+        totalPaid: entries.reduce((acc, curr) => {
+            // Smart Fallback: If paidAmount is missing but status is PAID, use amount (assuming inclusive in this context for total)
+            const paid = curr.paidAmount !== undefined ? curr.paidAmount : (curr.paymentStatus === 'PAID' ? (curr.amount || 0) : 0);
+            return acc + (paid || 0);
+        }, 0),
+        totalPending: entries.reduce((acc, curr) => {
+            const totalGross = (curr.amount || 0) * 1.18;
+            const pending = curr.remainingAmount !== undefined ? curr.remainingAmount : (curr.paymentStatus === 'PAID' ? 0 : totalGross - (curr.paidAmount || 0));
+            return acc + (pending || 0);
+        }, 0),
+        partialCount: entries.filter(e => e.paymentStatus === 'PARTIAL').length,
+        unpaidCount: entries.filter(e => e.paymentStatus === 'UNPAID').length,
         pendingApprovals: entries.filter(e => e.type === 'OUTWARD' && !e.gatePassNumber).length
     };
 
@@ -99,14 +126,14 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
             `*Date:* ${new Date(entry.timestamp).toLocaleDateString()}\n` +
             `*Vendor/Party:* ${entry.partyName}\n` +
             `*Vehicle:* ${entry.vehicleNumber}\n` +
-            `*Invoice:* ${entry.invoiceNumber}\n` +
+            `*Invoice:* ${entry.invoiceNumber || 'N/A'}\n` +
             itemsDetail +
-            `*GRAND TOTAL: ₹${(entry.amount || 0).toLocaleString()}*\n` +
+            `*TOTAL AMOUNT: ₹${(entry.amount || 0).toLocaleString()}*\n` +
+            `*PAID AMOUNT: ₹${(entry.paidAmount || 0).toLocaleString()} (${entry.paymentMode || 'N/A'})*\n` +
+            `*BALANCE DUE: ₹${((entry.remainingAmount || (entry.amount - (entry.paidAmount || 0)))).toLocaleString()}*\n` +
+            `*STATUS: ${entry.paymentStatus || 'UNPAID'}*\n` +
             `--------------------------------\n` +
-            `*Verified By:* ${entry.employeeName}\n` +
-            `*Supervisor:* ${entry.supervisorName}\n` +
-            `--------------------------------\n` +
-            `_Official Gate Registry System_`
+            `_Verified by Gate Registry System_`
         );
         window.open(`https://wa.me/?text=${text}`, '_blank');
     };
@@ -218,8 +245,12 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                     <div className="h-8 w-px bg-slate-100"></div>
                     <div className="flex items-center gap-3">
                         <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all cursor-pointer ${view === 'DASHBOARD' ? 'bg-emerald-500 border-emerald-400 text-slate-900' : 'bg-white border-slate-200 text-slate-400'}`} onClick={() => setView('DASHBOARD')}>Dashboard</div>
-                        <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all cursor-pointer ${view === 'INWARD_LIST' ? 'bg-emerald-500 border-emerald-400 text-slate-900' : 'bg-white border-slate-200 text-slate-400'}`} onClick={() => setView('INWARD_LIST')}>Inward Register</div>
-                        <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all cursor-pointer ${view === 'OUTWARD_LIST' ? 'bg-emerald-500 border-emerald-400 text-slate-900' : 'bg-white border-slate-200 text-slate-400'}`} onClick={() => setView('OUTWARD_LIST')}>Outward Register</div>
+                        <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all cursor-pointer ${view === 'INWARD_LIST' ? 'bg-emerald-500 border-emerald-400 text-slate-900 shadow-lg shadow-emerald-500/10' : 'bg-white border-slate-200 text-slate-400'}`} onClick={() => setView('INWARD_LIST')}>
+                            Inward Register <span className="ml-1 opacity-60">({stats.totalInwardToday})</span>
+                        </div>
+                        <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all cursor-pointer ${view === 'OUTWARD_LIST' ? 'bg-emerald-500 border-emerald-400 text-slate-900 shadow-lg shadow-emerald-500/10' : 'bg-white border-slate-200 text-slate-400'}`} onClick={() => setView('OUTWARD_LIST')}>
+                            Outward Register <span className="ml-1 opacity-60">({stats.totalOutwardToday})</span>
+                        </div>
                     </div>
                 </div>
                 
@@ -231,6 +262,8 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                     <button 
                         onClick={syncDatabase}
                         disabled={isSyncing}
+                        data-testid="btn-sync-cloud"
+                        aria-label="Sync with Forensic Database"
                         className={`p-3 border border-slate-200 rounded-xl transition-all ${isSyncing ? 'bg-slate-50 text-slate-400' : 'bg-white text-slate-600 hover:border-emerald-500 hover:text-emerald-500 shadow-sm'}`}
                         title="Sync with Forensic Database"
                     >
@@ -278,12 +311,78 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                     <>
                         {view === 'DASHBOARD' && (
                             <div className="max-w-[1400px] mx-auto space-y-10">
-                                {/* STATS GRID */}
-                                <div className="grid grid-cols-4 gap-8">
-                                    <StatCard icon={<LogIn />} label="Inward Entries" value={stats.totalInwardToday} color="emerald" onClick={() => setView('INWARD_LIST')} />
-                                    <StatCard icon={<LogOut />} label="Outward Entries" value={stats.totalOutwardToday} color="blue" onClick={() => setView('OUTWARD_LIST')} />
-                                    <StatCard icon={<TrendingUp />} label="Total Valuation" value={`₹${stats.totalValue.toLocaleString('en-IN')}`} color="purple" />
-                                    <StatCard icon={<AlertTriangle />} label="Pending Pass" value={stats.pendingApprovals} color="amber" />
+                                {/* STATS GRID - ROW 1: INWARD / OUTWARD CORE */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                                    <StatCard 
+                                        icon={<LogIn />} 
+                                        label="Inward Payments" 
+                                        value={`₹${stats.inwardPaid.toLocaleString('en-IN')}`} 
+                                        subValue={`Outstanding: ₹${stats.inwardPending.toLocaleString('en-IN')}`}
+                                        color="emerald" 
+                                        onClick={() => setView('INWARD_LIST')} 
+                                    />
+                                    <StatCard 
+                                        icon={<LogOut />} 
+                                        label="Outward Payments" 
+                                        value={`₹${stats.outwardPaid.toLocaleString('en-IN')}`} 
+                                        subValue={`Outstanding: ₹${stats.outwardPending.toLocaleString('en-IN')}`}
+                                        color="blue" 
+                                        onClick={() => setView('OUTWARD_LIST')} 
+                                    />
+                                    <StatCard 
+                                        icon={<TrendingUp />} 
+                                        label="Total Paid Amount" 
+                                        value={`₹${stats.totalPaid.toLocaleString('en-IN')}`} 
+                                        subValue={`Total Ledger Paid`}
+                                        color="purple" 
+                                    />
+                                    <StatCard 
+                                        icon={<AlertTriangle />} 
+                                        label="Total Outstanding" 
+                                        value={`₹${stats.totalPending.toLocaleString('en-IN')}`} 
+                                        subValue="Total Unpaid Balance"
+                                        color="amber" 
+                                    />
+                                </div>
+
+                                {/* STATS GRID - ROW 2: STATUS AUDIT */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-8">
+                                    <div className="bg-white p-6 rounded-3xl border border-slate-100 flex items-center justify-between shadow-sm">
+                                        <div>
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Partial Payments</p>
+                                            <p className="text-xl font-black text-slate-900 mt-1">{stats.partialCount} Entries</p>
+                                        </div>
+                                        <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-500">
+                                            <CreditCard className="w-5 h-5" />
+                                        </div>
+                                    </div>
+                                    <div className="bg-white p-6 rounded-3xl border border-slate-100 flex items-center justify-between shadow-sm">
+                                        <div>
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Unpaid Records</p>
+                                            <p className="text-xl font-black text-rose-500 mt-1">{stats.unpaidCount} Entries</p>
+                                        </div>
+                                        <div className="w-10 h-10 bg-rose-50 rounded-xl flex items-center justify-center text-rose-500">
+                                            <AlertTriangle className="w-5 h-5" />
+                                        </div>
+                                    </div>
+                                    <div className="bg-white p-6 rounded-3xl border border-slate-100 flex items-center justify-between shadow-sm">
+                                        <div>
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Pending Gate Pass</p>
+                                            <p className="text-xl font-black text-amber-500 mt-1">{stats.pendingApprovals} Units</p>
+                                        </div>
+                                        <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center text-amber-500">
+                                            <Hash className="w-5 h-5" />
+                                        </div>
+                                    </div>
+                                    <div className="bg-slate-900 p-6 rounded-3xl flex items-center justify-between shadow-xl">
+                                        <div>
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Database Sync</p>
+                                            <p className="text-xl font-black text-emerald-500 mt-1">SECURE</p>
+                                        </div>
+                                        <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center text-slate-900">
+                                            <Shield className="w-5 h-5" />
+                                        </div>
+                                    </div>
                                 </div>
 
                                 {/* LIVE FEED */}
@@ -295,17 +394,21 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                                         <div className="flex gap-4">
                                             <button 
                                                 onClick={shareMonthlySummary}
+                                                data-testid="btn-monthly-share"
                                                 className="px-6 py-3 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-xl hover:bg-emerald-100 transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest shadow-sm"
                                             >
                                                 <MessageSquare className="w-4 h-4" /> MONTHLY SHARE
                                             </button>
-                                            <button className="p-3 bg-slate-50 border border-slate-100 rounded-xl hover:bg-slate-100 transition-all text-slate-500">
+                                            <button 
+                                                aria-label="Print Registry"
+                                                className="p-3 bg-slate-50 border border-slate-100 rounded-xl hover:bg-slate-100 transition-all text-slate-500"
+                                            >
                                                 <Printer className="w-4 h-4" />
                                             </button>
                                         </div>
                                     </div>
                                     
-                                    <div className="p-10 overflow-x-auto">
+                                    <div className="p-10 overflow-x-auto no-scrollbar">
                                         <EntryTable 
                                             entries={entries.slice(0, 10)}
                                             onEdit={setEditingEntry}
@@ -322,11 +425,18 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                         {(view === 'INWARD_LIST' || view === 'OUTWARD_LIST') && (
                             <div className="max-w-[1400px] mx-auto space-y-10">
                                 <div className="bg-white rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)] overflow-hidden">
-                                    <div className="p-10 border-b border-slate-100 flex justify-between items-center">
-                                        <h2 className="text-2xl font-black text-slate-900 flex items-center gap-3">
-                                            <Shield className="w-6 h-6 text-emerald-500" /> 
-                                            {view === 'INWARD_LIST' ? 'Inward Registry' : 'Outward Registry'}
-                                        </h2>
+                                    <div className="p-10 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                                        <div className="flex flex-col">
+                                            <h2 className="text-2xl font-black text-slate-900 flex items-center gap-3">
+                                                <Shield className="w-6 h-6 text-emerald-500" /> 
+                                                {view === 'INWARD_LIST' ? 'Inward Registry' : 'Outward Registry'}
+                                            </h2>
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2 ml-9">
+                                                {view === 'INWARD_LIST' 
+                                                    ? `${stats.totalInwardToday} Entries Registered • Taxable: ₹${stats.inwardValue.toLocaleString('en-IN')} • Gross (GST): ₹${(stats.inwardValue * 1.18).toLocaleString('en-IN')}` 
+                                                    : `${stats.totalOutwardToday} Entries Dispatched • Valuation: ₹${stats.outwardValue.toLocaleString('en-IN')}`}
+                                            </p>
+                                        </div>
                                         <div className="relative w-96">
                                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                                             <input 
@@ -415,7 +525,7 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
     );
 };
 
-const StatCard = ({ icon, label, value, color, onClick }: any) => {
+const StatCard = ({ icon, label, value, subValue, color, onClick }: any) => {
     const colors: any = {
         emerald: "text-emerald-500 bg-emerald-50 border-emerald-100",
         blue: "text-blue-500 bg-blue-50 border-blue-100",
@@ -433,6 +543,9 @@ const StatCard = ({ icon, label, value, color, onClick }: any) => {
             </div>
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">{label}</p>
             <p className="text-3xl font-black text-slate-900 tracking-tighter">{value}</p>
+            {subValue && (
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-2">{subValue}</p>
+            )}
         </div>
     );
 };
@@ -488,7 +601,12 @@ const EntryTable = ({ entries, onEdit, onDelete, onPrint, onInvoice, onShare }: 
                         </td>
                         <td className="py-6 px-4">
                             <p className="font-bold text-slate-900 text-sm leading-tight">{entry.materialName}</p>
-                            <p className="text-[10px] font-bold text-slate-400 mt-1">{entry.quantity} {entry.unit}</p>
+                            <div className="flex items-center gap-2 mt-1">
+                                <span className="text-[10px] font-bold text-slate-400">{entry.quantity} {entry.unit}</span>
+                                {entry.type === 'INWARD' && entry.items?.[0]?.hsnCode && (
+                                    <span className="text-[8px] font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded tracking-tighter">HSN: {entry.items[0].hsnCode}</span>
+                                )}
+                            </div>
                         </td>
                         <td className="py-6 px-4">
                             <div className="flex items-center gap-2">
@@ -505,9 +623,17 @@ const EntryTable = ({ entries, onEdit, onDelete, onPrint, onInvoice, onShare }: 
                                 }`}>
                                     {entry.paymentStatus || 'UNPAID'}
                                 </span>
-                                <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">
-                                    {entry.paymentMode || 'UPI'}
-                                </span>
+                                <p className="text-[10px] font-black text-slate-900 mt-1">
+                                    {entry.type === 'INWARD' ? 'Inv (Gross): ' : 'Dlv (Gross): '} ₹{((entry.amount || 0) * 1.18).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                </p>
+                                <div className="flex flex-col">
+                                    <p className="text-[9px] font-bold text-slate-600">
+                                        {entry.type === 'INWARD' ? 'Paid: ' : 'Recd: '} ₹{(entry.paidAmount || 0).toLocaleString()}
+                                    </p>
+                                    <p className="text-[9px] font-bold text-slate-400">
+                                        {entry.type === 'INWARD' ? 'Rem: ' : 'Bal: '} ₹{((entry.remainingAmount || (((entry.amount || 0) * 1.18) - (entry.paidAmount || 0)))).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                    </p>
+                                </div>
                             </div>
                         </td>
                         <td className="py-6 px-4 text-right">

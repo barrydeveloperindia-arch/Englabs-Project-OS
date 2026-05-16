@@ -19,13 +19,16 @@
     "fromLocation": "MANIMAJRA, CHANDIGARH",
     "toLocation": "ENGLABS MDC",
     "amount": 2263,
+    "paidAmount": 0,
+    "remainingAmount": 2263,
+    "paymentStatus": "UNPAID",
+    "paymentMode": "CASH",
     "employeeName": "SAM",
     "supervisorName": "Gaurav Panchal",
     "remarks": "STATIONERY INWARD - AUDITED & VERIFIED",
     "isLocked": true,
     "status": "VERIFIED",
-    "paymentStatus": "UNPAID",
-    "paymentMode": "CREDIT"
+    "version": 1
   },
   {
     "id": "IN-002",
@@ -53,11 +56,17 @@
     "fromLocation": "CHANDIGARH",
     "toLocation": "ENGLABS MDC",
     "amount": 10075,
+    "paidAmount": 10075,
+    "remainingAmount": 0,
+    "paymentStatus": "PAID",
+    "paymentMode": "NEFT",
+    "paymentDate": "2026-05-11",
     "employeeName": "Uditanshu",
     "supervisorName": "Gaurav Panchal",
     "remarks": "INWARD MATERIAL RECEIVED AND VERIFIED",
     "isLocked": true,
-    "status": "VERIFIED"
+    "status": "VERIFIED",
+    "version": 1
   },
   {
     "id": "OUT-002",
@@ -74,11 +83,16 @@
     "employeeName": "SAM",
     "supervisorName": "Gaurav Panchal",
     "invoiceNumber": "N/A",
-    "amount": 0,
+    "amount": 1500,
+    "paidAmount": 0,
+    "remainingAmount": 1500,
+    "paymentStatus": "UNPAID",
+    "paymentMode": "CASH",
     "remarks": "HANDOVER COMPLETE",
     "gatePassNumber": "GP-001",
     "isLocked": true,
-    "status": "VERIFIED"
+    "status": "VERIFIED",
+    "version": 1
   },
   {
     "id": "IN-001",
@@ -93,10 +107,15 @@
     "fromLocation": "INDUSTRIAL AREA, CHANDIGARH",
     "toLocation": "MDC PANCHKULA",
     "amount": 8024,
+    "paidAmount": 4000,
+    "remainingAmount": 4024,
+    "paymentStatus": "PARTIAL",
+    "paymentMode": "CASH",
     "employeeName": "SAM",
     "supervisorName": "Gaurav Panchal",
     "remarks": "GOOD CONDITION / SEALED",
     "isLocked": true,
-    "status": "VERIFIED"
+    "status": "VERIFIED",
+    "version": 1
   }
 ]

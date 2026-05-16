@@ -86,7 +86,9 @@ const GateInvoiceSlip: React.FC<Props> = ({ entry, onClose }) => {
                         </div>
 
                         <div className="text-right flex flex-col justify-between h-full">
-                            <h2 className="text-7xl font-black text-slate-100 uppercase tracking-tighter leading-none select-none mb-6">INVOICE</h2>
+                            <h2 className="text-5xl font-black text-slate-100 uppercase tracking-tighter leading-none select-none mb-6">
+                                {entry.type === 'INWARD' ? 'INVOICE' : 'CHALLAN'}
+                            </h2>
                             <div className="space-y-4">
                                 <div>
                                     <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Invoice ID</p>
@@ -184,6 +186,22 @@ const GateInvoiceSlip: React.FC<Props> = ({ entry, onClose }) => {
                                     <td colSpan={5} className="py-4 text-right text-[10px] font-black text-slate-900 uppercase tracking-widest">Grand Total (Inclusive)</td>
                                     <td className="py-4 text-right text-lg font-black text-emerald-600">
                                         ₹{((entry.amount || 0) * 1.18).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                    </td>
+                                </tr>
+                                <tr className="border-t border-slate-100">
+                                    <td colSpan={5} className="py-3 text-right text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                                        {entry.type === 'INWARD' ? 'Amount Paid' : 'Amount Received'} ({entry.paymentMode || 'N/A'})
+                                    </td>
+                                    <td className="py-3 text-right text-sm font-black text-slate-900">
+                                        ₹{(entry.paidAmount || 0).toLocaleString('en-IN')}
+                                    </td>
+                                </tr>
+                                <tr className="border-t-2 border-slate-900">
+                                    <td colSpan={5} className="py-4 text-right text-[10px] font-black text-slate-900 uppercase tracking-widest">
+                                        {entry.type === 'INWARD' ? 'Balance Remaining' : 'Balance Due'}
+                                    </td>
+                                    <td className="py-4 text-right text-xl font-black text-rose-600">
+                                        ₹{((entry.remainingAmount || (((entry.amount || 0) * 1.18) - (entry.paidAmount || 0)))).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                                     </td>
                                 </tr>
                             </tfoot>

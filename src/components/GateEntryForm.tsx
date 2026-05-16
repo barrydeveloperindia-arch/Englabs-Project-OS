@@ -534,7 +534,7 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                                     </button>
                                     <div className="flex flex-col items-center md:items-end gap-1">
                                         <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">
-                                            Total Purchase Value (All Items)
+                                            {type === 'INWARD' ? 'Total Invoice Value' : 'Total Delivery Value'}
                                         </div>
                                         <div className="text-4xl font-black text-emerald-600 tracking-tighter flex items-center gap-2">
                                             <span className="text-xl text-emerald-400">₹</span>
@@ -651,7 +651,7 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                             <h3 className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.3em] flex items-center gap-3 mb-8">
                                 <CreditCard className="w-4 h-4" /> Forensic Financial Verification
                             </h3>
-                            <div className="grid grid-cols-3 gap-8">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                                 <div>
                                     <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 block">Payment Status</label>
                                     <div className="flex gap-2">
@@ -660,7 +660,7 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                                                 key={status}
                                                 type="button"
                                                 onClick={() => setFormData({...formData, paymentStatus: status})}
-                                                className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black transition-all ${
+                                                className={`flex-1 py-3 px-2 rounded-xl text-[9px] font-black transition-all ${
                                                     formData.paymentStatus === status 
                                                     ? 'bg-emerald-500 text-slate-900 shadow-lg shadow-emerald-500/20' 
                                                     : 'bg-white border border-slate-200 text-slate-400 hover:border-emerald-500'
@@ -670,6 +670,36 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                                             </button>
                                         ))}
                                     </div>
+                                </div>
+                                <div>
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 block">
+                                        {type === 'INWARD' ? 'Paid Amount (₹)' : 'Received Amount (₹)'}
+                                    </label>
+                                    <input 
+                                        type="number"
+                                        value={formData.paidAmount || 0}
+                                        onChange={e => {
+                                            const paid = parseFloat(e.target.value) || 0;
+                                            const total = formData.items.reduce((sum: number, item: any) => sum + item.amount, 0);
+                                            setFormData({
+                                                ...formData, 
+                                                paidAmount: paid,
+                                                remainingAmount: total - paid,
+                                                paymentStatus: paid >= total ? 'PAID' : (paid > 0 ? 'PARTIAL' : 'UNPAID')
+                                            });
+                                        }}
+                                        className="w-full bg-white border border-slate-200 rounded-xl py-3 px-6 font-black text-slate-900 outline-none focus:border-emerald-500 shadow-sm"
+                                        placeholder="0.00"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 block">Payment Date</label>
+                                    <input 
+                                        type="date"
+                                        value={formData.paymentDate || new Date().toISOString().split('T')[0]}
+                                        onChange={e => setFormData({...formData, paymentDate: e.target.value})}
+                                        className="w-full bg-white border border-slate-200 rounded-xl py-3 px-6 font-bold text-slate-900 outline-none focus:border-emerald-500 shadow-sm"
+                                    />
                                 </div>
                                 <div>
                                     <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 block">Payment Channel</label>
@@ -685,13 +715,24 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                                         <option value="OTHER">OTHER</option>
                                     </select>
                                 </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-8 mt-6">
                                 <div>
-                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 block">Transaction Ref / ID</label>
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 block">Transaction ID / Ref</label>
                                     <input 
                                         value={formData.transactionId}
                                         onChange={e => setFormData({...formData, transactionId: e.target.value})}
                                         className="w-full bg-white border border-slate-200 rounded-xl py-3 px-6 font-bold text-slate-900 outline-none focus:border-emerald-500 shadow-sm"
-                                        placeholder="UTR / ID / Receipt No"
+                                        placeholder="UTR Number / Receipt ID"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 block">Payment Remarks</label>
+                                    <input 
+                                        value={formData.paymentRemarks}
+                                        onChange={e => setFormData({...formData, paymentRemarks: e.target.value})}
+                                        className="w-full bg-white border border-slate-200 rounded-xl py-3 px-6 font-bold text-slate-900 outline-none focus:border-emerald-500 shadow-sm"
+                                        placeholder="Note regarding this transaction"
                                     />
                                 </div>
                             </div>

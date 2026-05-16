@@ -59,7 +59,7 @@ async function updateStock(
     });
 
     if (alreadyLogged) {
-        console.log(`Skipping inventory update: Item ${itemCode} already synced for Entry ${refId}`);
+        if (import.meta.env.DEV) console.log(`Skipping inventory update: Item ${itemCode} already synced for Entry ${refId}`);
         return { success: true, message: "Already synced" };
     }
 
