@@ -72,3 +72,5 @@ scratch/
 artifacts/
 .gemini/
 .antigravity/
+.qa_backups/
+test-results/

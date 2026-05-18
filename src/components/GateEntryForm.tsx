@@ -377,7 +377,7 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                                             setFormData({...formData, partyName: val});
                                             // 🏢 AUTO-FILL ON VENDOR MATCH
                                             if (VENDOR_PROFILES[val]) {
-                                                setFormData(prev => ({ ...prev, ...VENDOR_PROFILES[val], partyName: val }));
+                                                setFormData((prev: any) => ({ ...prev, ...VENDOR_PROFILES[val], partyName: val }));
                                             }
                                         }}
                                         className="w-full bg-transparent border-b-2 border-slate-700 py-3 pl-8 font-black text-2xl text-white placeholder:text-slate-600 focus:border-emerald-500 outline-none transition-all"

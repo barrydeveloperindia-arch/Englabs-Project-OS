@@ -23,7 +23,9 @@ import {
     CreditCard,
     FileText,
     ChefHat,
-    Truck
+    Truck,
+    MoreHorizontal,
+    X
 } from 'lucide-react';
 import NewProjectModal from './components/NewProjectModal';
 import GateRegister from './components/GateRegister';
@@ -37,6 +39,8 @@ import InventoryManager from './components/InventoryManager';
 import Sky5Terminal from './components/Sky5Terminal';
 import StoreStockReport from './components/StoreStockReport';
 import PorterRegister from './components/PorterRegister';
+import InventoryArchiveSystem from './components/InventoryArchiveSystem';
+import HandoverDashboard from './components/HandoverDashboard';
 import { ProjectData, STAGES, ProjectStage } from './lib/project';
 import { logAction, AuditLog } from './lib/system_guard';
 import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry } from './lib/database_service';
@@ -44,7 +48,80 @@ import { processInventoryUpdate } from './lib/inventory_service';
 import forensicRegistry from '../data/forensic_gate_registry.json';
 import porterForensic from '../data/porter_missions_forensic.json';
 
+import pC001 from '../data/C001.json';
+import pC002 from '../data/C002.json';
+import pC2718 from '../data/C2718.json';
+import pC2737 from '../data/C2737.json';
+import pC2931 from '../data/C2931.json';
+import pC3020 from '../data/C3020.json';
+import pC4867 from '../data/C4867.json';
+import pC5124 from '../data/C5124.json';
+import pC5135 from '../data/C5135.json';
+import pC5137 from '../data/C5137.json';
+import pC5162 from '../data/C5162.json';
+import pC5178 from '../data/C5178.json';
+import pENGLABS from '../data/ENGLABS.json';
+
+const staticProjects: ProjectData[] = [
+    pC001 as any,
+    pC002 as any,
+    pC2718 as any,
+    pC2737 as any,
+    pC2931 as any,
+    pC3020 as any,
+    pC4867 as any,
+    pC5124 as any,
+    pC5135 as any,
+    pC5137 as any,
+    pC5162 as any,
+    pC5178 as any,
+    pENGLABS as any
+].filter(p => p && p.projectId);
+
 const projectFiles = import.meta.glob('/data/*.json');
+
+interface MobileTabButtonProps {
+    active: boolean;
+    onClick: () => void;
+    icon: React.ReactNode;
+    label: string;
+    color?: 'emerald' | 'amber';
+}
+
+const MobileTabButton: React.FC<MobileTabButtonProps> = ({ active, onClick, icon, label, color = 'emerald' }) => {
+    const activeColor = color === 'emerald' ? 'text-emerald-400' : 'text-amber-400';
+    return (
+        <button 
+            type="button"
+            onClick={onClick}
+            data-testid={`mobile-nav-btn-${label.toLowerCase().replace(/\s+/g, '-')}`}
+            className="flex flex-col items-center justify-center w-12 h-12 rounded-xl transition-all"
+        >
+            <div className={`p-1.5 rounded-lg ${active ? 'bg-slate-800 ' + activeColor : 'text-slate-500'}`}>
+                {React.cloneElement(icon as React.ReactElement, { className: 'w-5 h-5' })}
+            </div>
+            <span className={`text-[8px] font-black uppercase tracking-wider mt-1 ${active ? activeColor : 'text-slate-500'}`}>{label}</span>
+        </button>
+    );
+};
+
+const MobileGridButton = ({ onClick, icon, label, active, color = 'emerald' }: any) => {
+    const activeColor = color === 'emerald' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+    return (
+        <button 
+            onClick={onClick}
+            data-testid={`mobile-grid-btn-${label.toLowerCase().replace(/\s+/g, '-')}`}
+            className={`flex flex-col items-center justify-center p-4 rounded-2xl border transition-all ${
+                active 
+                ? activeColor 
+                : 'bg-slate-800/40 border-transparent text-slate-400 hover:text-white hover:bg-slate-800'
+            }`}
+        >
+            {icon}
+            <span className="text-[9px] font-black uppercase tracking-wider mt-2 text-center">{label}</span>
+        </button>
+    );
+};
 
 interface SidebarButtonProps {
     active: boolean;
@@ -54,7 +131,7 @@ interface SidebarButtonProps {
     color?: 'emerald' | 'amber';
 }
 
-type View = 'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'BILLING' | 'QA_TESTER' | 'EVIDENCE' | 'INVENTORY' | 'SKY5_TERMINAL' | 'STOCK_REPORT' | 'PORTER_SERVICE';
+type View = 'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'BILLING' | 'QA_TESTER' | 'EVIDENCE' | 'INVENTORY' | 'INVENTORY_ARCHIVE' | 'SKY5_TERMINAL' | 'STOCK_REPORT' | 'PORTER_SERVICE';
 
 const SidebarButton: React.FC<SidebarButtonProps> = ({ active, onClick, icon, label, color = 'emerald' }) => {
     const activeClass = color === 'emerald' 
@@ -75,8 +152,20 @@ const SidebarButton: React.FC<SidebarButtonProps> = ({ active, onClick, icon, la
 };
 
 const App: React.FC = () => {
-    const [projects, setProjects] = useState<ProjectData[]>([]);
-    const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
+    const [showHandover, setShowHandover] = useState(() => {
+        // Only show handover once per day by checking localStorage
+        const today = new Date().toDateString();
+        const lastSeen = localStorage.getItem('last_handover_seen');
+        return lastSeen !== today;
+    });
+
+    const handleAcknowledgeHandover = () => {
+        localStorage.setItem('last_handover_seen', new Date().toDateString());
+        setShowHandover(false);
+    };
+
+    const [projects, setProjects] = useState<ProjectData[]>(staticProjects);
+    const [selectedProject, setSelectedProject] = useState<ProjectData | null>(staticProjects[0] || null);
     const [searchQuery, setSearchQuery] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
@@ -136,6 +225,7 @@ const App: React.FC = () => {
     }, []);
 
     const [currentView, setCurrentView] = useState<View>('PROJECTS');
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         console.log("Found project files:", Object.keys(projectFiles));
@@ -288,11 +378,15 @@ const App: React.FC = () => {
 
     if (!selectedProject) return <div className="h-screen w-screen bg-slate-900 flex items-center justify-center text-white font-black text-4xl">INITIALIZING...</div>;
 
+    if (showHandover) {
+        return <HandoverDashboard onAcknowledge={handleAcknowledgeHandover} />;
+    }
+
     return (
-        <div className="flex h-screen w-screen bg-[#F8FAFC] overflow-hidden text-slate-900 font-sans">
+        <div className="flex h-screen w-screen bg-[#F8FAFC] overflow-hidden text-slate-900 font-sans print:h-auto print:w-auto print:overflow-visible print:bg-white">
             {/* SIDEBAR LEDGER */}
             <aside 
-                className="bg-[#0F172A] flex flex-col shadow-2xl shrink-0 border-r border-slate-800"
+                className="bg-[#0F172A] hidden md:flex flex-col shadow-2xl shrink-0 border-r border-slate-800 print:hidden"
                 style={{ width: '320px', minWidth: '320px', maxWidth: '320px', zIndex: 50 }}
             >
                 <div className="p-8">
@@ -337,6 +431,12 @@ const App: React.FC = () => {
                         onClick={() => setCurrentView('INVENTORY')} 
                         icon={<Box className="w-4.5 h-4.5" />} 
                         label="INVENTORY MASTER" 
+                    />
+                    <SidebarButton 
+                        active={currentView === 'INVENTORY_ARCHIVE'} 
+                        onClick={() => setCurrentView('INVENTORY_ARCHIVE')} 
+                        icon={<Package className="w-4.5 h-4.5" />} 
+                        label="TIME MACHINE ARCHIVES" 
                     />
                     <SidebarButton 
                         active={currentView === 'STOCK_REPORT'} 
@@ -426,56 +526,57 @@ const App: React.FC = () => {
             </aside>
 
             {/* MAIN OPERATIONAL CORE */}
-            {currentView === 'PROJECTS' ? (
-                <div className="flex-1 flex flex-col min-w-0 bg-[#F8FAFC]">
-                    <header className="h-20 bg-white border-b border-slate-100 flex items-center justify-between px-10 shrink-0">
-                        <div className="flex items-center gap-6">
+            <div className="flex-1 flex flex-col min-w-0 overflow-hidden pb-16 md:pb-0">
+                {currentView === 'PROJECTS' ? (
+                    <div className="flex-1 flex flex-col min-w-0 bg-[#F8FAFC]">
+                    <header className="h-16 md:h-20 bg-white border-b border-slate-100 flex items-center justify-between px-4 md:px-10 shrink-0">
+                        <div className="flex items-center gap-3 md:gap-6">
                             <div className="flex flex-col">
-                                <h1 className="text-lg font-black text-slate-900 leading-none">Mission Control</h1>
-                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Operational Oversight Matrix</span>
+                                <h1 className="text-sm md:text-lg font-black text-slate-900 leading-none">Mission Control</h1>
+                                <span className="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Operational Oversight Matrix</span>
                             </div>
-                            <div className="h-8 w-px bg-slate-100"></div>
-                            <div className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-full border border-slate-100">
-                                <Clock className="w-3.5 h-3.5 text-emerald-500" />
-                                <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">{new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+                            <div className="h-6 md:h-8 w-px bg-slate-100"></div>
+                            <div className="flex items-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">
+                                <Clock className="w-3 h-3 text-emerald-500" />
+                                <span className="text-[8px] md:text-[10px] font-black text-slate-600 uppercase tracking-widest">{new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
                             </div>
                         </div>
-                        <div className="flex items-center gap-6">
-                            <div className="flex gap-4 items-center">
-                                <div className="text-right">
-                                    <p className="text-[10px] font-black text-slate-900 uppercase">GAURAV PANCHAL</p>
-                                    <p className="text-[9px] font-bold text-slate-400 uppercase">PROJECT HEAD</p>
+                        <div className="flex items-center gap-3 md:gap-6">
+                            <div className="flex gap-2.5 md:gap-4 items-center">
+                                <div className="text-right hidden sm:block">
+                                    <p className="text-[9px] md:text-[10px] font-black text-slate-900 uppercase">GAURAV PANCHAL</p>
+                                    <p className="text-[8px] md:text-[9px] font-bold text-slate-400 uppercase">PROJECT HEAD</p>
                                 </div>
-                                <img src={logo} alt="GP" className="w-10 h-10 bg-white rounded-full flex items-center justify-center border-2 border-slate-100 p-1" />
+                                <img src={logo} alt="GP" className="w-8 h-8 md:w-10 md:h-10 bg-white rounded-full flex items-center justify-center border-2 border-slate-100 p-1" />
                             </div>
                         </div>
                     </header>
 
-                    <main className="flex-1 overflow-y-auto p-10 custom-scrollbar">
-                        <div className="max-w-[1400px] mx-auto flex flex-col gap-8">
+                    <main className="flex-1 overflow-y-auto p-4 md:p-10 custom-scrollbar">
+                        <div className="max-w-[1400px] mx-auto flex flex-col gap-6 md:gap-8">
                             
                             {/* HERO CARD */}
-                            <div className="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)] flex justify-between items-center">
+                            <div className="bg-white p-5 md:p-10 rounded-[1.75rem] md:rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)] flex flex-col md:flex-row gap-4 md:gap-0 justify-between items-start md:items-center">
                                 <div>
-                                    <div className="flex items-center gap-3 mb-4">
-                                        <span className="bg-[#0F172A] text-emerald-500 text-[10px] font-black px-3 py-1.5 rounded-lg tracking-widest uppercase">{selectedProject?.projectId}</span>
-                                        <span className="text-slate-400 font-black text-[10px] uppercase tracking-widest">In-Orbit Dynamics</span>
+                                    <div className="flex items-center gap-2.5 md:gap-3 mb-3 md:mb-4">
+                                        <span className="bg-[#0F172A] text-emerald-500 text-[8px] md:text-[10px] font-black px-2.5 py-1.5 rounded-lg tracking-widest uppercase">{selectedProject?.projectId}</span>
+                                        <span className="text-slate-400 font-black text-[8px] md:text-[10px] uppercase tracking-widest">In-Orbit Dynamics</span>
                                     </div>
-                                    <h2 className="text-5xl font-black text-slate-900 tracking-tighter leading-none">{selectedProject.client}</h2>
+                                    <h2 className="text-xl md:text-5xl font-black text-slate-900 tracking-tighter leading-tight md:leading-none">{selectedProject.client}</h2>
                                 </div>
-                                <div className="text-right">
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Contract Valuation</p>
-                                    <p className="text-5xl font-black text-slate-900 tracking-tighter">₹{selectedProject.planning.value.toLocaleString('en-IN')}</p>
+                                <div className="text-left md:text-right">
+                                    <p className="text-[8px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Contract Valuation</p>
+                                    <p className="text-2xl md:text-5xl font-black text-slate-900 tracking-tighter">₹{selectedProject.planning.value.toLocaleString('en-IN')}</p>
                                 </div>
                             </div>
 
                             {/* SPLIT SECTION */}
-                            <div className="flex flex-col xl:flex-row gap-8">
+                            <div className="flex flex-col xl:flex-row gap-6 md:gap-8">
                                 
                                 {/* PIPELINE (LEFT) */}
-                                <div className="flex-1 bg-white p-10 rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)]">
-                                    <h3 className="text-2xl font-black text-slate-900 mb-8 tracking-tight flex items-center gap-3">
-                                        <Activity className="w-6 h-6 text-emerald-500" /> Production Pipeline
+                                <div className="flex-1 bg-white p-5 md:p-10 rounded-[1.75rem] md:rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)]">
+                                    <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-6 md:mb-8 tracking-tight flex items-center gap-3">
+                                        <Activity className="w-5.5 h-5.5 text-emerald-500" /> Production Pipeline
                                     </h3>
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                         {selectedProject.production.stages.map((stage, idx) => (
@@ -511,57 +612,57 @@ const App: React.FC = () => {
                                 </div>
 
                                 {/* INTEL (RIGHT) */}
-                                <div className="w-full xl:w-[400px] flex flex-col gap-8">
-                                    <div className="bg-[#0F172A] p-10 rounded-[3rem] text-white shadow-2xl relative overflow-hidden flex-1">
+                                <div className="w-full xl:w-[400px] flex flex-col gap-6 md:gap-8">
+                                    <div className="bg-[#0F172A] p-6 md:p-10 rounded-[1.75rem] md:rounded-[3rem] text-white shadow-2xl relative overflow-hidden flex-1">
                                         <div className="relative z-10">
-                                            <h3 className="text-xl font-black text-slate-400 mb-6 uppercase tracking-widest">Financial Health</h3>
-                                            <div className="space-y-8">
+                                            <h3 className="text-lg md:text-xl font-black text-slate-400 mb-4 md:mb-6 uppercase tracking-widest">Financial Health</h3>
+                                            <div className="space-y-6 md:space-y-8">
                                                 <div>
-                                                    <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase mb-3">
+                                                    <div className="flex justify-between text-[9px] md:text-[10px] font-black text-slate-400 uppercase mb-3">
                                                         <span>Budget Utilization</span>
                                                         <span className="text-emerald-500">{((selectedProject.planning.budget / selectedProject.planning.value) * 100).toFixed(1)}%</span>
                                                     </div>
-                                                    <div className="h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                                                    <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
                                                         <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${(selectedProject.planning.budget / selectedProject.planning.value) * 100}%` }} />
                                                     </div>
                                                 </div>
-                                                <div className="p-5 bg-white/5 rounded-2xl border border-white/5">
-                                                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Vault Margin</p>
-                                                    <p className="text-2xl font-black text-emerald-400">₹{(selectedProject.planning.value - selectedProject.planning.budget).toLocaleString('en-IN')}</p>
+                                                <div className="p-4 md:p-5 bg-white/5 rounded-2xl border border-white/5">
+                                                    <p className="text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Vault Margin</p>
+                                                    <p className="text-xl md:text-2xl font-black text-emerald-400">₹{(selectedProject.planning.value - selectedProject.planning.budget).toLocaleString('en-IN')}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)]">
-                                        <h3 className="text-xl font-black text-slate-900 mb-6 flex items-center gap-3">
-                                            <Box className="w-6 h-6 text-emerald-500" /> Intelligence
+                                    <div className="bg-white p-6 md:p-10 rounded-[1.75rem] md:rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)]">
+                                        <h3 className="text-lg md:text-xl font-black text-slate-900 mb-4 md:mb-6 flex items-center gap-3">
+                                            <Box className="w-5.5 h-5.5 text-emerald-500" /> Intelligence
                                         </h3>
                                         <div className="space-y-4">
-                                            <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100">
-                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Material Integrity</p>
-                                                <p className="font-bold text-slate-900 text-[13px]">{selectedProject.metrics.materialConsumption}</p>
+                                            <div className="p-4 md:p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                                                <p className="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Material Integrity</p>
+                                                <p className="font-bold text-slate-900 text-xs md:text-[13px]">{selectedProject.metrics.materialConsumption}</p>
                                             </div>
-                                            <div className="flex gap-4">
-                                                <a href="https://in.linkedin.com/company/englabs-limited" target="_blank" className="flex-1 bg-slate-100 p-4 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest hover:bg-slate-200">LinkedIn</a>
-                                                <a href="https://www.instagram.com/englabs_india/" target="_blank" className="flex-1 bg-slate-100 p-4 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest hover:bg-slate-200">Instagram</a>
+                                            <div className="flex gap-3 md:gap-4">
+                                                <a href="https://in.linkedin.com/company/englabs-limited" target="_blank" className="flex-1 bg-slate-100 p-3 md:p-4 rounded-xl flex items-center justify-center gap-2 text-[8px] md:text-[10px] font-black text-slate-500 uppercase tracking-widest hover:bg-slate-200">LinkedIn</a>
+                                                <a href="https://www.instagram.com/englabs_india/" target="_blank" className="flex-1 bg-slate-100 p-3 md:p-4 rounded-xl flex items-center justify-center gap-2 text-[8px] md:text-[10px] font-black text-slate-500 uppercase tracking-widest hover:bg-slate-200">Instagram</a>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)]">
-                                        <h3 className="text-xl font-black text-slate-900 mb-6 flex items-center gap-3">
-                                            <Users className="w-6 h-6 text-emerald-500" /> Project Team
+                                    <div className="bg-white p-6 md:p-10 rounded-[1.75rem] md:rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)]">
+                                        <h3 className="text-lg md:text-xl font-black text-slate-900 mb-4 md:mb-6 flex items-center gap-3">
+                                            <Users className="w-5.5 h-5.5 text-emerald-500" /> Project Team
                                         </h3>
-                                        <div className="grid grid-cols-2 gap-3">
+                                        <div className="grid grid-cols-2 gap-2 md:gap-3">
                                             {[
                                                 "Thakur", "Rajinder", 
                                                 "Arjun", "Kunwarlal", "Anurag", "Shubham", 
                                                 "Ratnesh", "Devarshu", "Shiv Kumar", "Uditanshu", "RAM"
                                             ].map(name => (
-                                                <div key={name} className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg border border-slate-100">
-                                                    <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-                                                    <span className="text-[10px] font-bold text-slate-700 uppercase">{name}</span>
+                                                <div key={name} className="flex items-center gap-1.5 p-1.5 md:p-2 bg-slate-50 rounded-lg border border-slate-100">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                                                    <span className="text-[8px] md:text-[10px] font-bold text-slate-700 uppercase">{name}</span>
                                                 </div>
                                             ))}
                                         </div>
@@ -590,6 +691,8 @@ const App: React.FC = () => {
                 <Sky5Terminal />
             ) : currentView === 'INVENTORY' ? (
                 <InventoryManager />
+            ) : currentView === 'INVENTORY_ARCHIVE' ? (
+                <InventoryArchiveSystem />
             ) : currentView === 'STOCK_REPORT' ? (
                 <StoreStockReport />
             ) : currentView === 'PORTER_SERVICE' ? (
@@ -601,6 +704,109 @@ const App: React.FC = () => {
                 />
             ) : (
                 <DigitalEvidence onAutoRegister={handleNewGateEntry} />
+            )}
+            </div>
+
+            {/* MOBILE BOTTOM NAVIGATION BAR */}
+            <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#0F172A] border-t border-slate-800 flex items-center justify-around px-4 z-50 print:hidden shadow-[0_-10px_30px_rgba(0,0,0,0.3)]">
+                <MobileTabButton 
+                    active={currentView === 'PROJECTS'} 
+                    onClick={() => setCurrentView('PROJECTS')} 
+                    icon={<Layers className="w-5 h-5" />} 
+                    label="Projects" 
+                />
+                <MobileTabButton 
+                    active={currentView === 'GATE_REGISTER'} 
+                    onClick={() => setCurrentView('GATE_REGISTER')} 
+                    icon={<Shield className="w-5 h-5" />} 
+                    label="Logistics" 
+                />
+                <MobileTabButton 
+                    active={currentView === 'INVENTORY'} 
+                    onClick={() => setCurrentView('INVENTORY')} 
+                    icon={<Box className="w-5 h-5" />} 
+                    label="Inventory" 
+                />
+                <MobileTabButton 
+                    active={currentView === 'STOCK_REPORT'} 
+                    onClick={() => setCurrentView('STOCK_REPORT')} 
+                    icon={<FileText className="w-5 h-5" />} 
+                    label="Report" 
+                />
+                <MobileTabButton 
+                    active={currentView === 'PORTER_SERVICE'} 
+                    onClick={() => setCurrentView('PORTER_SERVICE')} 
+                    icon={<Truck className="w-5 h-5" />} 
+                    label="Porter" 
+                    color="emerald"
+                />
+                <button 
+                    type="button"
+                    onClick={() => setIsMobileMenuOpen(true)}
+                    data-testid="mobile-nav-btn-more"
+                    className="flex flex-col items-center justify-center w-12 h-12 rounded-xl text-slate-500 hover:text-white"
+                >
+                    <div className="p-1.5">
+                        <MoreHorizontal className="w-5 h-5" />
+                    </div>
+                    <span className="text-[8px] font-black uppercase tracking-wider mt-1">More</span>
+                </button>
+            </nav>
+
+            {/* MOBILE MORE SHEET MODAL */}
+            {isMobileMenuOpen && (
+                <div className="fixed inset-0 z-[100] md:hidden flex items-end animate-in fade-in duration-300">
+                    <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
+                    <div className="relative w-full bg-[#0F172A] rounded-t-[2.5rem] border-t border-slate-800 p-8 space-y-6 shadow-2xl animate-in slide-in-from-bottom duration-300">
+                        <div className="flex justify-between items-center pb-4 border-b border-slate-800">
+                            <div>
+                                <h3 className="text-sm font-black text-white uppercase tracking-widest">More Operations</h3>
+                                <p className="text-[9px] font-bold text-slate-500 uppercase mt-0.5">Englabs Administrative Control</p>
+                            </div>
+                            <button 
+                                type="button"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                data-testid="btn-close-more-sheet"
+                                className="p-2 bg-slate-850 rounded-full text-slate-400 hover:text-white"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                        </div>
+                        <div className="grid grid-cols-3 gap-4 py-2">
+                            <MobileGridButton 
+                                onClick={() => { setCurrentView('FOOD_REGISTER'); setIsMobileMenuOpen(false); }} 
+                                icon={<Utensils className="w-6 h-6" />} 
+                                label="Pantry" 
+                                active={currentView === 'FOOD_REGISTER'}
+                            />
+                            <MobileGridButton 
+                                onClick={() => { setCurrentView('INVENTORY_ARCHIVE'); setIsMobileMenuOpen(false); }} 
+                                icon={<Package className="w-6 h-6" />} 
+                                label="Archives" 
+                                active={currentView === 'INVENTORY_ARCHIVE'}
+                            />
+                            <MobileGridButton 
+                                onClick={() => { setCurrentView('BILLING'); setIsMobileMenuOpen(false); }} 
+                                icon={<CreditCard className="w-6 h-6" />} 
+                                label="Finance" 
+                                active={currentView === 'BILLING'}
+                            />
+                            <MobileGridButton 
+                                onClick={() => { setCurrentView('QA_TESTER'); setIsMobileMenuOpen(false); }} 
+                                icon={<Shield className="w-6 h-6" />} 
+                                label="Zero-Audit" 
+                                active={currentView === 'QA_TESTER'}
+                            />
+                            <MobileGridButton 
+                                onClick={() => { setCurrentView('SKY5_TERMINAL'); setIsMobileMenuOpen(false); }} 
+                                icon={<ChefHat className="w-6 h-6" />} 
+                                label="Sky-5 Kitchen" 
+                                active={currentView === 'SKY5_TERMINAL'}
+                                color="amber"
+                            />
+                        </div>
+                    </div>
+                </div>
             )}
 
             <NewProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onAdd={(newProj) => setProjects(prev => [...prev, newProj])} />

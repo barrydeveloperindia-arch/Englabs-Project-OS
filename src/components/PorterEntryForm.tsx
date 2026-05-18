@@ -59,27 +59,30 @@ const PorterEntryForm: React.FC<Props> = ({ onClose, onSave, currentCount, initi
             
             try {
                 const extracted = await extractPorterData(dataUrl);
-                const calc = calculatePorterAmount(
-                    extracted.distanceKm || prev.distanceKm || 0,
-                    extracted.ratePerKm || prev.ratePerKm || 15,
-                    prev.fuelCharge, prev.serviceCharge, prev.repairCharge, prev.extraExpense,
-                    prev.advanceAmount
-                );
-                setFormData(prev => ({
-                    ...prev,
-                    date: extracted.date || prev.date,
-                    porterName: extracted.porterName || prev.porterName,
-                    vehicleNumber: extracted.vehicleNumber || prev.vehicleNumber,
-                    fromLocation: extracted.fromLocation || prev.fromLocation,
-                    toLocation: extracted.toLocation || prev.toLocation,
-                    materialDescription: extracted.materialDescription || prev.materialDescription,
-                    distanceKm: extracted.distanceKm || prev.distanceKm,
-                    ratePerKm: extracted.ratePerKm || prev.ratePerKm,
-                    remarks: extracted.remarks || prev.remarks,
-                    grossAmount: calc.gross,
-                    totalAmount: calc.gross,
-                    remainingBalance: calc.balance
-                }));
+                setFormData(prev => {
+                    const distanceKm = extracted.distanceKm || prev.distanceKm || 0;
+                    const ratePerKm = extracted.ratePerKm || prev.ratePerKm || 15;
+                    const calc = calculatePorterAmount(
+                        distanceKm, ratePerKm,
+                        prev.fuelCharge || 0, prev.serviceCharge || 0, prev.repairCharge || 0, prev.extraExpense || 0,
+                        prev.advanceAmount || 0
+                    );
+                    return {
+                        ...prev,
+                        date: extracted.date || prev.date,
+                        porterName: extracted.porterName || prev.porterName,
+                        vehicleNumber: extracted.vehicleNumber || prev.vehicleNumber,
+                        fromLocation: extracted.fromLocation || prev.fromLocation,
+                        toLocation: extracted.toLocation || prev.toLocation,
+                        materialDescription: extracted.materialDescription || prev.materialDescription,
+                        distanceKm,
+                        ratePerKm,
+                        remarks: extracted.remarks || prev.remarks,
+                        grossAmount: calc.gross,
+                        totalAmount: calc.gross,
+                        remainingBalance: calc.balance
+                    };
+                });
             } catch (error) {
                 console.error("AI Extraction failed:", error);
             } finally {
@@ -174,7 +177,7 @@ const PorterEntryForm: React.FC<Props> = ({ onClose, onSave, currentCount, initi
                             <span className="text-[10px] font-black bg-emerald-500 text-slate-900 px-3 py-1.5 rounded-lg tracking-widest uppercase">{initialData ? 'Update Sequence' : 'Mission Ready'}</span>
                             <h3 className="text-3xl font-black text-slate-900 mt-4 tracking-tight">{initialData ? 'Modify Details' : 'Trip Configuration'}</h3>
                         </div>
-                        <button onClick={onClose} className="p-3 hover:bg-slate-50 rounded-full transition-colors text-slate-400">
+                        <button onClick={onClose} data-testid="btn-close-porter" className="p-3 hover:bg-slate-50 rounded-full transition-colors text-slate-400">
                             <X className="w-6 h-6" />
                         </button>
                     </div>

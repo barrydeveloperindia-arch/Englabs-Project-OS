@@ -1,6 +1,6 @@
 import { GateEntry, InventoryItem, StockTransaction } from './gate_system';
 import { db } from './firebase';
-import { doc, getDoc, setDoc, collection, query, getDocs, orderBy } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, query, getDocs, orderBy, runTransaction } from 'firebase/firestore';
 
 const STOCK_COLLECTION = "inventory_stock";
 const LOG_COLLECTION = "inventory_logs";
@@ -50,79 +50,85 @@ async function updateStock(
 
     const itemCode = name.toUpperCase().replace(/\s+/g, '_');
     
-    // 🛡️ DUPLICATION GUARD: Check if this movement is already logged
-    const existingLogsQuery = query(collection(db, LOG_COLLECTION));
-    const logSnap = await getDocs(existingLogsQuery);
-    const alreadyLogged = logSnap.docs.some(doc => {
-        const data = doc.data();
-        return data.referenceId === refId && data.itemId === itemCode;
-    });
-
-    if (alreadyLogged) {
-        if (import.meta.env.DEV) console.log(`Skipping inventory update: Item ${itemCode} already synced for Entry ${refId}`);
-        return { success: true, message: "Already synced" };
-    }
-
-    const docRef = doc(db, STOCK_COLLECTION, itemCode);
-    
     try {
-        const snap = await getDoc(docRef);
-        let item: InventoryItem;
+        const result = await runTransaction(db, async (transaction) => {
+            // 🛡️ DUPLICATION GUARD: Check lock document instead of querying entire collection
+            const lockDocRef = doc(db, "inventory_sync_locks", `${refId}_${itemCode}`);
+            const lockSnap = await transaction.get(lockDocRef);
 
-        if (snap.exists()) {
-            item = snap.data() as InventoryItem;
-        } else {
-            item = {
-                itemCode,
-                name,
-                category: hsn || 'GENERAL',
-                unit,
-                currentStock: 0,
-                totalInward: 0,
-                totalOutward: 0,
-                minThreshold: 10,
-                lastUpdated: new Date().toISOString()
-            };
-        }
-
-        const prevStock = item.currentStock;
-        
-        if (type === 'INWARD') {
-            item.currentStock += qty;
-            item.totalInward += qty;
-        } else {
-            if (item.currentStock < qty) {
-                return { success: false, error: `Insufficient stock for ${name}. Available: ${item.currentStock}` };
+            if (lockSnap.exists()) {
+                if (import.meta.env.DEV) console.log(`Skipping inventory update: Item ${itemCode} already synced for Entry ${refId}`);
+                return { success: true, message: "Already synced" };
             }
-            item.currentStock -= qty;
-            item.totalOutward += qty;
-        }
 
-        item.lastUpdated = new Date().toISOString();
+            const docRef = doc(db, STOCK_COLLECTION, itemCode);
+            const snap = await transaction.get(docRef);
+            let item: InventoryItem;
 
-        // 1. Save updated stock
-        await setDoc(docRef, item);
+            if (snap.exists()) {
+                item = snap.data() as InventoryItem;
+            } else {
+                item = {
+                    itemCode,
+                    name,
+                    category: hsn || 'GENERAL',
+                    unit,
+                    currentStock: 0,
+                    totalInward: 0,
+                    totalOutward: 0,
+                    minThreshold: 10,
+                    lastUpdated: new Date().toISOString()
+                };
+            }
 
-        // 2. Log transaction
-        const logRef = doc(collection(db, LOG_COLLECTION));
-        const transaction: StockTransaction = {
-            id: logRef.id,
-            itemId: itemCode,
-            type,
-            quantity: qty,
-            previousStock: prevStock,
-            newStock: item.currentStock,
-            timestamp: new Date().toISOString(),
-            referenceId: refId,
-            partyName: party,
-            invoiceNumber: invoice
-        };
-        await setDoc(logRef, transaction);
+            const prevStock = item.currentStock;
+            
+            if (type === 'INWARD') {
+                item.currentStock += qty;
+                item.totalInward += qty;
+            } else {
+                if (item.currentStock < qty) {
+                    throw new Error(`Insufficient stock for ${name}. Available: ${item.currentStock}`);
+                }
+                item.currentStock -= qty;
+                item.totalOutward += qty;
+            }
 
-        return { success: true, itemCode };
-    } catch (e) {
+            item.lastUpdated = new Date().toISOString();
+
+            // 1. Save updated stock inside transaction
+            transaction.set(docRef, item);
+
+            // 2. Set the sync lock doc inside transaction
+            transaction.set(lockDocRef, {
+                timestamp: new Date().toISOString(),
+                referenceId: refId,
+                itemId: itemCode
+            });
+
+            // 3. Log transaction history doc inside transaction
+            const logRef = doc(collection(db, LOG_COLLECTION));
+            const stockTx: StockTransaction = {
+                id: logRef.id,
+                itemId: itemCode,
+                type,
+                quantity: qty,
+                previousStock: prevStock,
+                newStock: item.currentStock,
+                timestamp: new Date().toISOString(),
+                referenceId: refId,
+                partyName: party,
+                invoiceNumber: invoice
+            };
+            transaction.set(logRef, stockTx);
+
+            return { success: true, itemCode };
+        });
+
+        return result;
+    } catch (e: any) {
         console.error("Stock update failure:", e);
-        return { success: false, error: e };
+        return { success: false, error: e.message || e };
     }
 }
 

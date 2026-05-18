@@ -48,7 +48,7 @@ const MOCK_ORDERS: FoodOrder[] = [
         hasBill: true,
         status: "Approved",
         approvedBy: "Admin",
-        trackingStatus: 'DELIVERED'
+        trackingStatus: 'Delivered'
     },
     {
         entryId: "FOOD-002",
@@ -67,7 +67,7 @@ const MOCK_ORDERS: FoodOrder[] = [
         paidBy: "Company",
         hasBill: true,
         status: "Pending",
-        trackingStatus: 'PREPARING'
+        trackingStatus: 'In Kitchen'
     }
 ];
 

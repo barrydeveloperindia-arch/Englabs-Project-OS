@@ -10,9 +10,17 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:mobile:emulated": "playwright test src/tests/e2e/mobile.test.ts",
+    "test:mobile:real": "playwright test src/tests/e2e/mobile.test.ts --project=\"Mobile Chrome (Pixel 5)\"",
+    "test:mobile:diagnose": "node src/tests/native/scripts/parse_mobile_feedback.js",
+    "qa:protect": "node src/tests/qa_agent/protection_agent.cjs",
+    "agent:daemon": "node src/tests/qa_agent/master_handover_agent.cjs"
   },
   "dependencies": {
+    "@capacitor/android": "^8.3.4",
+    "@capacitor/cli": "^8.3.4",
+    "@capacitor/core": "^8.3.4",
     "@google/generative-ai": "^0.24.1",
     "@tailwindcss/vite": "^4.2.4",
     "dotenv": "^17.4.2",

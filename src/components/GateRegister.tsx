@@ -236,14 +236,14 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
 
     return (
         <div className="flex-1 flex flex-col min-w-0 bg-[#F8FAFC]">
-            <header className="h-20 bg-white border-b border-slate-100 flex items-center justify-between px-10 shrink-0">
-                <div className="flex items-center gap-6">
+            <header className="h-auto md:h-20 bg-white border-b border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between px-4 md:px-10 py-4 md:py-0 shrink-0 gap-4 md:gap-0">
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 w-full md:w-auto">
                     <div className="flex flex-col">
                         <h1 className="text-lg font-black text-slate-900 leading-none">Logistics Command Center</h1>
                         <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Englabs India Pvt Ltd • Official Movement Registry</span>
                     </div>
-                    <div className="h-8 w-px bg-slate-100"></div>
-                    <div className="flex items-center gap-3">
+                    <div className="hidden md:block h-8 w-px bg-slate-100"></div>
+                    <div className="flex flex-wrap items-center gap-2 md:gap-3">
                         <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all cursor-pointer ${view === 'DASHBOARD' ? 'bg-emerald-500 border-emerald-400 text-slate-900' : 'bg-white border-slate-200 text-slate-400'}`} onClick={() => setView('DASHBOARD')}>Dashboard</div>
                         <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all cursor-pointer ${view === 'INWARD_LIST' ? 'bg-emerald-500 border-emerald-400 text-slate-900 shadow-lg shadow-emerald-500/10' : 'bg-white border-slate-200 text-slate-400'}`} onClick={() => setView('INWARD_LIST')}>
                             Inward Register <span className="ml-1 opacity-60">({stats.totalInwardToday})</span>
@@ -254,7 +254,7 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                     </div>
                 </div>
                 
-                <div className="flex items-center gap-4">
+                <div className="flex flex-wrap items-center gap-2 md:gap-4 w-full md:w-auto justify-between md:justify-end mt-2 md:mt-0">
                     <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 border border-emerald-100 rounded-xl">
                         <div className={`w-2 h-2 rounded-full ${dbStatus === 'SECURE' ? 'bg-emerald-500 animate-pulse' : 'bg-orange-500'}`}></div>
                         <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Database: {dbStatus}</span>
@@ -286,7 +286,7 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                 </div>
             </header>
 
-            <main className="flex-1 overflow-y-auto p-10 custom-scrollbar">
+            <main className="flex-1 overflow-y-auto p-4 md:p-10 custom-scrollbar">
                 {editingEntry || view === 'NEW_ENTRY' ? (
                     <GateEntryForm 
                         onClose={() => {
@@ -437,7 +437,7 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                                                     : `${stats.totalOutwardToday} Entries Dispatched • Valuation: ₹${stats.outwardValue.toLocaleString('en-IN')}`}
                                             </p>
                                         </div>
-                                        <div className="relative w-96">
+                                        <div className="relative w-full md:w-96 mt-4 md:mt-0">
                                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                                             <input 
                                                 type="text"

@@ -12,7 +12,9 @@ import {
     Clock,
     Activity,
     Database,
-    ShieldCheck
+    ShieldCheck,
+    Share2,
+    Download
 } from 'lucide-react';
 import { InventoryItem, StockTransaction } from '../lib/gate_system';
 import { fetchInventoryMaster, fetchStockMovement } from '../lib/inventory_service';
@@ -31,9 +33,13 @@ const InventoryManager: React.FC = () => {
     const loadData = async () => {
         setIsLoading(true);
         try {
+            const timeoutPromise = new Promise<any>((_, reject) => setTimeout(() => reject(new Error('Timeout')), 3000));
+            const stockDataPromise = Promise.race([fetchInventoryMaster(), timeoutPromise]).catch(() => []);
+            const logDataPromise = Promise.race([fetchStockMovement(), timeoutPromise]).catch(() => []);
+            
             const [stockData, logData] = await Promise.all([
-                fetchInventoryMaster(),
-                fetchStockMovement()
+                stockDataPromise,
+                logDataPromise
             ]);
             setStock(stockData);
             setLogs(logData);
@@ -42,6 +48,34 @@ const InventoryManager: React.FC = () => {
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleExport = () => {
+        const headers = ["Timestamp", "Operation", "Item Details", "Party / Source", "Previous Stock", "New Stock", "Reference ID"];
+        const csvContent = [
+            headers.join(","),
+            ...logs.map(log => [
+                new Date(log.timestamp).toLocaleString().replace(/,/g, ''),
+                log.type,
+                `"${log.itemId.replace(/_/g, ' ')}"`,
+                `"${log.partyName}"`,
+                log.previousStock,
+                log.newStock,
+                log.referenceId
+            ].join(","))
+        ].join("\n");
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `Stock_Movement_Registry_${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
+    };
+
+    const handleWhatsAppShare = () => {
+        const text = `*Stock Movement Registry*\nTotal Operations Today: ${logs.filter(l => new Date(l.timestamp).toDateString() === new Date().toDateString()).length}\nLink: ${window.location.href}`;
+        const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+        window.open(url, '_blank');
     };
 
     const stats = {
@@ -58,25 +92,16 @@ const InventoryManager: React.FC = () => {
 
     const lowStock = stock.filter(s => s.currentStock <= s.minThreshold);
 
-    if (isLoading) return (
-        <div className="flex-1 flex items-center justify-center bg-[#F8FAFC]">
-            <div className="flex flex-col items-center gap-4">
-                <Database className="w-12 h-12 text-emerald-500 animate-pulse" />
-                <p className="text-xs font-black text-slate-400 uppercase tracking-[0.3em]">Synchronizing Vault...</p>
-            </div>
-        </div>
-    );
-
     return (
         <div className="flex-1 flex flex-col min-w-0 bg-[#F8FAFC]">
-            <header className="h-20 bg-white border-b border-slate-100 flex items-center justify-between px-10 shrink-0">
+            <header className="h-auto md:h-20 bg-white border-b border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between px-4 md:px-10 py-4 md:py-0 shrink-0 gap-4 md:gap-0">
                 <div className="flex items-center gap-6">
                     <div className="flex flex-col">
                         <h1 className="text-lg font-black text-slate-900 leading-none">Inventory Command</h1>
                         <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Real-Time Stock Synchronization & Audit</span>
                     </div>
-                    <div className="h-8 w-px bg-slate-100"></div>
-                    <nav className="flex gap-2">
+                    <div className="hidden md:block h-8 w-px bg-slate-100"></div>
+                    <nav className="flex flex-wrap gap-2">
                         <NavButton active={view === 'DASHBOARD'} onClick={() => setView('DASHBOARD')} icon={<Activity />} label="Dashboard" />
                         <NavButton active={view === 'MASTER'} onClick={() => setView('MASTER')} icon={<Box />} label="Master Register" />
                         <NavButton active={view === 'MOVEMENT'} onClick={() => setView('MOVEMENT')} icon={<History />} label="Movement Log" />
@@ -85,12 +110,12 @@ const InventoryManager: React.FC = () => {
                 </div>
                 
                 <div className="flex items-center gap-4">
-                    <div className="relative">
+                    <div className="relative w-full md:w-auto">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                         <input 
                             type="text" 
                             placeholder="Search Vault..." 
-                            className="bg-slate-50 border border-slate-100 rounded-xl py-2.5 pl-11 pr-4 text-xs font-bold focus:border-emerald-500 outline-none w-64"
+                            className="w-full md:w-64 bg-slate-50 border border-slate-100 rounded-xl py-2.5 pl-11 pr-4 text-xs font-bold focus:border-emerald-500 outline-none"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -101,8 +126,15 @@ const InventoryManager: React.FC = () => {
                 </div>
             </header>
 
-            <main className="flex-1 overflow-y-auto p-10 custom-scrollbar">
-                {view === 'DASHBOARD' && (
+            <main className="flex-1 overflow-y-auto p-4 md:p-10 custom-scrollbar">
+                {isLoading ? (
+                    <div className="flex-1 h-full flex items-center justify-center">
+                        <div className="flex flex-col items-center gap-4">
+                            <Database className="w-12 h-12 text-emerald-500 animate-pulse" />
+                            <p className="text-xs font-black text-slate-400 uppercase tracking-[0.3em]">Synchronizing Vault...</p>
+                        </div>
+                    </div>
+                ) : view === 'DASHBOARD' && (
                     <div className="max-w-[1400px] mx-auto space-y-10">
                         {/* HERO STATS */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -229,6 +261,14 @@ const InventoryManager: React.FC = () => {
                     <div className="max-w-[1400px] mx-auto bg-white rounded-[3rem] border border-slate-100 shadow-xl overflow-hidden">
                         <div className="p-10 border-b border-slate-100 flex justify-between items-center">
                             <h2 className="text-2xl font-black text-slate-900">Stock Movement Registry</h2>
+                            <div className="flex gap-3">
+                                <button onClick={handleWhatsAppShare} className="flex items-center gap-2 px-4 py-2 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] rounded-xl font-black text-[10px] uppercase tracking-widest transition-all border border-[#25D366]/30">
+                                    <Share2 className="w-4 h-4" /> WhatsApp
+                                </button>
+                                <button onClick={handleExport} className="flex items-center gap-2 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all border border-emerald-200">
+                                    <Download className="w-4 h-4" /> Export
+                                </button>
+                            </div>
                         </div>
                         <div className="p-10 overflow-x-auto">
                             <table className="w-full text-left">

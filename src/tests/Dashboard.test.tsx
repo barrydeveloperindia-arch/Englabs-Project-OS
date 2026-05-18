@@ -48,7 +48,10 @@ vi.mock('lucide-react', () => ({
     Truck: () => <div data-testid="icon-truck" />,
     Navigation: () => <div data-testid="icon-navigation" />,
     MapPin: () => <div data-testid="icon-map-pin" />,
-    IndianRupee: () => <div data-testid="icon-rupee" />
+    IndianRupee: () => <div data-testid="icon-rupee" />,
+    MoreHorizontal: () => <div data-testid="icon-more-horizontal" />,
+    ListTodo: () => <div data-testid="icon-list-todo" />,
+    Zap: () => <div data-testid="icon-zap" />
 }));
 
 // 🛡️ SERVICE MOCKS: Decouple UI from backend logic
@@ -90,11 +93,19 @@ vi.mock('@google/generative-ai', () => ({
 describe('Antigravity Dashboard UI', () => {
     it('renders the main dashboard title', async () => {
         render(<App />);
+        try {
+            const initBtn = await screen.findByText('Initialize Workday', {}, { timeout: 1000 });
+            if (initBtn) fireEvent.click(initBtn);
+        } catch(e) {}
         expect(await screen.findByText('Mission Control')).toBeDefined();
     });
 
     it('displays the default mock project', async () => {
         render(<App />);
+        try {
+            const initBtn = await screen.findByText('Initialize Workday', {}, { timeout: 1000 });
+            if (initBtn) fireEvent.click(initBtn);
+        } catch(e) {}
         // Wait for the project to load (appears in sidebar and hero)
         const elements = await screen.findAllByText('Standard Engineering Ltd');
         expect(elements.length).toBeGreaterThan(0);
@@ -105,6 +116,10 @@ describe('Antigravity Dashboard UI', () => {
 
     it('opens the New Project modal when clicking the button', async () => {
         render(<App />);
+        try {
+            const initBtn = await screen.findByText('Initialize Workday', {}, { timeout: 1000 });
+            if (initBtn) fireEvent.click(initBtn);
+        } catch(e) {}
         const newProjectBtn = await screen.findByText('NEW MISSION');
         fireEvent.click(newProjectBtn);
         expect(await screen.findByText('Initialize Mission')).toBeDefined();
@@ -112,6 +127,10 @@ describe('Antigravity Dashboard UI', () => {
 
     it('filters projects based on search query', async () => {
         render(<App />);
+        try {
+            const initBtn = await screen.findByText('Initialize Workday', {}, { timeout: 1000 });
+            if (initBtn) fireEvent.click(initBtn);
+        } catch(e) {}
         const searchInput = await screen.findByPlaceholderText('Search Projects...');
         
         // Search for non-existent project
