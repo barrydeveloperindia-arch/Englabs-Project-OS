@@ -251,7 +251,9 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
             `*Vehicle:* ${formData.vehicleNumber || 'Not Specified'}\n` +
             `*Invoice:* ${formData.invoiceNumber || 'Not Specified'}\n` +
             itemsDetail +
-            `*GRAND TOTAL: ₹${formData.items.reduce((sum: number, item: any) => sum + item.amount, 0).toLocaleString()}*\n` +
+            `*TAXABLE TOTAL: ₹${formData.items.reduce((sum: number, item: any) => sum + item.amount, 0).toLocaleString()}*\n` +
+            `*GST (18%): ₹${(formData.items.reduce((sum: number, item: any) => sum + item.amount, 0) * 0.18).toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
+            `*GRAND TOTAL: ₹${(formData.items.reduce((sum: number, item: any) => sum + item.amount, 0) * 1.18).toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
             `--------------------------------\n` +
             `_Sent from Gate Entry Terminal_`
         );
@@ -532,13 +534,27 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                                     >
                                         <PlusCircle className="w-5 h-5" /> Add Next Bulk Item
                                     </button>
-                                    <div className="flex flex-col items-center md:items-end gap-1">
-                                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">
-                                            {type === 'INWARD' ? 'Total Invoice Value' : 'Total Delivery Value'}
+                                    <div className="flex gap-8">
+                                        <div className="flex flex-col items-end gap-1 border-r border-slate-200 pr-8">
+                                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">
+                                                Taxable Subtotal
+                                            </div>
+                                            <div className="text-2xl font-black text-slate-400 tracking-tighter flex items-center gap-2">
+                                                <span className="text-sm">₹</span>
+                                                {formData.items.reduce((sum: number, item: any) => sum + item.amount, 0).toLocaleString('en-IN')}
+                                            </div>
+                                            <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                                                + IGST @18%: ₹{(formData.items.reduce((sum: number, item: any) => sum + item.amount, 0) * 0.18).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                            </div>
                                         </div>
-                                        <div className="text-4xl font-black text-emerald-600 tracking-tighter flex items-center gap-2">
-                                            <span className="text-xl text-emerald-400">₹</span>
-                                            {formData.items.reduce((sum: number, item: any) => sum + item.amount, 0).toLocaleString()}
+                                        <div className="flex flex-col items-end gap-1">
+                                            <div className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.3em]">
+                                                {type === 'INWARD' ? 'Grand Invoice Total' : 'Grand Delivery Total'}
+                                            </div>
+                                            <div className="text-4xl font-black text-emerald-600 tracking-tighter flex items-center gap-2">
+                                                <span className="text-xl text-emerald-400">₹</span>
+                                                {(formData.items.reduce((sum: number, item: any) => sum + item.amount, 0) * 1.18).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -680,12 +696,13 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                                         value={formData.paidAmount || 0}
                                         onChange={e => {
                                             const paid = parseFloat(e.target.value) || 0;
-                                            const total = formData.items.reduce((sum: number, item: any) => sum + item.amount, 0);
+                                            const totalTaxable = formData.items.reduce((sum: number, item: any) => sum + item.amount, 0);
+                                            const totalGross = totalTaxable * 1.18;
                                             setFormData({
                                                 ...formData, 
                                                 paidAmount: paid,
-                                                remainingAmount: total - paid,
-                                                paymentStatus: paid >= total ? 'PAID' : (paid > 0 ? 'PARTIAL' : 'UNPAID')
+                                                remainingAmount: totalGross - paid,
+                                                paymentStatus: paid >= totalGross ? 'PAID' : (paid > 0 ? 'PARTIAL' : 'UNPAID')
                                             });
                                         }}
                                         className="w-full bg-white border border-slate-200 rounded-xl py-3 px-6 font-black text-slate-900 outline-none focus:border-emerald-500 shadow-sm"

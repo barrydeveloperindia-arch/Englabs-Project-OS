@@ -128,9 +128,10 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
             `*Vehicle:* ${entry.vehicleNumber}\n` +
             `*Invoice:* ${entry.invoiceNumber || 'N/A'}\n` +
             itemsDetail +
-            `*TOTAL AMOUNT: ₹${(entry.amount || 0).toLocaleString()}*\n` +
+            `*TAXABLE AMOUNT: ₹${(entry.amount || 0).toLocaleString()}*\n` +
+            `*GRAND TOTAL (inc 18% GST): ₹${((entry.amount || 0) * 1.18).toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
             `*PAID AMOUNT: ₹${(entry.paidAmount || 0).toLocaleString()} (${entry.paymentMode || 'N/A'})*\n` +
-            `*BALANCE DUE: ₹${((entry.remainingAmount || (entry.amount - (entry.paidAmount || 0)))).toLocaleString()}*\n` +
+            `*BALANCE DUE: ₹${((entry.remainingAmount || (((entry.amount || 0) * 1.18) - (entry.paidAmount || 0)))).toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
             `*STATUS: ${entry.paymentStatus || 'UNPAID'}*\n` +
             `--------------------------------\n` +
             `_Verified by Gate Registry System_`
