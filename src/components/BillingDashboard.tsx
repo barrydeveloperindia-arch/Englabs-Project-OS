@@ -77,7 +77,7 @@ const BillingDashboard: React.FC = () => {
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
-                    <button className="flex items-center gap-3 bg-[#0F172A] text-white px-8 py-4 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10">
+                    <button className="flex items-center gap-3 bg-[#0e4368] text-white px-8 py-4 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10">
                         <FilePlus className="w-4 h-4 text-emerald-400" /> NEW DOCUMENT
                     </button>
                 </div>

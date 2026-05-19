@@ -383,7 +383,7 @@ const PorterEntryForm: React.FC<Props> = ({ onClose, onSave, currentCount, initi
                             </div>
                         </div>
 
-                        <div className={`p-8 rounded-[2rem] text-white flex justify-between items-center transition-all ${formData.remainingBalance && formData.remainingBalance < 0 ? 'bg-rose-500' : 'bg-[#0F172A]'}`}>
+                        <div className={`p-8 rounded-[2rem] text-white flex justify-between items-center transition-all ${formData.remainingBalance && formData.remainingBalance < 0 ? 'bg-rose-500' : 'bg-[#0e4368]'}`}>
                             <div>
                                 <p className="text-[10px] font-black text-white/50 uppercase tracking-[0.2em] mb-1">
                                     {formData.remainingBalance && formData.remainingBalance < 0 ? 'Overpayment detected' : 'Final Settlement Balance'}
@@ -403,7 +403,7 @@ const PorterEntryForm: React.FC<Props> = ({ onClose, onSave, currentCount, initi
 
                         <button 
                             type="submit"
-                            className="w-full bg-[#0F172A] text-white font-black py-5 rounded-2xl hover:bg-slate-800 transition-all active:scale-[0.98] flex items-center justify-center gap-3 shadow-2xl shadow-slate-900/20"
+                            className="w-full bg-[#0e4368] text-white font-black py-5 rounded-2xl hover:bg-slate-800 transition-all active:scale-[0.98] flex items-center justify-center gap-3 shadow-2xl shadow-slate-900/20"
                         >
                             <CheckCircle2 className="w-5 h-5 text-emerald-500" /> {initialData ? 'UPDATE MISSION RECORD' : 'FINALIZE MISSION RECORD'}
                         </button>

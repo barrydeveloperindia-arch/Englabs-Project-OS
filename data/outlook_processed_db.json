@@ -1,0 +1,27 @@
+[
+  {
+    "id": "MSG-001",
+    "date": "2026-05-19T09:30:00Z",
+    "subject": "Re: Quotation Approval for Steel Plant Automation",
+    "client": "Tata Steel",
+    "projectCode": "TATA-001",
+    "projectName": "Steel Plant Expansion Phase II",
+    "snippet": "Please find attached the revised quotation QT-2026-051. We have adjusted the timelines as discussed...",
+    "type": "QUOTATION",
+    "status": "CLOSED",
+    "hasAttachments": false
+  },
+  {
+    "id": "MSG-002",
+    "date": "2026-05-18T14:15:00Z",
+    "subject": "Invoice INV-8821 - Pending Payment Reminder",
+    "client": "Reliance Industries",
+    "projectCode": "REL-405",
+    "projectName": "Refinery IoT Sensors",
+    "snippet": "This is a gentle reminder regarding the outstanding payment for invoice INV-8821. Kindly process...",
+    "type": "INVOICE",
+    "status": "CLOSED",
+    "hasAttachments": false,
+    "referenceNo": "INV-8821"
+  }
+]

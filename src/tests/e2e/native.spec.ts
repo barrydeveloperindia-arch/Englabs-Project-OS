@@ -37,7 +37,7 @@ test.describe('Englabs OS Native Android Tests', () => {
         }
         
         expect(webViewContext).toBeDefined();
-        const page = await webViewContext.page();
+        const page = await webViewContext!.page();
         
         // Wait for app to render
         await page.waitForLoadState('networkidle');

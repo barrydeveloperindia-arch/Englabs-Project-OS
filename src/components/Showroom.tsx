@@ -70,7 +70,7 @@ const Showroom: React.FC = () => {
                     </div>
                 </div>
                 
-                <button className="bg-[#0F172A] text-white font-black px-6 py-3 rounded-xl flex items-center gap-2 text-xs transition-all shadow-lg hover:bg-slate-800">
+                <button className="bg-[#0e4368] text-white font-black px-6 py-3 rounded-xl flex items-center gap-2 text-xs transition-all shadow-lg hover:bg-slate-800">
                     <ExternalLink className="w-4 h-4" /> SHARE PORTFOLIO
                 </button>
             </header>
@@ -90,7 +90,7 @@ const Showroom: React.FC = () => {
                                             className="relative z-10 w-full h-auto object-contain transition-transform duration-700 group-hover:scale-110"
                                         />
                                         <div className="absolute top-6 left-6 z-20">
-                                            <span className="bg-[#0F172A] text-white text-[9px] font-black px-3 py-1.5 rounded-lg tracking-widest uppercase">{product.id}</span>
+                                            <span className="bg-[#0e4368] text-white text-[9px] font-black px-3 py-1.5 rounded-lg tracking-widest uppercase">{product.id}</span>
                                         </div>
                                     </div>
 

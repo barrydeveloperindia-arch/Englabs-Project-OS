@@ -33,13 +33,11 @@ import Showroom from './components/Showroom';
 import FoodRegister from './components/FoodRegister';
 import SystemGuardDashboard from './components/SystemGuardDashboard';
 import BillingDashboard from './components/BillingDashboard';
-import QADashboard from './components/QADashboard';
 import DigitalEvidence from './components/DigitalEvidence';
 import InventoryManager from './components/InventoryManager';
 import Sky5Terminal from './components/Sky5Terminal';
 import StoreStockReport from './components/StoreStockReport';
 import PorterRegister from './components/PorterRegister';
-import InventoryArchiveSystem from './components/InventoryArchiveSystem';
 import HandoverDashboard from './components/HandoverDashboard';
 import { ProjectData, STAGES, ProjectStage } from './lib/project';
 import { logAction, AuditLog } from './lib/system_guard';
@@ -131,7 +129,7 @@ interface SidebarButtonProps {
     color?: 'emerald' | 'amber';
 }
 
-type View = 'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'BILLING' | 'QA_TESTER' | 'EVIDENCE' | 'INVENTORY' | 'INVENTORY_ARCHIVE' | 'SKY5_TERMINAL' | 'STOCK_REPORT' | 'PORTER_SERVICE';
+type View = 'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'BILLING' | 'EVIDENCE' | 'INVENTORY' | 'SKY5_TERMINAL' | 'STOCK_REPORT' | 'PORTER_SERVICE';
 
 const SidebarButton: React.FC<SidebarButtonProps> = ({ active, onClick, icon, label, color = 'emerald' }) => {
     const activeClass = color === 'emerald' 
@@ -386,7 +384,7 @@ const App: React.FC = () => {
         <div className="flex h-screen w-screen bg-[#F8FAFC] overflow-hidden text-slate-900 font-sans print:h-auto print:w-auto print:overflow-visible print:bg-white">
             {/* SIDEBAR LEDGER */}
             <aside 
-                className="bg-[#0F172A] hidden md:flex flex-col shadow-2xl shrink-0 border-r border-slate-800 print:hidden"
+                className="bg-[#0e4368] hidden md:flex flex-col shadow-2xl shrink-0 border-r border-slate-800 print:hidden"
                 style={{ width: '320px', minWidth: '320px', maxWidth: '320px', zIndex: 50 }}
             >
                 <div className="p-8">
@@ -433,12 +431,6 @@ const App: React.FC = () => {
                         label="INVENTORY MASTER" 
                     />
                     <SidebarButton 
-                        active={currentView === 'INVENTORY_ARCHIVE'} 
-                        onClick={() => setCurrentView('INVENTORY_ARCHIVE')} 
-                        icon={<Package className="w-4.5 h-4.5" />} 
-                        label="TIME MACHINE ARCHIVES" 
-                    />
-                    <SidebarButton 
                         active={currentView === 'STOCK_REPORT'} 
                         onClick={() => setCurrentView('STOCK_REPORT')} 
                         icon={<FileText className="w-4.5 h-4.5" />} 
@@ -449,12 +441,6 @@ const App: React.FC = () => {
                         onClick={() => setCurrentView('BILLING')} 
                         icon={<CreditCard className="w-4.5 h-4.5" />} 
                         label="FINANCE COMMAND" 
-                    />
-                    <SidebarButton 
-                        active={currentView === 'QA_TESTER'} 
-                        onClick={() => setCurrentView('QA_TESTER')} 
-                        icon={<Shield className="w-4.5 h-4.5" />} 
-                        label="ZERO-ERROR AUDIT" 
                     />
 
                     <SidebarButton 
@@ -526,9 +512,9 @@ const App: React.FC = () => {
             </aside>
 
             {/* MAIN OPERATIONAL CORE */}
-            <div className="flex-1 flex flex-col min-w-0 overflow-hidden pb-16 md:pb-0">
+            <div className="flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden pb-16 md:pb-0">
                 {currentView === 'PROJECTS' ? (
-                    <div className="flex-1 flex flex-col min-w-0 bg-[#F8FAFC]">
+                    <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-[#F8FAFC]">
                     <header className="h-16 md:h-20 bg-white border-b border-slate-100 flex items-center justify-between px-4 md:px-10 shrink-0">
                         <div className="flex items-center gap-3 md:gap-6">
                             <div className="flex flex-col">
@@ -559,7 +545,7 @@ const App: React.FC = () => {
                             <div className="bg-white p-5 md:p-10 rounded-[1.75rem] md:rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)] flex flex-col md:flex-row gap-4 md:gap-0 justify-between items-start md:items-center">
                                 <div>
                                     <div className="flex items-center gap-2.5 md:gap-3 mb-3 md:mb-4">
-                                        <span className="bg-[#0F172A] text-emerald-500 text-[8px] md:text-[10px] font-black px-2.5 py-1.5 rounded-lg tracking-widest uppercase">{selectedProject?.projectId}</span>
+                                        <span className="bg-[#0e4368] text-emerald-500 text-[8px] md:text-[10px] font-black px-2.5 py-1.5 rounded-lg tracking-widest uppercase">{selectedProject?.projectId}</span>
                                         <span className="text-slate-400 font-black text-[8px] md:text-[10px] uppercase tracking-widest">In-Orbit Dynamics</span>
                                     </div>
                                     <h2 className="text-xl md:text-5xl font-black text-slate-900 tracking-tighter leading-tight md:leading-none">{selectedProject.client}</h2>
@@ -613,7 +599,7 @@ const App: React.FC = () => {
 
                                 {/* INTEL (RIGHT) */}
                                 <div className="w-full xl:w-[400px] flex flex-col gap-6 md:gap-8">
-                                    <div className="bg-[#0F172A] p-6 md:p-10 rounded-[1.75rem] md:rounded-[3rem] text-white shadow-2xl relative overflow-hidden flex-1">
+                                    <div className="bg-[#0e4368] p-6 md:p-10 rounded-[1.75rem] md:rounded-[3rem] text-white shadow-2xl relative overflow-hidden flex-1">
                                         <div className="relative z-10">
                                             <h3 className="text-lg md:text-xl font-black text-slate-400 mb-4 md:mb-6 uppercase tracking-widest">Financial Health</h3>
                                             <div className="space-y-6 md:space-y-8">
@@ -685,14 +671,10 @@ const App: React.FC = () => {
                 <FoodRegister onLog={(log) => setAuditLogs(prev => [log, ...prev])} />
             ) : currentView === 'BILLING' ? (
                 <BillingDashboard />
-            ) : currentView === 'QA_TESTER' ? (
-                <QADashboard currentData={gateEntries} />
             ) : currentView === 'SKY5_TERMINAL' ? (
                 <Sky5Terminal />
             ) : currentView === 'INVENTORY' ? (
                 <InventoryManager />
-            ) : currentView === 'INVENTORY_ARCHIVE' ? (
-                <InventoryArchiveSystem />
             ) : currentView === 'STOCK_REPORT' ? (
                 <StoreStockReport />
             ) : currentView === 'PORTER_SERVICE' ? (
@@ -708,7 +690,7 @@ const App: React.FC = () => {
             </div>
 
             {/* MOBILE BOTTOM NAVIGATION BAR */}
-            <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#0F172A] border-t border-slate-800 flex items-center justify-around px-4 z-50 print:hidden shadow-[0_-10px_30px_rgba(0,0,0,0.3)]">
+            <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#0e4368] border-t border-slate-800 flex items-center justify-around px-4 z-50 print:hidden shadow-[0_-10px_30px_rgba(0,0,0,0.3)]">
                 <MobileTabButton 
                     active={currentView === 'PROJECTS'} 
                     onClick={() => setCurrentView('PROJECTS')} 
@@ -757,7 +739,7 @@ const App: React.FC = () => {
             {isMobileMenuOpen && (
                 <div className="fixed inset-0 z-[100] md:hidden flex items-end animate-in fade-in duration-300">
                     <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
-                    <div className="relative w-full bg-[#0F172A] rounded-t-[2.5rem] border-t border-slate-800 p-8 space-y-6 shadow-2xl animate-in slide-in-from-bottom duration-300">
+                    <div className="relative w-full bg-[#0e4368] rounded-t-[2.5rem] border-t border-slate-800 p-8 space-y-6 shadow-2xl animate-in slide-in-from-bottom duration-300">
                         <div className="flex justify-between items-center pb-4 border-b border-slate-800">
                             <div>
                                 <h3 className="text-sm font-black text-white uppercase tracking-widest">More Operations</h3>
@@ -780,23 +762,12 @@ const App: React.FC = () => {
                                 active={currentView === 'FOOD_REGISTER'}
                             />
                             <MobileGridButton 
-                                onClick={() => { setCurrentView('INVENTORY_ARCHIVE'); setIsMobileMenuOpen(false); }} 
-                                icon={<Package className="w-6 h-6" />} 
-                                label="Archives" 
-                                active={currentView === 'INVENTORY_ARCHIVE'}
-                            />
-                            <MobileGridButton 
                                 onClick={() => { setCurrentView('BILLING'); setIsMobileMenuOpen(false); }} 
                                 icon={<CreditCard className="w-6 h-6" />} 
                                 label="Finance" 
                                 active={currentView === 'BILLING'}
                             />
-                            <MobileGridButton 
-                                onClick={() => { setCurrentView('QA_TESTER'); setIsMobileMenuOpen(false); }} 
-                                icon={<Shield className="w-6 h-6" />} 
-                                label="Zero-Audit" 
-                                active={currentView === 'QA_TESTER'}
-                            />
+
                             <MobileGridButton 
                                 onClick={() => { setCurrentView('SKY5_TERMINAL'); setIsMobileMenuOpen(false); }} 
                                 icon={<ChefHat className="w-6 h-6" />} 

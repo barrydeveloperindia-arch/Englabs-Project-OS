@@ -51,7 +51,14 @@ vi.mock('lucide-react', () => ({
     IndianRupee: () => <div data-testid="icon-rupee" />,
     MoreHorizontal: () => <div data-testid="icon-more-horizontal" />,
     ListTodo: () => <div data-testid="icon-list-todo" />,
-    Zap: () => <div data-testid="icon-zap" />
+    Zap: () => <div data-testid="icon-zap" />,
+    Mail: () => <div data-testid="icon-mail" />,
+    Filter: () => <div data-testid="icon-filter" />,
+    Briefcase: () => <div data-testid="icon-briefcase" />,
+    Paperclip: () => <div data-testid="icon-paperclip" />,
+    Send: () => <div data-testid="icon-send" />,
+    FolderTree: () => <div data-testid="icon-folder" />,
+    PieChart: () => <div data-testid="icon-piechart" />
 }));
 
 // 🛡️ SERVICE MOCKS: Decouple UI from backend logic

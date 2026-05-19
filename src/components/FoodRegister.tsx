@@ -159,7 +159,7 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
 
     return (
         <div className="flex-1 flex flex-col min-w-0 bg-[#F8FAFC] dark:bg-slate-950 transition-colors duration-500 overflow-hidden">
-            <header className="h-20 bg-white dark:bg-[#020617]/60 dark:backdrop-blur-xl border-b border-slate-100 dark:border-white/5 flex items-center justify-between px-10 shrink-0 transition-all duration-500">
+            <header className="h-20 bg-white dark:bg-[#092a42]/60 dark:backdrop-blur-xl border-b border-slate-100 dark:border-white/5 flex items-center justify-between px-10 shrink-0 transition-all duration-500">
                 <div className="flex items-center gap-6">
                     <div className="flex flex-col">
                         <h1 className="text-lg font-black text-slate-900 dark:text-white leading-none tracking-tight">Food & Expense Tracker</h1>
@@ -190,7 +190,7 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
                     </button>
                     <button 
                         onClick={() => setShowForm(true)}
-                        className="bg-[#0F172A] dark:bg-emerald-500 hover:bg-slate-800 dark:hover:bg-emerald-400 text-white dark:text-slate-900 font-black px-6 py-3 rounded-xl flex items-center gap-2 text-xs transition-all shadow-lg active:scale-95 btn-glow"
+                        className="bg-[#0e4368] dark:bg-emerald-500 hover:bg-slate-800 dark:hover:bg-emerald-400 text-white dark:text-slate-900 font-black px-6 py-3 rounded-xl flex items-center gap-2 text-xs transition-all shadow-lg active:scale-95 btn-glow"
                     >
                         <Plus className="w-4 h-4" /> LOG NEW ORDER
                     </button>
@@ -238,7 +238,7 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
                                 </div>
                             </div>
 
-                            <div className="bg-[#0F172A] p-8 rounded-[2.5rem] text-white shadow-2xl flex flex-col justify-between h-44 relative overflow-hidden group industrial-glow staggered-entry" style={{ animationDelay: '100ms' }}>
+                            <div className="bg-[#0e4368] p-8 rounded-[2.5rem] text-white shadow-2xl flex flex-col justify-between h-44 relative overflow-hidden group industrial-glow staggered-entry" style={{ animationDelay: '100ms' }}>
                                 <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent animate-pulse" />
                                 <div className="flex justify-between items-start relative">
                                     <div className="p-3 bg-white/10 rounded-2xl backdrop-blur-md border border-white/5">
@@ -283,7 +283,7 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
                         </div>
 
                         {/* REGISTER TABLE */}
-                        <div className="glass-card rounded-[3rem] overflow-hidden flex flex-col min-h-[600px] mb-10 dark:bg-[#0F172A]/40 transition-all duration-500 border-slate-100 dark:border-white/5">
+                        <div className="glass-card rounded-[3rem] overflow-hidden flex flex-col min-h-[600px] mb-10 dark:bg-[#0e4368]/40 transition-all duration-500 border-slate-100 dark:border-white/5">
                             <div className="p-8 border-b border-slate-100 dark:border-white/5 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/60 backdrop-blur-md">
                                 <div className="flex items-center gap-4 flex-1">
                                     <div className="relative flex-1 max-w-md group">

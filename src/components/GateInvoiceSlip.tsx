@@ -41,7 +41,7 @@ const GateInvoiceSlip: React.FC<Props> = ({ entry, onClose }) => {
             <div className="bg-white w-full max-w-[900px] h-[90vh] rounded-[3rem] shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-300 print:h-auto print:w-full print:max-w-none print:shadow-none print:rounded-none print:block print:static">
                 
                 {/* ACTIONS HEADER (HIDDEN ON PRINT) */}
-                <div className="bg-[#0F172A] p-6 text-white flex justify-between items-center print:hidden shrink-0">
+                <div className="bg-[#0e4368] p-6 text-white flex justify-between items-center print:hidden shrink-0">
                     <div className="flex items-center gap-3">
                         <FileText className="w-5 h-5 text-emerald-500" />
                         <span className="text-xs font-black uppercase tracking-widest text-emerald-500">Official Billing Portal v5.0</span>
@@ -86,8 +86,9 @@ const GateInvoiceSlip: React.FC<Props> = ({ entry, onClose }) => {
                         </div>
 
                         <div className="text-right flex flex-col justify-between h-full">
-                            <h2 className="text-5xl font-black text-slate-100 uppercase tracking-tighter leading-none select-none mb-6">
-                                {entry.type === 'INWARD' ? 'INVOICE' : 'CHALLAN'}
+                            <h2 className="text-5xl font-black text-slate-100 uppercase tracking-tighter leading-none select-none mb-6 flex flex-col gap-2">
+                                <span>{entry.type === 'INWARD' ? 'INVOICE' : 'CHALLAN'}</span>
+                                {entry.billType === 'WITHOUT_GST' && <span className="text-xl text-amber-500 tracking-widest">(WITHOUT GST)</span>}
                             </h2>
                             <div className="space-y-4">
                                 <div>
@@ -131,9 +132,11 @@ const GateInvoiceSlip: React.FC<Props> = ({ entry, onClose }) => {
                             <TrendingUp className="absolute -right-4 -bottom-4 w-32 h-32 opacity-10" />
                             <p className="text-[9px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-2">Grand Total Amount</p>
                             <p className="text-5xl font-black tracking-tighter">
-                                ₹{((entry.amount || 0) * 1.18).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                ₹{((entry.amount || 0) * (entry.billType !== 'WITHOUT_GST' ? 1.18 : 1)).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                             </p>
-                            <p className="text-[9px] font-bold text-slate-400 mt-4 uppercase tracking-widest">Inclusive of all logistics taxes (GST @18%)</p>
+                            <p className="text-[9px] font-bold text-slate-400 mt-4 uppercase tracking-widest">
+                                {entry.billType !== 'WITHOUT_GST' ? 'Inclusive of all logistics taxes (GST @18%)' : 'Non-GST Commercial Invoice'}
+                            </p>
                         </div>
                     </div>
 
@@ -178,14 +181,22 @@ const GateInvoiceSlip: React.FC<Props> = ({ entry, onClose }) => {
                                     <td colSpan={5} className="py-4 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">Taxable Sub-Total</td>
                                     <td className="py-4 text-right text-sm font-black text-slate-900">₹{(entry.amount || 0).toLocaleString('en-IN')}</td>
                                 </tr>
-                                <tr>
-                                    <td colSpan={5} className="py-2 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">IGST @18%</td>
-                                    <td className="py-2 text-right text-sm font-black text-slate-900">₹{((entry.amount || 0) * 0.18).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                                </tr>
+                                {entry.billType !== 'WITHOUT_GST' && (
+                                    <>
+                                        <tr>
+                                            <td colSpan={5} className="py-2 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">CGST @9%</td>
+                                            <td className="py-2 text-right text-sm font-black text-slate-900">₹{((entry.amount || 0) * 0.09).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan={5} className="py-2 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">SGST @9%</td>
+                                            <td className="py-2 text-right text-sm font-black text-slate-900">₹{((entry.amount || 0) * 0.09).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                        </tr>
+                                    </>
+                                )}
                                 <tr className="bg-slate-50 border-t border-slate-100">
-                                    <td colSpan={5} className="py-4 text-right text-[10px] font-black text-slate-900 uppercase tracking-widest">Grand Total (Inclusive)</td>
+                                    <td colSpan={5} className="py-4 text-right text-[10px] font-black text-slate-900 uppercase tracking-widest">Grand Total {entry.billType !== 'WITHOUT_GST' ? '(Inclusive)' : ''}</td>
                                     <td className="py-4 text-right text-lg font-black text-emerald-600">
-                                        ₹{((entry.amount || 0) * 1.18).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                        ₹{((entry.amount || 0) * (entry.billType !== 'WITHOUT_GST' ? 1.18 : 1)).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                                     </td>
                                 </tr>
                                 <tr className="border-t border-slate-100">
@@ -201,7 +212,7 @@ const GateInvoiceSlip: React.FC<Props> = ({ entry, onClose }) => {
                                         {entry.type === 'INWARD' ? 'Balance Remaining' : 'Balance Due'}
                                     </td>
                                     <td className="py-4 text-right text-xl font-black text-rose-600">
-                                        ₹{((entry.remainingAmount || (((entry.amount || 0) * 1.18) - (entry.paidAmount || 0)))).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                        ₹{((entry.remainingAmount || (((entry.amount || 0) * (entry.billType !== 'WITHOUT_GST' ? 1.18 : 1)) - (entry.paidAmount || 0)))).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                                     </td>
                                 </tr>
                             </tfoot>
@@ -316,7 +327,7 @@ const GateInvoiceSlip: React.FC<Props> = ({ entry, onClose }) => {
                         
                         /* Fix for the Total card which must remain dark */
                         .bg-slate-900 {
-                            background-color: #0f172a !important;
+                            background-color: #0e4368 !important;
                             color: white !important;
                         }
                         .bg-slate-50 {

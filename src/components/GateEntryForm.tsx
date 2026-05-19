@@ -79,7 +79,8 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
             invoicePhotoUrl: '',
             paymentStatus: 'UNPAID',
             paymentMode: 'UPI',
-            transactionId: ''
+            transactionId: '',
+            billType: 'GST'
         };
 
         if (initialData) {
@@ -152,7 +153,7 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                 toLocation: '',
                 driverName: '',
                 employeeName: '',
-                supervisorName: 'Gaurav Panchal',
+                supervisorName: '',
                 invoiceNumber: '',
                 amount: 0,
                 remarks: '',
@@ -161,7 +162,8 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                 invoicePhotoUrl: '',
                 paymentStatus: 'UNPAID',
                 paymentMode: 'UPI',
-                transactionId: ''
+                transactionId: '',
+                billType: 'GST'
             };
             setFormData(resetState);
             
@@ -243,19 +245,37 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
             itemsDetail += `--------------------------------\n`;
         }
 
+        const totalTaxable = formData.items.reduce((sum: number, item: any) => sum + item.amount, 0);
+        const hasGST = formData.billType === 'GST';
+        const cgst = hasGST ? totalTaxable * 0.09 : 0;
+        const sgst = hasGST ? totalTaxable * 0.09 : 0;
+        const grandTotal = totalTaxable + cgst + sgst;
+
         const text = encodeURIComponent(
             `*ENGLABS GATE ENTRY DRAFT*\n` +
             `--------------------------------\n` +
             `*Type:* ${type}\n` +
+            `*Invoice Type:* ${hasGST ? 'GST Bill' : 'Without GST'}\n` +
+            `*Date & Time:* ${new Date().toLocaleString()}\n` +
             `*Vendor:* ${formData.partyName || 'Not Specified'}\n` +
             `*Vehicle:* ${formData.vehicleNumber || 'Not Specified'}\n` +
             `*Invoice:* ${formData.invoiceNumber || 'Not Specified'}\n` +
             itemsDetail +
-            `*TAXABLE TOTAL: ₹${formData.items.reduce((sum: number, item: any) => sum + item.amount, 0).toLocaleString()}*\n` +
-            `*GST (18%): ₹${(formData.items.reduce((sum: number, item: any) => sum + item.amount, 0) * 0.18).toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
-            `*GRAND TOTAL: ₹${(formData.items.reduce((sum: number, item: any) => sum + item.amount, 0) * 1.18).toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
+            `*TAXABLE TOTAL: ₹${totalTaxable.toLocaleString()}*\n` +
+            (hasGST ? `*CGST (9%): ₹${cgst.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
+            `*SGST (9%): ₹${sgst.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` : '') +
+            `*GRAND TOTAL: ₹${grandTotal.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
+            `*PAYMENT STATUS:* ${formData.paymentStatus}\n` +
+            `*DELIVERY STATUS:* ${type === 'INWARD' ? 'Received' : 'Dispatched'}\n` +
             `--------------------------------\n` +
-            `_Sent from Gate Entry Terminal_`
+            `*TRANSIT & PERSONNEL AUTHENTICATION*\n` +
+            `Route: ${formData.fromLocation || 'N/A'} -> ${formData.toLocation || 'N/A'}\n` +
+            `Received By: ${formData.employeeName || 'N/A'}\n` +
+            `Carrier/Driver: ${formData.driverName || 'N/A'}\n` +
+            `Checked By: ${formData.supervisorName || 'N/A'}\n` +
+            `Prepared By: Gate Registry System\n` +
+            `--------------------------------\n` +
+            `_Verified by Gate Registry System_`
         );
         window.open(`https://wa.me/?text=${text}`, '_blank');
     };
@@ -397,6 +417,25 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                                         className="w-full bg-transparent border-b-2 border-slate-700 py-3 pl-8 font-black text-2xl text-white placeholder:text-slate-600 focus:border-emerald-500 outline-none transition-all"
                                         placeholder="REF-0000"
                                     />
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] block">Bill Type</label>
+                                <div className="flex bg-slate-800 p-1 rounded-xl">
+                                    <button 
+                                        type="button"
+                                        onClick={() => setFormData({...formData, billType: 'GST'})}
+                                        className={`flex-1 py-2 px-4 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${formData.billType === 'GST' ? 'bg-emerald-500 text-slate-900 shadow-md' : 'text-slate-400 hover:text-white'}`}
+                                    >
+                                        GST Bill
+                                    </button>
+                                    <button 
+                                        type="button"
+                                        onClick={() => setFormData({...formData, billType: 'WITHOUT_GST'})}
+                                        className={`flex-1 py-2 px-4 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${formData.billType === 'WITHOUT_GST' ? 'bg-slate-700 text-white shadow-md' : 'text-slate-400 hover:text-white'}`}
+                                    >
+                                        Without GST
+                                    </button>
                                 </div>
                             </div>
                             <div className="space-y-4">
@@ -543,9 +582,20 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                                                 <span className="text-sm">₹</span>
                                                 {formData.items.reduce((sum: number, item: any) => sum + item.amount, 0).toLocaleString('en-IN')}
                                             </div>
-                                            <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-                                                + IGST @18%: ₹{(formData.items.reduce((sum: number, item: any) => sum + item.amount, 0) * 0.18).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                                            </div>
+                                            {formData.billType === 'GST' ? (
+                                                <>
+                                                    <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                                                        + CGST @9%: ₹{(formData.items.reduce((sum: number, item: any) => sum + item.amount, 0) * 0.09).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    </div>
+                                                    <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                                                        + SGST @9%: ₹{(formData.items.reduce((sum: number, item: any) => sum + item.amount, 0) * 0.09).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <div className="text-[9px] font-bold text-amber-500 uppercase tracking-widest mt-1">
+                                                    (WITHOUT GST)
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="flex flex-col items-end gap-1">
                                             <div className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.3em]">
@@ -553,7 +603,7 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                                             </div>
                                             <div className="text-4xl font-black text-emerald-600 tracking-tighter flex items-center gap-2">
                                                 <span className="text-xl text-emerald-400">₹</span>
-                                                {(formData.items.reduce((sum: number, item: any) => sum + item.amount, 0) * 1.18).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                                {(formData.items.reduce((sum: number, item: any) => sum + item.amount, 0) * (formData.billType === 'GST' ? 1.18 : 1)).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                                             </div>
                                         </div>
                                     </div>
@@ -697,7 +747,7 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                                         onChange={e => {
                                             const paid = parseFloat(e.target.value) || 0;
                                             const totalTaxable = formData.items.reduce((sum: number, item: any) => sum + item.amount, 0);
-                                            const totalGross = totalTaxable * 1.18;
+                                            const totalGross = formData.billType === 'GST' ? totalTaxable * 1.18 : totalTaxable;
                                             setFormData({
                                                 ...formData, 
                                                 paidAmount: paid,

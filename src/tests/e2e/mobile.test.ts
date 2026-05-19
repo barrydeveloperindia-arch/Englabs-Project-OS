@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 
 // Viewport Validation Helper to catch horizontal layout regressions (content clipping or scrolling sideways)
-async function validateNoHorizontalOverflow(page) {
+async function validateNoHorizontalOverflow(page: Page) {
   const isOverflowing = await page.evaluate(() => {
     return document.documentElement.scrollWidth > window.innerWidth || document.body.scrollWidth > window.innerWidth;
   });
@@ -219,9 +219,7 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
 
       // Verify secondary option buttons are present
       await expect(page.getByTestId('mobile-grid-btn-pantry')).toBeVisible({ timeout: 15000 });
-      await expect(page.getByTestId('mobile-grid-btn-archives')).toBeVisible({ timeout: 15000 });
       await expect(page.getByTestId('mobile-grid-btn-finance')).toBeVisible({ timeout: 15000 });
-      await expect(page.getByTestId('mobile-grid-btn-zero-audit')).toBeVisible({ timeout: 15000 });
       await expect(page.getByTestId('mobile-grid-btn-sky-5-kitchen')).toBeVisible({ timeout: 15000 });
 
       // Close sheet modal
@@ -230,24 +228,14 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
     }
   });
 
-  test('10. Pantry and Zero-Audit Control Panels Transitions via More Sheet', async ({ page, isMobile }) => {
+  test('10. Pantry Control Panel Transition via More Sheet', async ({ page, isMobile }) => {
     if (isMobile) {
       // Open More sheet
       const moreBtn = page.getByTestId('mobile-nav-btn-more');
       await expect(moreBtn).toBeVisible({ timeout: 15000 });
       await moreBtn.click({ force: true });
 
-      // Transition to Zero-Audit control panel
-      const zeroAuditBtn = page.getByTestId('mobile-grid-btn-zero-audit');
-      await expect(zeroAuditBtn).toBeVisible({ timeout: 15000 });
-      await zeroAuditBtn.click({ force: true });
-
-      // Verify QA system loaded
-      await expect(page.getByText('Englabs QA Tester')).toBeVisible({ timeout: 15000 });
-
-      // Switch back to More sheet and transition to Pantry
-      const moreBtn2 = page.getByTestId('mobile-nav-btn-more');
-      await moreBtn2.click({ force: true });
+      // Transition to Pantry
       const pantryBtn = page.getByTestId('mobile-grid-btn-pantry');
       await pantryBtn.click({ force: true });
 

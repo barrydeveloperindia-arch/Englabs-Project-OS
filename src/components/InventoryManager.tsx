@@ -179,7 +179,7 @@ const InventoryManager: React.FC = () => {
                             </div>
 
                             {/* LOW STOCK SIDEBAR */}
-                            <div className="bg-[#0F172A] rounded-[3rem] p-10 text-white shadow-2xl relative overflow-hidden">
+                            <div className="bg-[#0e4368] rounded-[3rem] p-10 text-white shadow-2xl relative overflow-hidden">
                                 <h3 className="text-xl font-black text-slate-400 mb-8 uppercase tracking-widest flex items-center gap-3">
                                     <AlertCircle className="w-6 h-6 text-amber-500" /> Critical Alerts
                                 </h3>

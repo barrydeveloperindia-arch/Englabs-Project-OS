@@ -26,7 +26,7 @@ const GatePassSlip: React.FC<Props> = ({ entry, onClose }) => {
             <div className="bg-white w-full max-w-[450px] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-300 print:shadow-none print:w-full print:max-w-none">
                 
                 {/* SLIP HEADER */}
-                <div className="bg-[#0F172A] p-8 text-white flex justify-between items-center print:bg-white print:text-slate-900 print:border-b-2 print:border-slate-900">
+                <div className="bg-[#0e4368] p-8 text-white flex justify-between items-center print:bg-white print:text-slate-900 print:border-b-2 print:border-slate-900">
                     <div className="flex items-center gap-4">
                         <img src={logo} alt="Englabs" className="h-16 print:h-20 object-contain" />
                         <div>
@@ -156,7 +156,7 @@ const GatePassSlip: React.FC<Props> = ({ entry, onClose }) => {
                 <div className="bg-slate-50 p-8 border-t border-slate-100 flex gap-4 print:hidden">
                     <button 
                         onClick={handlePrint}
-                        className="flex-1 bg-[#0F172A] text-white py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10"
+                        className="flex-1 bg-[#0e4368] text-white py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10"
                     >
                         <Printer className="w-4 h-4 text-emerald-500" /> PRINT GATE PASS
                     </button>

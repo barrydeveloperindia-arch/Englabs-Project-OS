@@ -17,7 +17,7 @@ const HandoverDashboard: React.FC<HandoverProps> = ({ onAcknowledge }) => {
     const isOptimal = handoverData.systemHealth === 'OPTIMAL';
 
     return (
-        <div className="fixed inset-0 z-[100] bg-[#0F172A] text-white flex flex-col font-sans overflow-hidden">
+        <div className="fixed inset-0 z-[100] bg-[#0e4368] text-white flex flex-col font-sans overflow-hidden">
             {/* BACKGROUND EFFECTS */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[100px]"></div>

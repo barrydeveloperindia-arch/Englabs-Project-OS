@@ -68,7 +68,7 @@ const Sky5Terminal: React.FC = () => {
     const completedToday = orders.filter(o => o.trackingStatus === 'Delivered').length;
 
     return (
-        <div className="flex-1 flex flex-col min-w-0 bg-[#0F172A] text-white">
+        <div className="flex-1 flex flex-col min-w-0 bg-[#0e4368] text-white">
             {/* KITCHEN HEADER */}
             <header className="h-24 bg-slate-900 border-b border-white/5 flex items-center justify-between px-10 shrink-0">
                 <div className="flex items-center gap-6">

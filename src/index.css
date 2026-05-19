@@ -3,16 +3,16 @@
 :root {
   --glass-bg: rgba(255, 255, 255, 0.7);
   --glass-border: rgba(255, 255, 255, 0.3);
-  --industrial-slate: #0F172A;
-  --emerald-glow: 0 0 20px rgba(16, 185, 129, 0.2);
-  --card-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.08);
+  --industrial-slate: #0e4368;
+  --emerald-glow: 0 0 20px rgba(82, 204, 163, 0.2);
+  --card-shadow: 0 8px 32px 0 rgba(9, 42, 66, 0.08);
 }
 
 .dark {
   --glass-bg: rgba(15, 23, 42, 0.8);
   --glass-border: rgba(255, 255, 255, 0.05);
-  --industrial-slate: #020617;
-  --emerald-glow: 0 0 30px rgba(16, 185, 129, 0.3);
+  --industrial-slate: #092a42;
+  --emerald-glow: 0 0 30px rgba(82, 204, 163, 0.3);
   --card-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.5);
 }
 
@@ -20,13 +20,13 @@
 .dark #root,
 .dark main,
 .dark div[class*="bg-[#F8FAFC]"] {
-  background: radial-gradient(circle at top left, #0f172a, #020617) !important;
+  background: radial-gradient(circle at top left, #0e4368, #092a42) !important;
   color: #f8fafc !important;
 }
 
 .dark header,
 .dark div[class*="bg-white"] {
-  background: rgba(2, 6, 23, 0.6) !important;
+  background: rgba(9, 42, 66, 0.6) !important;
   backdrop-filter: blur(20px) !important;
   border-color: rgba(255, 255, 255, 0.05) !important;
 }
@@ -38,13 +38,13 @@
 .dark input, 
 .dark select, 
 .dark textarea {
-  background-color: rgba(2, 6, 23, 0.8) !important;
+  background-color: rgba(9, 42, 66, 0.8) !important;
   color: #ffffff !important;
   border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 .dark thead tr {
-  background-color: #020617 !important;
+  background-color: #092a42 !important;
 }
 
 .dark button:not([class*="bg-emerald"]):not([class*="bg-amber"]):not([class*="bg-rose"]):not([class*="bg-blue"]) {
@@ -91,7 +91,7 @@
 .glass-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 40px 0 rgba(15, 23, 42, 0.12);
-  border-color: rgba(16, 185, 129, 0.3);
+  border-color: rgba(82, 204, 163, 0.3);
 }
 
 .industrial-glow {
@@ -134,7 +134,7 @@
 }
 
 .btn-glow:hover {
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 0 15px rgba(82, 204, 163, 0.4);
 }
 
 /* Custom Scrollbar for Clinical Aesthetic */
@@ -209,7 +209,7 @@
   /* Force text colors for readability in print */
   .text-slate-900 { color: black !important; }
   .text-slate-400 { color: #64748b !important; }
-  .text-emerald-500 { color: #10b981 !important; }
+  .text-emerald-500 { color: #52cca3 !important; }
   .text-amber-500 { color: #f59e0b !important; }
 }
 

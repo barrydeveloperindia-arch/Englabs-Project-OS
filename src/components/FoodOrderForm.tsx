@@ -271,7 +271,7 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
                                 </div>
 
                                     {/* TRANSPARENT BILLING INTELLIGENCE */}
-                                    <div className="bg-[#0F172A] rounded-[2rem] p-6 flex justify-between items-center border-b-4 border-emerald-500/30 shadow-xl">
+                                    <div className="bg-[#0e4368] rounded-[2rem] p-6 flex justify-between items-center border-b-4 border-emerald-500/30 shadow-xl">
                                         <div className="flex flex-col">
                                             <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Gross Total</span>
                                             <span className="text-sm font-black text-white/40 line-through tracking-widest">₹{((formData.rate || 0) * (formData.quantity || 1)).toLocaleString('en-IN')}</span>

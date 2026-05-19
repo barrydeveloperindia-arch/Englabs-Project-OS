@@ -43,6 +43,7 @@ export interface GateEntry {
     remainingAmount?: number;
     paymentDate?: string;
     paymentRemarks?: string;
+    billType?: 'GST' | 'WITHOUT_GST';
     history?: any[]; // Store previous versions for rollback
 }
 

@@ -81,24 +81,24 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
         inwardValue: entries.filter(e => e.type === 'INWARD').reduce((acc, curr) => acc + (curr.amount || 0), 0),
         inwardPaid: entries.filter(e => e.type === 'INWARD').reduce((acc, curr) => acc + (curr.paidAmount || 0), 0),
         inwardPending: entries.filter(e => e.type === 'INWARD').reduce((acc, curr) => {
-            const totalGross = (curr.amount || 0) * 1.18;
+            const totalGross = curr.billType !== 'WITHOUT_GST' ? (curr.amount || 0) * 1.18 : (curr.amount || 0);
             return acc + (curr.remainingAmount !== undefined ? curr.remainingAmount : (curr.paymentStatus === 'PAID' ? 0 : totalGross - (curr.paidAmount || 0)));
         }, 0),
         
         outwardValue: entries.filter(e => e.type === 'OUTWARD').reduce((acc, curr) => acc + (curr.amount || 0), 0),
         outwardPaid: entries.filter(e => e.type === 'OUTWARD').reduce((acc, curr) => acc + (curr.paidAmount || 0), 0),
         outwardPending: entries.filter(e => e.type === 'OUTWARD').reduce((acc, curr) => {
-            const totalGross = (curr.amount || 0) * 1.18;
+            const totalGross = curr.billType !== 'WITHOUT_GST' ? (curr.amount || 0) * 1.18 : (curr.amount || 0);
             return acc + (curr.remainingAmount !== undefined ? curr.remainingAmount : (curr.paymentStatus === 'PAID' ? 0 : totalGross - (curr.paidAmount || 0)));
         }, 0),
         
         totalPaid: entries.reduce((acc, curr) => {
             // Smart Fallback: If paidAmount is missing but status is PAID, use amount (assuming inclusive in this context for total)
-            const paid = curr.paidAmount !== undefined ? curr.paidAmount : (curr.paymentStatus === 'PAID' ? (curr.amount || 0) : 0);
+            const paid = curr.paidAmount !== undefined ? curr.paidAmount : (curr.paymentStatus === 'PAID' ? (curr.billType !== 'WITHOUT_GST' ? (curr.amount || 0) * 1.18 : (curr.amount || 0)) : 0);
             return acc + (paid || 0);
         }, 0),
         totalPending: entries.reduce((acc, curr) => {
-            const totalGross = (curr.amount || 0) * 1.18;
+            const totalGross = curr.billType !== 'WITHOUT_GST' ? (curr.amount || 0) * 1.18 : (curr.amount || 0);
             const pending = curr.remainingAmount !== undefined ? curr.remainingAmount : (curr.paymentStatus === 'PAID' ? 0 : totalGross - (curr.paidAmount || 0));
             return acc + (pending || 0);
         }, 0),
@@ -119,20 +119,37 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
             itemsDetail += `--------------------------------\n`;
         }
 
+        const hasGST = entry.billType !== 'WITHOUT_GST';
+        const totalTaxable = entry.amount || 0;
+        const cgst = hasGST ? totalTaxable * 0.09 : 0;
+        const sgst = hasGST ? totalTaxable * 0.09 : 0;
+        const grandTotal = totalTaxable + cgst + sgst;
+        const balanceDue = entry.remainingAmount !== undefined ? entry.remainingAmount : (grandTotal - (entry.paidAmount || 0));
+
         const text = encodeURIComponent(
             `*ENGLABS GATE PASS - ${entry.id}*\n` +
             `--------------------------------\n` +
             `*Type:* ${entry.type}\n` +
-            `*Date:* ${new Date(entry.timestamp).toLocaleDateString()}\n` +
+            `*Invoice Type:* ${hasGST ? 'GST Bill' : 'Without GST'}\n` +
+            `*Date & Time:* ${new Date(entry.timestamp).toLocaleString()}\n` +
             `*Vendor/Party:* ${entry.partyName}\n` +
             `*Vehicle:* ${entry.vehicleNumber}\n` +
             `*Invoice:* ${entry.invoiceNumber || 'N/A'}\n` +
             itemsDetail +
-            `*TAXABLE AMOUNT: ₹${(entry.amount || 0).toLocaleString()}*\n` +
-            `*GRAND TOTAL (inc 18% GST): ₹${((entry.amount || 0) * 1.18).toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
+            `*TAXABLE AMOUNT: ₹${totalTaxable.toLocaleString()}*\n` +
+            (hasGST ? `*CGST (9%): ₹${cgst.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
+            `*SGST (9%): ₹${sgst.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` : '') +
+            `*GRAND TOTAL: ₹${grandTotal.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
             `*PAID AMOUNT: ₹${(entry.paidAmount || 0).toLocaleString()} (${entry.paymentMode || 'N/A'})*\n` +
-            `*BALANCE DUE: ₹${((entry.remainingAmount || (((entry.amount || 0) * 1.18) - (entry.paidAmount || 0)))).toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
+            `*BALANCE DUE: ₹${balanceDue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
             `*STATUS: ${entry.paymentStatus || 'UNPAID'}*\n` +
+            `*DELIVERY STATUS:* ${entry.type === 'INWARD' ? 'Received' : 'Dispatched'}\n` +
+            `--------------------------------\n` +
+            `*TRANSIT & PERSONNEL AUTHENTICATION*\n` +
+            `Received By: ${entry.employeeName || 'N/A'}\n` +
+            `Carrier/Driver: ${entry.driverName || 'N/A'}\n` +
+            `Checked By: ${entry.supervisorName || 'N/A'}\n` +
+            `Prepared By: Gate Registry System\n` +
             `--------------------------------\n` +
             `_Verified by Gate Registry System_`
         );
@@ -236,7 +253,7 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
     };
 
     return (
-        <div className="flex-1 flex flex-col min-w-0 bg-[#F8FAFC]">
+        <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-[#F8FAFC]">
             <header className="h-auto md:h-20 bg-white border-b border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between px-4 md:px-10 py-4 md:py-0 shrink-0 gap-4 md:gap-0">
                 <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 w-full md:w-auto">
                     <div className="flex flex-col">
@@ -280,7 +297,7 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                     </button>
                     <button 
                         onClick={() => setView('NEW_ENTRY')}
-                        className="bg-[#0F172A] text-emerald-500 hover:bg-slate-800 font-black px-6 py-3 rounded-xl flex items-center gap-2 text-xs transition-all shadow-lg"
+                        className="bg-[#0e4368] text-emerald-500 hover:bg-slate-800 font-black px-6 py-3 rounded-xl flex items-center gap-2 text-xs transition-all shadow-lg"
                     >
                         <Plus className="w-4 h-4" /> NEW LOG ENTRY
                     </button>
@@ -434,7 +451,7 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                                             </h2>
                                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2 ml-9">
                                                 {view === 'INWARD_LIST' 
-                                                    ? `${stats.totalInwardToday} Entries Registered • Taxable: ₹${stats.inwardValue.toLocaleString('en-IN')} • Gross (GST): ₹${(stats.inwardValue * 1.18).toLocaleString('en-IN')}` 
+                                                    ? `${stats.totalInwardToday} Entries Registered • Taxable: ₹${stats.inwardValue.toLocaleString('en-IN')}` 
                                                     : `${stats.totalOutwardToday} Entries Dispatched • Valuation: ₹${stats.outwardValue.toLocaleString('en-IN')}`}
                                             </p>
                                         </div>
@@ -625,14 +642,14 @@ const EntryTable = ({ entries, onEdit, onDelete, onPrint, onInvoice, onShare }: 
                                     {entry.paymentStatus || 'UNPAID'}
                                 </span>
                                 <p className="text-[10px] font-black text-slate-900 mt-1">
-                                    {entry.type === 'INWARD' ? 'Inv (Gross): ' : 'Dlv (Gross): '} ₹{((entry.amount || 0) * 1.18).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                    {entry.type === 'INWARD' ? 'Inv (Gross): ' : 'Dlv (Gross): '} ₹{((entry.amount || 0) * (entry.billType !== 'WITHOUT_GST' ? 1.18 : 1)).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                                 </p>
                                 <div className="flex flex-col">
                                     <p className="text-[9px] font-bold text-slate-600">
                                         {entry.type === 'INWARD' ? 'Paid: ' : 'Recd: '} ₹{(entry.paidAmount || 0).toLocaleString()}
                                     </p>
                                     <p className="text-[9px] font-bold text-slate-400">
-                                        {entry.type === 'INWARD' ? 'Rem: ' : 'Bal: '} ₹{((entry.remainingAmount || (((entry.amount || 0) * 1.18) - (entry.paidAmount || 0)))).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                        {entry.type === 'INWARD' ? 'Rem: ' : 'Bal: '} ₹{((entry.remainingAmount || (((entry.amount || 0) * (entry.billType !== 'WITHOUT_GST' ? 1.18 : 1)) - (entry.paidAmount || 0)))).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                                     </p>
                                 </div>
                             </div>

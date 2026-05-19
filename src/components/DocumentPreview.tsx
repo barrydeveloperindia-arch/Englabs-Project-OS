@@ -28,7 +28,7 @@ const DocumentPreview: React.FC<Props> = ({ doc, onClose }) => {
             <div className="bg-white w-full max-w-[800px] h-[90vh] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-300 print:h-auto print:w-full print:max-w-none print:shadow-none print:rounded-none">
                 
                 {/* ACTIONS HEADER */}
-                <div className="bg-[#0F172A] p-6 text-white flex justify-between items-center print:hidden">
+                <div className="bg-[#0e4368] p-6 text-white flex justify-between items-center print:hidden">
                     <div className="flex items-center gap-3">
                         <img src={logo} alt="Englabs" className="h-8 brightness-0 invert" />
                         <span className="text-xs font-black uppercase tracking-widest text-emerald-500">Document Intelligence Preview</span>
@@ -187,7 +187,7 @@ const DocumentPreview: React.FC<Props> = ({ doc, onClose }) => {
                     >
                         <Printer className="w-4 h-4" /> PRINT OFFICIAL DOCUMENT
                     </button>
-                    <button className="px-10 bg-[#0F172A] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-slate-800 transition-all">
+                    <button className="px-10 bg-[#0e4368] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-slate-800 transition-all">
                         <Share2 className="w-4 h-4 text-emerald-400" /> SHARE
                     </button>
                 </div>
