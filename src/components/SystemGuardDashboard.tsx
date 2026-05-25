@@ -61,7 +61,7 @@ const SystemGuardDashboard: React.FC<Props> = ({ todayActivities, auditLogs = []
     };
 
     return (
-        <div className="flex-1 flex flex-col min-w-0 bg-[#0e4368] text-white overflow-hidden p-10">
+        <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-[#0e4368] text-white overflow-hidden p-10">
             <header className="flex justify-between items-center mb-10">
                 <div className="flex items-center gap-6">
                     <div className={`p-4 rounded-[2rem] shadow-2xl transition-all duration-500 ${status === 'STABLE' ? 'bg-emerald-500 shadow-emerald-500/20' : 'bg-orange-500 animate-pulse'}`}>

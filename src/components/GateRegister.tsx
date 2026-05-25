@@ -28,6 +28,7 @@ import GateInvoiceSlip from './GateInvoiceSlip';
 import { GateEntry, generateId, generateGatePassId, UNITS, DELIVERY_TYPES } from '../lib/gate_system';
 import { syncLocalToFirebase } from '../lib/database_service';
 import { AuditLog } from '../lib/system_guard';
+import { isInterState } from '../lib/billing_system';
 
 interface Props {
     entries: GateEntry[];
@@ -50,7 +51,7 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
     const [deletePasscode, setDeletePasscode] = useState('');
 
     const executeDelete = () => {
-        if (deletePasscode === 'ADMIN2026') {
+        if (deletePasscode === '0001') {
             const entry = showDeleteModal!;
             onDeleteEntry(entry.id);
             if (onLog) {
@@ -74,6 +75,8 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
         setShowDeleteModal(entry);
     };
     
+    const getGrossTotal = (entry: GateEntry) => Math.round((entry.amount || 0) * (entry.billType !== 'WITHOUT_GST' ? 1.18 : 1));
+
     // Summary Stats
     const stats = {
         totalInwardToday: entries.filter(e => e.type === 'INWARD').length,
@@ -81,24 +84,23 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
         inwardValue: entries.filter(e => e.type === 'INWARD').reduce((acc, curr) => acc + (curr.amount || 0), 0),
         inwardPaid: entries.filter(e => e.type === 'INWARD').reduce((acc, curr) => acc + (curr.paidAmount || 0), 0),
         inwardPending: entries.filter(e => e.type === 'INWARD').reduce((acc, curr) => {
-            const totalGross = curr.billType !== 'WITHOUT_GST' ? (curr.amount || 0) * 1.18 : (curr.amount || 0);
+            const totalGross = getGrossTotal(curr);
             return acc + (curr.remainingAmount !== undefined ? curr.remainingAmount : (curr.paymentStatus === 'PAID' ? 0 : totalGross - (curr.paidAmount || 0)));
         }, 0),
         
         outwardValue: entries.filter(e => e.type === 'OUTWARD').reduce((acc, curr) => acc + (curr.amount || 0), 0),
         outwardPaid: entries.filter(e => e.type === 'OUTWARD').reduce((acc, curr) => acc + (curr.paidAmount || 0), 0),
         outwardPending: entries.filter(e => e.type === 'OUTWARD').reduce((acc, curr) => {
-            const totalGross = curr.billType !== 'WITHOUT_GST' ? (curr.amount || 0) * 1.18 : (curr.amount || 0);
+            const totalGross = getGrossTotal(curr);
             return acc + (curr.remainingAmount !== undefined ? curr.remainingAmount : (curr.paymentStatus === 'PAID' ? 0 : totalGross - (curr.paidAmount || 0)));
         }, 0),
         
         totalPaid: entries.reduce((acc, curr) => {
-            // Smart Fallback: If paidAmount is missing but status is PAID, use amount (assuming inclusive in this context for total)
-            const paid = curr.paidAmount !== undefined ? curr.paidAmount : (curr.paymentStatus === 'PAID' ? (curr.billType !== 'WITHOUT_GST' ? (curr.amount || 0) * 1.18 : (curr.amount || 0)) : 0);
+            const paid = curr.paidAmount !== undefined ? curr.paidAmount : (curr.paymentStatus === 'PAID' ? getGrossTotal(curr) : 0);
             return acc + (paid || 0);
         }, 0),
         totalPending: entries.reduce((acc, curr) => {
-            const totalGross = curr.billType !== 'WITHOUT_GST' ? (curr.amount || 0) * 1.18 : (curr.amount || 0);
+            const totalGross = getGrossTotal(curr);
             const pending = curr.remainingAmount !== undefined ? curr.remainingAmount : (curr.paymentStatus === 'PAID' ? 0 : totalGross - (curr.paidAmount || 0));
             return acc + (pending || 0);
         }, 0),
@@ -121,9 +123,12 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
 
         const hasGST = entry.billType !== 'WITHOUT_GST';
         const totalTaxable = entry.amount || 0;
-        const cgst = hasGST ? totalTaxable * 0.09 : 0;
-        const sgst = hasGST ? totalTaxable * 0.09 : 0;
-        const grandTotal = totalTaxable + cgst + sgst;
+        const isInter = isInterState(entry.fromLocation, entry.toLocation);
+        const igst = hasGST && isInter ? totalTaxable * 0.18 : 0;
+        const cgst = hasGST && !isInter ? totalTaxable * 0.09 : 0;
+        const sgst = hasGST && !isInter ? totalTaxable * 0.09 : 0;
+        const exactTotal = totalTaxable + igst + cgst + sgst;
+        const grandTotal = Math.round(exactTotal);
         const balanceDue = entry.remainingAmount !== undefined ? entry.remainingAmount : (grandTotal - (entry.paidAmount || 0));
 
         const text = encodeURIComponent(
@@ -137,8 +142,10 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
             `*Invoice:* ${entry.invoiceNumber || 'N/A'}\n` +
             itemsDetail +
             `*TAXABLE AMOUNT: ₹${totalTaxable.toLocaleString()}*\n` +
-            (hasGST ? `*CGST (9%): ₹${cgst.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
-            `*SGST (9%): ₹${sgst.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` : '') +
+            (hasGST ? (isInter 
+                ? `*IGST (18%): ₹${igst.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n`
+                : `*CGST (9%): ₹${cgst.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
+                  `*SGST (9%): ₹${sgst.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n`) : '') +
             `*GRAND TOTAL: ₹${grandTotal.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
             `*PAID AMOUNT: ₹${(entry.paidAmount || 0).toLocaleString()} (${entry.paymentMode || 'N/A'})*\n` +
             `*BALANCE DUE: ₹${balanceDue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
@@ -262,11 +269,11 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                     </div>
                     <div className="hidden md:block h-8 w-px bg-slate-100"></div>
                     <div className="flex flex-wrap items-center gap-2 md:gap-3">
-                        <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all cursor-pointer ${view === 'DASHBOARD' ? 'bg-emerald-500 border-emerald-400 text-slate-900' : 'bg-white border-slate-200 text-slate-400'}`} onClick={() => setView('DASHBOARD')}>Dashboard</div>
-                        <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all cursor-pointer ${view === 'INWARD_LIST' ? 'bg-emerald-500 border-emerald-400 text-slate-900 shadow-lg shadow-emerald-500/10' : 'bg-white border-slate-200 text-slate-400'}`} onClick={() => setView('INWARD_LIST')}>
+                        <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all cursor-pointer ${view === 'DASHBOARD' ? 'bg-[#0e4368] border-[#0e4368] text-white shadow-lg shadow-slate-900/10' : 'bg-white border-slate-200 text-slate-400'}`} onClick={() => setView('DASHBOARD')}>Dashboard</div>
+                        <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all cursor-pointer ${view === 'INWARD_LIST' ? 'bg-[#0e4368] border-[#0e4368] text-white shadow-lg shadow-slate-900/10' : 'bg-white border-slate-200 text-slate-400'}`} onClick={() => setView('INWARD_LIST')}>
                             Inward Register <span className="ml-1 opacity-60">({stats.totalInwardToday})</span>
                         </div>
-                        <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all cursor-pointer ${view === 'OUTWARD_LIST' ? 'bg-emerald-500 border-emerald-400 text-slate-900 shadow-lg shadow-emerald-500/10' : 'bg-white border-slate-200 text-slate-400'}`} onClick={() => setView('OUTWARD_LIST')}>
+                        <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all cursor-pointer ${view === 'OUTWARD_LIST' ? 'bg-[#0e4368] border-[#0e4368] text-white shadow-lg shadow-slate-900/10' : 'bg-white border-slate-200 text-slate-400'}`} onClick={() => setView('OUTWARD_LIST')}>
                             Outward Register <span className="ml-1 opacity-60">({stats.totalOutwardToday})</span>
                         </div>
                     </div>
@@ -324,6 +331,7 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                             setEditingEntry(null);
                         }}
                         onLog={onLog}
+                        entries={entries}
                     />
                 ) : (
                     <>
@@ -459,7 +467,9 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                                             <input 
                                                 type="text"
-                                                placeholder="Search by ID, Material or Party..."
+                                                autoComplete="off"
+                                                name="gate-register-search"
+                                                placeholder="Search by ID, Material, Party or Person..."
                                                 className="w-full bg-slate-50 border border-slate-100 rounded-xl py-3 pl-12 pr-4 text-sm font-bold outline-none focus:border-emerald-500 transition-all"
                                                 value={searchQuery}
                                                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -473,7 +483,10 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                                                 (view === 'INWARD_LIST' ? e.type === 'INWARD' : e.type === 'OUTWARD') &&
                                                 (e.materialName.toLowerCase().includes(searchQuery.toLowerCase()) || 
                                                 e.partyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                                e.id.toLowerCase().includes(searchQuery.toLowerCase()))
+                                                e.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                                (e.employeeName && e.employeeName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                                                (e.supervisorName && e.supervisorName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                                                (e.vehicleNumber && e.vehicleNumber.toLowerCase().includes(searchQuery.toLowerCase())))
                                             )}
                                             onEdit={setEditingEntry}
                                             onDelete={handleDelete}
@@ -520,6 +533,7 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest text-left">Enter Deletion Protocol Key</label>
                                     <input 
                                         type="password" 
+                                        autoComplete="new-password"
                                         value={deletePasscode}
                                         onChange={(e) => setDeletePasscode(e.target.value)}
                                         className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-4 px-6 text-xl font-black text-slate-900 outline-none focus:border-red-500 transition-all text-center tracking-[0.5em]"
@@ -641,17 +655,25 @@ const EntryTable = ({ entries, onEdit, onDelete, onPrint, onInvoice, onShare }: 
                                 }`}>
                                     {entry.paymentStatus || 'UNPAID'}
                                 </span>
-                                <p className="text-[10px] font-black text-slate-900 mt-1">
-                                    {entry.type === 'INWARD' ? 'Inv (Gross): ' : 'Dlv (Gross): '} ₹{((entry.amount || 0) * (entry.billType !== 'WITHOUT_GST' ? 1.18 : 1)).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
-                                </p>
-                                <div className="flex flex-col">
-                                    <p className="text-[9px] font-bold text-slate-600">
-                                        {entry.type === 'INWARD' ? 'Paid: ' : 'Recd: '} ₹{(entry.paidAmount || 0).toLocaleString()}
-                                    </p>
-                                    <p className="text-[9px] font-bold text-slate-400">
-                                        {entry.type === 'INWARD' ? 'Rem: ' : 'Bal: '} ₹{((entry.remainingAmount || (((entry.amount || 0) * (entry.billType !== 'WITHOUT_GST' ? 1.18 : 1)) - (entry.paidAmount || 0)))).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
-                                    </p>
-                                </div>
+                                {(() => {
+                                    const roundedTotal = Math.round((entry.amount || 0) * (entry.billType !== 'WITHOUT_GST' ? 1.18 : 1));
+                                    const remaining = entry.remainingAmount ?? (roundedTotal - (entry.paidAmount || 0));
+                                    return (
+                                        <>
+                                            <p className="text-[10px] font-black text-slate-900 mt-1">
+                                                {entry.type === 'INWARD' ? 'Inv (Gross): ' : 'Dlv (Gross): '} ₹{roundedTotal.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                            </p>
+                                            <div className="flex flex-col">
+                                                <p className="text-[9px] font-bold text-slate-600">
+                                                    {entry.type === 'INWARD' ? 'Paid: ' : 'Recd: '} ₹{(entry.paidAmount || 0).toLocaleString()}
+                                                </p>
+                                                <p className="text-[9px] font-bold text-slate-400">
+                                                    {entry.type === 'INWARD' ? 'Rem: ' : 'Bal: '} ₹{remaining.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                                </p>
+                                            </div>
+                                        </>
+                                    );
+                                })()}
                             </div>
                         </td>
                         <td className="py-6 px-4 text-right">

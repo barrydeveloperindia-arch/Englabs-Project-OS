@@ -55,7 +55,7 @@ const BillingDashboard: React.FC = () => {
     };
 
     return (
-        <div className="flex-1 flex flex-col min-w-0 bg-[#F8FAFC]">
+        <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-[#F8FAFC]">
             {/* HEADER */}
             <header className="h-24 bg-white border-b border-slate-100 flex items-center justify-between px-10 shrink-0">
                 <div>

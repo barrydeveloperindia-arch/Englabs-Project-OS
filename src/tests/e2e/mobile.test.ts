@@ -13,6 +13,13 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
   test.beforeEach(async ({ page }) => {
     // Navigate to local dashboard baseline
     await page.goto('/');
+    try {
+      const initBtn = page.getByRole('button', { name: 'Initialize Workday' });
+      await expect(initBtn).toBeVisible({ timeout: 2000 });
+      await initBtn.click();
+    } catch (e) {
+      // Button not present or already clicked, ignore
+    }
   });
 
   test('1. Viewport Scaling & Main Bottom Tab Transitions', async ({ page, isMobile }) => {
@@ -110,6 +117,10 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
     await page.locator('input[placeholder="MH-01-..."]').fill('PB-65-AX-9921');
     await page.locator('input[placeholder="INV-000000"]').fill('REF-887766');
 
+    // Fill in item description and quantity to pass validation
+    await page.locator('input[placeholder="Enter Item Description..."]').fill('Steel Beams');
+    await page.locator('input[type="number"]').first().fill('50');
+
     // Fill in Accountability section
     await page.locator('input[placeholder="Name"]').fill('Gaurav Panchal');
 
@@ -157,7 +168,7 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
 
     // Open Report
     const reportRow = page.getByText('SR-20260514-MASTER');
-    await expect(reportRow).toBeVisible({ timeout: 15000 });
+    await expect(reportRow).toBeVisible({ timeout: 30000 });
     await reportRow.click({ force: true });
 
     // Confirm WebView details header

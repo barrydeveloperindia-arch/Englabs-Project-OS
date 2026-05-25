@@ -34,6 +34,7 @@ import FoodRegister from './components/FoodRegister';
 import SystemGuardDashboard from './components/SystemGuardDashboard';
 import BillingDashboard from './components/BillingDashboard';
 import DigitalEvidence from './components/DigitalEvidence';
+import GateDisplayScreen from './components/GateDisplayScreen';
 import InventoryManager from './components/InventoryManager';
 import Sky5Terminal from './components/Sky5Terminal';
 import StoreStockReport from './components/StoreStockReport';
@@ -129,19 +130,19 @@ interface SidebarButtonProps {
     color?: 'emerald' | 'amber';
 }
 
-type View = 'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'BILLING' | 'EVIDENCE' | 'INVENTORY' | 'SKY5_TERMINAL' | 'STOCK_REPORT' | 'PORTER_SERVICE';
+type View = 'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'BILLING' | 'EVIDENCE' | 'INVENTORY' | 'SKY5_TERMINAL' | 'STOCK_REPORT' | 'PORTER_SERVICE' | 'GATE_DISPLAY';
 
 const SidebarButton: React.FC<SidebarButtonProps> = ({ active, onClick, icon, label, color = 'emerald' }) => {
     const activeClass = color === 'emerald' 
-        ? 'bg-emerald-500 text-slate-900 shadow-[0_0_25px_rgba(16,185,129,0.35)] scale-[1.02]' 
-        : 'bg-amber-500 text-slate-900 shadow-[0_0_25px_rgba(245,158,11,0.35)] scale-[1.02]';
+        ? 'bg-white/10 text-white border border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.25)] scale-[1.01] relative before:content-[""] before:absolute before:left-0 before:top-3 before:bottom-3 before:w-[3px] before:bg-emerald-400 before:rounded-r-full' 
+        : 'bg-white/10 text-white border border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.25)] scale-[1.01] relative before:content-[""] before:absolute before:left-0 before:top-3 before:bottom-3 before:w-[3px] before:bg-amber-400 before:rounded-r-full';
         
     return (
         <button 
             type="button"
             onClick={onClick}
             data-testid={`sidebar-btn-${label.toLowerCase().replace(/\s+/g, '-')}`}
-            className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 w-full text-left ${active ? activeClass : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+            className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 w-full text-left ${active ? activeClass : 'text-slate-500 hover:text-white hover:bg-white/5 border border-transparent'}`}
         >
             {React.cloneElement(icon as React.ReactElement, { className: 'w-4.5 h-4.5' })}
             {label}
@@ -194,7 +195,13 @@ const App: React.FC = () => {
             local.forEach((e: any) => {
                 const existing = entryMap.get(e.id);
                 if (existing) {
-                    entryMap.set(e.id, { ...existing, ...e });
+                    if (existing.isLocked) {
+                        if (e.version > existing.version) {
+                            entryMap.set(e.id, { ...existing, ...e });
+                        }
+                    } else {
+                        entryMap.set(e.id, { ...existing, ...e });
+                    }
                 } else {
                     entryMap.set(e.id, e);
                 }
@@ -297,7 +304,13 @@ const App: React.FC = () => {
                             
                             // If local has been updated or is same age, merge local fields
                             if (localTime >= cloudTime) {
-                                entryMap.set(e.id, { ...existing, ...e });
+                                if (existing.isLocked) {
+                                    if (e.version > existing.version) {
+                                        entryMap.set(e.id, { ...existing, ...e });
+                                    }
+                                } else {
+                                    entryMap.set(e.id, { ...existing, ...e });
+                                }
                             }
                         }
                     });
@@ -405,7 +418,7 @@ const App: React.FC = () => {
                     <p className="text-[9px] font-black text-emerald-500/80 tracking-[0.25em] uppercase pl-1">Enterprise Operational OS</p>
                 </div>
 
-                <div className="px-6 mb-8 flex flex-col gap-2.5">
+                <div className="px-6 mb-8 flex flex-col gap-2.5 overflow-y-auto max-h-[55vh] dark-scrollbar shrink-0">
                     <SidebarButton 
                         active={currentView === 'PROJECTS'} 
                         onClick={() => setCurrentView('PROJECTS')} 
@@ -417,6 +430,13 @@ const App: React.FC = () => {
                         onClick={() => setCurrentView('GATE_REGISTER')} 
                         icon={<Shield className="w-4.5 h-4.5" />} 
                         label="LOGISTICS COMMAND" 
+                    />
+                    <SidebarButton 
+                        active={currentView === 'GATE_DISPLAY'} 
+                        onClick={() => setCurrentView('GATE_DISPLAY')} 
+                        icon={<Activity className="w-4.5 h-4.5" />} 
+                        label="GATE DISPLAY HUD" 
+                        color="emerald"
                     />
                     <SidebarButton 
                         active={currentView === 'FOOD_REGISTER'} 
@@ -478,15 +498,15 @@ const App: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="flex-grow overflow-y-auto px-4 space-y-2 pb-8 custom-scrollbar">
+                <div className="flex-grow overflow-y-auto px-4 space-y-2 pb-8 dark-scrollbar">
                     {filteredProjects.map(project => (
                         <button 
                             key={project.projectId}
                             onClick={() => setSelectedProject(project)}
                             className={`w-full text-left px-4 py-4 rounded-2xl transition-all border ${
                                 selectedProject?.projectId === project.projectId 
-                                ? 'bg-emerald-500 border-emerald-400 text-slate-900 shadow-lg shadow-emerald-500/20' 
-                                : 'border-transparent text-slate-400 hover:bg-slate-800 hover:text-white'
+                                ? 'bg-white/10 border-white/20 text-white shadow-lg shadow-black/25 relative before:content-[""] before:absolute before:left-0 before:top-4 before:bottom-4 before:w-[3px] before:bg-emerald-400 before:rounded-r-full' 
+                                : 'border-transparent text-slate-400 hover:bg-slate-800/50 hover:text-white'
                             }`}
                         >
                             <div className="flex justify-between items-center mb-1">
@@ -504,7 +524,7 @@ const App: React.FC = () => {
                     <button 
                         onClick={() => setIsModalOpen(true)}
                         data-testid="btn-new-mission"
-                        className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-emerald-500/10"
+                        className="w-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-emerald-950/20"
                     >
                         <Plus className="w-5 h-5" /> NEW MISSION
                     </button>
@@ -667,6 +687,8 @@ const App: React.FC = () => {
                     onLog={(log) => setAuditLogs(prev => [log, ...prev])} 
                     onFullSync={handleFullSync}
                 />
+            ) : currentView === 'GATE_DISPLAY' ? (
+                <GateDisplayScreen entries={gateEntries} />
             ) : currentView === 'FOOD_REGISTER' ? (
                 <FoodRegister onLog={(log) => setAuditLogs(prev => [log, ...prev])} />
             ) : currentView === 'BILLING' ? (
@@ -739,7 +761,7 @@ const App: React.FC = () => {
             {isMobileMenuOpen && (
                 <div className="fixed inset-0 z-[100] md:hidden flex items-end animate-in fade-in duration-300">
                     <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
-                    <div className="relative w-full bg-[#0e4368] rounded-t-[2.5rem] border-t border-slate-800 p-8 space-y-6 shadow-2xl animate-in slide-in-from-bottom duration-300">
+                    <div className="relative w-full max-h-[85vh] overflow-y-auto dark-scrollbar bg-[#0e4368] rounded-t-[2.5rem] border-t border-slate-800 p-8 space-y-6 shadow-2xl animate-in slide-in-from-bottom duration-300">
                         <div className="flex justify-between items-center pb-4 border-b border-slate-800">
                             <div>
                                 <h3 className="text-sm font-black text-white uppercase tracking-widest">More Operations</h3>
@@ -774,6 +796,13 @@ const App: React.FC = () => {
                                 label="Sky-5 Kitchen" 
                                 active={currentView === 'SKY5_TERMINAL'}
                                 color="amber"
+                            />
+                            <MobileGridButton 
+                                onClick={() => { setCurrentView('GATE_DISPLAY'); setIsMobileMenuOpen(false); }} 
+                                icon={<Activity className="w-6 h-6" />} 
+                                label="Gate HUD" 
+                                active={currentView === 'GATE_DISPLAY'}
+                                color="emerald"
                             />
                         </div>
                     </div>

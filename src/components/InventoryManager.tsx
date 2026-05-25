@@ -93,7 +93,7 @@ const InventoryManager: React.FC = () => {
     const lowStock = stock.filter(s => s.currentStock <= s.minThreshold);
 
     return (
-        <div className="flex-1 flex flex-col min-w-0 bg-[#F8FAFC]">
+        <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-[#F8FAFC]">
             <header className="h-auto md:h-20 bg-white border-b border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between px-4 md:px-10 py-4 md:py-0 shrink-0 gap-4 md:gap-0">
                 <div className="flex items-center gap-6">
                     <div className="flex flex-col">
@@ -323,7 +323,7 @@ const InventoryManager: React.FC = () => {
 const NavButton = ({ active, onClick, icon, label }: any) => (
     <button 
         onClick={onClick}
-        className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all duration-300 ${active ? 'bg-emerald-500 text-slate-900 shadow-lg shadow-emerald-500/20' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'}`}
+        className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all duration-300 ${active ? 'bg-[#0e4368] text-white shadow-lg shadow-[#0e4368]/20' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'}`}
     >
         {React.cloneElement(icon, { className: "w-4 h-4" })} {label}
     </button>

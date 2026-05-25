@@ -10,7 +10,7 @@ import {
     MapPin
 } from 'lucide-react';
 import { GateEntry } from '../lib/gate_system';
-import { COMPANY_DETAILS } from '../lib/billing_system';
+import { COMPANY_DETAILS, isInterState } from '../lib/billing_system';
 import signature from '../assets/englabs_signature.png';
 import logo from '../assets/englabs_logo.png';
 
@@ -20,6 +20,17 @@ interface Props {
 }
 
 const GateInvoiceSlip: React.FC<Props> = ({ entry, onClose }) => {
+    const isInter = isInterState(entry.fromLocation, entry.toLocation);
+    const hasGST = entry.billType !== 'WITHOUT_GST';
+    const taxableSubtotal = entry.amount || 0;
+    
+    const igst = hasGST && isInter ? taxableSubtotal * 0.18 : 0;
+    const cgst = hasGST && !isInter ? taxableSubtotal * 0.09 : 0;
+    const sgst = hasGST && !isInter ? taxableSubtotal * 0.09 : 0;
+    
+    const exactTotal = taxableSubtotal + igst + cgst + sgst;
+    const roundedTotal = Math.round(exactTotal);
+    const roundingDiff = roundedTotal - exactTotal;
     
     // URGENT: Fix for PDF Generation Shifting & Leakage
     // We use a Portal to move the invoice outside the Dashboard DOM tree
@@ -132,10 +143,10 @@ const GateInvoiceSlip: React.FC<Props> = ({ entry, onClose }) => {
                             <TrendingUp className="absolute -right-4 -bottom-4 w-32 h-32 opacity-10" />
                             <p className="text-[9px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-2">Grand Total Amount</p>
                             <p className="text-5xl font-black tracking-tighter">
-                                ₹{((entry.amount || 0) * (entry.billType !== 'WITHOUT_GST' ? 1.18 : 1)).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                ₹{roundedTotal.toLocaleString('en-IN')}
                             </p>
                             <p className="text-[9px] font-bold text-slate-400 mt-4 uppercase tracking-widest">
-                                {entry.billType !== 'WITHOUT_GST' ? 'Inclusive of all logistics taxes (GST @18%)' : 'Non-GST Commercial Invoice'}
+                                {hasGST ? `Inclusive of all logistics taxes (${isInter ? 'IGST' : 'GST'} @18%)` : 'Non-GST Commercial Invoice'}
                             </p>
                         </div>
                     </div>
@@ -179,24 +190,39 @@ const GateInvoiceSlip: React.FC<Props> = ({ entry, onClose }) => {
                             <tfoot className="border-t-2 border-slate-900">
                                 <tr>
                                     <td colSpan={5} className="py-4 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">Taxable Sub-Total</td>
-                                    <td className="py-4 text-right text-sm font-black text-slate-900">₹{(entry.amount || 0).toLocaleString('en-IN')}</td>
+                                    <td className="py-4 text-right text-sm font-black text-slate-900">₹{taxableSubtotal.toLocaleString('en-IN')}</td>
                                 </tr>
-                                {entry.billType !== 'WITHOUT_GST' && (
-                                    <>
+                                {hasGST && (
+                                    isInter ? (
                                         <tr>
-                                            <td colSpan={5} className="py-2 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">CGST @9%</td>
-                                            <td className="py-2 text-right text-sm font-black text-slate-900">₹{((entry.amount || 0) * 0.09).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                            <td colSpan={5} className="py-2 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">IGST @18%</td>
+                                            <td className="py-2 text-right text-sm font-black text-slate-900">₹{igst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                                         </tr>
-                                        <tr>
-                                            <td colSpan={5} className="py-2 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">SGST @9%</td>
-                                            <td className="py-2 text-right text-sm font-black text-slate-900">₹{((entry.amount || 0) * 0.09).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                                        </tr>
-                                    </>
+                                    ) : (
+                                        <>
+                                            <tr>
+                                                <td colSpan={5} className="py-2 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">CGST @9%</td>
+                                                <td className="py-2 text-right text-sm font-black text-slate-900">₹{cgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colSpan={5} className="py-2 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">SGST @9%</td>
+                                                <td className="py-2 text-right text-sm font-black text-slate-900">₹{sgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                            </tr>
+                                        </>
+                                    )
+                                )}
+                                {Math.abs(roundingDiff) > 0.001 && (
+                                    <tr>
+                                        <td colSpan={5} className="py-2 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">Rounded Off</td>
+                                        <td className="py-2 text-right text-sm font-black text-slate-900">
+                                            {roundingDiff > 0 ? '+' : ''}{roundingDiff.toFixed(2)}
+                                        </td>
+                                    </tr>
                                 )}
                                 <tr className="bg-slate-50 border-t border-slate-100">
-                                    <td colSpan={5} className="py-4 text-right text-[10px] font-black text-slate-900 uppercase tracking-widest">Grand Total {entry.billType !== 'WITHOUT_GST' ? '(Inclusive)' : ''}</td>
+                                    <td colSpan={5} className="py-4 text-right text-[10px] font-black text-slate-900 uppercase tracking-widest">Grand Total {hasGST ? '(Inclusive)' : ''}</td>
                                     <td className="py-4 text-right text-lg font-black text-emerald-600">
-                                        ₹{((entry.amount || 0) * (entry.billType !== 'WITHOUT_GST' ? 1.18 : 1)).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                        ₹{roundedTotal.toLocaleString('en-IN')}
                                     </td>
                                 </tr>
                                 <tr className="border-t border-slate-100">
@@ -212,7 +238,7 @@ const GateInvoiceSlip: React.FC<Props> = ({ entry, onClose }) => {
                                         {entry.type === 'INWARD' ? 'Balance Remaining' : 'Balance Due'}
                                     </td>
                                     <td className="py-4 text-right text-xl font-black text-rose-600">
-                                        ₹{((entry.remainingAmount || (((entry.amount || 0) * (entry.billType !== 'WITHOUT_GST' ? 1.18 : 1)) - (entry.paidAmount || 0)))).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                        ₹{((entry.remainingAmount !== undefined ? entry.remainingAmount : (roundedTotal - (entry.paidAmount || 0)))).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                                     </td>
                                 </tr>
                             </tfoot>

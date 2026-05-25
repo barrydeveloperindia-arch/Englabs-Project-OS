@@ -105,7 +105,7 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
     }, [orders]);
 
     const confirmDelete = () => {
-        if (adminPin === "2026") {
+        if (adminPin === "0001") {
             const updated = orders.filter(o => o.entryId !== deletingId);
             setOrders(updated);
             localStorage.setItem('englabs_food_ledger', JSON.stringify(updated));
@@ -158,7 +158,7 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
     const officialExpense = orders.filter(o => o.purpose !== 'Personal').reduce((sum, o) => sum + o.amount, 0);
 
     return (
-        <div className="flex-1 flex flex-col min-w-0 bg-[#F8FAFC] dark:bg-slate-950 transition-colors duration-500 overflow-hidden">
+        <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-[#F8FAFC] dark:bg-slate-950 transition-colors duration-500 overflow-hidden">
             <header className="h-20 bg-white dark:bg-[#092a42]/60 dark:backdrop-blur-xl border-b border-slate-100 dark:border-white/5 flex items-center justify-between px-10 shrink-0 transition-all duration-500">
                 <div className="flex items-center gap-6">
                     <div className="flex flex-col">
@@ -290,7 +290,9 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
                                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
                                         <input 
                                             type="text" 
-                                            placeholder="Search Orders..."
+                                            autoComplete="off"
+                                            name="food-register-search"
+                                            placeholder="Search Orders by ID, Employee, Vendor or Item..."
                                             className="w-full bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-xl py-2.5 pl-11 pr-4 text-sm focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500/30 transition-all dark:text-white"
                                             value={searchQuery}
                                             onChange={(e) => setSearchQuery(e.target.value)}
@@ -321,7 +323,13 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100 dark:divide-white/5">
-                                        {orders.map((order) => (
+                                        {orders.filter(order => 
+                                            order.entryId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                            order.employeeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                            order.vendorName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                            order.items.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                            order.platform.toLowerCase().includes(searchQuery.toLowerCase())
+                                        ).map((order) => (
                                             <tr key={order.entryId} className="hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors group">
                                                 <td className="px-8 py-6">
                                                     <div className="flex items-center gap-3">
@@ -451,6 +459,7 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
                             <input 
                                 autoFocus
                                 type="password" 
+                                autoComplete="new-password"
                                 placeholder="ENTER ADMIN PIN"
                                 className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-4 text-center text-lg font-black tracking-[0.5em] focus:bg-white focus:ring-2 focus:ring-rose-500/20 outline-none transition-all"
                                 value={adminPin}

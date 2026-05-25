@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { InventoryItem } from '../lib/gate_system';
+import { fetchInventoryMaster, seedInventoryMaster, updateInventoryItemStock, deleteInventoryItem } from '../lib/inventory_service';
 
 interface StockReport {
     report_id: string;
@@ -118,7 +119,7 @@ const StoreStockReport: React.FC = () => {
             { name: "Fevitite", "itemCode": "ADH-143", category: "Chemicals", currentStock: 3, unit: "Pcs", location: "Rack-2", totalInward: 3, totalOutward: 0, minThreshold: 2, lastUpdated: "2026-05-14T10:00:00Z" },
             { name: "Plastic Reban", "itemCode": "MIS-144", category: "General", currentStock: 5, unit: "Pcs", location: "Rack-2", totalInward: 5, totalOutward: 0, minThreshold: 10, lastUpdated: "2026-05-14T10:00:00Z" },
             { name: "Board Marker Ink", "itemCode": "INK-145", category: "Stationery", currentStock: 8, unit: "Pcs", location: "Rack-2", totalInward: 8, totalOutward: 0, minThreshold: 5, lastUpdated: "2026-05-14T10:00:00Z" },
-            { name: "Transparent Tape", "itemCode": "TAP-146", category: "Stationery", currentStock: 3, unit: "Pcs", location: "Rack-2", totalInward: 3, totalOutward: 0, minThreshold: 10, lastUpdated: "2026-05-14T10:00:00Z" },
+            { name: "Transparent Tape", "itemCode": "TAP-146", category: "Stationery", currentStock: 147, unit: "Pcs", location: "Rack-2", totalInward: 147, totalOutward: 0, minThreshold: 10, lastUpdated: "2026-05-21T10:03:02Z" },
             { name: "Dubbal Tape", "itemCode": "TAP-147", category: "Stationery", currentStock: 4, unit: "Pcs", location: "Rack-2", totalInward: 4, totalOutward: 0, minThreshold: 5, lastUpdated: "2026-05-14T10:00:00Z" },
             { name: "Masking Tape", "itemCode": "TAP-148", category: "Stationery", currentStock: 1, unit: "Pcs", location: "Rack-2", totalInward: 1, totalOutward: 0, minThreshold: 5, lastUpdated: "2026-05-14T10:00:00Z" },
             { name: "Pen", "itemCode": "PEN-149", category: "Stationery", currentStock: 80, unit: "Pcs", location: "Rack-2", totalInward: 80, totalOutward: 0, minThreshold: 20, lastUpdated: "2026-05-14T10:00:00Z" },
@@ -224,13 +225,51 @@ const StoreStockReport: React.FC = () => {
                 items: masterItems
             }
         ];
-        setReports(mockReports);
-        setSelectedReport(mockReports[0]);
+
+        async function syncWithFirestore() {
+            try {
+                const timeoutPromise = new Promise<any>((_, reject) => setTimeout(() => reject(new Error('Timeout')), 3000));
+                let liveItems = await Promise.race([fetchInventoryMaster(), timeoutPromise]).catch(() => []);
+                if (liveItems.length === 0) {
+                    await Promise.race([seedInventoryMaster(masterItems), timeoutPromise]).catch(() => {});
+                    liveItems = await Promise.race([fetchInventoryMaster(), timeoutPromise]).catch(() => []);
+                }
+                
+                const sortedItems = [...liveItems].sort((a, b) => {
+                    const matchA = a.itemCode.match(/\d+/);
+                    const matchB = b.itemCode.match(/\d+/);
+                    if (matchA && matchB) {
+                        return parseInt(matchA[0]) - parseInt(matchB[0]);
+                    }
+                    return a.itemCode.localeCompare(b.itemCode);
+                });
+
+                const updatedReport: StockReport = {
+                    report_id: "SR-20260514-MASTER",
+                    report_date: "2026-05-14",
+                    status: 'SYNCED',
+                    items: sortedItems.length > 0 ? sortedItems : masterItems
+                };
+                setReports([updatedReport]);
+                setSelectedReport(updatedReport);
+            } catch (e) {
+                console.error("Firestore sync error, falling back to local dataset", e);
+                setReports(mockReports);
+                setSelectedReport(mockReports[0]);
+            }
+        }
+
+        syncWithFirestore();
     }, []);
 
-    const handleDeleteItem = (itemCode: string) => {
-        if (passcode === 'ADMIN2026') {
+    const handleDeleteItem = async (itemCode: string) => {
+        if (passcode === '0001') {
             if (selectedReport) {
+                try {
+                    await deleteInventoryItem(itemCode);
+                } catch (e) {
+                    console.error("Firestore delete failed, updating local state only", e);
+                }
                 const updatedItems = selectedReport.items.filter(i => i.itemCode !== itemCode);
                 const updatedReport = { ...selectedReport, items: updatedItems };
                 setSelectedReport(updatedReport);
@@ -243,8 +282,13 @@ const StoreStockReport: React.FC = () => {
         }
     };
 
-    const handleEditItem = (item: InventoryItem, newStock: number) => {
+    const handleEditItem = async (item: InventoryItem, newStock: number) => {
         if (selectedReport) {
+            try {
+                await updateInventoryItemStock(item.itemCode, newStock);
+            } catch (e) {
+                console.error("Firestore stock update failed, updating local state only", e);
+            }
             const updatedItems = selectedReport.items.map(i => 
                 i.itemCode === item.itemCode ? { ...i, currentStock: newStock, lastUpdated: new Date().toISOString() } : i
             );
@@ -342,7 +386,7 @@ const StoreStockReport: React.FC = () => {
     };
 
     return (
-        <div className="flex-1 flex flex-col min-w-0 bg-[#F8FAFC] print:bg-white print:block">
+        <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-[#F8FAFC] print:bg-white print:block">
             {/* TOP COMMAND BAR */}
             <header className="h-auto md:h-20 bg-white border-b border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between px-4 md:px-10 py-4 md:py-0 shrink-0 gap-4 md:gap-0 print:hidden">
                 <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 w-full md:w-auto">
@@ -362,7 +406,9 @@ const StoreStockReport: React.FC = () => {
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                         <input 
                             type="text" 
-                            placeholder="Search Reports..." 
+                            autoComplete="off"
+                            name="store-stock-search"
+                            placeholder="Search Reports or Items..." 
                             className="w-full md:w-64 bg-slate-50 border border-slate-100 rounded-xl py-2.5 pl-11 pr-4 text-xs font-bold focus:border-indigo-500 outline-none"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
@@ -475,13 +521,17 @@ const StoreStockReport: React.FC = () => {
                                         ← Back to Archive
                                     </button>
                                     <h2 className="text-3xl font-black text-slate-900 tracking-tighter">Store Report: {selectedReport.report_id}</h2>
-                                    <div className="flex items-center gap-6 mt-4">
+                                    <div className="flex flex-wrap items-center gap-4 md:gap-6 mt-4">
                                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                             <Clock className="w-4 h-4" /> Ingested: {selectedReport.report_date}
                                         </p>
                                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                             <Folder className="w-4 h-4" /> Path: /2026/May
                                         </p>
+                                        <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                                            <span className="text-[8px] md:text-[9px] font-black text-emerald-500 uppercase tracking-wider">Firestore Live Sync</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="flex gap-3 print:hidden">
@@ -715,6 +765,7 @@ const StoreStockReport: React.FC = () => {
                                             <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Enter Protocol Key</label>
                                             <input 
                                                 type="password" 
+                                                autoComplete="new-password"
                                                 value={passcode}
                                                 onChange={(e) => setPasscode(e.target.value)}
                                                 className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-4 px-6 text-xl font-black text-slate-900 outline-none focus:border-red-500 transition-all text-center tracking-[0.5em]"

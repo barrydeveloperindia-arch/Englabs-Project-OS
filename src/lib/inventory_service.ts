@@ -6,6 +6,17 @@ const STOCK_COLLECTION = "inventory_stock";
 const LOG_COLLECTION = "inventory_logs";
 
 export async function processInventoryUpdate(entry: GateEntry) {
+    // 🔍 MAIN STORE FILTER: Only update inventory stock when transits are entering/leaving the "MAIN STORE"
+    const isInwardToMainStore = entry.type === 'INWARD' && entry.toLocation?.toUpperCase().trim() === 'MAIN STORE';
+    const isOutwardFromMainStore = entry.type === 'OUTWARD' && entry.fromLocation?.toUpperCase().trim() === 'MAIN STORE';
+
+    if (!isInwardToMainStore && !isOutwardFromMainStore) {
+        if (import.meta.env.DEV) {
+            console.log(`Skipping inventory update for Entry ${entry.id}: Route does not target MAIN STORE`);
+        }
+        return { success: true, message: "Skipped: not MAIN STORE" };
+    }
+
     if (!entry.items || entry.items.length === 0) {
         // Fallback for singular entries (if items array is empty but quantity exists)
         return updateStock(
@@ -144,4 +155,51 @@ export async function fetchStockMovement(): Promise<StockTransaction[]> {
     const q = query(collection(db, LOG_COLLECTION), orderBy("timestamp", "desc"));
     const snap = await getDocs(q);
     return snap.docs.map(d => d.data() as StockTransaction);
+}
+
+export async function seedInventoryMaster(items: InventoryItem[]) {
+    if (!db) return;
+    for (const item of items) {
+        const itemCode = item.itemCode;
+        const docRef = doc(db, STOCK_COLLECTION, itemCode);
+        const snap = await getDoc(docRef);
+        if (!snap.exists()) {
+            await setDoc(docRef, item);
+        }
+    }
+}
+
+export async function updateInventoryItemStock(itemCode: string, currentStock: number) {
+    if (!db) return;
+    const docRef = doc(db, STOCK_COLLECTION, itemCode);
+    const snap = await getDoc(docRef);
+    if (snap.exists()) {
+        const item = snap.data() as InventoryItem;
+        const prevStock = item.currentStock;
+        item.currentStock = currentStock;
+        item.lastUpdated = new Date().toISOString();
+        await setDoc(docRef, item);
+
+        // Append a manual audit log record
+        const logRef = doc(collection(db, LOG_COLLECTION));
+        const stockTx: StockTransaction = {
+            id: logRef.id,
+            itemId: itemCode,
+            type: currentStock >= prevStock ? 'INWARD' : 'OUTWARD',
+            quantity: Math.abs(currentStock - prevStock),
+            previousStock: prevStock,
+            newStock: currentStock,
+            timestamp: new Date().toISOString(),
+            referenceId: 'MANUAL_ADJUSTMENT',
+            partyName: 'STORE_AUDITOR',
+            invoiceNumber: 'AUDIT_CORRECTION'
+        };
+        await setDoc(logRef, stockTx);
+    }
+}
+
+export async function deleteInventoryItem(itemCode: string) {
+    if (!db) return;
+    const { deleteDoc } = await import('firebase/firestore');
+    await deleteDoc(doc(db, STOCK_COLLECTION, itemCode));
 }

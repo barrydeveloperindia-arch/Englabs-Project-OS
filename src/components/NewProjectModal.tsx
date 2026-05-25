@@ -71,7 +71,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({ isOpen, onClose, onAd
                             <Target className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                             <input 
                                 required
-                                className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
+                                className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[#0e4368]/10 focus:border-[#0e4368] transition-all"
                                 placeholder="e.g. C001"
                                 value={formData.projectId}
                                 onChange={e => setFormData({...formData, projectId: e.target.value})}
@@ -83,7 +83,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({ isOpen, onClose, onAd
                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Client Identity</label>
                         <input 
                             required
-                            className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 px-6 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
+                            className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 px-6 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[#0e4368]/10 focus:border-[#0e4368] transition-all"
                             placeholder="Full Corporate Name"
                             value={formData.client}
                             onChange={e => setFormData({...formData, client: e.target.value})}
@@ -98,7 +98,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({ isOpen, onClose, onAd
                                 <input 
                                     required
                                     type="number"
-                                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
+                                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[#0e4368]/10 focus:border-[#0e4368] transition-all"
                                     placeholder="Total ₹"
                                     value={formData.value}
                                     onChange={e => setFormData({...formData, value: e.target.value})}
@@ -112,7 +112,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({ isOpen, onClose, onAd
                                 <input 
                                     required
                                     type="number"
-                                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
+                                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[#0e4368]/10 focus:border-[#0e4368] transition-all"
                                     placeholder="Limit ₹"
                                     value={formData.budget}
                                     onChange={e => setFormData({...formData, budget: e.target.value})}
@@ -123,7 +123,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({ isOpen, onClose, onAd
 
                     <button 
                         type="submit"
-                        className="w-full bg-slate-900 text-white font-black py-5 rounded-2xl hover:bg-emerald-600 hover:shadow-[0_10px_30px_rgba(16,185,129,0.3)] transition-all active:scale-[0.98] flex items-center justify-center gap-3 mt-4"
+                        className="w-full bg-slate-900 text-white font-black py-5 rounded-2xl hover:bg-[#0e4368] hover:shadow-[0_10px_30px_rgba(14,67,104,0.3)] transition-all active:scale-[0.98] flex items-center justify-center gap-3 mt-4"
                     >
                         <Calendar className="w-5 h-5" /> INITIALIZE PROJECT
                     </button>

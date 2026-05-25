@@ -56,3 +56,27 @@ export const calculateTotals = (items: LineItem[], taxRate: number = 0) => {
     const totalAmount = subtotal + taxAmount;
     return { subtotal, taxAmount, totalAmount };
 };
+
+export const isInterState = (fromLoc?: string, toLoc?: string): boolean => {
+    if (!fromLoc || !toLoc) return false;
+    const cleanFrom = fromLoc.toUpperCase();
+    const cleanTo = toLoc.toUpperCase();
+    
+    const getState = (loc: string) => {
+        if (loc.includes('CHANDIGARH')) return 'CHANDIGARH';
+        if (loc.includes('HARYANA') || loc.includes('PANCHKULA') || loc.includes('MDC')) return 'HARYANA';
+        if (loc.includes('PUNJAB') || loc.includes('MOHALI') || loc.includes('ZIRAKPUR')) return 'PUNJAB';
+        if (loc.includes('DELHI')) return 'DELHI';
+        if (loc.includes('HIMACHAL') || loc.includes('BADI') || loc.includes('SHIMLA')) return 'HIMACHAL';
+        return null;
+    };
+    
+    const stateFrom = getState(cleanFrom);
+    const stateTo = getState(cleanTo);
+    
+    if (stateFrom && stateTo && stateFrom !== stateTo) {
+        return true;
+    }
+    return false;
+};
+

@@ -171,7 +171,7 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
     };
 
     return (
-        <div className="flex-1 flex flex-col min-w-0 bg-[#F8FAFC]">
+        <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-[#F8FAFC]">
             {/* HEADER */}
             <header className="h-auto md:h-24 bg-white border-b border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between px-4 md:px-10 py-4 md:py-0 shrink-0 sticky top-0 z-40 shadow-sm gap-4 md:gap-0">
                 <div className="flex items-center gap-4 md:gap-6 w-full md:w-auto">
@@ -440,7 +440,7 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                                                         <button 
                                                             onClick={() => {
                                                                 const pass = prompt("ADMIN AUTHORIZATION REQUIRED\nEnter Passcode to Delete Trip:");
-                                                                if (pass === 'ADMIN2026') onDeleteTrip(trip.id);
+                                                                if (pass === '0001') onDeleteTrip(trip.id);
                                                             }}
                                                             className="p-2.5 bg-slate-50 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
                                                         >
@@ -496,7 +496,7 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                             <div className="flex justify-between items-start mb-16">
                                 <div>
                                     <div className="flex items-center gap-3 mb-6">
-                                        <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center text-slate-900">
+                                        <div className="w-12 h-12 bg-[#0e4368] rounded-2xl flex items-center justify-center text-white">
                                             <Truck className="w-6 h-6" />
                                         </div>
                                         <h2 className="text-3xl font-black text-slate-900 tracking-tighter italic">ENGLABS LOGISTICS</h2>
@@ -554,7 +554,7 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Final Settlement Balance</p>
                                     <p className="text-4xl font-black text-emerald-400">₹{viewingInvoice.remainingBalance.toLocaleString()}</p>
                                 </div>
-                                <button className="bg-emerald-500 text-slate-900 font-black px-8 py-4 rounded-2xl flex items-center gap-2 hover:bg-emerald-400 transition-all">
+                                <button className="bg-white text-[#0e4368] font-black px-8 py-4 rounded-2xl flex items-center gap-2 hover:bg-slate-100 transition-all">
                                     <FileText className="w-5 h-5" /> EXPORT PDF
                                 </button>
                             </div>

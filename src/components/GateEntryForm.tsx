@@ -16,11 +16,13 @@ import {
     Save,
     Trash2,
     MessageSquare,
-    CreditCard
+    CreditCard,
+    AlertCircle
 } from 'lucide-react';
 import { GateEntry, UNITS, DELIVERY_TYPES, generateId, generateGatePassId } from '../lib/gate_system';
 import { AuditLog } from '../lib/system_guard';
 import { extractInvoiceData } from '../lib/extraction_service';
+import { isInterState } from '../lib/billing_system';
 
 interface Props {
     onSave: (entry: GateEntry) => void;
@@ -29,6 +31,7 @@ interface Props {
     gpCount: number;
     initialData?: GateEntry;
     onLog?: (log: AuditLog) => void;
+    entries?: GateEntry[];
 }
 
 const DRAFT_KEY = 'englabs_gate_entry_draft';
@@ -55,12 +58,23 @@ const VENDOR_PROFILES: Record<string, any> = {
         items: [
             { id: 1, name: 'Industrial Hardware Kit', hsnCode: '7318', quantity: 5, unit: 'Nos', rate: 450, amount: 2250 }
         ]
+    },
+    'SKY-5 Hotel': {
+        vehicleNumber: 'HAND-CARRY',
+        fromLocation: 'ENGLABS OFFICE',
+        toLocation: 'SKY-5 KITCHEN',
+        driverName: 'VARUN',
+        remarks: 'DELIVERY TO SKY-5 KITCHEN',
+        items: [
+            { id: 1, name: 'Catering / Food Supply', hsnCode: '9963', quantity: 1, unit: 'Nos', rate: 0, amount: 0 }
+        ]
     }
 };
 
-const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount, initialData, onLog }) => {
+const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount, initialData, onLog, entries = [] }) => {
     const [isScanning, setIsScanning] = useState(false);
     const [type, setType] = useState<'INWARD' | 'OUTWARD'>(initialData?.type || 'INWARD');
+    const [showVendorDropdown, setShowVendorDropdown] = useState(false);
     const [formData, setFormData] = useState(() => {
         const defaults = {
             items: [{ id: 1, name: '', hsnCode: '', quantity: 0, unit: 'Nos', rate: 0, amount: 0 }],
@@ -119,6 +133,52 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
         }
         return defaults;
     });
+
+    // Helper to normalize names for mapping (bahl/behl, ridhan/ridhaan, and sky-5 spelling variation reconciliation)
+    const getNormalizedVendorKey = (name: string) => {
+        let key = name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (key.includes('parmodbahl') || key.includes('parmodbehl')) {
+            return 'parmodbehl';
+        }
+        if (key.includes('ridhan') || key.includes('ridhaan')) {
+            return 'ridhan';
+        }
+        if (key.includes('sky5') || key.includes('sky-5')) {
+            return 'sky5';
+        }
+        return key;
+    };
+
+    const hasProfile = (vendorName: string) => {
+        const normalized = getNormalizedVendorKey(vendorName);
+        return Object.keys(VENDOR_PROFILES).some(profileName => getNormalizedVendorKey(profileName) === normalized);
+    };
+
+    // Extract unique vendor list from entries and static Profiles
+    const allVendors = React.useMemo(() => {
+        const historicalVendors = entries.map(e => e.partyName).filter(Boolean);
+        const staticVendors = Object.keys(VENDOR_PROFILES);
+        return Array.from(new Set([...staticVendors, ...historicalVendors])).sort();
+    }, [entries]);
+
+    const filteredVendors = React.useMemo(() => {
+        const search = (formData.partyName || '').trim().toLowerCase();
+        if (!search) return allVendors;
+        return allVendors.filter(v => v.toLowerCase().includes(search));
+    }, [allVendors, formData.partyName]);
+
+
+    const duplicateInvoiceEntry = React.useMemo(() => {
+        const invNum = (formData.invoiceNumber || '').trim().toLowerCase();
+        const vendor = (formData.partyName || '').trim().toLowerCase();
+        if (!invNum || !vendor) return null;
+        const normalizedInputVendor = getNormalizedVendorKey(vendor);
+        return entries.find(e => 
+            e.id !== initialData?.id &&
+            getNormalizedVendorKey(e.partyName) === normalizedInputVendor &&
+            e.invoiceNumber && e.invoiceNumber.trim().toLowerCase() === invNum
+        );
+    }, [entries, formData.invoiceNumber, formData.partyName, initialData]);
 
     // 💾 SAVE DRAFT ON EVERY CHANGE
     useEffect(() => {
@@ -247,9 +307,12 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
 
         const totalTaxable = formData.items.reduce((sum: number, item: any) => sum + item.amount, 0);
         const hasGST = formData.billType === 'GST';
-        const cgst = hasGST ? totalTaxable * 0.09 : 0;
-        const sgst = hasGST ? totalTaxable * 0.09 : 0;
-        const grandTotal = totalTaxable + cgst + sgst;
+        const isInter = isInterState(formData.fromLocation, formData.toLocation);
+        const igst = hasGST && isInter ? totalTaxable * 0.18 : 0;
+        const cgst = hasGST && !isInter ? totalTaxable * 0.09 : 0;
+        const sgst = hasGST && !isInter ? totalTaxable * 0.09 : 0;
+        const exactTotal = totalTaxable + igst + cgst + sgst;
+        const grandTotal = Math.round(exactTotal);
 
         const text = encodeURIComponent(
             `*ENGLABS GATE ENTRY DRAFT*\n` +
@@ -262,8 +325,10 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
             `*Invoice:* ${formData.invoiceNumber || 'Not Specified'}\n` +
             itemsDetail +
             `*TAXABLE TOTAL: ₹${totalTaxable.toLocaleString()}*\n` +
-            (hasGST ? `*CGST (9%): ₹${cgst.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
-            `*SGST (9%): ₹${sgst.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` : '') +
+            (hasGST ? (isInter 
+                ? `*IGST (18%): ₹${igst.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n`
+                : `*CGST (9%): ₹${cgst.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
+                  `*SGST (9%): ₹${sgst.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n`) : '') +
             `*GRAND TOTAL: ₹${grandTotal.toLocaleString('en-IN', { maximumFractionDigits: 0 })}*\n` +
             `*PAYMENT STATUS:* ${formData.paymentStatus}\n` +
             `*DELIVERY STATUS:* ${type === 'INWARD' ? 'Received' : 'Dispatched'}\n` +
@@ -297,11 +362,22 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
             summaryName = formData.items[0].name;
         }
 
+        const isInter = isInterState(formData.fromLocation, formData.toLocation);
+        const igst = formData.billType === 'GST' && isInter ? totalAmount * 0.18 : 0;
+        const cgst = formData.billType === 'GST' && !isInter ? totalAmount * 0.09 : 0;
+        const sgst = formData.billType === 'GST' && !isInter ? totalAmount * 0.09 : 0;
+        const totalGross = Math.round(totalAmount + igst + cgst + sgst);
+        const paid = formData.paidAmount || 0;
+        const remaining = totalGross - paid;
+        const status = paid >= totalGross ? 'PAID' : (paid > 0 ? 'PARTIAL' : 'UNPAID');
+
         const entry: GateEntry = {
             id: initialData?.id || generateId(type, currentCount),
             timestamp: initialData?.timestamp || new Date().toISOString(),
             type,
             ...formData,
+            remainingAmount: remaining,
+            paymentStatus: status,
             materialName: summaryName,
             quantity: totalQty,
             amount: totalAmount,
@@ -382,42 +458,86 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
 
                 <form onSubmit={handleSubmit} className="p-12 space-y-10">
                     {/* VENDOR & LOGISTICS CONTEXT (SINGLE VENDOR FOCUS) */}
-                    <div className="bg-slate-900 rounded-[3rem] p-10 text-white shadow-2xl relative overflow-hidden">
+                    <div className="bg-slate-900 rounded-[3rem] p-10 text-white shadow-2xl relative overflow-visible">
                         <div className="absolute top-0 right-0 p-8 opacity-10">
                             <Truck className="w-32 h-32" />
                         </div>
                         <div className="relative z-10 grid grid-cols-3 gap-8">
-                            <div className="col-span-1 space-y-4">
+                            <div className="col-span-1 space-y-4 relative">
                                 <label className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.3em] block">Principal Vendor</label>
                                 <div className="relative">
                                     <User className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500/50" />
                                     <input 
                                         required
                                         value={formData.partyName}
+                                        onFocus={() => setShowVendorDropdown(true)}
                                         onChange={e => {
                                             const val = e.target.value;
                                             setFormData({...formData, partyName: val});
-                                            // 🏢 AUTO-FILL ON VENDOR MATCH
-                                            if (VENDOR_PROFILES[val]) {
-                                                setFormData((prev: any) => ({ ...prev, ...VENDOR_PROFILES[val], partyName: val }));
-                                            }
+                                            setShowVendorDropdown(true);
                                         }}
-                                        className="w-full bg-transparent border-b-2 border-slate-700 py-3 pl-8 font-black text-2xl text-white placeholder:text-slate-600 focus:border-emerald-500 outline-none transition-all"
+                                        className="w-full bg-transparent border-b-2 border-slate-700 py-3 pl-8 pr-8 font-black text-2xl text-white placeholder:text-slate-600 focus:border-emerald-500 outline-none transition-all"
                                         placeholder="Vendor Name"
+                                        autoComplete="off"
                                     />
+                                    <ChevronDown className="absolute right-0 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 cursor-pointer" onClick={() => setShowVendorDropdown(prev => !prev)} />
                                 </div>
+                                {showVendorDropdown && (
+                                    <>
+                                        <div className="fixed inset-0 z-40 cursor-default" onClick={() => setShowVendorDropdown(false)} />
+                                        <div className="absolute left-0 right-0 top-[calc(100%-8px)] mt-2 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl z-50 max-h-60 overflow-y-auto no-scrollbar animate-in fade-in slide-in-from-top-2 duration-150">
+                                            {filteredVendors.length > 0 ? (
+                                                filteredVendors.map(vendor => (
+                                                    <button
+                                                        type="button"
+                                                        key={vendor}
+                                                        onClick={() => {
+                                                            setFormData((prev: any) => ({
+                                                                ...prev,
+                                                                partyName: vendor
+                                                            }));
+                                                            setShowVendorDropdown(false);
+                                                        }}
+                                                        className="w-full text-left px-6 py-4 hover:bg-slate-700 hover:text-emerald-400 font-bold text-sm border-b border-slate-750/50 last:border-b-0 transition-colors flex items-center justify-between text-white"
+                                                    >
+                                                        <span>{vendor}</span>
+                                                        {hasProfile(vendor) ? (
+                                                            <span className="text-[9px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-black uppercase tracking-widest">Profile</span>
+                                                        ) : (
+                                                            <span className="text-[9px] bg-slate-700 text-slate-400 px-2 py-0.5 rounded-full font-black uppercase tracking-widest">History</span>
+                                                        )}
+                                                    </button>
+                                                ))
+                                            ) : (
+                                                <div className="px-6 py-4 text-xs font-bold text-slate-500 italic">No vendors found. Keep typing to add.</div>
+                                            )}
+                                        </div>
+                                    </>
+                                )}
                             </div>
-                            <div className="space-y-4">
+                            <div className="space-y-4 relative">
                                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] block">Invoice / Slip #</label>
                                 <div className="relative">
                                     <Hash className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-600" />
                                     <input 
                                         value={formData.invoiceNumber}
                                         onChange={e => setFormData({...formData, invoiceNumber: e.target.value})}
-                                        className="w-full bg-transparent border-b-2 border-slate-700 py-3 pl-8 font-black text-2xl text-white placeholder:text-slate-600 focus:border-emerald-500 outline-none transition-all"
+                                        className={`w-full bg-transparent border-b-2 py-3 pl-8 font-black text-2xl text-white placeholder:text-slate-600 outline-none transition-all ${duplicateInvoiceEntry ? 'border-amber-500 focus:border-amber-500' : 'border-slate-700 focus:border-emerald-500'}`}
                                         placeholder="REF-0000"
+                                        autoComplete="off"
                                     />
                                 </div>
+                                {duplicateInvoiceEntry && (
+                                    <div className="absolute left-0 right-0 top-[calc(100%-8px)] mt-2 bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 flex items-start gap-2 text-amber-400 animate-in fade-in slide-in-from-top-1 duration-200 z-50">
+                                        <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" />
+                                        <div className="flex flex-col gap-0.5">
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-amber-500">Duplicate Entry Detected</span>
+                                            <span className="text-[9px] font-medium leading-normal text-slate-300">
+                                                Invoice {formData.invoiceNumber} was already registered for this vendor in entry <span className="font-bold text-white">{duplicateInvoiceEntry.id}</span> ({new Date(duplicateInvoiceEntry.timestamp).toLocaleDateString()}).
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                             <div className="space-y-4">
                                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] block">Bill Type</label>
@@ -574,38 +694,56 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                                         <PlusCircle className="w-5 h-5" /> Add Next Bulk Item
                                     </button>
                                     <div className="flex gap-8">
-                                        <div className="flex flex-col items-end gap-1 border-r border-slate-200 pr-8">
-                                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">
-                                                Taxable Subtotal
-                                            </div>
-                                            <div className="text-2xl font-black text-slate-400 tracking-tighter flex items-center gap-2">
-                                                <span className="text-sm">₹</span>
-                                                {formData.items.reduce((sum: number, item: any) => sum + item.amount, 0).toLocaleString('en-IN')}
-                                            </div>
-                                            {formData.billType === 'GST' ? (
+                                        {(() => {
+                                            const totalTaxable = formData.items.reduce((sum: number, item: any) => sum + item.amount, 0);
+                                            const isInter = isInterState(formData.fromLocation, formData.toLocation);
+                                            const igst = formData.billType === 'GST' && isInter ? totalTaxable * 0.18 : 0;
+                                            const cgst = formData.billType === 'GST' && !isInter ? totalTaxable * 0.09 : 0;
+                                            const sgst = formData.billType === 'GST' && !isInter ? totalTaxable * 0.09 : 0;
+                                            const grandTotal = Math.round(totalTaxable + igst + cgst + sgst);
+                                            return (
                                                 <>
-                                                    <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-                                                        + CGST @9%: ₹{(formData.items.reduce((sum: number, item: any) => sum + item.amount, 0) * 0.09).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    <div className="flex flex-col items-end gap-1 border-r border-slate-200 pr-8">
+                                                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">
+                                                            Taxable Subtotal
+                                                        </div>
+                                                        <div className="text-2xl font-black text-slate-400 tracking-tighter flex items-center gap-2">
+                                                            <span className="text-sm">₹</span>
+                                                            {totalTaxable.toLocaleString('en-IN')}
+                                                        </div>
+                                                        {formData.billType === 'GST' ? (
+                                                            isInter ? (
+                                                                <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                                                                    + IGST @18%: ₹{igst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                                </div>
+                                                            ) : (
+                                                                <>
+                                                                    <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                                                                        + CGST @9%: ₹{cgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                                    </div>
+                                                                    <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                                                                        + SGST @9%: ₹{sgst.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                                    </div>
+                                                                </>
+                                                            )
+                                                        ) : (
+                                                            <div className="text-[9px] font-bold text-amber-500 uppercase tracking-widest mt-1">
+                                                                (WITHOUT GST)
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                    <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-                                                        + SGST @9%: ₹{(formData.items.reduce((sum: number, item: any) => sum + item.amount, 0) * 0.09).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                    <div className="flex flex-col items-end gap-1">
+                                                        <div className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.3em]">
+                                                            {type === 'INWARD' ? 'Grand Invoice Total' : 'Grand Delivery Total'}
+                                                        </div>
+                                                        <div className="text-4xl font-black text-emerald-600 tracking-tighter flex items-center gap-2">
+                                                            <span className="text-xl text-emerald-400">₹</span>
+                                                            {grandTotal.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                                        </div>
                                                     </div>
                                                 </>
-                                            ) : (
-                                                <div className="text-[9px] font-bold text-amber-500 uppercase tracking-widest mt-1">
-                                                    (WITHOUT GST)
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="flex flex-col items-end gap-1">
-                                            <div className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.3em]">
-                                                {type === 'INWARD' ? 'Grand Invoice Total' : 'Grand Delivery Total'}
-                                            </div>
-                                            <div className="text-4xl font-black text-emerald-600 tracking-tighter flex items-center gap-2">
-                                                <span className="text-xl text-emerald-400">₹</span>
-                                                {(formData.items.reduce((sum: number, item: any) => sum + item.amount, 0) * (formData.billType === 'GST' ? 1.18 : 1)).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
-                                            </div>
-                                        </div>
+                                            );
+                                        })()}
                                     </div>
                                 </div>
                             </div>
@@ -747,7 +885,11 @@ const GateEntryForm: React.FC<Props> = ({ onSave, onClose, currentCount, gpCount
                                         onChange={e => {
                                             const paid = parseFloat(e.target.value) || 0;
                                             const totalTaxable = formData.items.reduce((sum: number, item: any) => sum + item.amount, 0);
-                                            const totalGross = formData.billType === 'GST' ? totalTaxable * 1.18 : totalTaxable;
+                                            const isInter = isInterState(formData.fromLocation, formData.toLocation);
+                                            const igst = formData.billType === 'GST' && isInter ? totalTaxable * 0.18 : 0;
+                                            const cgst = formData.billType === 'GST' && !isInter ? totalTaxable * 0.09 : 0;
+                                            const sgst = formData.billType === 'GST' && !isInter ? totalTaxable * 0.09 : 0;
+                                            const totalGross = Math.round(totalTaxable + igst + cgst + sgst);
                                             setFormData({
                                                 ...formData, 
                                                 paidAmount: paid,
