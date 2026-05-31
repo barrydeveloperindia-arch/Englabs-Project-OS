@@ -11,7 +11,7 @@
     "grepInvert": null,
     "maxFailures": 0,
     "metadata": {
-      "actualWorkers": 16
+      "actualWorkers": 12
     },
     "preserveOutput": "always",
     "projects": [
@@ -20,7 +20,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 16
+          "actualWorkers": 12
         },
         "id": "chromium",
         "name": "chromium",
@@ -36,7 +36,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 16
+          "actualWorkers": 12
         },
         "id": "Mobile Chrome (Pixel 5)",
         "name": "Mobile Chrome (Pixel 5)",
@@ -52,7 +52,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 16
+          "actualWorkers": 12
         },
         "id": "Mobile Safari (iPhone 12)",
         "name": "Mobile Safari (iPhone 12)",
@@ -95,1043 +95,6 @@
   },
   "suites": [
     {
-      "title": "mobile.test.ts",
-      "file": "mobile.test.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Englabs Projects OS - Exhaustive Mobile UI & Data Integration Suite",
-          "file": "mobile.test.ts",
-          "line": 11,
-          "column": 6,
-          "specs": [
-            {
-              "title": "1. Viewport Scaling & Main Bottom Tab Transitions",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 876,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:11.395Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-461f4ad61f721c61bcf8",
-              "file": "mobile.test.ts",
-              "line": 25,
-              "column": 3
-            },
-            {
-              "title": "2. Projects Workspace, Filtering, & Metadata Hydration",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 809,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:11.455Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-6df9e6370347fa768aad",
-              "file": "mobile.test.ts",
-              "line": 54,
-              "column": 3
-            },
-            {
-              "title": "3. Interactive Stage Toggles on Projects Tab",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 893,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:11.381Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-7fccbfa35afec20bb51f",
-              "file": "mobile.test.ts",
-              "line": 66,
-              "column": 3
-            },
-            {
-              "title": "4. Logistics Command (Gate Register) Movements & Intake Forms",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 852,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:11.409Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-0295d674015dd9d19993",
-              "file": "mobile.test.ts",
-              "line": 85,
-              "column": 3
-            },
-            {
-              "title": "5. Dynamic Inward Logistics Log Creation & State Preservation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 4,
-                      "parallelIndex": 4,
-                      "status": "passed",
-                      "duration": 1046,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:11.411Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-221d4a8dd0fc0332cab1",
-              "file": "mobile.test.ts",
-              "line": 103,
-              "column": 3
-            },
-            {
-              "title": "6. Inventory Master Dashboard, Real-time Stats, & Alerts",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 5,
-                      "parallelIndex": 5,
-                      "status": "passed",
-                      "duration": 3244,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:11.409Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-6a2a034e647c158e2631",
-              "file": "mobile.test.ts",
-              "line": 134,
-              "column": 3
-            },
-            {
-              "title": "7. Store Stock Registry, Passcode Corrections, & Responsive Card UI",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 6,
-                      "parallelIndex": 6,
-                      "status": "passed",
-                      "duration": 2998,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:11.409Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-01dfbf9b055abc15428f",
-              "file": "mobile.test.ts",
-              "line": 158,
-              "column": 3
-            },
-            {
-              "title": "8. Porter Logistics Dispatch & Mobile Intake validation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 7,
-                      "parallelIndex": 7,
-                      "status": "passed",
-                      "duration": 1065,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:11.443Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-e789d460a2767515ebb2",
-              "file": "mobile.test.ts",
-              "line": 195,
-              "column": 3
-            },
-            {
-              "title": "9. More Bottom Sheet Modal & Secondary Administrative Workspaces",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 8,
-                      "parallelIndex": 8,
-                      "status": "passed",
-                      "duration": 812,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:11.426Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-0e9d260e9826a8772a59",
-              "file": "mobile.test.ts",
-              "line": 220,
-              "column": 3
-            },
-            {
-              "title": "10. Pantry Control Panel Transition via More Sheet",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 9,
-                      "parallelIndex": 9,
-                      "status": "passed",
-                      "duration": 771,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:11.457Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-23174fcf92c1bb8c011c",
-              "file": "mobile.test.ts",
-              "line": 242,
-              "column": 3
-            },
-            {
-              "title": "1. Viewport Scaling & Main Bottom Tab Transitions",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome (Pixel 5)",
-                  "projectName": "Mobile Chrome (Pixel 5)",
-                  "results": [
-                    {
-                      "workerIndex": 14,
-                      "parallelIndex": 14,
-                      "status": "passed",
-                      "duration": 963,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:11.456Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-ee5271730021bc1fc2e5",
-              "file": "mobile.test.ts",
-              "line": 25,
-              "column": 3
-            },
-            {
-              "title": "2. Projects Workspace, Filtering, & Metadata Hydration",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome (Pixel 5)",
-                  "projectName": "Mobile Chrome (Pixel 5)",
-                  "results": [
-                    {
-                      "workerIndex": 15,
-                      "parallelIndex": 15,
-                      "status": "passed",
-                      "duration": 769,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:11.456Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-eab4bb1281e09de01739",
-              "file": "mobile.test.ts",
-              "line": 54,
-              "column": 3
-            },
-            {
-              "title": "3. Interactive Stage Toggles on Projects Tab",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome (Pixel 5)",
-                  "projectName": "Mobile Chrome (Pixel 5)",
-                  "results": [
-                    {
-                      "workerIndex": 16,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1063,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:12.988Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-2c78adb74b29731b2f89",
-              "file": "mobile.test.ts",
-              "line": 66,
-              "column": 3
-            },
-            {
-              "title": "4. Logistics Command (Gate Register) Movements & Intake Forms",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome (Pixel 5)",
-                  "projectName": "Mobile Chrome (Pixel 5)",
-                  "results": [
-                    {
-                      "workerIndex": 17,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 575,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:12.989Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-8d237a349c4db2d9734c",
-              "file": "mobile.test.ts",
-              "line": 85,
-              "column": 3
-            },
-            {
-              "title": "5. Dynamic Inward Logistics Log Creation & State Preservation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome (Pixel 5)",
-                  "projectName": "Mobile Chrome (Pixel 5)",
-                  "results": [
-                    {
-                      "workerIndex": 18,
-                      "parallelIndex": 8,
-                      "status": "passed",
-                      "duration": 732,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:12.988Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-1a89d79aecd934c0c78b",
-              "file": "mobile.test.ts",
-              "line": 103,
-              "column": 3
-            },
-            {
-              "title": "6. Inventory Master Dashboard, Real-time Stats, & Alerts",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome (Pixel 5)",
-                  "projectName": "Mobile Chrome (Pixel 5)",
-                  "results": [
-                    {
-                      "workerIndex": 19,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 2453,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:13.018Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-295bf220abec7e11b57b",
-              "file": "mobile.test.ts",
-              "line": 134,
-              "column": 3
-            },
-            {
-              "title": "7. Store Stock Registry, Passcode Corrections, & Responsive Card UI",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome (Pixel 5)",
-                  "projectName": "Mobile Chrome (Pixel 5)",
-                  "results": [
-                    {
-                      "workerIndex": 20,
-                      "parallelIndex": 9,
-                      "status": "passed",
-                      "duration": 2838,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:13.095Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-22aee43637a7b22feb9b",
-              "file": "mobile.test.ts",
-              "line": 158,
-              "column": 3
-            },
-            {
-              "title": "8. Porter Logistics Dispatch & Mobile Intake validation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome (Pixel 5)",
-                  "projectName": "Mobile Chrome (Pixel 5)",
-                  "results": [
-                    {
-                      "workerIndex": 21,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 689,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:13.119Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-bde9160b0122e413bd13",
-              "file": "mobile.test.ts",
-              "line": 195,
-              "column": 3
-            },
-            {
-              "title": "9. More Bottom Sheet Modal & Secondary Administrative Workspaces",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome (Pixel 5)",
-                  "projectName": "Mobile Chrome (Pixel 5)",
-                  "results": [
-                    {
-                      "workerIndex": 22,
-                      "parallelIndex": 11,
-                      "status": "passed",
-                      "duration": 634,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:13.095Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-782ac29927ff3b883d5e",
-              "file": "mobile.test.ts",
-              "line": 220,
-              "column": 3
-            },
-            {
-              "title": "10. Pantry Control Panel Transition via More Sheet",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome (Pixel 5)",
-                  "projectName": "Mobile Chrome (Pixel 5)",
-                  "results": [
-                    {
-                      "workerIndex": 23,
-                      "parallelIndex": 10,
-                      "status": "passed",
-                      "duration": 603,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:13.133Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-bd00e5bd41215d6aaf13",
-              "file": "mobile.test.ts",
-              "line": 242,
-              "column": 3
-            },
-            {
-              "title": "1. Viewport Scaling & Main Bottom Tab Transitions",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari (iPhone 12)",
-                  "projectName": "Mobile Safari (iPhone 12)",
-                  "results": [
-                    {
-                      "workerIndex": 26,
-                      "parallelIndex": 7,
-                      "status": "passed",
-                      "duration": 2416,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:13.297Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-22e185e1ea7d38bec949",
-              "file": "mobile.test.ts",
-              "line": 25,
-              "column": 3
-            },
-            {
-              "title": "2. Projects Workspace, Filtering, & Metadata Hydration",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari (iPhone 12)",
-                  "projectName": "Mobile Safari (iPhone 12)",
-                  "results": [
-                    {
-                      "workerIndex": 27,
-                      "parallelIndex": 15,
-                      "status": "passed",
-                      "duration": 1392,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:13.539Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-9978d009df94198829de",
-              "file": "mobile.test.ts",
-              "line": 54,
-              "column": 3
-            },
-            {
-              "title": "3. Interactive Stage Toggles on Projects Tab",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari (iPhone 12)",
-                  "projectName": "Mobile Safari (iPhone 12)",
-                  "results": [
-                    {
-                      "workerIndex": 28,
-                      "parallelIndex": 14,
-                      "status": "passed",
-                      "duration": 1968,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:13.952Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-ab2a3f83edd8139274b7",
-              "file": "mobile.test.ts",
-              "line": 66,
-              "column": 3
-            },
-            {
-              "title": "4. Logistics Command (Gate Register) Movements & Intake Forms",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari (iPhone 12)",
-                  "projectName": "Mobile Safari (iPhone 12)",
-                  "results": [
-                    {
-                      "workerIndex": 29,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1904,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:14.243Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-eb4511d0b036b7d4b78d",
-              "file": "mobile.test.ts",
-              "line": 85,
-              "column": 3
-            },
-            {
-              "title": "5. Dynamic Inward Logistics Log Creation & State Preservation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari (iPhone 12)",
-                  "projectName": "Mobile Safari (iPhone 12)",
-                  "results": [
-                    {
-                      "workerIndex": 30,
-                      "parallelIndex": 8,
-                      "status": "passed",
-                      "duration": 2353,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:14.303Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-6b16704c14a597475dea",
-              "file": "mobile.test.ts",
-              "line": 103,
-              "column": 3
-            },
-            {
-              "title": "6. Inventory Master Dashboard, Real-time Stats, & Alerts",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari (iPhone 12)",
-                  "projectName": "Mobile Safari (iPhone 12)",
-                  "results": [
-                    {
-                      "workerIndex": 32,
-                      "parallelIndex": 10,
-                      "status": "passed",
-                      "duration": 5342,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:14.425Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-c2865fd89af5b954f64e",
-              "file": "mobile.test.ts",
-              "line": 134,
-              "column": 3
-            },
-            {
-              "title": "7. Store Stock Registry, Passcode Corrections, & Responsive Card UI",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari (iPhone 12)",
-                  "projectName": "Mobile Safari (iPhone 12)",
-                  "results": [
-                    {
-                      "workerIndex": 31,
-                      "parallelIndex": 11,
-                      "status": "passed",
-                      "duration": 5978,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:14.427Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-f0d609cd47d12c820cbc",
-              "file": "mobile.test.ts",
-              "line": 158,
-              "column": 3
-            },
-            {
-              "title": "8. Porter Logistics Dispatch & Mobile Intake validation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari (iPhone 12)",
-                  "projectName": "Mobile Safari (iPhone 12)",
-                  "results": [
-                    {
-                      "workerIndex": 33,
-                      "parallelIndex": 13,
-                      "status": "passed",
-                      "duration": 2153,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:14.471Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-afbea3a554c00d4bb634",
-              "file": "mobile.test.ts",
-              "line": 195,
-              "column": 3
-            },
-            {
-              "title": "9. More Bottom Sheet Modal & Secondary Administrative Workspaces",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari (iPhone 12)",
-                  "projectName": "Mobile Safari (iPhone 12)",
-                  "results": [
-                    {
-                      "workerIndex": 34,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 2107,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:14.440Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-5ea838c9235cc03d0541",
-              "file": "mobile.test.ts",
-              "line": 220,
-              "column": 3
-            },
-            {
-              "title": "10. Pantry Control Panel Transition via More Sheet",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari (iPhone 12)",
-                  "projectName": "Mobile Safari (iPhone 12)",
-                  "results": [
-                    {
-                      "workerIndex": 35,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1997,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-25T11:10:14.685Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b918482cffc7046160dc-7ba18b5543180b34fad0",
-              "file": "mobile.test.ts",
-              "line": 242,
-              "column": 3
-            }
-          ]
-        }
-      ]
-    },
-    {
       "title": "smoke.test.ts",
       "file": "smoke.test.ts",
       "column": 0,
@@ -1157,15 +120,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 10,
-                      "parallelIndex": 10,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 774,
+                      "duration": 3258,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-25T11:10:11.471Z",
+                      "startTime": "2026-05-31T12:24:06.175Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1191,15 +154,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 11,
-                      "parallelIndex": 11,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 901,
+                      "duration": 3333,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-25T11:10:11.427Z",
+                      "startTime": "2026-05-31T12:24:06.206Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1225,15 +188,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 12,
-                      "parallelIndex": 12,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 3197,
+                      "duration": 5619,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-25T11:10:11.441Z",
+                      "startTime": "2026-05-31T12:24:06.161Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1259,15 +222,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 13,
-                      "parallelIndex": 13,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 906,
+                      "duration": 3342,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-25T11:10:11.442Z",
+                      "startTime": "2026-05-31T12:24:06.193Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1293,15 +256,15 @@
                   "projectName": "Mobile Chrome (Pixel 5)",
                   "results": [
                     {
-                      "workerIndex": 15,
-                      "parallelIndex": 15,
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
                       "status": "passed",
-                      "duration": 351,
+                      "duration": 3256,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-25T11:10:12.576Z",
+                      "startTime": "2026-05-31T12:24:06.175Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1327,15 +290,15 @@
                   "projectName": "Mobile Chrome (Pixel 5)",
                   "results": [
                     {
-                      "workerIndex": 24,
-                      "parallelIndex": 13,
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 560,
+                      "duration": 3275,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-25T11:10:13.158Z",
+                      "startTime": "2026-05-31T12:24:06.161Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1361,15 +324,15 @@
                   "projectName": "Mobile Chrome (Pixel 5)",
                   "results": [
                     {
-                      "workerIndex": 25,
-                      "parallelIndex": 4,
+                      "workerIndex": 6,
+                      "parallelIndex": 6,
                       "status": "passed",
-                      "duration": 2431,
+                      "duration": 5105,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-25T11:10:13.188Z",
+                      "startTime": "2026-05-31T12:24:06.177Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1395,15 +358,15 @@
                   "projectName": "Mobile Chrome (Pixel 5)",
                   "results": [
                     {
-                      "workerIndex": 14,
-                      "parallelIndex": 14,
+                      "workerIndex": 7,
+                      "parallelIndex": 7,
                       "status": "passed",
-                      "duration": 484,
+                      "duration": 3341,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-25T11:10:12.776Z",
+                      "startTime": "2026-05-31T12:24:06.193Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1429,15 +392,15 @@
                   "projectName": "Mobile Safari (iPhone 12)",
                   "results": [
                     {
-                      "workerIndex": 36,
-                      "parallelIndex": 6,
+                      "workerIndex": 8,
+                      "parallelIndex": 8,
                       "status": "passed",
-                      "duration": 1668,
+                      "duration": 1582,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-25T11:10:15.163Z",
+                      "startTime": "2026-05-31T12:24:06.161Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1463,15 +426,15 @@
                   "projectName": "Mobile Safari (iPhone 12)",
                   "results": [
                     {
-                      "workerIndex": 37,
-                      "parallelIndex": 5,
+                      "workerIndex": 9,
+                      "parallelIndex": 9,
                       "status": "passed",
-                      "duration": 1538,
+                      "duration": 1541,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-25T11:10:15.407Z",
+                      "startTime": "2026-05-31T12:24:06.206Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1497,15 +460,15 @@
                   "projectName": "Mobile Safari (iPhone 12)",
                   "results": [
                     {
-                      "workerIndex": 38,
-                      "parallelIndex": 12,
+                      "workerIndex": 10,
+                      "parallelIndex": 10,
                       "status": "passed",
-                      "duration": 4900,
+                      "duration": 4967,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-25T11:10:15.453Z",
+                      "startTime": "2026-05-31T12:24:06.193Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1531,15 +494,15 @@
                   "projectName": "Mobile Safari (iPhone 12)",
                   "results": [
                     {
-                      "workerIndex": 27,
-                      "parallelIndex": 15,
+                      "workerIndex": 11,
+                      "parallelIndex": 11,
                       "status": "passed",
-                      "duration": 1827,
+                      "duration": 1669,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-25T11:10:15.035Z",
+                      "startTime": "2026-05-31T12:24:06.209Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1557,15 +520,11 @@
       ]
     }
   ],
-  "errors": [
-    {
-      "message": "Error: worker-26 process did not exit within 300000ms after stop, force-killed it"
-    }
-  ],
+  "errors": [],
   "stats": {
-    "startTime": "2026-05-25T11:10:10.856Z",
-    "duration": 305114.84699999995,
-    "expected": 42,
+    "startTime": "2026-05-31T12:24:05.654Z",
+    "duration": 6591.307000000001,
+    "expected": 12,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0
