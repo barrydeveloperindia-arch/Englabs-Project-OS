@@ -128,8 +128,20 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
 
     const shareOnWhatsApp = (order: FoodOrder) => {
         const date = new Date(order.timestamp).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        
+        const subtotal = (order.rate || 0) * (order.quantity || 1);
+        const discountAmount = order.discountType === 'Percentage' 
+            ? (subtotal * (order.discount || 0) / 100)
+            : (order.discount || 0);
+            
+        const rebateText = discountAmount > 0 
+            ? `*REBATE:* -₹${discountAmount.toFixed(2)} ${order.discountType === 'Percentage' ? `(${order.discount}%)` : ''}\n`
+            : '';
+
+        const statusEmoji = order.status === 'Approved' ? '✅' : order.status === 'Rejected' ? '❌' : '⏳';
+
         const text = encodeURIComponent(
-            `*ENGLABS INDUSTRIAL OS - AUDIT RECEIPT*\n` +
+            `*📄 ENGLABS INDUSTRIAL OS - AUDIT RECEIPT*\n` +
             `================================\n` +
             `*ORDER ID:* ${order.entryId}\n` +
             `*DATE:* ${date}\n` +
@@ -139,14 +151,16 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
             `--------------------------------\n` +
             `*VENDOR:* ${order.vendorName} (${order.platform})\n` +
             `*ITEMS:* ${order.items}\n` +
-            `*QTY:* ${order.quantity} Nos\n` +
+            `*QTY:* ${order.quantity} ${order.unit || 'Nos'} @ ₹${(order.rate || 0).toFixed(2)}/unit\n` +
             `--------------------------------\n` +
-            `*AMOUNT:* ₹${order.amount}\n` +
+            `*SUBTOTAL:* ₹${subtotal.toFixed(2)}\n` +
+            rebateText +
+            `*NET TOTAL:* ₹${order.amount.toFixed(2)}\n` +
+            `--------------------------------\n` +
             `*PAYMENT:* ${order.paymentMode} (${order.paidBy})\n` +
             `*PURPOSE:* ${order.purpose}\n` +
-            `--------------------------------\n` +
-            `*STATUS:* ✅ ${order.status}\n` +
-            `*APPROVED BY:* ${order.approvedBy || 'System Admin'}\n` +
+            `*STATUS:* ${statusEmoji} ${order.status}\n` +
+            `*APPROVED BY:* ${order.approvedBy || 'GAURAV PANCHAL'}\n` +
             `================================\n` +
             `_Verified Hospitality & Welfare Ledger_`
         );

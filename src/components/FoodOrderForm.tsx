@@ -8,7 +8,9 @@ import {
     User, 
     Briefcase,
     AlertCircle,
-    Camera
+    Camera,
+    Plus,
+    ChevronDown
 } from 'lucide-react';
 import { 
     FoodOrder, 
@@ -77,6 +79,106 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
 
     const [previewUrl, setPreviewUrl] = useState<string>(initialData?.attachmentUrl || '');
 
+    // Staff List state initialized from localStorage with fallback to default STAFF_LIST
+    const [staffList, setStaffList] = useState<string[]>(() => {
+        const saved = localStorage.getItem('englabs_staff_list');
+        if (saved) {
+            try {
+                return JSON.parse(saved);
+            } catch (e) {
+                // ignore and fall back
+            }
+        }
+        return [...STAFF_LIST];
+    });
+
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [newStaffName, setNewStaffName] = useState('');
+
+    const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const selectedStaff = formData.employeeName 
+        ? formData.employeeName.split(', ').filter(Boolean) 
+        : [];
+
+    const handleToggleStaff = (name: string) => {
+        let updated: string[];
+        if (selectedStaff.includes(name)) {
+            updated = selectedStaff.filter(s => s !== name);
+        } else {
+            updated = [...selectedStaff, name];
+        }
+        const newEmployeeName = updated.join(', ');
+        
+        // Auto-set orderType to Team if multiple selected
+        const autoOrderType = updated.length > 1 ? 'Team' : (formData.orderType === 'Team' ? 'Individual' : formData.orderType || 'Individual');
+        
+        setFormData(prev => ({
+            ...prev,
+            employeeName: newEmployeeName,
+            orderType: autoOrderType
+        }));
+    };
+
+    const handleRemoveStaff = (name: string) => {
+        const updated = selectedStaff.filter(s => s !== name);
+        const newEmployeeName = updated.join(', ');
+        const autoOrderType = updated.length > 1 ? 'Team' : (formData.orderType === 'Team' ? 'Individual' : formData.orderType || 'Individual');
+        
+        setFormData(prev => ({
+            ...prev,
+            employeeName: newEmployeeName,
+            orderType: autoOrderType
+        }));
+    };
+
+    const handleAddNewStaff = (e: React.MouseEvent | React.KeyboardEvent) => {
+        e.preventDefault();
+        const trimmed = newStaffName.trim();
+        if (!trimmed) return;
+        
+        const exists = staffList.some(s => s.toLowerCase() === trimmed.toLowerCase());
+        let updatedList = staffList;
+        if (!exists) {
+            updatedList = [...staffList, trimmed];
+            setStaffList(updatedList);
+            localStorage.setItem('englabs_staff_list', JSON.stringify(updatedList));
+        }
+        
+        const matchingName = exists 
+            ? staffList.find(s => s.toLowerCase() === trimmed.toLowerCase()) || trimmed 
+            : trimmed;
+            
+        if (!selectedStaff.includes(matchingName)) {
+            const updatedSelection = [...selectedStaff, matchingName];
+            const autoOrderType = updatedSelection.length > 1 ? 'Team' : (formData.orderType === 'Team' ? 'Individual' : formData.orderType || 'Individual');
+            setFormData(prev => ({
+                ...prev,
+                employeeName: updatedSelection.join(', '),
+                orderType: autoOrderType
+            }));
+        }
+        
+        setNewStaffName('');
+    };
+
+    const filteredStaff = staffList.filter(name => 
+        name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -123,19 +225,116 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
+                                <div className="space-y-2 relative" ref={dropdownRef}>
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Employee Name</label>
-                                    <select 
-                                        required
-                                        className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
-                                        value={formData.employeeName || ''}
-                                        onChange={e => setFormData({...formData, employeeName: e.target.value})}
+                                    
+                                    {/* Visually hidden required input for native HTML validation */}
+                                    <input 
+                                        type="text" 
+                                        className="opacity-0 absolute w-px h-px pointer-events-none"
+                                        value={formData.employeeName || ''} 
+                                        readOnly
+                                        required 
+                                    />
+
+                                    {/* Selector Trigger */}
+                                    <div 
+                                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                        className="w-full min-h-[46px] bg-slate-50 dark:bg-slate-900 border border-slate-105 dark:border-slate-800 rounded-xl px-4 py-2.5 text-sm font-bold focus-within:bg-white focus-within:ring-2 focus-within:ring-emerald-500/20 outline-none transition-all cursor-pointer flex items-center justify-between gap-2"
                                     >
-                                        <option value="">Select Employee...</option>
-                                        {STAFF_LIST.map(name => (
-                                            <option key={name} value={name}>{name}</option>
-                                        ))}
-                                    </select>
+                                        <div className="flex flex-wrap gap-1.5 items-center">
+                                            {selectedStaff.length === 0 ? (
+                                                <span className="text-slate-400 font-bold text-xs">Select Employee...</span>
+                                            ) : (
+                                                selectedStaff.map(name => (
+                                                    <span 
+                                                        key={name} 
+                                                        className="inline-flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 text-[11px] font-black px-2.5 py-1 rounded-lg border border-emerald-100 dark:border-emerald-900/50"
+                                                    >
+                                                        {name}
+                                                        <button 
+                                                            type="button" 
+                                                            onClick={(e) => { 
+                                                                e.stopPropagation(); 
+                                                                handleRemoveStaff(name); 
+                                                            }}
+                                                            className="hover:text-rose-500 rounded p-0.5"
+                                                        >
+                                                            <X className="w-3 h-3" />
+                                                        </button>
+                                                    </span>
+                                                ))
+                                            )}
+                                        </div>
+                                        <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                                    </div>
+
+                                    {/* Dropdown Panel */}
+                                    {isDropdownOpen && (
+                                        <div className="absolute left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-xl z-50 overflow-hidden flex flex-col max-h-[340px] animate-in slide-in-from-top-2 duration-150">
+                                            {/* Search Input */}
+                                            <div className="p-2 border-b border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
+                                                <input
+                                                    type="text"
+                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:text-white"
+                                                    placeholder="Search staff name..."
+                                                    value={searchQuery}
+                                                    onChange={e => setSearchQuery(e.target.value)}
+                                                />
+                                            </div>
+
+                                            {/* List of Staff */}
+                                            <div className="flex-1 overflow-y-auto p-1.5 space-y-0.5 custom-scrollbar" onClick={e => e.stopPropagation()}>
+                                                {filteredStaff.length === 0 ? (
+                                                    <p className="text-[10px] text-slate-400 dark:text-slate-500 p-3 italic uppercase text-center">No matching staff</p>
+                                                ) : (
+                                                    filteredStaff.map(name => {
+                                                        const isChecked = selectedStaff.includes(name);
+                                                        return (
+                                                            <div 
+                                                                key={name}
+                                                                onClick={() => handleToggleStaff(name)}
+                                                                className="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 cursor-pointer text-xs font-bold text-slate-700 dark:text-slate-300 transition-colors"
+                                                            >
+                                                                <span>{name}</span>
+                                                                <input 
+                                                                    type="checkbox"
+                                                                    checked={isChecked}
+                                                                    onChange={() => {}} // Controlled by row click
+                                                                    className="rounded border-slate-300 dark:border-slate-700 text-emerald-500 focus:ring-emerald-500/20 w-4 h-4 cursor-pointer accent-emerald-500"
+                                                                />
+                                                            </div>
+                                                        );
+                                                    })
+                                                )}
+                                            </div>
+
+                                            {/* Dynamic Add Staff Input */}
+                                            <div className="p-2 bg-slate-50 dark:bg-slate-950/60 border-t border-slate-100 dark:border-slate-800 flex gap-2 items-center" onClick={e => e.stopPropagation()}>
+                                                <input 
+                                                    type="text"
+                                                    placeholder="Add new staff name..."
+                                                    value={newStaffName}
+                                                    onChange={e => setNewStaffName(e.target.value)}
+                                                    onKeyDown={e => {
+                                                        if (e.key === 'Enter') {
+                                                            e.preventDefault();
+                                                            handleAddNewStaff(e);
+                                                        }
+                                                    }}
+                                                    className="flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:text-white"
+                                                />
+                                                <button 
+                                                    type="button"
+                                                    onClick={handleAddNewStaff}
+                                                    className="bg-emerald-500 hover:bg-emerald-400 text-slate-900 rounded-xl p-2 transition-all flex items-center justify-center shrink-0 shadow-md shadow-emerald-500/10 active:scale-95"
+                                                    title="Add and Select Staff"
+                                                >
+                                                    <Plus className="w-4 h-4 font-black text-slate-900" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Department</label>

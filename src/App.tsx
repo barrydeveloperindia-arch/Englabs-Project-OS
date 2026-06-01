@@ -40,6 +40,8 @@ import Sky5Terminal from './components/Sky5Terminal';
 import StoreStockReport from './components/StoreStockReport';
 import PorterRegister from './components/PorterRegister';
 import HandoverDashboard from './components/HandoverDashboard';
+import ProjectLookupDashboard from './components/ProjectLookupDashboard';
+import { ProjectBudgets } from './components/ProjectBudgets';
 import { ProjectData, STAGES, ProjectStage } from './lib/project';
 import { logAction, AuditLog } from './lib/system_guard';
 import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry } from './lib/database_service';
@@ -130,7 +132,7 @@ interface SidebarButtonProps {
     color?: 'emerald' | 'amber';
 }
 
-type View = 'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'BILLING' | 'EVIDENCE' | 'INVENTORY' | 'SKY5_TERMINAL' | 'STOCK_REPORT' | 'PORTER_SERVICE' | 'GATE_DISPLAY';
+type View = 'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'BILLING' | 'EVIDENCE' | 'INVENTORY' | 'SKY5_TERMINAL' | 'STOCK_REPORT' | 'PORTER_SERVICE' | 'GATE_DISPLAY' | 'PROJECT_LOOKUP' | 'PROJECT_BUDGETS';
 
 const SidebarButton: React.FC<SidebarButtonProps> = ({ active, onClick, icon, label, color = 'emerald' }) => {
     const activeClass = color === 'emerald' 
@@ -426,6 +428,18 @@ const App: React.FC = () => {
                         label="PROJECTS" 
                     />
                     <SidebarButton 
+                        active={currentView === 'PROJECT_LOOKUP'} 
+                        onClick={() => setCurrentView('PROJECT_LOOKUP')} 
+                        icon={<Search className="w-4.5 h-4.5" />} 
+                        label="PROJECT LOOKUP & MAPPING" 
+                    />
+                    <SidebarButton 
+                        active={currentView === 'PROJECT_BUDGETS'} 
+                        onClick={() => setCurrentView('PROJECT_BUDGETS')} 
+                        icon={<DollarSign className="w-4.5 h-4.5" />} 
+                        label="PROJECT BUDGETS" 
+                    />
+                    <SidebarButton 
                         active={currentView === 'GATE_REGISTER'} 
                         onClick={() => setCurrentView('GATE_REGISTER')} 
                         icon={<Shield className="w-4.5 h-4.5" />} 
@@ -678,6 +692,10 @@ const App: React.FC = () => {
                         </div>
                     </main>
                 </div>
+            ) : currentView === 'PROJECT_LOOKUP' ? (
+                <ProjectLookupDashboard />
+            ) : currentView === 'PROJECT_BUDGETS' ? (
+                <ProjectBudgets projects={projects} />
             ) : currentView === 'GATE_REGISTER' ? (
                 <GateRegister 
                     entries={gateEntries} 
@@ -803,6 +821,18 @@ const App: React.FC = () => {
                                 label="Gate HUD" 
                                 active={currentView === 'GATE_DISPLAY'}
                                 color="emerald"
+                            />
+                            <MobileGridButton 
+                                onClick={() => { setCurrentView('PROJECT_LOOKUP'); setIsMobileMenuOpen(false); }} 
+                                icon={<Search className="w-6 h-6" />} 
+                                label="Mapping" 
+                                active={currentView === 'PROJECT_LOOKUP'}
+                            />
+                            <MobileGridButton 
+                                onClick={() => { setCurrentView('PROJECT_BUDGETS'); setIsMobileMenuOpen(false); }} 
+                                icon={<DollarSign className="w-6 h-6" />} 
+                                label="Budgets" 
+                                active={currentView === 'PROJECT_BUDGETS'}
                             />
                         </div>
                     </div>

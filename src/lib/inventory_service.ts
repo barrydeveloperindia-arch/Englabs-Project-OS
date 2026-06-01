@@ -203,3 +203,10 @@ export async function deleteInventoryItem(itemCode: string) {
     const { deleteDoc } = await import('firebase/firestore');
     await deleteDoc(doc(db, STOCK_COLLECTION, itemCode));
 }
+
+export async function addInventoryItem(item: InventoryItem) {
+    if (!db) return;
+    const docRef = doc(db, STOCK_COLLECTION, item.itemCode);
+    await setDoc(docRef, item);
+}
+

@@ -22,20 +22,33 @@ const FoodReceiptSlip: React.FC<Props> = ({ order, onClose }) => {
 
     const handleWhatsAppShare = () => {
         const subtotal = (order?.rate || 0) * (order?.quantity || 1);
+        const discountAmount = order?.discountType === 'Percentage' 
+            ? (subtotal * (order?.discount || 0) / 100)
+            : (order?.discount || 0);
+            
+        const rebateText = discountAmount > 0 
+            ? `*REBATE:* -₹${discountAmount.toFixed(2)} ${order?.discountType === 'Percentage' ? `(${order?.discount}%)` : ''}\n`
+            : '';
+
+        const statusEmoji = order?.status === 'Approved' ? '✅' : order?.status === 'Rejected' ? '❌' : '⏳';
+
         const text = `*📄 ENGLABS SETTLEMENT SLIP*
----------------------------------
+=================================
 *ID:* ${order?.entryId || 'N/A'}
 *STAFF:* ${order?.employeeName?.toUpperCase() || 'N/A'}
 *DEPT:* ${order?.department?.toUpperCase() || 'N/A'}
 ---------------------------------
 *ITEMS:* ${order?.items?.toUpperCase() || 'N/A'}
-*QTY:* ${order?.quantity || 1} ${order?.unit || 'Nos'}
+*QTY:* ${order?.quantity || 1} ${order?.unit || 'Nos'} @ ₹${(order?.rate || 0).toFixed(2)}/unit
 ---------------------------------
 *SUBTOTAL:* ₹${subtotal.toFixed(2)}
-*TOTAL:* ₹${(order?.amount || 0).toFixed(2)}
-*PAYMENT:* ${order?.paymentMode?.toUpperCase() || 'N/A'}
-*STATUS:* ${order?.status?.toUpperCase() || 'PENDING'}
+${rebateText}*NET TOTAL:* ₹${(order?.amount || 0).toFixed(2)}
 ---------------------------------
+*PAYMENT:* ${order?.paymentMode?.toUpperCase() || 'N/A'} (${order?.paidBy?.toUpperCase() || 'N/A'})
+*PURPOSE:* ${order?.purpose?.toUpperCase() || 'N/A'}
+*STATUS:* ${statusEmoji} ${order?.status?.toUpperCase() || 'PENDING'}
+*APPROVED BY:* GAURAV PANCHAL
+=================================
 _Verified by Englabs OS_`;
 
         const encodedText = encodeURIComponent(text);
@@ -48,8 +61,8 @@ _Verified by Englabs OS_`;
         : (order?.discount || 0);
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300">
-            <div className="relative bg-[#F8F9FA] w-full max-w-[400px] shadow-2xl flex flex-col animate-in zoom-in-95 duration-300 thermal-slip">
+        <div className="fixed inset-0 z-[100] overflow-y-auto flex justify-center p-4 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300 custom-scrollbar thermal-slip-overlay">
+            <div className="relative bg-[#F8F9FA] w-full max-w-[400px] shadow-2xl flex flex-col animate-in zoom-in-95 duration-300 thermal-slip my-auto">
                 
                 {/* JAGGED TOP EDGE */}
                 <div className="thermal-edge-top"></div>
@@ -179,8 +192,11 @@ _Verified by Englabs OS_`;
                             </p>
                         )}
                         
-                        <div className="mt-12 border-t border-slate-400 pt-2 w-48 mx-auto">
-                            <p className="text-[9px] font-black uppercase">Authorized Signature</p>
+                        <div className="mt-12 w-48 mx-auto">
+                            <p className="text-[10px] font-black uppercase tracking-wider mb-1">GAURAV PANCHAL</p>
+                            <div className="border-t border-slate-400 pt-1">
+                                <p className="text-[8px] font-bold uppercase text-slate-500 tracking-widest">Authorized Signature</p>
+                            </div>
                         </div>
                         
                         <p className="mt-12 text-[10px] font-bold">THANK YOU FOR YOUR WORK!</p>
@@ -240,10 +256,53 @@ _Verified by Englabs OS_`;
                     clip-path: polygon(0 0, 5% 100%, 10% 0, 15% 100%, 20% 0, 25% 100%, 30% 0, 35% 100%, 40% 0, 45% 100%, 50% 0, 55% 100%, 60% 0, 65% 100%, 70% 0, 75% 100%, 80% 0, 85% 100%, 90% 0, 95% 100%, 100% 0);
                 }
                 @media print {
-                    @page { size: auto; margin: 0; }
-                    body { background: white !important; }
-                    .thermal-slip { filter: none !important; width: 100% !important; max-width: none !important; margin: 0 !important; }
-                    .thermal-edge-top, .thermal-edge-bottom { display: none; }
+                    @page { 
+                        size: portrait; 
+                        margin: 0; 
+                    }
+                    html, body {
+                        height: 100% !important;
+                        overflow: hidden !important;
+                        background: white !important;
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
+                    }
+                    body * {
+                        visibility: hidden !important;
+                    }
+                    .thermal-slip-overlay, .thermal-slip-overlay * {
+                        visibility: visible !important;
+                    }
+                    .thermal-slip-overlay {
+                        position: absolute !important;
+                        left: 0 !important;
+                        top: 0 !important;
+                        width: 100% !important;
+                        height: 100% !important;
+                        background: white !important;
+                        display: flex !important;
+                        justify-content: center !important;
+                        align-items: flex-start !important;
+                        padding: 20px 0 !important;
+                        margin: 0 !important;
+                        overflow: hidden !important;
+                    }
+                    .thermal-slip {
+                        filter: none !important;
+                        width: 380px !important;
+                        max-width: 380px !important;
+                        margin: 0 auto !important;
+                        box-shadow: none !important;
+                        border: 1px solid #e2e8f0 !important;
+                        background: white !important;
+                        page-break-inside: avoid !important;
+                    }
+                    .thermal-edge-top, .thermal-edge-bottom { 
+                        display: none !important; 
+                    }
+                    .print\:hidden {
+                        display: none !important;
+                    }
                 }
             `}} />
         </div>

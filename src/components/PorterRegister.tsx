@@ -36,6 +36,7 @@ import PorterEntryForm from './PorterEntryForm';
 import { PorterTrip, PorterPaymentStatus, DeliveryStatus } from '../lib/porter_system';
 import { PorterProtectionAgent } from '../lib/porter_protection';
 import { logAction } from '../lib/system_guard';
+import logo from '../assets/englabs_logo.png';
 
 interface Props {
     trips: PorterTrip[];
@@ -133,7 +134,14 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
             `━━━━━━━━━━━━━━━━━━━━\n` +
             `🌐 _Command OS Forensic Dispatch_`
         );
-        window.open(`https://wa.me/?text=${text}`, '_blank');
+        const url = `https://wa.me/?text=${text}`;
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     const shareMonthlySummary = () => {
@@ -156,7 +164,14 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
             `━━━━━━━━━━━━━━━━━━━━\n` +
             `🛡️ _Verified by Porter Protection Agent_`
         );
-        window.open(`https://wa.me/?text=${text}`, '_blank');
+        const url = `https://wa.me/?text=${text}`;
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     const sendCustomerUpdate = (trip: PorterTrip, status: string) => {
@@ -167,13 +182,20 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
             case 'REACHED': message = `Hi ${trip.customerName}, our porter has reached the delivery location.`; break;
             case 'DELIVERED': message = `Hi ${trip.customerName}, mission accomplished! Your delivery is complete. Final Balance: ₹${trip.remainingBalance.toLocaleString()}.`; break;
         }
-        window.open(`https://wa.me/${trip.customerMobile.replace(/\D/g,'')}?text=${encodeURIComponent(message)}`, '_blank');
+        const url = `https://wa.me/${trip.customerMobile.replace(/\D/g,'')}?text=${encodeURIComponent(message)}`;
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     return (
         <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-[#F8FAFC]">
             {/* HEADER */}
-            <header className="h-auto md:h-24 bg-white border-b border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between px-4 md:px-10 py-4 md:py-0 shrink-0 sticky top-0 z-40 shadow-sm gap-4 md:gap-0">
+            <header className="h-auto md:h-24 bg-white border-b border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between px-4 md:px-10 py-4 md:py-0 shrink-0 sticky top-0 z-40 shadow-sm gap-4 md:gap-0 print:hidden">
                 <div className="flex items-center gap-4 md:gap-6 w-full md:w-auto">
                     <div className="w-10 h-10 md:w-12 md:h-12 bg-[#0e4368] rounded-2xl flex items-center justify-center shadow-lg shadow-slate-900/10 shrink-0">
                         <Truck className="w-5 h-5 md:w-6 md:h-6 text-emerald-500" />
@@ -327,7 +349,7 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                 ) : (
                     <div className="max-w-[1400px] mx-auto space-y-8">
                         {/* CONTROLS */}
-                        <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0">
+                        <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0 print:hidden">
                             <div className="relative w-full md:w-96">
                                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                                 <input 
@@ -345,7 +367,7 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                                 <button onClick={exportToExcel} className="flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-all text-[10px] font-black uppercase tracking-widest text-slate-600 shadow-sm">
                                     <Download className="w-4 h-4" /> EXCEL
                                 </button>
-                                <button className="p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-all text-slate-400">
+                                <button onClick={() => window.print()} className="p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-all text-slate-400" title="Print Logbook">
                                     <Printer className="w-4 h-4" />
                                 </button>
                             </div>
@@ -362,7 +384,7 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                                             <th className="py-8 px-6">Distance / KM</th>
                                             <th className="py-8 px-6">Valuation</th>
                                             <th className="py-8 px-6">Lifecycle</th>
-                                            <th className="py-8 px-10 text-right">Dispatch Control</th>
+                                            <th className="py-8 px-10 text-right print:hidden">Dispatch Control</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-50">
@@ -423,7 +445,7 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                                                         </button>
                                                     </div>
                                                 </td>
-                                                <td className="py-8 px-10">
+                                                <td className="py-8 px-10 print:hidden">
                                                     <div className="flex items-center justify-end gap-2">
                                                         <div className="flex items-center bg-slate-50 p-1 rounded-xl gap-1">
                                                             <button onClick={() => sendCustomerUpdate(trip, 'PICKUP')} title="Pickup Alert" className="p-2 text-slate-400 hover:text-blue-500 transition-colors"><Map className="w-4 h-4" /></button>
@@ -490,27 +512,29 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
 
             {/* INVOICE MODAL */}
             {viewingInvoice && (
-                <div className="fixed inset-0 bg-slate-900/90 backdrop-blur-xl z-[100] flex items-center justify-center p-6">
-                    <div className="bg-white rounded-[3rem] w-full max-w-2xl overflow-hidden shadow-2xl border-8 border-slate-50">
-                        <div className="p-12">
-                            <div className="flex justify-between items-start mb-16">
+                <div className="fixed inset-0 bg-slate-900/90 backdrop-blur-xl z-[100] flex items-center justify-center p-6 print:p-0">
+                    <div className="bg-white rounded-[3rem] w-full max-w-2xl overflow-hidden shadow-2xl border-8 border-slate-50 print:border-0 print:shadow-none print:max-w-none print:w-full print:rounded-none">
+                        <div id="porter-slip-print-area" className="p-12 print:p-8">
+                            <div className="flex justify-between items-start mb-16 print:mb-8">
                                 <div>
                                     <div className="flex items-center gap-3 mb-6">
-                                        <div className="w-12 h-12 bg-[#0e4368] rounded-2xl flex items-center justify-center text-white">
-                                            <Truck className="w-6 h-6" />
-                                        </div>
+                                        <img src={logo} alt="Englabs Logo" className="h-12 object-contain" />
                                         <h2 className="text-3xl font-black text-slate-900 tracking-tighter italic">ENGLABS LOGISTICS</h2>
                                     </div>
                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Official Delivery Invoice</p>
                                 </div>
-                                <div className="text-right">
+                                <div className="text-right print:hidden">
                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Invoice ID</p>
                                     <p className="text-lg font-black text-slate-900">{viewingInvoice.id}</p>
                                     <button onClick={() => setViewingInvoice(null)} className="mt-4 p-2 bg-slate-50 rounded-full text-slate-400 hover:text-slate-900 transition-colors"><X className="w-5 h-5" /></button>
                                 </div>
+                                <div className="text-right hidden print:block">
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Invoice ID</p>
+                                    <p className="text-lg font-black text-slate-900">{viewingInvoice.id}</p>
+                                </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-12 mb-16">
+                            <div className="grid grid-cols-2 gap-12 mb-16 print:mb-8 print:gap-4">
                                 <div>
                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Customer Details</p>
                                     <p className="text-lg font-black text-slate-900 mb-1">{viewingInvoice.customerName}</p>
@@ -521,13 +545,14 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Mission Parameters</p>
                                     <div className="space-y-2">
                                         <div className="flex justify-between text-sm font-bold"><span className="text-slate-400">Date</span> <span className="text-slate-900">{viewingInvoice.date}</span></div>
+                                        <div className="flex justify-between text-sm font-bold"><span className="text-slate-400">Porter Name</span> <span className="text-slate-900">{viewingInvoice.porterName}</span></div>
                                         <div className="flex justify-between text-sm font-bold"><span className="text-slate-400">Distance</span> <span className="text-slate-900">{viewingInvoice.distanceKm} KM</span></div>
                                         <div className="flex justify-between text-sm font-bold"><span className="text-slate-400">Vehicle</span> <span className="text-slate-900">{viewingInvoice.vehicleNumber}</span></div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="bg-slate-50 rounded-[2rem] p-10 mb-12">
+                            <div className="bg-slate-50 rounded-[2rem] p-10 mb-12 print:mb-8 print:p-6 print:bg-white print:border print:border-slate-100">
                                 <div className="space-y-6">
                                     <div className="flex justify-between items-center text-sm font-black uppercase tracking-tight">
                                         <span className="text-slate-500">Trip Base Cost ({viewingInvoice.distanceKm}KM × ₹{viewingInvoice.ratePerKm})</span>
@@ -542,26 +567,60 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                                         <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Gross Total Mission Value</span>
                                         <span className="text-2xl font-black text-slate-900">₹{viewingInvoice.grossAmount.toLocaleString()}</span>
                                     </div>
-                                    <div className="flex justify-between items-center text-emerald-600 bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
+                                    <div className="flex justify-between items-center text-emerald-600 bg-emerald-50 p-4 rounded-2xl border border-emerald-100 print:bg-white print:border-dashed">
                                         <span className="text-[10px] font-black uppercase tracking-widest">Advance Received</span>
                                         <span className="text-lg font-black">-₹{(viewingInvoice.advanceAmount || 0).toLocaleString()}</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="flex justify-between items-center bg-[#0e4368] p-10 rounded-[2.5rem] text-white">
+                            <div className="flex justify-between items-center bg-[#0e4368] p-10 rounded-[2.5rem] text-white print:bg-slate-950 print:p-6 print:rounded-2xl">
                                 <div>
-                                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Final Settlement Balance</p>
+                                    <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1 font-mono">Final Balance</p>
                                     <p className="text-4xl font-black text-emerald-400">₹{viewingInvoice.remainingBalance.toLocaleString()}</p>
                                 </div>
-                                <button className="bg-white text-[#0e4368] font-black px-8 py-4 rounded-2xl flex items-center gap-2 hover:bg-slate-100 transition-all">
-                                    <FileText className="w-5 h-5" /> EXPORT PDF
+                                <button 
+                                    onClick={() => window.print()}
+                                    className="bg-white text-[#0e4368] font-black px-8 py-4 rounded-2xl flex items-center gap-2 hover:bg-slate-100 transition-all print:hidden"
+                                >
+                                    <Printer className="w-5 h-5 text-emerald-500" /> PRINT SLIP
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
             )}
+
+            {/* Custom print styles */}
+            <style dangerouslySetInnerHTML={{ __html: `
+                @media print {
+                    @page {
+                        size: A4;
+                        margin: 0;
+                    }
+                    body {
+                        margin: 0;
+                        padding: 0;
+                        background: white !important;
+                    }
+                    body * {
+                        visibility: hidden;
+                    }
+                    #porter-slip-print-area, #porter-slip-print-area * {
+                        visibility: visible;
+                    }
+                    #porter-slip-print-area {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 210mm;
+                        min-height: 297mm;
+                        padding: 20mm !important;
+                        margin: 0;
+                    }
+                }
+            `}} />
+
 
             {selectedProof && (
                 <div className="fixed inset-0 z-[200] flex items-center justify-center p-10">

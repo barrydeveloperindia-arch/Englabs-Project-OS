@@ -17,11 +17,13 @@ import {
     ArrowDownRight,
     CheckCircle2,
     Clock,
-    Printer
+    Printer,
+    X
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { InventoryItem } from '../lib/gate_system';
-import { fetchInventoryMaster, seedInventoryMaster, updateInventoryItemStock, deleteInventoryItem } from '../lib/inventory_service';
+import { fetchInventoryMaster, seedInventoryMaster, updateInventoryItemStock, deleteInventoryItem, addInventoryItem } from '../lib/inventory_service';
+import logo from '../assets/englabs_logo.png';
 
 interface StockReport {
     report_id: string;
@@ -39,6 +41,8 @@ const StoreStockReport: React.FC = () => {
     const [importSuccess, setImportSuccess] = useState(false);
     const [modalConfig, setModalConfig] = useState<{ type: 'ITEM' | 'REPORT' | 'DELETE', data: any } | null>(null);
     const [passcode, setPasscode] = useState('');
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [viewingSlipItem, setViewingSlipItem] = useState<InventoryItem | null>(null);
 
     useEffect(() => {
         // Initial Forensic Load - Full 112+ Items Dataset from May 2026 Reports
@@ -230,8 +234,12 @@ const StoreStockReport: React.FC = () => {
             try {
                 const timeoutPromise = new Promise<any>((_, reject) => setTimeout(() => reject(new Error('Timeout')), 3000));
                 let liveItems = await Promise.race([fetchInventoryMaster(), timeoutPromise]).catch(() => []);
-                if (liveItems.length === 0) {
-                    await Promise.race([seedInventoryMaster(masterItems), timeoutPromise]).catch(() => {});
+                
+                // Seed any missing items to Firestore
+                const liveCodes = new Set(liveItems.map((i: any) => i.itemCode));
+                const missingItems = masterItems.filter((i: any) => !liveCodes.has(i.itemCode));
+                if (missingItems.length > 0) {
+                    await Promise.race([seedInventoryMaster(missingItems), timeoutPromise]).catch(() => {});
                     liveItems = await Promise.race([fetchInventoryMaster(), timeoutPromise]).catch(() => []);
                 }
                 
@@ -414,6 +422,13 @@ const StoreStockReport: React.FC = () => {
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
+                    <div className="flex gap-2">
+                        <button 
+                            onClick={() => setIsAddModalOpen(true)}
+                            className="flex items-center gap-2 px-6 py-2.5 bg-emerald-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20"
+                        >
+                            <Plus className="w-4 h-4" /> Add Item
+                        </button>
                         {importSuccess ? (
                             <span className="flex items-center gap-2 px-6 py-2.5 bg-emerald-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest animate-in zoom-in duration-300">
                                 <CheckCircle2 className="w-4 h-4" /> Import Complete
@@ -429,6 +444,7 @@ const StoreStockReport: React.FC = () => {
                             </button>
                         )}
                     </div>
+                </div>
             </header>
 
             <main className="flex-1 overflow-y-auto p-4 md:p-10 custom-scrollbar print:overflow-visible print:p-0 print:block">
@@ -613,6 +629,13 @@ const StoreStockReport: React.FC = () => {
                                                 <td className="py-6 px-8 text-right print:hidden">
                                                     <div className="flex justify-end gap-2">
                                                         <button 
+                                                            onClick={() => setViewingSlipItem(item)}
+                                                            className="p-2 bg-slate-50 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all border border-slate-200 hover:border-emerald-100 shadow-sm"
+                                                            title="Print Item Slip"
+                                                        >
+                                                            <Printer className="w-4 h-4" />
+                                                        </button>
+                                                        <button 
                                                             onClick={() => setModalConfig({ type: 'ITEM', data: item })}
                                                             className="p-2 bg-slate-50 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all border border-slate-200 hover:border-indigo-100 shadow-sm"
                                                             title="Edit Item Stock"
@@ -674,6 +697,13 @@ const StoreStockReport: React.FC = () => {
                                             <span className="text-amber-500 text-[10px] font-black">-{item.totalOutward} Out</span>
                                         </div>
                                         <div className="flex gap-2">
+                                            <button 
+                                                onClick={() => setViewingSlipItem(item)}
+                                                className="p-2 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-xl border border-emerald-100"
+                                                title="Print Item Slip"
+                                            >
+                                                <Printer className="w-3.5 h-3.5" />
+                                            </button>
                                             <button 
                                                 onClick={() => setModalConfig({ type: 'ITEM', data: item })}
                                                 className="px-4 py-2 bg-slate-900 text-white hover:bg-slate-800 rounded-xl text-[9px] font-black uppercase tracking-widest shadow-md flex items-center gap-1.5"
@@ -797,6 +827,204 @@ const StoreStockReport: React.FC = () => {
                             </div>
                         </div>
                     </div>
+                )}
+
+                {/* ADD ITEM MODAL */}
+                {isAddModalOpen && (
+                    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6 print:hidden animate-in fade-in duration-300">
+                        <div className="bg-white rounded-[2.5rem] w-full max-w-md overflow-hidden shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-300">
+                            <div className="p-8 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
+                                <div>
+                                    <h3 className="text-xl font-black text-slate-900 tracking-tight">Manual Registry Intake</h3>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Register New Stock Item / Asset</p>
+                                </div>
+                                <button onClick={() => setIsAddModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors"><X className="w-5 h-5 text-slate-400" /></button>
+                            </div>
+                            <form onSubmit={async (e) => {
+                                e.preventDefault();
+                                const target = e.target as HTMLFormElement;
+                                const name = target.elements.namedItem('itemName') as HTMLInputElement;
+                                const code = target.elements.namedItem('itemCode') as HTMLInputElement;
+                                const category = target.elements.namedItem('category') as HTMLInputElement;
+                                const location = target.elements.namedItem('location') as HTMLInputElement;
+                                const stock = target.elements.namedItem('stock') as HTMLInputElement;
+                                const unit = target.elements.namedItem('unit') as HTMLInputElement;
+                                const minThreshold = target.elements.namedItem('minThreshold') as HTMLInputElement;
+
+                                const newItem: InventoryItem = {
+                                    name: name.value,
+                                    itemCode: code.value.toUpperCase().trim(),
+                                    category: category.value,
+                                    location: location.value,
+                                    currentStock: parseInt(stock.value) || 0,
+                                    unit: unit.value.toUpperCase().trim(),
+                                    minThreshold: parseInt(minThreshold.value) || 10,
+                                    totalInward: parseInt(stock.value) || 0,
+                                    totalOutward: 0,
+                                    lastUpdated: new Date().toISOString()
+                                };
+
+                                try {
+                                    await addInventoryItem(newItem);
+                                } catch (err) {
+                                    console.error("Firestore save failed, adding locally:", err);
+                                }
+
+                                if (selectedReport) {
+                                    const updatedItems = [...selectedReport.items, newItem];
+                                    const updatedReport = { ...selectedReport, items: updatedItems };
+                                    setSelectedReport(updatedReport);
+                                    setReports(prev => prev.map(r => r.report_id === updatedReport.report_id ? updatedReport : r));
+                                }
+
+                                setIsAddModalOpen(false);
+                            }} className="p-8 space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Item Name (Full Name)</label>
+                                    <input name="itemName" required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none" placeholder="Ex: JK Bond Paper" />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Item Code</label>
+                                        <input name="itemCode" required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none" placeholder="Ex: PAP-101" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Category</label>
+                                        <input name="category" required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none" placeholder="Ex: Stationery" />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Location (Rack)</label>
+                                        <input name="location" required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none" placeholder="Ex: Rack-2" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Unit</label>
+                                        <input name="unit" required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none" placeholder="Ex: Pcs" />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Initial Stock</label>
+                                        <input name="stock" required type="number" min="0" defaultValue="0" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Min Threshold</label>
+                                        <input name="minThreshold" required type="number" min="1" defaultValue="5" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none" />
+                                    </div>
+                                </div>
+                                <button type="submit" className="w-full bg-indigo-600 text-white font-black py-4 rounded-xl hover:bg-indigo-700 transition-all text-xs uppercase tracking-widest shadow-lg shadow-indigo-600/20">
+                                    Register Item
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
+                {/* VIEW SLIP MODAL */}
+                {viewingSlipItem && (
+                    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6 print:p-0 animate-in fade-in duration-300">
+                        <div className="bg-white rounded-[2.5rem] w-full max-w-[450px] overflow-hidden shadow-2xl border border-slate-100 flex flex-col print:border-0 print:shadow-none print:max-w-none print:w-full print:rounded-none">
+                            {/* Header */}
+                            <div className="bg-[#0e4368] p-8 text-white flex justify-between items-center print:bg-white print:text-slate-900 print:border-b-2 print:border-slate-900">
+                                <div className="flex items-center gap-4">
+                                    <img src={logo} alt="Englabs" className="h-16 print:h-20 object-contain" />
+                                    <div>
+                                        <h2 className="text-xl font-black tracking-tighter">ENGLABS</h2>
+                                        <p className="text-[8px] font-black uppercase tracking-[0.2em] opacity-60">India Private Limited • Store Stock Slip</p>
+                                    </div>
+                                </div>
+                                <button onClick={() => setViewingSlipItem(null)} className="p-2 hover:bg-white/10 rounded-xl transition-colors print:hidden">
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+
+                            {/* Content */}
+                            <div id="stock-slip-print-area" className="p-10 flex-1 relative overflow-hidden">
+                                <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none rotate-[-30deg]">
+                                    <h1 className="text-[100px] font-black">ENGLABS</h1>
+                                </div>
+
+                                <div className="space-y-8 relative z-10">
+                                    <div className="border-b border-dashed border-slate-200 pb-6">
+                                        <span className="px-3 py-1 rounded-full text-[9px] font-black bg-indigo-100 text-indigo-700 uppercase tracking-widest">
+                                            STOCK INVENTORY ITEM
+                                        </span>
+                                        <h1 className="text-2xl font-black text-slate-900 mt-4 tracking-tight leading-tight">{viewingSlipItem.name}</h1>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Item Code: {viewingSlipItem.itemCode}</p>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-y-6">
+                                        <div>
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Category</p>
+                                            <p className="text-sm font-black text-slate-900 mt-1">{viewingSlipItem.category}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Location / Rack</p>
+                                            <p className="text-sm font-black text-slate-900 mt-1">{viewingSlipItem.location || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Min Threshold</p>
+                                            <p className="text-sm font-black text-slate-900 mt-1">{viewingSlipItem.minThreshold} {viewingSlipItem.unit}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Last Updated</p>
+                                            <p className="text-xs font-bold text-slate-500 mt-1">
+                                                {new Date(viewingSlipItem.lastUpdated).toLocaleDateString('en-GB')} {new Date(viewingSlipItem.lastUpdated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 flex items-center justify-between mt-6 print:bg-white print:border print:border-slate-200">
+                                        <div>
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Current Stock Balance</p>
+                                            <p className="text-3xl font-black text-slate-900 tracking-tighter">
+                                                {viewingSlipItem.currentStock} <span className="text-sm font-black text-slate-400 uppercase">{viewingSlipItem.unit}</span>
+                                            </p>
+                                        </div>
+                                        <span className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest ${viewingSlipItem.currentStock >= viewingSlipItem.minThreshold ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                                            {viewingSlipItem.currentStock >= viewingSlipItem.minThreshold ? 'Secure' : 'Replenish'}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Actions */}
+                            <div className="bg-slate-50 p-8 border-t border-slate-100 flex gap-4 print:hidden">
+                                <button 
+                                    onClick={() => window.print()}
+                                    className="flex-1 bg-[#0e4368] text-white py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10"
+                                >
+                                    <Printer className="w-4 h-4 text-emerald-500" /> PRINT STOCK SLIP
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {viewingSlipItem && (
+                    <style dangerouslySetInnerHTML={{ __html: `
+                        @media print {
+                            @page {
+                                size: portrait;
+                                margin: 15mm;
+                            }
+                            body * {
+                                visibility: hidden !important;
+                            }
+                            #stock-slip-print-area, #stock-slip-print-area * {
+                                visibility: visible !important;
+                            }
+                            #stock-slip-print-area {
+                                position: absolute !important;
+                                left: 0 !important;
+                                top: 0 !important;
+                                width: 100% !important;
+                                margin: 0 !important;
+                                padding: 0 !important;
+                            }
+                        }
+                    `}} />
                 )}
             </main>
         </div>
