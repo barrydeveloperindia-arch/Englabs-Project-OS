@@ -114,10 +114,10 @@ describe('Antigravity Dashboard UI', () => {
             if (initBtn) fireEvent.click(initBtn);
         } catch(e) {}
         // Wait for the project to load (appears in sidebar and hero)
-        const elements = await screen.findAllByText('Standard Engineering Ltd');
+        const elements = await screen.findAllByText('THROTTLE AEROSACE');
         expect(elements.length).toBeGreaterThan(0);
         
-        const idElements = await screen.findAllByText('C001');
+        const idElements = await screen.findAllByText('C2718');
         expect(idElements.length).toBeGreaterThan(0);
     });
 
@@ -147,11 +147,11 @@ describe('Antigravity Dashboard UI', () => {
         // but should NOT be in the sidebar anymore.
         // We can check if the sidebar list has only the active project or is empty if we filter hard.
         // Let's just check that only 1 remains (the Hero Card one) instead of 2.
-        expect(screen.getAllByText('Standard Engineering Ltd').length).toBe(1);
+        expect(screen.getAllByText('THROTTLE AEROSACE').length).toBe(1);
         
         // Search for existing project
-        fireEvent.change(searchInput, { target: { value: 'C001' } });
-        const elements = await screen.findAllByText('Standard Engineering Ltd');
+        fireEvent.change(searchInput, { target: { value: 'C2718' } });
+        const elements = await screen.findAllByText('THROTTLE AEROSACE');
         expect(elements.length).toBeGreaterThan(1); // One in hero, one in sidebar
     });
 });

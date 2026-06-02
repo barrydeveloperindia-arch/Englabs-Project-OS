@@ -19,6 +19,7 @@ import {
     Purpose, 
     PaymentMode, 
     PaidBy,
+    MealType,
     PLATFORMS,
     ORDER_TYPES,
     PURPOSES,
@@ -26,6 +27,7 @@ import {
     PAID_BY_OPTIONS,
     DEPARTMENTS,
     STAFF_LIST,
+    MEAL_TYPES,
     generateFoodId
 } from '../lib/food_system';
 
@@ -38,7 +40,13 @@ interface Props {
 
 const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initialData }) => {
     const [formData, setFormData] = useState<Partial<FoodOrder>>(() => {
-        if (initialData) return initialData;
+        if (initialData) {
+            const derivedMealType = initialData.mealType || (initialData.timestamp ? (new Date(initialData.timestamp).getHours() >= 5 && new Date(initialData.timestamp).getHours() < 11 ? 'Breakfast' : new Date(initialData.timestamp).getHours() >= 11 && new Date(initialData.timestamp).getHours() < 16 ? 'Lunch' : 'Dinner') : 'Lunch');
+            return {
+                ...initialData,
+                mealType: derivedMealType
+            };
+        }
         return {
             entryId: generateFoodId(orderCount),
             timestamp: new Date().toISOString(),
@@ -57,6 +65,7 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
             discountType: 'Flat',
             quantity: 1,
             unit: 'Nos',
+            mealType: 'Lunch',
             trackingStatus: 'Order Placed'
         };
     });
@@ -179,6 +188,15 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
         name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    const handleDateChange = (dateVal: string) => {
+        const prevTimestamp = formData.timestamp || new Date().toISOString();
+        const timePart = prevTimestamp.includes('T') ? prevTimestamp.split('T')[1] : '12:00:00';
+        setFormData(prev => ({
+            ...prev,
+            timestamp: `${dateVal}T${timePart}`
+        }));
+    };
+
     const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -190,7 +208,8 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (onSubmit) onSubmit(formData as FoodOrder);
+        const derivedMealType = formData.mealType || (formData.timestamp ? (new Date(formData.timestamp).getHours() >= 5 && new Date(formData.timestamp).getHours() < 11 ? 'Breakfast' : new Date(formData.timestamp).getHours() >= 11 && new Date(formData.timestamp).getHours() < 16 ? 'Lunch' : 'Dinner') : 'Lunch');
+        if (onSubmit) onSubmit({ ...formData, mealType: derivedMealType } as FoodOrder);
     };
 
     return (
@@ -348,6 +367,29 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
                                 </div>
                             </div>
 
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Order Date</label>
+                                    <input 
+                                        type="date"
+                                        required
+                                        className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                        value={formData.timestamp ? formData.timestamp.split('T')[0] : ''}
+                                        onChange={e => handleDateChange(e.target.value)}
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Order Type</label>
+                                    <select 
+                                        className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                        value={formData.orderType || 'Individual'}
+                                        onChange={e => setFormData({...formData, orderType: e.target.value as any})}
+                                    >
+                                        {ORDER_TYPES.map(o => <option key={o} value={o}>{o}</option>)}
+                                    </select>
+                                </div>
+                            </div>
+
                             <div className="space-y-8 pt-4">
                                 <div className="flex items-center gap-3 pb-2 border-b border-slate-100">
                                     <Briefcase className="w-4 h-4 text-emerald-500" />
@@ -378,9 +420,19 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-3 gap-4">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Quantity (Nos)</label>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Meal Type</label>
+                                        <select 
+                                            className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                                            value={formData.mealType || 'Lunch'}
+                                            onChange={e => setFormData({...formData, mealType: e.target.value as MealType})}
+                                        >
+                                            {MEAL_TYPES.map(m => <option key={m} value={m}>{m}</option>)}
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Quantity</label>
                                         <input 
                                             required
                                             type="number" 

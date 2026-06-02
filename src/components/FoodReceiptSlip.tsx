@@ -35,6 +35,8 @@ const FoodReceiptSlip: React.FC<Props> = ({ order, onClose }) => {
         const text = `*📄 ENGLABS SETTLEMENT SLIP*
 =================================
 *ID:* ${order?.entryId || 'N/A'}
+*PROJECT ID:* ${order?.projectCode?.toUpperCase() || 'N/A'}
+*MEAL:* ${order?.mealType?.toUpperCase() || 'N/A'}
 *STAFF:* ${order?.employeeName?.toUpperCase() || 'N/A'}
 *DEPT:* ${order?.department?.toUpperCase() || 'N/A'}
 ---------------------------------
@@ -47,7 +49,7 @@ ${rebateText}*NET TOTAL:* ₹${(order?.amount || 0).toFixed(2)}
 *PAYMENT:* ${order?.paymentMode?.toUpperCase() || 'N/A'} (${order?.paidBy?.toUpperCase() || 'N/A'})
 *PURPOSE:* ${order?.purpose?.toUpperCase() || 'N/A'}
 *STATUS:* ${statusEmoji} ${order?.status?.toUpperCase() || 'PENDING'}
-*APPROVED BY:* GAURAV PANCHAL
+${order?.platform === 'Sky-5' ? `*⚡ UPI PAYMENT LINK:* upi://pay?pa=Q15213511@ybl&pn=Sky5 Hotel&am=${order?.amount || 0}&cu=INR\n` : ''}*APPROVED BY:* GAURAV PANCHAL
 =================================
 _Verified by Englabs OS_`;
 
@@ -80,7 +82,7 @@ _Verified by Englabs OS_`;
                     <div className="text-center mb-8">
                         <img 
                             src={logo} 
-                            className="h-12 mx-auto mb-4 grayscale contrast-125 brightness-90" 
+                            className="h-12 mx-auto mb-4 object-contain" 
                             alt="Englabs" 
                         />
                         <h2 className="text-2xl font-black tracking-tight mb-1">ENGLABS INDIA</h2>
@@ -98,6 +100,7 @@ _Verified by Englabs OS_`;
                         <p className="font-black">RECEIPT #: {order?.entryId || 'N/A'}</p>
                         <p>STAFF: {order?.employeeName?.toUpperCase() || 'N/A'}</p>
                         <p>DEPT: {order?.department?.toUpperCase() || 'GENERAL'}</p>
+                        {order?.mealType && <p>MEAL TYPE: {order.mealType.toUpperCase()}</p>}
                         <p className="border-t border-dotted border-slate-300 pt-1 mt-1">PURPOSE: {order?.purpose?.toUpperCase() || 'N/A'}</p>
                         <p className="text-[10px] text-slate-500 leading-tight">JUSTIFICATION: {order?.justification || 'No justification provided.'}</p>
                     </div>
@@ -164,7 +167,7 @@ _Verified by Englabs OS_`;
 
                     <div className="mt-12 text-center">
                         <div className="flex justify-center mb-4">
-                            {order?.platform === 'Sky-5' && order?.paymentMode === 'UPI' ? (
+                            {order?.platform === 'Sky-5' ? (
                                 <div className="p-3 bg-white border-2 border-slate-900 rounded-3xl shadow-sm relative">
                                     <img 
                                         src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=Q15213511@ybl&pn=Sky5%20Hotel&am=${order?.amount || 0}&cu=INR`} 
@@ -185,7 +188,7 @@ _Verified by Englabs OS_`;
                         </div>
                         <p className="text-[8px] font-black tracking-[0.5em] opacity-30 mb-8">****************************</p>
                         
-                        {order?.platform === 'Sky-5' && order?.paymentMode === 'UPI' && (
+                        {order?.platform === 'Sky-5' && (
                             <p className="text-[9px] font-black mb-6 text-emerald-600">
                                 MERCHANT: SKY5 HOTEL<br/>
                                 <span className="text-[7px] text-slate-400">ID: Q15213511@ybl</span>
@@ -261,8 +264,8 @@ _Verified by Englabs OS_`;
                         margin: 0; 
                     }
                     html, body {
-                        height: 100% !important;
-                        overflow: hidden !important;
+                        height: auto !important;
+                        overflow: visible !important;
                         background: white !important;
                         -webkit-print-color-adjust: exact !important;
                         print-color-adjust: exact !important;
@@ -278,14 +281,15 @@ _Verified by Englabs OS_`;
                         left: 0 !important;
                         top: 0 !important;
                         width: 100% !important;
-                        height: 100% !important;
+                        height: auto !important;
+                        min-height: 100% !important;
                         background: white !important;
                         display: flex !important;
                         justify-content: center !important;
                         align-items: flex-start !important;
-                        padding: 20px 0 !important;
+                        padding: 0 !important;
                         margin: 0 !important;
-                        overflow: hidden !important;
+                        overflow: visible !important;
                     }
                     .thermal-slip {
                         filter: none !important;
@@ -293,7 +297,7 @@ _Verified by Englabs OS_`;
                         max-width: 380px !important;
                         margin: 0 auto !important;
                         box-shadow: none !important;
-                        border: 1px solid #e2e8f0 !important;
+                        border: none !important;
                         background: white !important;
                         page-break-inside: avoid !important;
                     }

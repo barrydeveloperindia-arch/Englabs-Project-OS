@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
     Utensils, 
     Plus, 
@@ -27,6 +27,7 @@ import FoodOrderForm from './FoodOrderForm';
 import FoodReceiptSlip from './FoodReceiptSlip';
 import { AuditLog } from '../lib/system_guard';
 import { Trash2 } from 'lucide-react';
+import thaliImage from '../assets/indian_thali_plate.png';
 
 const MOCK_ORDERS: FoodOrder[] = [
     {
@@ -35,6 +36,7 @@ const MOCK_ORDERS: FoodOrder[] = [
         employeeName: "Gaurav Panchal",
         department: "Engineering",
         platform: "Sky-5",
+        mealType: "Lunch",
         vendorName: "Sky Kitchen",
         items: "Chicken Biryani, Raita",
         quantity: 2,
@@ -56,6 +58,7 @@ const MOCK_ORDERS: FoodOrder[] = [
         employeeName: "Paras",
         department: "Workshop",
         platform: "Zomato",
+        mealType: "Dinner",
         vendorName: "Punjabi Tadka",
         items: "Dal Makhani, Butter Naan",
         quantity: 1,
@@ -78,7 +81,23 @@ interface Props {
 const FoodRegister: React.FC<Props> = ({ onLog }) => {
     const [orders, setOrders] = useState<FoodOrder[]>(() => {
         const saved = localStorage.getItem('englabs_food_ledger');
-        if (saved) return JSON.parse(saved);
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved) as FoodOrder[];
+                return parsed.map(o => {
+                    if (o.mealType) return o;
+                    const dateObj = new Date(o.timestamp);
+                    const hours = isNaN(dateObj.getTime()) ? 12 : dateObj.getHours();
+                    const derivedMeal = hours >= 5 && hours < 11 ? 'Breakfast' : hours >= 11 && hours < 16 ? 'Lunch' : 'Dinner';
+                    return {
+                        ...o,
+                        mealType: derivedMeal
+                    };
+                });
+            } catch (e) {
+                // Ignore and fall back
+            }
+        }
         return MOCK_ORDERS;
     });
     const [showForm, setShowForm] = useState(false);
@@ -89,6 +108,53 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
     const [deletingId, setDeletingId] = useState<string | null>(null);
     const [adminPin, setAdminPin] = useState("");
     const [darkMode, setDarkMode] = useState(false);
+
+    const [sortBy, setSortBy] = useState<'entryId' | 'timestamp' | 'employeeName' | 'amount' | 'status'>('timestamp');
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+
+    const handleSort = (field: 'entryId' | 'timestamp' | 'employeeName' | 'amount' | 'status') => {
+        if (sortBy === field) {
+            setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+        } else {
+            setSortBy(field);
+            setSortOrder(field === 'timestamp' || field === 'amount' ? 'desc' : 'asc');
+        }
+    };
+
+    const processedOrders = useMemo(() => {
+        const filtered = orders.filter(order => 
+            order.entryId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            order.employeeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            order.vendorName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            order.items.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            order.platform.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            order.mealType?.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+        return [...filtered].sort((a, b) => {
+            let comparison = 0;
+            if (sortBy === 'entryId') {
+                comparison = a.entryId.localeCompare(b.entryId);
+            } else if (sortBy === 'timestamp') {
+                const timeA = new Date(a.timestamp).getTime();
+                const timeB = new Date(b.timestamp).getTime();
+                comparison = timeA - timeB;
+            } else if (sortBy === 'employeeName') {
+                comparison = a.employeeName.localeCompare(b.employeeName);
+            } else if (sortBy === 'amount') {
+                comparison = a.amount - b.amount;
+            } else if (sortBy === 'status') {
+                comparison = a.status.localeCompare(b.status);
+            }
+            return sortOrder === 'asc' ? comparison : -comparison;
+        });
+    }, [orders, searchQuery, sortBy, sortOrder]);
+
+    const getFormattedDate = (timestamp?: string): Date => {
+        if (!timestamp) return new Date();
+        const d = new Date(timestamp);
+        return isNaN(d.getTime()) || d.getFullYear() <= 1970 ? new Date() : d;
+    };
 
     // 🌑 THEME SYNC
     useEffect(() => {
@@ -144,6 +210,8 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
             `*📄 ENGLABS INDUSTRIAL OS - AUDIT RECEIPT*\n` +
             `================================\n` +
             `*ORDER ID:* ${order.entryId}\n` +
+            `*PROJECT ID:* ${order.projectCode || 'N/A'}\n` +
+            `*MEAL:* ${order.mealType || 'N/A'}\n` +
             `*DATE:* ${date}\n` +
             `--------------------------------\n` +
             `*EMPLOYEE:* ${order.employeeName}\n` +
@@ -160,11 +228,166 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
             `*PAYMENT:* ${order.paymentMode} (${order.paidBy})\n` +
             `*PURPOSE:* ${order.purpose}\n` +
             `*STATUS:* ${statusEmoji} ${order.status}\n` +
+            (order.platform === 'Sky-5' ? `*⚡ UPI PAYMENT LINK:* upi://pay?pa=Q15213511@ybl&pn=Sky5%20Hotel&am=${order.amount}&cu=INR\n` : '') +
             `*APPROVED BY:* ${order.approvedBy || 'GAURAV PANCHAL'}\n` +
             `================================\n` +
             `_Verified Hospitality & Welfare Ledger_`
         );
         window.open(`https://wa.me/?text=${text}`, '_blank');
+    };
+
+    const shareSummaryOnWhatsApp = () => {
+        const dateStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+        const activeOrders = processedOrders;
+        const total = activeOrders.reduce((sum, o) => sum + o.amount, 0);
+        const approvedCount = activeOrders.filter(o => o.status === 'Approved').length;
+        const pendingCount = activeOrders.filter(o => o.status === 'Pending').length;
+        const sky5Total = activeOrders.filter(o => o.platform === 'Sky-5').reduce((sum, o) => sum + o.amount, 0);
+        const otherTotal = total - sky5Total;
+
+        // Meal type stats
+        const bfOrders = activeOrders.filter(o => o.mealType === 'Breakfast');
+        const lnOrders = activeOrders.filter(o => o.mealType === 'Lunch');
+        const dnOrders = activeOrders.filter(o => o.mealType === 'Dinner');
+
+        const bfTotal = bfOrders.reduce((sum, o) => sum + o.amount, 0);
+        const lnTotal = lnOrders.reduce((sum, o) => sum + o.amount, 0);
+        const dnTotal = dnOrders.reduce((sum, o) => sum + o.amount, 0);
+
+        // Group active orders by date (formatted as DD MMM YYYY)
+        const groups: { [date: string]: FoodOrder[] } = {};
+        activeOrders.forEach(o => {
+            const dateObj = new Date(o.timestamp);
+            const dateKey = isNaN(dateObj.getTime())
+                ? 'Unknown Date'
+                : dateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+            if (!groups[dateKey]) {
+                groups[dateKey] = [];
+            }
+            groups[dateKey].push(o);
+        });
+
+        // Sort dates based on current sortOrder
+        const sortedDates = Object.keys(groups).sort((a, b) => {
+            const timeA = new Date(a).getTime();
+            const timeB = new Date(b).getTime();
+            return sortOrder === 'asc' ? timeA - timeB : timeB - timeA;
+        });
+
+        const dateWiseDetails = sortedDates.map(date => {
+            const dateOrdersText = groups[date].map(o => {
+                return `• *${o.entryId}* | Staff: ${o.employeeName} (${o.department})\n` +
+                       `  Meal: ${o.mealType || 'N/A'} - ${o.quantity} ${o.unit || 'Nos'} ${o.items}\n` +
+                       `  Cost: ₹${o.amount} (${o.platform} - ${o.vendorName})\n` +
+                       `  Purpose: ${o.purpose}${o.projectCode ? ` | Project ID: ${o.projectCode}` : ''} [Status: ${o.status}]`;
+            }).join('\n\n');
+            return `*📅 ${date}*\n` +
+                   `--------------------------------\n` +
+                   dateOrdersText;
+        }).join('\n\n');
+
+        const text = encodeURIComponent(
+            `*📊 ENGLABS PANTRY LEDGER SUMMARY*\n` +
+            `================================\n` +
+            `*DATE:* ${dateStr}\n` +
+            `*TOTAL VOLUME:* ${activeOrders.length} orders\n` +
+            `*TOTAL SPEND:* ₹${total.toLocaleString('en-IN')}\n` +
+            `--------------------------------\n` +
+            `*MEAL TYPE BREAKDOWN:*\n` +
+            `🍳 Breakfast: ${bfOrders.length} orders (₹${bfTotal.toLocaleString('en-IN')})\n` +
+            `🍱 Lunch: ${lnOrders.length} orders (₹${lnTotal.toLocaleString('en-IN')})\n` +
+            `🍽️ Dinner: ${dnOrders.length} orders (₹${dnTotal.toLocaleString('en-IN')})\n` +
+            `--------------------------------\n` +
+            `*SKY-5 SPEND:* ₹${sky5Total.toLocaleString('en-IN')}\n` +
+            `*OTHER SPEND:* ₹${otherTotal.toLocaleString('en-IN')}\n` +
+            `--------------------------------\n` +
+            `*AUDIT LIFECYCLE:*\n` +
+            `✅ Approved: ${approvedCount} orders\n` +
+            `⏳ Pending: ${pendingCount} orders\n` +
+            `================================\n\n` +
+            `*DATE-WISE ORDER DETAILS:*\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            dateWiseDetails + '\n\n' +
+            `================================\n` +
+            `_Generated by Englabs OS Ledger Portal_`
+        );
+        window.open(`https://wa.me/?text=${text}`, '_blank');
+    };
+
+    const downloadLedgerCSV = () => {
+        const headers = [
+            'Entry ID', 'Date', 'Time', 'Employee Name', 'Department', 'Platform', 
+            'Meal Type', 'Vendor Name', 'Items', 'Quantity', 'Unit', 'Rate (₹)', 
+            'Gross Total (₹)', 'Discount Mode', 'Discount Value', 'Discount Amount (₹)', 
+            'Net Amount (₹)', 'Payment Mode', 'Paid By', 'Project Code', 'Purpose', 
+            'Business Justification', 'Approval Status', 'Approved By', 'Tracking Status', 
+            'Receipt Attachment', 'Remarks'
+        ];
+        const csvRows = [headers.join(',')];
+
+        orders.forEach(o => {
+            const subtotal = (o.rate || 0) * (o.quantity || 1);
+            const discountAmount = o.discountType === 'Percentage' 
+                ? (subtotal * (o.discount || 0) / 100)
+                : (o.discount || 0);
+
+            const row = [
+                o.entryId,
+                o.timestamp ? new Date(o.timestamp).toLocaleDateString('en-GB') : '',
+                o.timestamp ? new Date(o.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '',
+                `"${o.employeeName.replace(/"/g, '""')}"`,
+                o.department,
+                o.platform,
+                o.mealType || 'N/A',
+                `"${o.vendorName.replace(/"/g, '""')}"`,
+                `"${o.items.replace(/"/g, '""')}"`,
+                o.quantity,
+                o.unit || 'Nos',
+                o.rate || 0,
+                subtotal,
+                o.discountType || 'Flat',
+                o.discount || 0,
+                discountAmount,
+                o.amount,
+                o.paymentMode,
+                o.paidBy,
+                o.projectCode || 'N/A',
+                o.purpose,
+                `"${(o.justification || '').replace(/"/g, '""')}"`,
+                o.status,
+                o.approvedBy || 'GAURAV PANCHAL',
+                o.trackingStatus,
+                o.hasBill ? 'Yes' : 'No',
+                `"${(o.remarks || '').replace(/"/g, '""')}"`
+            ];
+            csvRows.push(row.join(','));
+        });
+
+        const csvContent = "data:text/csv;charset=utf-8," + csvRows.join("\n");
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `englabs_food_ledger_${new Date().toISOString().split('T')[0]}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const handleShare = () => {
+        const total = orders.reduce((sum, o) => sum + o.amount, 0);
+        const summaryText = `ENGLABS PANTRY LEDGER SUMMARY - spend: ₹${total.toLocaleString('en-IN')} across ${orders.length} orders.`;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: 'Englabs Food Ledger',
+                text: summaryText,
+                url: window.location.href
+            }).catch(() => {
+                shareSummaryOnWhatsApp();
+            });
+        } else {
+            shareSummaryOnWhatsApp();
+        }
     };
 
     const totalExpense = orders.reduce((sum, o) => sum + o.amount, 0);
@@ -196,10 +419,18 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
                     >
                         {darkMode ? <Sun className="w-5 h-5 text-orange-400" /> : <Moon className="w-5 h-5" />}
                     </button>
-                    <button className="p-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+                    <button 
+                        onClick={downloadLedgerCSV}
+                        className="p-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                        title="Download CSV"
+                    >
                         <Download className="w-5 h-5" />
                     </button>
-                    <button className="p-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+                    <button 
+                        onClick={handleShare}
+                        className="p-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                        title="Share Summary"
+                    >
                         <Share2 className="w-5 h-5" />
                     </button>
                     <button 
@@ -318,8 +549,27 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mr-2">Quick Reports:</span>
-                                    <button className="px-3 py-1.5 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg text-[10px] font-black uppercase hover:bg-emerald-100 transition-colors">Daily PDF</button>
-                                    <button className="px-3 py-1.5 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-lg text-[10px] font-black uppercase hover:bg-blue-100 transition-colors">Master Excel</button>
+                                    <button 
+                                        onClick={() => window.print()}
+                                        className="px-3 py-1.5 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg text-[10px] font-black uppercase hover:bg-emerald-100 transition-colors"
+                                        title="Print Ledger Report"
+                                    >
+                                        Daily PDF
+                                    </button>
+                                    <button 
+                                        onClick={downloadLedgerCSV}
+                                        className="px-3 py-1.5 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-lg text-[10px] font-black uppercase hover:bg-blue-100 transition-colors"
+                                        title="Export Ledger to CSV"
+                                    >
+                                        Master Excel
+                                    </button>
+                                    <button 
+                                        onClick={shareSummaryOnWhatsApp}
+                                        className="px-3 py-1.5 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 rounded-lg text-[10px] font-black uppercase hover:bg-green-100 transition-colors"
+                                        title="Share Ledger Summary on WhatsApp"
+                                    >
+                                        WhatsApp Ledger
+                                    </button>
                                 </div>
                             </div>
 
@@ -327,39 +577,62 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
                                 <table className="w-full text-left border-collapse">
                                     <thead className="bg-slate-50/50 dark:bg-slate-900/80 sticky top-0 z-10 backdrop-blur-xl">
                                         <tr className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-                                            <th className="px-8 py-5 border-b border-slate-100 dark:border-white/5">Entry ID</th>
-                                            <th className="px-8 py-5 border-b border-slate-100 dark:border-white/5">Employee</th>
+                                            <th className="px-8 py-5 border-b border-slate-100 dark:border-white/5 cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors select-none" onClick={() => handleSort('entryId')}>
+                                                Entry ID {sortBy === 'entryId' && (sortOrder === 'asc' ? '↑' : '↓')}
+                                            </th>
+                                            <th className="px-8 py-5 border-b border-slate-100 dark:border-white/5 cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors select-none" onClick={() => handleSort('timestamp')}>
+                                                Date {sortBy === 'timestamp' && (sortOrder === 'asc' ? '↑' : '↓')}
+                                            </th>
+                                            <th className="px-8 py-5 border-b border-slate-100 dark:border-white/5 cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors select-none" onClick={() => handleSort('employeeName')}>
+                                                Employee {sortBy === 'employeeName' && (sortOrder === 'asc' ? '↑' : '↓')}
+                                            </th>
                                             <th className="px-8 py-5 border-b border-slate-100 dark:border-white/5">Platform / Vendor</th>
-                                            <th className="px-8 py-5 border-b border-slate-100 dark:border-white/5">Amount</th>
+                                            <th className="px-8 py-5 border-b border-slate-100 dark:border-white/5 cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors select-none" onClick={() => handleSort('amount')}>
+                                                Amount {sortBy === 'amount' && (sortOrder === 'asc' ? '↑' : '↓')}
+                                            </th>
                                             <th className="px-8 py-5 border-b border-slate-100 dark:border-white/5">Purpose</th>
-                                            <th className="px-8 py-5 border-b border-slate-100 dark:border-white/5">Status</th>
+                                            <th className="px-8 py-5 border-b border-slate-100 dark:border-white/5 cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors select-none" onClick={() => handleSort('status')}>
+                                                Status {sortBy === 'status' && (sortOrder === 'asc' ? '↑' : '↓')}
+                                            </th>
                                             <th className="px-8 py-5 border-b border-slate-100 dark:border-white/5 text-right">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100 dark:divide-white/5">
-                                        {orders.filter(order => 
-                                            order.entryId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                            order.employeeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                            order.vendorName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                            order.items.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                            order.platform.toLowerCase().includes(searchQuery.toLowerCase())
-                                        ).map((order) => (
+                                        {processedOrders.map((order) => (
                                             <tr key={order.entryId} className="hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors group">
                                                 <td className="px-8 py-6">
                                                     <div className="flex items-center gap-3">
-                                                        {order.attachmentUrl ? (
+                                                        {order.attachmentUrl || 
+                                                         order.items.toLowerCase().includes('thali') || 
+                                                         order.items.toLowerCase().includes('thaali') || 
+                                                         order.items.toLowerCase().includes('biryani') || 
+                                                         order.items.toLowerCase().includes('makhani') ? (
                                                             <button 
-                                                                onClick={() => setSelectedImage(order.attachmentUrl || null)}
+                                                                onClick={() => setSelectedImage(order.attachmentUrl || thaliImage)}
                                                                 className="w-8 h-8 rounded-lg overflow-hidden border border-slate-100 shrink-0 hover:ring-2 hover:ring-emerald-500 transition-all"
                                                             >
-                                                                <img src={order.attachmentUrl} className="w-full h-full object-cover" alt="Bill" />
+                                                                <img 
+                                                                    src={order.attachmentUrl || thaliImage} 
+                                                                    className="w-full h-full object-cover" 
+                                                                    alt="Food" 
+                                                                />
                                                             </button>
                                                         ) : (
                                                             <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
                                                                 <ImageIcon className="w-3 h-3 text-slate-300" />
                                                             </div>
                                                         )}
-                                                        <span className="text-[10px] font-black bg-slate-100 text-slate-600 px-2 py-1 rounded-md">{order.entryId}</span>
+                                                        <span className="text-[10px] font-black bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-1 rounded-md">{order.entryId}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-8 py-6">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-sm font-bold text-slate-900 dark:text-white">
+                                                            {getFormattedDate(order.timestamp).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                                        </span>
+                                                        <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500 mt-0.5">
+                                                            {getFormattedDate(order.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                        </span>
                                                     </div>
                                                 </td>
                                                 <td className="px-8 py-6">
@@ -379,7 +652,14 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
                                                 </td>
                                                 <td className="px-8 py-6">
                                                     <div className="flex flex-col gap-1">
-                                                        <span className="text-[10px] font-black text-slate-600 uppercase">{order.purpose}</span>
+                                                        <div className="flex items-center gap-1.5 flex-wrap">
+                                                            <span className="text-[10px] font-black text-slate-600 uppercase">{order.purpose}</span>
+                                                            {order.mealType && (
+                                                                <span className="px-1.5 py-0.5 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 text-[8px] font-black rounded border border-amber-100 dark:border-amber-900/50 uppercase">
+                                                                    {order.mealType}
+                                                                </span>
+                                                            )}
+                                                        </div>
                                                         <span className="text-[10px] font-bold text-emerald-600">{order.quantity} {order.unit || 'Nos'}</span>
                                                         {order.projectCode && <span className="text-[9px] font-bold text-blue-500">PROJ: {order.projectCode}</span>}
                                                     </div>

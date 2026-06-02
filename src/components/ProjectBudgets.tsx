@@ -203,6 +203,7 @@ export const ProjectBudgets: React.FC<ProjectBudgetsProps> = ({ projects }) => {
                             <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="border-b border-slate-100 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                        <th className="pb-4 w-12">SR. NO.</th>
                                         <th className="pb-4 cursor-pointer hover:text-slate-900" onClick={() => handleSort('id')}>Project ID {sortBy === 'id' && (sortOrder === 'asc' ? '↑' : '↓')}</th>
                                         <th className="pb-4">Client</th>
                                         <th className="pb-4 cursor-pointer hover:text-slate-900" onClick={() => handleSort('value')}>Value {sortBy === 'value' && (sortOrder === 'asc' ? '↑' : '↓')}</th>
@@ -213,7 +214,7 @@ export const ProjectBudgets: React.FC<ProjectBudgetsProps> = ({ projects }) => {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 text-sm font-semibold text-slate-700">
-                                    {processedProjects.map((project) => {
+                                    {processedProjects.map((project, index) => {
                                         const marginVal = project.planning.value - project.planning.budget;
                                         const marginPct = project.planning.value > 0 ? (marginVal / project.planning.value) * 100 : 0;
                                         const status = getBudgetStatus(project.planning.value, project.planning.budget);
@@ -225,6 +226,7 @@ export const ProjectBudgets: React.FC<ProjectBudgetsProps> = ({ projects }) => {
                                                 className={`hover:bg-slate-50/50 cursor-pointer transition-all ${isSelected ? 'bg-emerald-500/5' : ''}`}
                                                 onClick={() => handleSelectProject(project)}
                                             >
+                                                <td className="py-4 text-[11px] font-bold text-slate-400">{index + 1}</td>
                                                 <td className="py-4 font-black text-[#0e4368]">{project.projectId}</td>
                                                 <td className="py-4 font-bold text-slate-900 truncate max-w-[150px]">{project.client}</td>
                                                 <td className="py-4">₹{project.planning.value.toLocaleString('en-IN')}</td>

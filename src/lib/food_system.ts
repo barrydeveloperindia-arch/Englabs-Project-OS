@@ -6,6 +6,7 @@ export type PaidBy = 'Employee' | 'Company' | 'Reimbursement';
 export type ApprovalStatus = 'Pending' | 'Approved' | 'Rejected';
 export type TrackingStatus = 'Order Placed' | 'In Kitchen' | 'Ready for Pickup' | 'Dispatched' | 'Delivered';
 export type DiscountType = 'Flat' | 'Percentage';
+export type MealType = 'Breakfast' | 'Lunch' | 'Dinner';
 
 export interface FoodOrder {
     entryId: string; // FOOD-001
@@ -15,6 +16,7 @@ export interface FoodOrder {
     mobile?: string;
     
     platform: FoodPlatform;
+    mealType?: MealType;
     vendorName: string;
     items: string;
     quantity: number;
@@ -47,6 +49,7 @@ export const ORDER_TYPES: OrderType[] = ['Individual', 'Team', 'Client Meeting',
 export const PURPOSES: Purpose[] = ['Official Work', 'Overtime Work', 'Client Meeting', 'Site Work', 'Personal'];
 export const PAYMENT_MODES: PaymentMode[] = ['Cash', 'UPI', 'GPay', 'PhonePay', 'BharatPay', 'NEFT', 'Company Account'];
 export const PAID_BY_OPTIONS: PaidBy[] = ['Employee', 'Company', 'Reimbursement'];
+export const MEAL_TYPES: MealType[] = ['Breakfast', 'Lunch', 'Dinner'];
 
 export const STAFF_LIST = [
     'Bharat Anand',

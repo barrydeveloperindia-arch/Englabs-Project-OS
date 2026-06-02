@@ -1,66 +1,66 @@
 {
-  "projectId": "C5137",
-  "client": "MARELLI",
-  "planning": {
-    "value": 100000,
-    "budget": 70000,
-    "deliveryTerms": "ToPay",
-    "poConfirmed": true,
-    "startDate": "2026-04-28"
-  },
-  "production": {
-    "currentStage": "Workshop Fabrication",
-    "stages": [
-      {
-        "name": "Engineering Design",
-        "status": "Completed",
-        "lead": "Gaurav Panchal"
-      },
-      {
-        "name": "Machine Processing",
-        "status": "Completed",
-        "lead": "Paras"
-      },
-      {
-        "name": "Workshop Fabrication",
-        "status": "Completed",
-        "lead": "Parth"
-      },
-      {
-        "name": "Sanding",
-        "status": "In Progress",
-        "lead": "Parth"
-      },
-      {
-        "name": "Painting",
-        "status": "Pending",
-        "lead": "Parth"
-      },
-      {
-        "name": "Drying",
-        "status": "Pending",
-        "lead": "Parth"
-      },
-      {
-        "name": "Finishing",
-        "status": "Pending",
-        "lead": "Parth"
-      },
-      {
-        "name": "Final Packaging",
-        "status": "Pending",
-        "lead": "Parth"
-      }
-    ]
-  },
-  "metrics": {
-    "totalComponents": 34,
-    "materialConsumption": "Aluminum 6061, MS Sheet",
-    "workforce": [
-      "Gaurav Panchal",
-      "Paras",
-      "Parth",
-      "Sandeep"
-    ]
-  }
+    "projectId": "C5137",
+    "client": "Unknown Client",
+    "planning": {
+        "value": 7282.84,
+        "budget": 5098,
+        "deliveryTerms": "ToPay",
+        "poConfirmed": true,
+        "startDate": "2026-04-28"
+    },
+    "production": {
+        "currentStage": "Workshop Fabrication",
+        "stages": [
+            {
+                "name": "Engineering Design",
+                "status": "Completed",
+                "lead": "Gaurav Panchal"
+            },
+            {
+                "name": "Machine Processing",
+                "status": "Completed",
+                "lead": "Paras"
+            },
+            {
+                "name": "Workshop Fabrication",
+                "status": "Completed",
+                "lead": "Parth"
+            },
+            {
+                "name": "Sanding",
+                "status": "In Progress",
+                "lead": "Parth"
+            },
+            {
+                "name": "Painting",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Drying",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Finishing",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Final Packaging",
+                "status": "Pending",
+                "lead": "Parth"
+            }
+        ]
+    },
+    "metrics": {
+        "totalComponents": 34,
+        "materialConsumption": "Aluminum 6061, MS Sheet",
+        "workforce": [
+            "Gaurav Panchal",
+            "Paras",
+            "Parth",
+            "Sandeep"
+        ]
+    }
 }
