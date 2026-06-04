@@ -17,7 +17,7 @@ test.describe('Englabs Projects OS - Core Workflow', () => {
     await expect(page.getByText('Mission Control', { exact: false })).toBeVisible({ timeout: 15000 });
     
     // Check for some project cards
-    const projects = page.locator('div:has-text("C0")');
+    const projects = page.locator('button:has-text("C")');
     const count = await projects.count();
     expect(count).toBeGreaterThan(0);
   });

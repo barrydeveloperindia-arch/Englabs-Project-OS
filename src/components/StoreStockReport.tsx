@@ -24,6 +24,7 @@ import * as XLSX from 'xlsx';
 import { InventoryItem } from '../lib/gate_system';
 import { fetchInventoryMaster, seedInventoryMaster, updateInventoryItemStock, deleteInventoryItem, addInventoryItem } from '../lib/inventory_service';
 import logo from '../assets/englabs_logo.png';
+import masterInventory from '../../data/master_inventory_may_2026.json';
 
 interface StockReport {
     report_id: string;
@@ -221,14 +222,7 @@ const StoreStockReport: React.FC = () => {
             { name: "OHP Marker 969", itemCode: "STA-618", category: "Stationery", currentStock: 5, unit: "PCS", location: "Rack-6", totalInward: 5, totalOutward: 0, minThreshold: 10, lastUpdated: "2026-05-14T10:00:00Z" }
         ];
 
-        const mockReports: StockReport[] = [
-            {
-                report_id: "SR-20260514-MASTER",
-                report_date: "2026-05-14",
-                status: 'SYNCED',
-                items: masterItems
-            }
-        ];
+        const mockReports: StockReport[] = masterInventory as unknown as StockReport[];
 
         async function syncWithFirestore() {
             try {
@@ -243,23 +237,30 @@ const StoreStockReport: React.FC = () => {
                     liveItems = await Promise.race([fetchInventoryMaster(), timeoutPromise]).catch(() => []);
                 }
                 
+                const codeToIndex = new Map(masterItems.map((item, idx) => [item.itemCode, idx]));
                 const sortedItems = [...liveItems].sort((a, b) => {
-                    const matchA = a.itemCode.match(/\d+/);
-                    const matchB = b.itemCode.match(/\d+/);
-                    if (matchA && matchB) {
-                        return parseInt(matchA[0]) - parseInt(matchB[0]);
-                    }
+                    const idxA = codeToIndex.has(a.itemCode) ? codeToIndex.get(a.itemCode)! : 9999;
+                    const idxB = codeToIndex.has(b.itemCode) ? codeToIndex.get(b.itemCode)! : 9999;
+                    if (idxA !== idxB) return idxA - idxB;
                     return a.itemCode.localeCompare(b.itemCode);
                 });
 
-                const updatedReport: StockReport = {
+                const juneReport: StockReport = {
+                    report_id: "SR-20260604-MASTER",
+                    report_date: "2026-06-04",
+                    status: 'SYNCED',
+                    items: sortedItems.length > 0 ? sortedItems : (masterInventory[0]?.items as unknown as InventoryItem[])
+                };
+
+                const mayReport: StockReport = {
                     report_id: "SR-20260514-MASTER",
                     report_date: "2026-05-14",
                     status: 'SYNCED',
-                    items: sortedItems.length > 0 ? sortedItems : masterItems
+                    items: masterItems
                 };
-                setReports([updatedReport]);
-                setSelectedReport(updatedReport);
+
+                setReports([juneReport, mayReport]);
+                setSelectedReport(juneReport);
             } catch (e) {
                 console.error("Firestore sync error, falling back to local dataset", e);
                 setReports(mockReports);
@@ -452,9 +453,31 @@ const StoreStockReport: React.FC = () => {
                     <div className="max-w-7xl mx-auto space-y-10">
                         {/* FOLDER SYSTEM */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <FolderCard year="2026" month="May" count={reports.length} onClick={() => setView('REPORT_VIEW')} />
+                            <FolderCard 
+                                year="2026" 
+                                month="June" 
+                                count={reports.filter(r => r.report_id === "SR-20260604-MASTER").length} 
+                                onClick={() => {
+                                    const juneReport = reports.find(r => r.report_id === "SR-20260604-MASTER");
+                                    if (juneReport) {
+                                        setSelectedReport(juneReport);
+                                        setView('REPORT_VIEW');
+                                    }
+                                }} 
+                            />
+                            <FolderCard 
+                                year="2026" 
+                                month="May" 
+                                count={reports.filter(r => r.report_id === "SR-20260514-MASTER").length} 
+                                onClick={() => {
+                                    const mayReport = reports.find(r => r.report_id === "SR-20260514-MASTER");
+                                    if (mayReport) {
+                                        setSelectedReport(mayReport);
+                                        setView('REPORT_VIEW');
+                                    }
+                                }} 
+                            />
                             <FolderCard year="2026" month="April" count={0} locked />
-                            <FolderCard year="2026" month="March" count={0} locked />
                             <FolderCard year="2025" month="Archive" count={0} locked />
                         </div>
 
@@ -489,7 +512,7 @@ const StoreStockReport: React.FC = () => {
                                                         </div>
                                                         <div>
                                                             <p className="font-black text-slate-900 text-sm">{report.report_id}</p>
-                                                            <p className="text-[10px] font-bold text-slate-400 uppercase">May-2026 Store Report</p>
+                                                            <p className="text-[10px] font-bold text-slate-400 uppercase">{report.report_id === "SR-20260604-MASTER" ? "June-2026" : "May-2026"} Store Report</p>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -542,7 +565,7 @@ const StoreStockReport: React.FC = () => {
                                             <Clock className="w-4 h-4" /> Ingested: {selectedReport.report_date}
                                         </p>
                                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                            <Folder className="w-4 h-4" /> Path: /2026/May
+                                            <Folder className="w-4 h-4" /> Path: /2026/{selectedReport.report_id === "SR-20260604-MASTER" ? "June" : "May"}
                                         </p>
                                         <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">
                                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
