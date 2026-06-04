@@ -25,7 +25,10 @@ import {
     ChefHat,
     Truck,
     MoreHorizontal,
-    X
+    X,
+    ArrowUpRight,
+    ArrowDownRight,
+    Lock
 } from 'lucide-react';
 import NewProjectModal from './components/NewProjectModal';
 import GateRegister from './components/GateRegister';
@@ -38,6 +41,7 @@ import GateDisplayScreen from './components/GateDisplayScreen';
 import InventoryManager from './components/InventoryManager';
 import Sky5Terminal from './components/Sky5Terminal';
 import StoreStockReport from './components/StoreStockReport';
+import { STAFF_ROSTER } from './lib/constants';
 import PorterRegister from './components/PorterRegister';
 import HandoverDashboard from './components/HandoverDashboard';
 import ProjectLookupDashboard from './components/ProjectLookupDashboard';
@@ -45,7 +49,7 @@ import { ProjectBudgets } from './components/ProjectBudgets';
 import { ProjectData, STAGES, ProjectStage } from './lib/project';
 import { logAction, AuditLog } from './lib/system_guard';
 import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry } from './lib/database_service';
-import { processInventoryUpdate } from './lib/inventory_service';
+import { processInventoryUpdate, fetchInventoryMaster, fetchStockMovement, recordManualTransaction } from './lib/inventory_service';
 import forensicRegistry from '../data/forensic_gate_registry.json';
 import porterForensic from '../data/porter_missions_forensic.json';
 
@@ -316,11 +320,67 @@ const App: React.FC = () => {
         setShowHandover(false);
     };
 
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+        return localStorage.getItem('englabs_authenticated') === 'true';
+    });
+    const [userRole, setUserRole] = useState<'ADMIN' | 'STAFF' | null>(() => {
+        return localStorage.getItem('englabs_user_role') as 'ADMIN' | 'STAFF' | null;
+    });
+    const [pin, setPin] = useState("");
+    const [pinError, setPinError] = useState(false);
+
+    const handlePinInput = (num: string) => {
+        if (pin.length >= 4) return;
+        const newPin = pin + num;
+        setPin(newPin);
+        
+        if (newPin.length === 4) {
+            if (newPin === "0001") {
+                setIsAuthenticated(true);
+                setUserRole("ADMIN");
+                localStorage.setItem("englabs_authenticated", "true");
+                localStorage.setItem("englabs_user_role", "ADMIN");
+                setPin("");
+            } else if (newPin === "2580") {
+                setIsAuthenticated(true);
+                setUserRole("STAFF");
+                setCurrentView("STOCK_REPORT");
+                localStorage.setItem("englabs_authenticated", "true");
+                localStorage.setItem("englabs_user_role", "STAFF");
+                setPin("");
+            } else {
+                setPinError(true);
+                setTimeout(() => {
+                    setPinError(false);
+                    setPin("");
+                }, 500);
+            }
+        }
+    };
+
+    const handlePinBackspace = () => {
+        setPin(prev => prev.slice(0, -1));
+    };
+
+    const handleLogout = () => {
+        setIsAuthenticated(false);
+        setUserRole(null);
+        localStorage.removeItem("englabs_authenticated");
+        localStorage.removeItem("englabs_user_role");
+    };
+
     const [projects, setProjects] = useState<ProjectData[]>(staticProjects);
     const [selectedProject, setSelectedProject] = useState<ProjectData | null>(staticProjects[0] || null);
     const [searchQuery, setSearchQuery] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
+    const [inventoryItems, setInventoryItems] = useState<any[]>([]);
+    const [recentCheckouts, setRecentCheckouts] = useState<any[]>([]);
+    const [checkoutRefreshTrigger, setCheckoutRefreshTrigger] = useState(0);
+    const [checkoutItemCode, setCheckoutItemCode] = useState("");
+    const [checkoutQty, setCheckoutQty] = useState(1);
+    const [checkoutStaffName, setCheckoutStaffName] = useState("");
+    const [checkoutLoading, setCheckoutLoading] = useState(false);
     const [porterTrips, setPorterTrips] = useState<any[]>(() => {
         try {
             const saved = localStorage.getItem('englabs_porter_v1');
@@ -382,7 +442,26 @@ const App: React.FC = () => {
         });
     }, []);
 
-    const [currentView, setCurrentView] = useState<View>('PROJECTS');
+    useEffect(() => {
+        const loadInventoryForCheckout = async () => {
+            try {
+                const items = await fetchInventoryMaster();
+                setInventoryItems(items);
+
+                const logs = await fetchStockMovement();
+                const checkouts = logs.filter((l: any) => l.type === 'OUTWARD');
+                setRecentCheckouts(checkouts);
+            } catch (e) {
+                console.error("Failed to load inventory for checkout panel:", e);
+            }
+        };
+        loadInventoryForCheckout();
+    }, [checkoutRefreshTrigger]);
+
+    const [currentView, setCurrentView] = useState<View>(() => {
+        const role = localStorage.getItem('englabs_user_role');
+        return role === 'STAFF' ? 'STOCK_REPORT' : 'PROJECTS';
+    });
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     useEffect(() => {
@@ -540,7 +619,145 @@ const App: React.FC = () => {
         setGateEntries(prev => prev.filter(e => e.id !== id));
     };
 
-    if (!selectedProject) return <div className="h-screen w-screen bg-slate-900 flex items-center justify-center text-white font-black text-4xl">INITIALIZING...</div>;
+    const handleCheckoutSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!checkoutItemCode) {
+            alert("Please select an item to check out.");
+            return;
+        }
+        if (checkoutQty <= 0) {
+            alert("Quantity must be greater than 0.");
+            return;
+        }
+        if (!checkoutStaffName.trim()) {
+            alert("Please enter the staff name.");
+            return;
+        }
+
+        const selectedItem = inventoryItems.find(i => i.itemCode === checkoutItemCode);
+        if (!selectedItem) {
+            alert("Selected item not found.");
+            return;
+        }
+
+        try {
+            setCheckoutLoading(true);
+            const res = await recordManualTransaction(
+                selectedItem.name,
+                checkoutQty,
+                selectedItem.unit || "Nos",
+                'OUTWARD',
+                checkoutStaffName.trim(),
+                "HOMEPAGE_CHECKOUT",
+                undefined,
+                undefined,
+                selectedProject?.projectId
+            ) as any;
+
+            if (res.success) {
+                setCheckoutQty(1);
+                setCheckoutItemCode("");
+                setCheckoutRefreshTrigger(prev => prev + 1);
+            } else {
+                alert(`Failed to check out: ${res.error || 'Unknown error'}`);
+            }
+        } catch (err: any) {
+            alert(`Check-out error: ${err.message || err}`);
+        } finally {
+            setCheckoutLoading(false);
+        }
+    };
+
+    if (!selectedProject) return <div className="h-screen w-screen bg-[#092a42] flex items-center justify-center text-white font-black text-4xl">INITIALIZING...</div>;
+
+    if (!isAuthenticated) {
+        return (
+            <div className="h-screen w-screen bg-[#092a42] flex items-center justify-center text-white font-sans p-6 overflow-hidden relative">
+                {/* Decorative background grid and graphics */}
+                <div className="absolute inset-0 industrial-grid opacity-20" />
+                <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-emerald-500/10 blur-[120px] animate-pulse" />
+                <div className="absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-blue-500/10 blur-[120px] animate-pulse" />
+
+                <div className="w-full max-w-[400px] bg-slate-950/40 backdrop-blur-xl border border-white/5 rounded-[2.5rem] p-8 flex flex-col items-center shadow-2xl relative z-10 animate-spring-zoom">
+                    {/* Brand header */}
+                    <div className="flex items-center gap-3.5 mb-2">
+                        <div className="p-2 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl shadow-lg shadow-emerald-500/20">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-900">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                            </svg>
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-base font-black tracking-tighter text-white">ENGLABS STORE</span>
+                            <span className="text-[8px] font-black text-slate-400 tracking-[0.3em] uppercase">Enterprise Stock OS</span>
+                        </div>
+                    </div>
+
+                    <div className="h-[1px] w-full bg-white/5 my-6" />
+
+                    <h2 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-1 text-center">SYSTEM ACCESS LOCK</h2>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-8 text-center">Enter PIN to authorize access</p>
+
+                    {/* PIN circular indicators */}
+                    <div className={`flex gap-4 mb-10 ${pinError ? 'animate-shake' : ''}`}>
+                        {[0, 1, 2, 3].map((index) => (
+                            <div 
+                                key={index} 
+                                className={`w-4 h-4 rounded-full transition-all duration-300 ${
+                                    pinError 
+                                    ? 'bg-rose-500 border border-rose-400 shadow-[0_0_12px_rgba(239,68,68,0.5)]'
+                                    : index < pin.length 
+                                    ? 'bg-emerald-400 border border-emerald-300 shadow-[0_0_12px_rgba(52,211,153,0.5)]' 
+                                    : 'bg-slate-800 border border-slate-700/50'
+                                }`} 
+                            />
+                        ))}
+                    </div>
+
+                    {/* Numeric Keypad */}
+                    <div className="grid grid-cols-3 gap-4 w-full max-w-[280px] mb-6">
+                        {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((num) => (
+                            <button
+                                key={num}
+                                type="button"
+                                onClick={() => handlePinInput(num)}
+                                className="w-16 h-16 rounded-full bg-white/5 border border-white/5 font-black text-xl hover:bg-white/10 hover:border-white/10 transition-all flex items-center justify-center shadow-lg active:scale-95 cursor-pointer text-white"
+                            >
+                                {num}
+                            </button>
+                        ))}
+                        <button
+                            type="button"
+                            onClick={() => setPin("")}
+                            className="w-16 h-16 rounded-full font-black text-[10px] uppercase tracking-widest text-slate-500 hover:text-white flex items-center justify-center transition-all active:scale-95 cursor-pointer"
+                        >
+                            Clear
+                        </button>
+                        <button
+                            key="0"
+                            type="button"
+                            onClick={() => handlePinInput("0")}
+                            className="w-16 h-16 rounded-full bg-white/5 border border-white/5 font-black text-xl hover:bg-white/10 hover:border-white/10 transition-all flex items-center justify-center shadow-lg active:scale-95 cursor-pointer text-white"
+                        >
+                            0
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handlePinBackspace}
+                            className="w-16 h-16 rounded-full font-black text-[10px] uppercase tracking-widest text-slate-500 hover:text-white flex items-center justify-center transition-all active:scale-95 cursor-pointer"
+                        >
+                            Delete
+                        </button>
+                    </div>
+
+                    {pinError && (
+                        <p className="text-[10px] font-black text-rose-400 uppercase tracking-wider animate-bounce">
+                            INCORRECT PIN. ACCESS DENIED.
+                        </p>
+                    )}
+                </div>
+            </div>
+        );
+    }
 
     if (showHandover) {
         return <HandoverDashboard onAcknowledge={handleAcknowledgeHandover} />;
@@ -564,88 +781,108 @@ const App: React.FC = () => {
                             </div>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-lg font-black text-white tracking-tighter leading-none">ENGLABS INDIA</span>
+                            <span className="text-lg font-black text-white tracking-tighter leading-none">ENGLABS STORE</span>
                             <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mt-1">PVT LTD</span>
                         </div>
                     </div>
-                    <p className="text-[9px] font-black text-emerald-500/80 tracking-[0.25em] uppercase pl-1">Enterprise Operational OS</p>
+                    <p className="text-[9px] font-black text-emerald-500/80 tracking-[0.25em] uppercase pl-1">Enterprise Store OS</p>
+                    <div className="mt-4 pl-1">
+                        {userRole === 'ADMIN' ? (
+                            <span className="inline-flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-xl text-[9px] font-black text-emerald-400 uppercase tracking-widest">
+                                <Shield className="w-3.5 h-3.5 text-emerald-400" /> Admin Mode
+                            </span>
+                        ) : (
+                            <span className="inline-flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded-xl text-[9px] font-black text-amber-400 uppercase tracking-widest">
+                                <Lock className="w-3.5 h-3.5 text-amber-400" /> Staff Mode
+                            </span>
+                        )}
+                    </div>
                 </div>
 
                 <div className="px-6 mb-8 flex flex-col gap-2.5 overflow-y-auto max-h-[55vh] dark-scrollbar shrink-0">
-                    <SidebarButton 
-                        active={currentView === 'PROJECTS'} 
-                        onClick={() => setCurrentView('PROJECTS')} 
-                        icon={<Layers className="w-4.5 h-4.5" />} 
-                        label="PROJECTS" 
-                    />
-                    <SidebarButton 
-                        active={currentView === 'PROJECT_LOOKUP'} 
-                        onClick={() => setCurrentView('PROJECT_LOOKUP')} 
-                        icon={<Search className="w-4.5 h-4.5" />} 
-                        label="PROJECT LOOKUP & MAPPING" 
-                    />
-                    <SidebarButton 
-                        active={currentView === 'PROJECT_BUDGETS'} 
-                        onClick={() => setCurrentView('PROJECT_BUDGETS')} 
-                        icon={<DollarSign className="w-4.5 h-4.5" />} 
-                        label="PROJECT BUDGETS" 
-                    />
-                    <SidebarButton 
-                        active={currentView === 'GATE_REGISTER'} 
-                        onClick={() => setCurrentView('GATE_REGISTER')} 
-                        icon={<Shield className="w-4.5 h-4.5" />} 
-                        label="LOGISTICS COMMAND" 
-                    />
-                    <SidebarButton 
-                        active={currentView === 'GATE_DISPLAY'} 
-                        onClick={() => setCurrentView('GATE_DISPLAY')} 
-                        icon={<Activity className="w-4.5 h-4.5" />} 
-                        label="GATE DISPLAY HUD" 
-                        color="emerald"
-                    />
-                    <SidebarButton 
-                        active={currentView === 'FOOD_REGISTER'} 
-                        onClick={() => setCurrentView('FOOD_REGISTER')} 
-                        icon={<Utensils className="w-4.5 h-4.5" />} 
-                        label="PANTRY CONTROL" 
-                    />
-                    <SidebarButton 
-                        active={currentView === 'INVENTORY'} 
-                        onClick={() => setCurrentView('INVENTORY')} 
-                        icon={<Box className="w-4.5 h-4.5" />} 
-                        label="INVENTORY MASTER" 
-                    />
-                    <SidebarButton 
-                        active={currentView === 'STOCK_REPORT'} 
-                        onClick={() => setCurrentView('STOCK_REPORT')} 
-                        icon={<FileText className="w-4.5 h-4.5" />} 
-                        label="STORE STOCK REPORT" 
-                    />
-                    <SidebarButton 
-                        active={currentView === 'BILLING'} 
-                        onClick={() => setCurrentView('BILLING')} 
-                        icon={<CreditCard className="w-4.5 h-4.5" />} 
-                        label="FINANCE COMMAND" 
-                    />
-
-                    <SidebarButton 
-                        active={currentView === 'PORTER_SERVICE'} 
-                        onClick={() => setCurrentView('PORTER_SERVICE')} 
-                        icon={<Truck className="w-4.5 h-4.5" />} 
-                        label="PORTER SERVICE" 
-                        color="emerald"
-                    />
-
-                    <div className="mt-8 pt-8 border-t border-white/5">
-                        <p className="px-5 text-[9px] font-black text-slate-600 uppercase tracking-[0.25em] mb-5">Vendor Channels</p>
+                    {userRole === 'ADMIN' ? (
+                        <>
+                            <SidebarButton 
+                                active={currentView === 'PROJECTS'} 
+                                onClick={() => setCurrentView('PROJECTS')} 
+                                icon={<Layers className="w-4.5 h-4.5" />} 
+                                label="PROJECTS" 
+                            />
+                            <SidebarButton 
+                                active={currentView === 'PROJECT_LOOKUP'} 
+                                onClick={() => setCurrentView('PROJECT_LOOKUP')} 
+                                icon={<Search className="w-4.5 h-4.5" />} 
+                                label="PROJECT LOOKUP & MAPPING" 
+                            />
+                            <SidebarButton 
+                                active={currentView === 'PROJECT_BUDGETS'} 
+                                onClick={() => setCurrentView('PROJECT_BUDGETS')} 
+                                icon={<DollarSign className="w-4.5 h-4.5" />} 
+                                label="PROJECT BUDGETS" 
+                            />
+                            <SidebarButton 
+                                active={currentView === 'GATE_REGISTER'} 
+                                onClick={() => setCurrentView('GATE_REGISTER')} 
+                                icon={<Shield className="w-4.5 h-4.5" />} 
+                                label="LOGISTICS COMMAND" 
+                            />
+                            <SidebarButton 
+                                active={currentView === 'GATE_DISPLAY'} 
+                                onClick={() => setCurrentView('GATE_DISPLAY')} 
+                                icon={<Activity className="w-4.5 h-4.5" />} 
+                                label="GATE DISPLAY HUD" 
+                                color="emerald"
+                            />
+                            <SidebarButton 
+                                active={currentView === 'FOOD_REGISTER'} 
+                                onClick={() => setCurrentView('FOOD_REGISTER')} 
+                                icon={<Utensils className="w-4.5 h-4.5" />} 
+                                label="PANTRY CONTROL" 
+                            />
+                            <SidebarButton 
+                                active={currentView === 'INVENTORY'} 
+                                onClick={() => setCurrentView('INVENTORY')} 
+                                icon={<Box className="w-4.5 h-4.5" />} 
+                                label="INVENTORY MASTER" 
+                            />
+                            <SidebarButton 
+                                active={currentView === 'STOCK_REPORT'} 
+                                onClick={() => setCurrentView('STOCK_REPORT')} 
+                                icon={<FileText className="w-4.5 h-4.5" />} 
+                                label="STORE STOCK REPORT" 
+                            />
+                            <SidebarButton 
+                                active={currentView === 'BILLING'} 
+                                onClick={() => setCurrentView('BILLING')} 
+                                icon={<CreditCard className="w-4.5 h-4.5" />} 
+                                label="FINANCE COMMAND" 
+                            />
+                            <SidebarButton 
+                                active={currentView === 'PORTER_SERVICE'} 
+                                onClick={() => setCurrentView('PORTER_SERVICE')} 
+                                icon={<Truck className="w-4.5 h-4.5" />} 
+                                label="PORTER SERVICE" 
+                                color="emerald"
+                            />
+                            <div className="mt-8 pt-8 border-t border-white/5">
+                                <p className="px-5 text-[9px] font-black text-slate-600 uppercase tracking-[0.25em] mb-5">Vendor Channels</p>
+                                <SidebarButton 
+                                    active={currentView === 'SKY5_TERMINAL'} 
+                                    onClick={() => setCurrentView('SKY5_TERMINAL')} 
+                                    icon={<ChefHat className="w-4.5 h-4.5" />} 
+                                    label="SKY-5 KITCHEN" 
+                                    color="amber"
+                                />
+                            </div>
+                        </>
+                    ) : (
                         <SidebarButton 
-                            active={currentView === 'SKY5_TERMINAL'} 
-                            onClick={() => setCurrentView('SKY5_TERMINAL')} 
-                            icon={<ChefHat className="w-4.5 h-4.5" />} 
-                            label="SKY-5 KITCHEN" 
-                            color="amber"
+                            active={currentView === 'STOCK_REPORT'} 
+                            onClick={() => setCurrentView('STOCK_REPORT')} 
+                            icon={<FileText className="w-4.5 h-4.5" />} 
+                            label="STORE STOCK REPORT" 
                         />
-                    </div>
+                    )}
                 </div>
 
                 {currentView === 'PROJECTS' && (
@@ -685,13 +922,21 @@ const App: React.FC = () => {
 
                     </>
                 )}
-                <div className="p-6 border-t border-slate-800 shrink-0">
+                <div className="p-6 border-t border-slate-800 shrink-0 space-y-3">
+                    {userRole === 'ADMIN' && (
+                        <button 
+                            onClick={() => setIsModalOpen(true)}
+                            data-testid="btn-new-mission"
+                            className="w-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-emerald-950/20 cursor-pointer"
+                        >
+                            <Plus className="w-5 h-5" /> NEW MISSION
+                        </button>
+                    )}
                     <button 
-                        onClick={() => setIsModalOpen(true)}
-                        data-testid="btn-new-mission"
-                        className="w-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-emerald-950/20"
+                        onClick={handleLogout}
+                        className="w-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 font-black py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg cursor-pointer text-xs"
                     >
-                        <Plus className="w-5 h-5" /> NEW MISSION
+                        <Lock className="w-4 h-4" /> LOCK SYSTEM
                     </button>
                 </div>
             </aside>
@@ -713,6 +958,15 @@ const App: React.FC = () => {
                             </div>
                         </div>
                         <div className="flex items-center gap-3 md:gap-6">
+                            {userRole === 'ADMIN' ? (
+                                <span className="flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full text-[9px] font-black text-emerald-600 uppercase tracking-widest">
+                                    <Shield className="w-3 h-3 text-emerald-500" /> Admin Mode
+                                </span>
+                            ) : (
+                                <span className="flex items-center gap-1 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-full text-[9px] font-black text-amber-600 uppercase tracking-widest">
+                                    <Lock className="w-3 h-3 text-amber-500" /> Staff Mode
+                                </span>
+                            )}
                             <div className="flex gap-2.5 md:gap-4 items-center">
                                 <div className="text-right hidden sm:block">
                                     <p className="text-[9px] md:text-[10px] font-black text-slate-900 uppercase">GAURAV PANCHAL</p>
@@ -745,45 +999,205 @@ const App: React.FC = () => {
                             <div className="flex flex-col xl:flex-row gap-6 md:gap-8">
                                 
                                 {/* PIPELINE (LEFT) */}
-                                <div className="flex-1 bg-white p-5 md:p-10 rounded-[1.75rem] md:rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)]">
-                                    <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-6 md:mb-8 tracking-tight flex items-center gap-3">
-                                        <Activity className="w-5.5 h-5.5 text-emerald-500" /> Production Pipeline
-                                    </h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                        {selectedProject.production.stages.map((stage, idx) => (
-                                            <div 
-                                                key={stage.name} 
-                                                className={`p-6 rounded-[2rem] border-2 transition-all cursor-pointer group flex flex-col justify-between h-48 ${
-                                                    stage.status === 'Completed' ? 'bg-emerald-50/30 border-emerald-100' :
-                                                    stage.status === 'In Progress' ? 'bg-blue-50/30 border-blue-200' :
-                                                    'bg-slate-50 border-transparent hover:border-slate-200'
-                                                }`}
-                                                onClick={() => updateStage(stage.name, stage.status === 'Pending' ? 'In Progress' : stage.status === 'In Progress' ? 'Completed' : 'Pending')}
-                                            >
-                                                <div className="flex justify-between items-start">
-                                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black ${
-                                                        stage.status === 'Completed' ? 'bg-emerald-500 text-slate-900' :
-                                                        stage.status === 'In Progress' ? 'bg-blue-500 text-white' :
-                                                        'bg-slate-200 text-slate-400'
-                                                    }`}>
-                                                        {stage.status === 'Completed' ? <CheckCircle2 className="w-5 h-5" /> : idx + 1}
+                                <div className="flex-1 flex flex-col gap-6 md:gap-8">
+                                    <div className="bg-white p-5 md:p-10 rounded-[1.75rem] md:rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)]">
+                                        <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-6 md:mb-8 tracking-tight flex items-center gap-3">
+                                            <Activity className="w-5.5 h-5.5 text-emerald-500" /> Production Pipeline
+                                        </h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                            {selectedProject.production.stages.map((stage, idx) => (
+                                                <div 
+                                                    key={stage.name} 
+                                                    className={`p-6 rounded-[2rem] border-2 transition-all cursor-pointer group flex flex-col justify-between h-48 ${
+                                                        stage.status === 'Completed' ? 'bg-emerald-50/30 border-emerald-100' :
+                                                        stage.status === 'In Progress' ? 'bg-blue-50/30 border-blue-200' :
+                                                        'bg-slate-50 border-transparent hover:border-slate-200'
+                                                    }`}
+                                                    onClick={() => updateStage(stage.name, stage.status === 'Pending' ? 'In Progress' : stage.status === 'In Progress' ? 'Completed' : 'Pending')}
+                                                >
+                                                    <div className="flex justify-between items-start">
+                                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black ${
+                                                            stage.status === 'Completed' ? 'bg-emerald-500 text-slate-900' :
+                                                            stage.status === 'In Progress' ? 'bg-blue-500 text-white' :
+                                                            'bg-slate-200 text-slate-400'
+                                                        }`}>
+                                                            {stage.status === 'Completed' ? <CheckCircle2 className="w-5 h-5" /> : idx + 1}
+                                                        </div>
+                                                        <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest">{stage.status}</span>
                                                     </div>
-                                                    <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest">{stage.status}</span>
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-black text-slate-900 text-sm leading-tight mb-3">{stage.name}</h4>
-                                                    <div className="flex items-center gap-2">
-                                                        <Users className="w-3 h-3 text-slate-400" />
-                                                        <span className="text-[9px] font-bold text-slate-500 uppercase">{stage.lead || "Pending"}</span>
+                                                    <div>
+                                                        <h4 className="font-black text-slate-900 text-sm leading-tight mb-3">{stage.name}</h4>
+                                                        <div className="flex items-center gap-2">
+                                                            <Users className="w-3 h-3 text-slate-400" />
+                                                            <span className="text-[9px] font-bold text-slate-500 uppercase">{stage.lead || "Pending"}</span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* TODAY'S MATERIAL ISSUED */}
+                                    <div className="bg-white p-5 md:p-10 rounded-[1.75rem] md:rounded-[3rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.02)] flex flex-col gap-6">
+                                         <div className="flex justify-between items-center pb-4 border-b border-slate-100">
+                                             <div>
+                                                 <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-3">
+                                                     <Box className="w-5.5 h-5.5 text-amber-500" /> Today's Material Issued
+                                                 </h3>
+                                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Real-time Operations Release Registry</p>
+                                             </div>
+                                             <span className="bg-slate-100 rounded-xl px-4 py-2 text-[10px] font-black text-slate-700 uppercase tracking-wider">
+                                                 {recentCheckouts.filter(tx => new Date(tx.timestamp).toDateString() === new Date().toDateString()).length} Items
+                                             </span>
+                                         </div>
+
+                                         {recentCheckouts.filter(tx => new Date(tx.timestamp).toDateString() === new Date().toDateString()).length === 0 ? (
+                                             <div className="p-16 text-center text-slate-300 flex flex-col items-center gap-3">
+                                                 <Clock className="w-12 h-12 opacity-30" />
+                                                 <p className="font-black text-sm uppercase tracking-widest">No Materials Issued Today</p>
+                                                 <p className="text-xs text-slate-400 max-w-xs">Items checked out via the side panel will instantly appear here in real-time.</p>
+                                             </div>
+                                         ) : (
+                                             <div className="overflow-x-auto">
+                                                 <table className="w-full text-left border-collapse">
+                                                     <thead>
+                                                         <tr className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-50 pb-4">
+                                                             <th className="pb-4 pr-4">Item Identity</th>
+                                                             <th className="pb-4 px-4 text-center">Quantity</th>
+                                                             <th className="pb-4 px-4">Staff Member</th>
+                                                             <th className="pb-4 pl-4 text-right">Time</th>
+                                                         </tr>
+                                                     </thead>
+                                                     <tbody className="divide-y divide-slate-50 text-xs">
+                                                         {recentCheckouts.filter(tx => new Date(tx.timestamp).toDateString() === new Date().toDateString()).map((tx) => (
+                                                             <tr key={tx.id} className="group hover:bg-slate-50/50 transition-colors">
+                                                                 <td className="py-4 pr-4">
+                                                                     <p className="font-black text-slate-900">{tx.itemId.replace(/_/g, ' ')}</p>
+                                                                     <p className="text-[8px] font-bold text-slate-400 mt-0.5 tracking-wider uppercase">{tx.itemId}</p>
+                                                                 </td>
+                                                                 <td className="py-4 px-4 text-center">
+                                                                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-100">
+                                                                         -{tx.quantity} {tx.unit || 'Nos'}
+                                                                     </span>
+                                                                 </td>
+                                                                 <td className="py-4 px-4 font-bold text-slate-700 uppercase">
+                                                                     {tx.partyName}
+                                                                 </td>
+                                                                 <td className="py-4 pl-4 text-right font-medium text-slate-400">
+                                                                     {new Date(tx.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+                                                                 </td>
+                                                             </tr>
+                                                         ))}
+                                                     </tbody>
+                                                 </table>
+                                             </div>
+                                         )}
                                     </div>
                                 </div>
 
                                 {/* INTEL (RIGHT) */}
                                 <div className="w-full xl:w-[400px] flex flex-col gap-6 md:gap-8">
+                                    {/* LIVE CHECK-OUT PANEL */}
+                                    <div className="bg-slate-900 border border-slate-800 p-6 md:p-8 rounded-[1.75rem] md:rounded-[3rem] text-white shadow-2xl relative overflow-hidden flex flex-col gap-6 shrink-0">
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                                        
+                                        <div>
+                                            <div className="flex items-center justify-between mb-2">
+                                                <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                                    <Activity className="w-4 h-4 text-emerald-400 animate-pulse" /> Live Check-Out Panel
+                                                </h3>
+                                                <span className="flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full text-[8px] font-black text-emerald-400 uppercase tracking-wider">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div> Live
+                                                </span>
+                                            </div>
+                                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Store Inventory Release Center</p>
+                                        </div>
+
+                                        {/* QUICK FORM */}
+                                        <form onSubmit={handleCheckoutSubmit} className="space-y-4">
+                                            <div className="space-y-1.5">
+                                                <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Select Item</label>
+                                                <select 
+                                                    value={checkoutItemCode} 
+                                                    onChange={(e) => setCheckoutItemCode(e.target.value)}
+                                                    required 
+                                                    className="w-full bg-slate-800 border border-slate-700/50 rounded-xl py-2.5 px-3 text-xs font-bold text-white outline-none focus:border-emerald-500"
+                                                >
+                                                    <option value="">-- Select Material --</option>
+                                                    {inventoryItems.map((item) => (
+                                                        <option key={item.itemCode} value={item.itemCode}>
+                                                            [{item.itemCode}] {item.name} ({item.currentStock} {item.unit} left)
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <div className="space-y-1.5">
+                                                    <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Quantity</label>
+                                                    <input 
+                                                        type="number" 
+                                                        min="1" 
+                                                        value={checkoutQty} 
+                                                        onChange={(e) => setCheckoutQty(parseInt(e.target.value) || 1)}
+                                                        required 
+                                                        className="w-full bg-slate-800 border border-slate-700/50 rounded-xl py-2.5 px-3 text-xs font-bold text-white outline-none focus:border-emerald-500"
+                                                    />
+                                                </div>
+                                                <div className="space-y-1.5">
+                                                    <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Staff Name</label>
+                                                    <select 
+                                                        value={checkoutStaffName} 
+                                                        onChange={(e) => setCheckoutStaffName(e.target.value)}
+                                                        required 
+                                                        className="w-full bg-slate-800 border border-slate-700/50 rounded-xl py-2.5 px-3 text-xs font-bold text-white outline-none focus:border-emerald-500"
+                                                    >
+                                                        <option value="">-- Staff --</option>
+                                                        {STAFF_ROSTER.map((name) => (
+                                                            <option key={name} value={name}>
+                                                                {name}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <button 
+                                                type="submit" 
+                                                disabled={checkoutLoading}
+                                                className="w-full bg-emerald-500 text-slate-950 font-black py-3 rounded-xl hover:bg-emerald-400 transition-all text-[10px] uppercase tracking-widest disabled:opacity-50 mt-2 shadow-lg shadow-emerald-500/10"
+                                            >
+                                                {checkoutLoading ? 'Processing...' : 'CHECK OUT'}
+                                            </button>
+                                        </form>
+
+                                        {/* MINI RECENT TICKER */}
+                                        <div className="border-t border-slate-800/80 pt-4">
+                                            <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-3">Live Checkout Feed</span>
+                                            {recentCheckouts.length === 0 ? (
+                                                <p className="text-[10px] font-bold text-slate-600 uppercase text-center py-4">No recent releases logged</p>
+                                            ) : (
+                                                <div className="space-y-2.5 max-h-[140px] overflow-y-auto custom-scrollbar">
+                                                    {recentCheckouts.slice(0, 3).map((tx) => (
+                                                        <div key={tx.id} className="p-3 bg-slate-800/40 border border-slate-800/60 rounded-xl flex items-center justify-between gap-3 animate-in fade-in duration-300">
+                                                            <div className="flex items-center gap-2.5 min-w-0">
+                                                                <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                                                                    <ArrowDownRight className="w-3.5 h-3.5 text-amber-400" />
+                                                                </div>
+                                                                <div className="min-w-0">
+                                                                    <p className="text-[11px] font-black text-white truncate">{tx.itemId.replace(/_/g, ' ')}</p>
+                                                                    <p className="text-[8px] font-bold text-slate-500 uppercase tracking-wider truncate">By: {tx.partyName}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div className="text-right shrink-0">
+                                                                <p className="text-[11px] font-black text-amber-400">-{tx.quantity} {tx.unit || 'Nos'}</p>
+                                                                <p className="text-[8px] font-medium text-slate-500 mt-0.5">{new Date(tx.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</p>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
                                     <div className="bg-[#0e4368] p-6 md:p-10 rounded-[1.75rem] md:rounded-[3rem] text-white shadow-2xl relative overflow-hidden flex-1">
                                         <div className="relative z-10">
                                             <h3 className="text-lg md:text-xl font-black text-slate-400 mb-4 md:mb-6 uppercase tracking-widest">Financial Health</h3>
@@ -867,7 +1281,7 @@ const App: React.FC = () => {
             ) : currentView === 'INVENTORY' ? (
                 <InventoryManager />
             ) : currentView === 'STOCK_REPORT' ? (
-                <StoreStockReport />
+                <StoreStockReport userRole={userRole || 'STAFF'} projects={projects} />
             ) : currentView === 'PORTER_SERVICE' ? (
                 <PorterRegister 
                     trips={porterTrips}
@@ -882,48 +1296,71 @@ const App: React.FC = () => {
 
             {/* MOBILE BOTTOM NAVIGATION BAR */}
             <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#0e4368] border-t border-slate-800 flex items-center justify-around px-4 z-50 print:hidden shadow-[0_-10px_30px_rgba(0,0,0,0.3)]">
-                <MobileTabButton 
-                    active={currentView === 'PROJECTS'} 
-                    onClick={() => setCurrentView('PROJECTS')} 
-                    icon={<Layers className="w-5 h-5" />} 
-                    label="Projects" 
-                />
-                <MobileTabButton 
-                    active={currentView === 'GATE_REGISTER'} 
-                    onClick={() => setCurrentView('GATE_REGISTER')} 
-                    icon={<Shield className="w-5 h-5" />} 
-                    label="Logistics" 
-                />
-                <MobileTabButton 
-                    active={currentView === 'INVENTORY'} 
-                    onClick={() => setCurrentView('INVENTORY')} 
-                    icon={<Box className="w-5 h-5" />} 
-                    label="Inventory" 
-                />
-                <MobileTabButton 
-                    active={currentView === 'STOCK_REPORT'} 
-                    onClick={() => setCurrentView('STOCK_REPORT')} 
-                    icon={<FileText className="w-5 h-5" />} 
-                    label="Report" 
-                />
-                <MobileTabButton 
-                    active={currentView === 'PORTER_SERVICE'} 
-                    onClick={() => setCurrentView('PORTER_SERVICE')} 
-                    icon={<Truck className="w-5 h-5" />} 
-                    label="Porter" 
-                    color="emerald"
-                />
-                <button 
-                    type="button"
-                    onClick={() => setIsMobileMenuOpen(true)}
-                    data-testid="mobile-nav-btn-more"
-                    className="flex flex-col items-center justify-center w-12 h-12 rounded-xl text-slate-500 hover:text-white"
-                >
-                    <div className="p-1.5">
-                        <MoreHorizontal className="w-5 h-5" />
-                    </div>
-                    <span className="text-[8px] font-black uppercase tracking-wider mt-1">More</span>
-                </button>
+                {userRole === 'ADMIN' ? (
+                    <>
+                        <MobileTabButton 
+                            active={currentView === 'PROJECTS'} 
+                            onClick={() => setCurrentView('PROJECTS')} 
+                            icon={<Layers className="w-5 h-5" />} 
+                            label="Projects" 
+                        />
+                        <MobileTabButton 
+                            active={currentView === 'GATE_REGISTER'} 
+                            onClick={() => setCurrentView('GATE_REGISTER')} 
+                            icon={<Shield className="w-5 h-5" />} 
+                            label="Logistics" 
+                        />
+                        <MobileTabButton 
+                            active={currentView === 'INVENTORY'} 
+                            onClick={() => setCurrentView('INVENTORY')} 
+                            icon={<Box className="w-5 h-5" />} 
+                            label="Inventory" 
+                        />
+                        <MobileTabButton 
+                            active={currentView === 'STOCK_REPORT'} 
+                            onClick={() => setCurrentView('STOCK_REPORT')} 
+                            icon={<FileText className="w-5 h-5" />} 
+                            label="Report" 
+                        />
+                        <MobileTabButton 
+                            active={currentView === 'PORTER_SERVICE'} 
+                            onClick={() => setCurrentView('PORTER_SERVICE')} 
+                            icon={<Truck className="w-5 h-5" />} 
+                            label="Porter" 
+                            color="emerald"
+                        />
+                        <button 
+                            type="button"
+                            onClick={() => setIsMobileMenuOpen(true)}
+                            data-testid="mobile-nav-btn-more"
+                            className="flex flex-col items-center justify-center w-12 h-12 rounded-xl text-slate-500 hover:text-white"
+                        >
+                            <div className="p-1.5">
+                                <MoreHorizontal className="w-5 h-5" />
+                            </div>
+                            <span className="text-[8px] font-black uppercase tracking-wider mt-1">More</span>
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <MobileTabButton 
+                            active={currentView === 'STOCK_REPORT'} 
+                            onClick={() => setCurrentView('STOCK_REPORT')} 
+                            icon={<FileText className="w-5 h-5" />} 
+                            label="Report" 
+                        />
+                        <button 
+                            type="button"
+                            onClick={handleLogout}
+                            className="flex flex-col items-center justify-center w-12 h-12 rounded-xl text-rose-400 hover:text-rose-350"
+                        >
+                            <div className="p-1.5">
+                                <Lock className="w-5 h-5" />
+                            </div>
+                            <span className="text-[8px] font-black uppercase tracking-wider mt-1">Lock</span>
+                        </button>
+                    </>
+                )}
             </nav>
 
             {/* MOBILE MORE SHEET MODAL */}

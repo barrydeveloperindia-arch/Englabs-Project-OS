@@ -18,11 +18,13 @@ import {
     CheckCircle2,
     Clock,
     Printer,
-    X
+    X,
+    Package,
+    Camera
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
-import { InventoryItem } from '../lib/gate_system';
-import { fetchInventoryMaster, seedInventoryMaster, updateInventoryItemStock, deleteInventoryItem, addInventoryItem } from '../lib/inventory_service';
+import { InventoryItem, StockTransaction } from '../lib/gate_system';
+import { fetchInventoryMaster, seedInventoryMaster, updateInventoryItemStock, deleteInventoryItem, addInventoryItem, fetchStockMovement, recordManualTransaction } from '../lib/inventory_service';
 import logo from '../assets/englabs_logo.png';
 import masterInventory from '../../data/master_inventory_may_2026.json';
 
@@ -33,17 +35,107 @@ interface StockReport {
     status: 'AUDITED' | 'PENDING' | 'SYNCED';
 }
 
-const StoreStockReport: React.FC = () => {
-    const [view, setView] = useState<'FOLDERS' | 'REPORT_VIEW' | 'MASTER_REPORT'>('FOLDERS');
+import { STAFF_ROSTER } from '../lib/constants';
+
+interface StoreStockReportProps {
+    userRole?: 'ADMIN' | 'STAFF';
+    projects?: any[];
+}
+
+const StoreStockReport: React.FC<StoreStockReportProps> = ({ userRole = 'ADMIN', projects = [] }) => {
+    const [view, setView] = useState<'FOLDERS' | 'REPORT_VIEW' | 'MASTER_REPORT' | 'TRANSACTIONS'>('FOLDERS');
     const [selectedReport, setSelectedReport] = useState<StockReport | null>(null);
     const [reports, setReports] = useState<StockReport[]>([]);
+    const [transactions, setTransactions] = useState<StockTransaction[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [importSuccess, setImportSuccess] = useState(false);
     const [modalConfig, setModalConfig] = useState<{ type: 'ITEM' | 'REPORT' | 'DELETE', data: any } | null>(null);
     const [passcode, setPasscode] = useState('');
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isTxModalOpen, setIsTxModalOpen] = useState(false);
+    const [isCheckOutOnly, setIsCheckOutOnly] = useState(false);
+    const [isCheckInOnly, setIsCheckInOnly] = useState(false);
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [viewingSlipItem, setViewingSlipItem] = useState<InventoryItem | null>(null);
+    const [selectedUnit, setSelectedUnit] = useState<string>('Pcs');
+    const [selectedItemCode, setSelectedItemCode] = useState<string>('');
+    const [isOutOfStockFilter, setIsOutOfStockFilter] = useState(false);
+    const [newItemPhoto, setNewItemPhoto] = useState<string>('');
+    const [editItemPhoto, setEditItemPhoto] = useState<string>('');
+    const [checkoutPhoto, setCheckoutPhoto] = useState<string>('');
+    const [addItemCodeMode, setAddItemCodeMode] = useState<'SELECT' | 'CUSTOM'>('SELECT');
+    const [addCategoryMode, setAddCategoryMode] = useState<'SELECT' | 'CUSTOM'>('SELECT');
+    const [addLocationMode, setAddLocationMode] = useState<'SELECT' | 'CUSTOM'>('SELECT');
+    const [addItemCode, setAddItemCode] = useState<string>('');
+    const [addCategory, setAddCategory] = useState<string>('');
+    const [addLocation, setAddLocation] = useState<string>('');
+    const [addUnit, setAddUnit] = useState<string>('Pcs');
+    const [selectedProjectTx, setSelectedProjectTx] = useState<string>('');
+
+    const itemCatalog = selectedReport ? selectedReport.items : (reports[0] ? reports[0].items : []);
+    const existingItemCodes = Array.from(new Set(itemCatalog.map(i => i.itemCode))).sort();
+    const existingCategories = Array.from(new Set(itemCatalog.map(i => i.category))).sort();
+    const existingLocations = Array.from(new Set(itemCatalog.map(i => i.location))).sort();
+
+    const DEFAULT_PROJECT_IDS = ['C2718', 'C2737', 'C2931', 'C3020', 'C4867', 'C5178', 'C5191', 'C5192', 'C5193', 'C5195', 'C5197', 'C5198', 'C5207', 'C5209', 'C5210', 'C5212', 'C5213', 'C5216', 'C5223', 'C5224', 'C5227', 'C5228', 'C5229'];
+    const projectList = (projects && projects.length > 0)
+        ? projects.map((p: any) => p.projectId)
+        : DEFAULT_PROJECT_IDS;
+
+    const openAddModal = () => {
+        setAddItemCode('');
+        setAddCategory('');
+        setAddLocation('');
+        setAddUnit('Pcs');
+        setAddItemCodeMode('SELECT');
+        setAddCategoryMode('SELECT');
+        setAddLocationMode('SELECT');
+        setNewItemPhoto('');
+        setIsAddModalOpen(true);
+    };
+
+    useEffect(() => {
+        if (modalConfig && modalConfig.type === 'ITEM') {
+            setEditItemPhoto(modalConfig.data.photoUrl || '');
+        } else {
+            setEditItemPhoto('');
+        }
+    }, [modalConfig]);
+
+    const getNextInvoiceNumber = () => {
+        const prefix = "ENG-01-";
+        const engInvoices = transactions
+            .map(tx => tx.invoiceNumber || '')
+            .filter(inv => inv.toUpperCase().startsWith(prefix));
+        
+        if (engInvoices.length === 0) {
+            return `${prefix}0001`;
+        }
+        
+        let maxNum = 0;
+        engInvoices.forEach(inv => {
+            const numPart = inv.substring(prefix.length);
+            const parsed = parseInt(numPart, 10);
+            if (!isNaN(parsed) && parsed > maxNum) {
+                maxNum = parsed;
+            }
+        });
+        
+        const nextNum = maxNum + 1;
+        return `${prefix}${nextNum.toString().padStart(4, '0')}`;
+    };
+
+    const filteredReportItems = selectedReport 
+        ? selectedReport.items.filter(i => {
+            const matchesSearch = i.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                i.itemCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                i.category.toLowerCase().includes(searchQuery.toLowerCase());
+            if (!matchesSearch) return false;
+            if (isOutOfStockFilter) return i.currentStock <= 0;
+            return true;
+        })
+        : [];
 
     useEffect(() => {
         // Initial Forensic Load - Full 112+ Items Dataset from May 2026 Reports
@@ -261,15 +353,19 @@ const StoreStockReport: React.FC = () => {
 
                 setReports([juneReport, mayReport]);
                 setSelectedReport(juneReport);
+
+                const logs = await fetchStockMovement();
+                setTransactions(logs);
             } catch (e) {
                 console.error("Firestore sync error, falling back to local dataset", e);
                 setReports(mockReports);
                 setSelectedReport(mockReports[0]);
+                setTransactions([]);
             }
         }
 
         syncWithFirestore();
-    }, []);
+    }, [refreshTrigger]);
 
     const handleDeleteItem = async (itemCode: string) => {
         if (passcode === '0001') {
@@ -291,15 +387,22 @@ const StoreStockReport: React.FC = () => {
         }
     };
 
-    const handleEditItem = async (item: InventoryItem, newStock: number) => {
+    const handleEditItem = async (item: InventoryItem, newStock: number, newPhoto?: string) => {
         if (selectedReport) {
+            const updatedPhoto = newPhoto !== undefined ? newPhoto : (item.photoUrl || '');
             try {
-                await updateInventoryItemStock(item.itemCode, newStock);
+                const updatedItem = {
+                    ...item,
+                    currentStock: newStock,
+                    photoUrl: updatedPhoto,
+                    lastUpdated: new Date().toISOString()
+                };
+                await addInventoryItem(updatedItem);
             } catch (e) {
                 console.error("Firestore stock update failed, updating local state only", e);
             }
             const updatedItems = selectedReport.items.map(i => 
-                i.itemCode === item.itemCode ? { ...i, currentStock: newStock, lastUpdated: new Date().toISOString() } : i
+                i.itemCode === item.itemCode ? { ...i, currentStock: newStock, photoUrl: updatedPhoto, lastUpdated: new Date().toISOString() } : i
             );
             const updatedReport = { ...selectedReport, items: updatedItems };
             setSelectedReport(updatedReport);
@@ -320,6 +423,33 @@ const StoreStockReport: React.FC = () => {
     const handleShareWhatsApp = () => {
         if (!selectedReport) return;
         
+        if (isOutOfStockFilter) {
+            const outOfStockItems = selectedReport.items.filter(i => i.currentStock <= 0);
+            let message = `*ENGLABS STORE - OUT OF STOCK REGISTER*\n`;
+            message += `_Date: ${new Date().toLocaleDateString('en-GB')}_\n\n`;
+            message += `*ΓÜá∩╕Å OUT OF STOCK ITEMS (${outOfStockItems.length}):*\n`;
+            
+            outOfStockItems.forEach((i, idx) => {
+                message += `${idx + 1}. *${i.name}* [${i.itemCode}]\n`;
+                message += `   ≡ƒôì Location: ${i.location || 'Rack 1'}\n`;
+                message += `   ≡ƒôª Required Min: ${i.minThreshold} ${i.unit}\n\n`;
+            });
+            
+            message += `_Please arrange immediate procurement for these items._\n`;
+            message += `\n_View full professional ledger in Englabs OS._`;
+            
+            const encoded = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/?text=${encoded}`;
+            const link = document.createElement('a');
+            link.href = whatsappUrl;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            return;
+        }
+
         const lowStockItems = selectedReport.items.filter(i => i.currentStock < i.minThreshold);
         let message = `*ENGLABS STORE STOCK REPORT: ${selectedReport.report_id}*\n`;
         message += `_Date: ${selectedReport.report_date}_\n\n`;
@@ -364,8 +494,12 @@ const StoreStockReport: React.FC = () => {
     };
 
     const exportToExcel = () => {
-        const dataToExport = selectedReport ? selectedReport.items : reports.flatMap(r => r.items);
-        const fileName = selectedReport ? `Stock_Report_${selectedReport.report_id}` : `Master_Stock_Inventory_${new Date().toISOString().split('T')[0]}`;
+        const dataToExport = selectedReport 
+            ? (isOutOfStockFilter ? selectedReport.items.filter(i => i.currentStock <= 0) : selectedReport.items) 
+            : reports.flatMap(r => r.items);
+        const fileName = selectedReport 
+            ? (isOutOfStockFilter ? `Out_of_Stock_Report_${selectedReport.report_id}` : `Stock_Report_${selectedReport.report_id}`) 
+            : `Master_Stock_Inventory_${new Date().toISOString().split('T')[0]}`;
 
         const flatData = dataToExport.map((item, idx) => ({
             'Sr. No.': idx + 1,
@@ -405,8 +539,9 @@ const StoreStockReport: React.FC = () => {
                     </div>
                     <div className="hidden md:block h-8 w-px bg-slate-100"></div>
                     <nav className="flex gap-2">
-                        <button onClick={() => setView('FOLDERS')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${view === 'FOLDERS' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'}`}>Archive</button>
+                        <button onClick={() => { setIsOutOfStockFilter(false); setView('FOLDERS'); }} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${view === 'FOLDERS' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'}`}>Archive</button>
                         <button onClick={() => setView('MASTER_REPORT')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${view === 'MASTER_REPORT' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'}`}>Master Report</button>
+                        <button onClick={() => setView('TRANSACTIONS')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${view === 'TRANSACTIONS' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'}`}>Transits Ledger</button>
                     </nav>
                 </div>
                 
@@ -424,25 +559,66 @@ const StoreStockReport: React.FC = () => {
                         />
                     </div>
                     <div className="flex gap-2">
-                        <button 
-                            onClick={() => setIsAddModalOpen(true)}
-                            className="flex items-center gap-2 px-6 py-2.5 bg-emerald-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20"
-                        >
-                            <Plus className="w-4 h-4" /> Add Item
-                        </button>
-                        {importSuccess ? (
-                            <span className="flex items-center gap-2 px-6 py-2.5 bg-emerald-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest animate-in zoom-in duration-300">
-                                <CheckCircle2 className="w-4 h-4" /> Import Complete
-                            </span>
-                        ) : (
+                        {userRole === 'ADMIN' && (
+                            <>
+                                <button 
+                                    onClick={openAddModal}
+                                    className="flex items-center gap-2 px-6 py-2.5 bg-emerald-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20"
+                                >
+                                    <Plus className="w-4 h-4" /> Add Item
+                                </button>
+                                <button 
+                                    onClick={() => {
+                                        setSelectedItemCode('');
+                                        setIsCheckOutOnly(false);
+                                        setIsCheckInOnly(false);
+                                        setIsTxModalOpen(true);
+                                    }}
+                                    className="flex items-center gap-2 px-6 py-2.5 bg-slate-800 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-900 transition-all shadow-lg shadow-slate-800/20"
+                                >
+                                    <Plus className="w-4 h-4" /> Record Transit
+                                </button>
+                            </>
+                        )}
+                        {userRole === 'ADMIN' && (
                             <button 
-                                onClick={handleImportPDF}
-                                disabled={isLoading}
-                                className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 disabled:opacity-50"
+                                onClick={() => {
+                                    setSelectedItemCode('');
+                                    setIsCheckOutOnly(false);
+                                    setIsCheckInOnly(true);
+                                    setIsTxModalOpen(true);
+                                }}
+                                className="flex items-center gap-2 px-6 py-2.5 bg-[#0e4368] text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#0c3857] transition-all shadow-lg shadow-[#0e4368]/20"
                             >
-                                {isLoading ? <RefreshCcw className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-                                Import Stock PDF
+                                <Plus className="w-4 h-4" /> Check In Item
                             </button>
+                        )}
+                        <button 
+                            onClick={() => {
+                                setSelectedItemCode('');
+                                setIsCheckOutOnly(true);
+                                setIsCheckInOnly(false);
+                                setIsTxModalOpen(true);
+                            }}
+                            className="flex items-center gap-2 px-6 py-2.5 bg-amber-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/20"
+                        >
+                            <Plus className="w-4 h-4" /> Check Out Item
+                        </button>
+                        {userRole === 'ADMIN' && (
+                            importSuccess ? (
+                                <span className="flex items-center gap-2 px-6 py-2.5 bg-emerald-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest animate-in zoom-in duration-300">
+                                    <CheckCircle2 className="w-4 h-4" /> Import Complete
+                                </span>
+                            ) : (
+                                <button 
+                                    onClick={handleImportPDF}
+                                    disabled={isLoading}
+                                    className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 disabled:opacity-50"
+                                >
+                                    {isLoading ? <RefreshCcw className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                                    Import Stock PDF
+                                </button>
+                            )
                         )}
                     </div>
                 </div>
@@ -452,7 +628,21 @@ const StoreStockReport: React.FC = () => {
                 {view === 'FOLDERS' && (
                     <div className="max-w-7xl mx-auto space-y-10">
                         {/* FOLDER SYSTEM */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                            <FolderCard 
+                                year="Alerts" 
+                                month="Out of Stock" 
+                                count={reports[0] ? reports[0].items.filter(i => i.currentStock <= 0).length : 0} 
+                                isAlert
+                                onClick={() => {
+                                    const masterReport = reports[0] || reports.find(r => r.report_id === "SR-20260604-MASTER");
+                                    if (masterReport) {
+                                        setSelectedReport(masterReport);
+                                        setIsOutOfStockFilter(true);
+                                        setView('REPORT_VIEW');
+                                    }
+                                }} 
+                            />
                             <FolderCard 
                                 year="2026" 
                                 month="June" 
@@ -545,7 +735,7 @@ const StoreStockReport: React.FC = () => {
                             {/* PRINT ONLY HEADER */}
                             <div className="hidden print:flex justify-between items-center mb-8 border-b-2 border-slate-900 pb-4">
                                 <div>
-                                    <h1 className="text-2xl font-black text-slate-900 tracking-tighter">ENGLABS INDIA PVT LTD</h1>
+                                    <h1 className="text-2xl font-black text-slate-900 tracking-tighter">ENGLABS STORE PVT LTD</h1>
                                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Enterprise Forensic Audit Report</p>
                                 </div>
                                 <div className="text-right">
@@ -556,16 +746,18 @@ const StoreStockReport: React.FC = () => {
                             <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50 rounded-full -translate-y-1/2 translate-x-1/2 opacity-50 blur-3xl print:hidden"></div>
                             <div className="relative flex justify-between items-start">
                                 <div>
-                                    <button onClick={() => setView('FOLDERS')} className="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-4 hover:underline flex items-center gap-2 print:hidden">
+                                    <button onClick={() => { setIsOutOfStockFilter(false); setView('FOLDERS'); }} className="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-4 hover:underline flex items-center gap-2 print:hidden">
                                         ← Back to Archive
                                     </button>
-                                    <h2 className="text-3xl font-black text-slate-900 tracking-tighter">Store Report: {selectedReport.report_id}</h2>
+                                    <h2 className="text-3xl font-black text-slate-900 tracking-tighter">
+                                        {isOutOfStockFilter ? "Out of Stock Items Register" : `Store Report: ${selectedReport.report_id}`}
+                                    </h2>
                                     <div className="flex flex-wrap items-center gap-4 md:gap-6 mt-4">
                                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                             <Clock className="w-4 h-4" /> Ingested: {selectedReport.report_date}
                                         </p>
                                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                            <Folder className="w-4 h-4" /> Path: /2026/{selectedReport.report_id === "SR-20260604-MASTER" ? "June" : "May"}
+                                            <Folder className="w-4 h-4" /> Path: /2026/{isOutOfStockFilter ? "Out-Of-Stock" : (selectedReport.report_id === "SR-20260604-MASTER" ? "June" : "May")}
                                         </p>
                                         <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">
                                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
@@ -577,21 +769,23 @@ const StoreStockReport: React.FC = () => {
                                     <button onClick={handleExportPDF} className="p-3 bg-slate-50 text-slate-600 rounded-xl hover:bg-slate-100 transition-all border border-slate-100 shadow-sm" title="Print Forensic Report"><Printer className="w-5 h-5" /></button>
                                     <button onClick={handleShareWhatsApp} className="p-3 bg-slate-50 text-emerald-600 rounded-xl hover:bg-emerald-50 transition-all border border-slate-100 shadow-sm" title="Share via WhatsApp"><Share2 className="w-5 h-5" /></button>
                                     <button onClick={exportToExcel} className="p-3 bg-slate-50 text-slate-600 rounded-xl hover:bg-emerald-50 hover:text-emerald-600 transition-all border border-slate-100 shadow-sm" title="Download Audit Data"><Download className="w-5 h-5" /></button>
-                                    <button 
-                                        onClick={() => setModalConfig({ type: 'REPORT', data: selectedReport })}
-                                        className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl hover:bg-slate-800 transition-all"
-                                    >
-                                        <Edit3 className="w-4 h-4" /> Edit Audit
-                                    </button>
+                                    {userRole === 'ADMIN' && (
+                                        <button 
+                                            onClick={() => setModalConfig({ type: 'REPORT', data: selectedReport })}
+                                            className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl hover:bg-slate-800 transition-all"
+                                        >
+                                            <Edit3 className="w-4 h-4" /> Edit Audit
+                                        </button>
+                                    )}
                                 </div>
                             </div>
 
                             {/* STATS STRIP */}
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-8 md:mt-12 print:mt-6 print:border-b print:border-slate-200 print:pb-6 print:gap-4">
-                                <ReportStat label="Stock Value" value="₹2,45,000" color="indigo" />
-                                <ReportStat label="Items Audited" value={selectedReport.items.length.toString()} color="slate" />
-                                <ReportStat label="Low Stock" value={selectedReport.items.filter(i => i.currentStock < i.minThreshold).length.toString()} color="amber" />
-                                <ReportStat label="Accuracy" value="100%" color="emerald" />
+                                <ReportStat label={isOutOfStockFilter ? "Critical Alerts" : "Stock Value"} value={isOutOfStockFilter ? filteredReportItems.length.toString() : "₹2,45,000"} color={isOutOfStockFilter ? "red" : "indigo"} />
+                                <ReportStat label="Items Registered" value={selectedReport.items.length.toString()} color="slate" />
+                                <ReportStat label="Low Stock Alert" value={selectedReport.items.filter(i => i.currentStock < i.minThreshold).length.toString()} color="amber" />
+                                <ReportStat label="Replenish Urgent" value={selectedReport.items.filter(i => i.currentStock <= 0).length.toString()} color={selectedReport.items.filter(i => i.currentStock <= 0).length > 0 ? "red" : "emerald"} />
                             </div>
                         </div>
 
@@ -612,18 +806,23 @@ const StoreStockReport: React.FC = () => {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-50">
-                                        {selectedReport.items.filter(i => 
-                                            i.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                            i.itemCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                            i.category.toLowerCase().includes(searchQuery.toLowerCase())
-                                        ).map((item, index) => (
+                                        {filteredReportItems.map((item, index) => (
                                             <tr key={item.itemCode} className="group hover:bg-slate-50/50 transition-all">
                                                 <td className="py-6 px-8 text-center">
                                                     <span className="text-xs font-black text-slate-300 group-hover:text-indigo-500 transition-colors">{(index + 1).toString().padStart(3, '0')}</span>
                                                 </td>
-                                                <td className="py-6 px-8">
-                                                    <p className="font-black text-slate-900 text-sm">{item.name}</p>
-                                                    <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-widest">{item.itemCode}</p>
+                                                <td className="py-6 px-8 flex items-center gap-4">
+                                                    <div className="w-10 h-10 rounded-xl bg-slate-100 overflow-hidden flex items-center justify-center border border-slate-200/50 shrink-0">
+                                                        {item.photoUrl ? (
+                                                            <img src={item.photoUrl} className="w-full h-full object-cover" />
+                                                        ) : (
+                                                            <Package className="w-5 h-5 text-slate-400" />
+                                                        )}
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-black text-slate-900 text-sm">{item.name}</p>
+                                                        <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-widest">{item.itemCode}</p>
+                                                    </div>
                                                 </td>
                                                 <td className="py-6 px-4 font-black text-[11px] text-slate-500 uppercase tracking-widest">{item.category}</td>
                                                 <td className="py-6 px-4">
@@ -658,20 +857,24 @@ const StoreStockReport: React.FC = () => {
                                                         >
                                                             <Printer className="w-4 h-4" />
                                                         </button>
-                                                        <button 
-                                                            onClick={() => setModalConfig({ type: 'ITEM', data: item })}
-                                                            className="p-2 bg-slate-50 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all border border-slate-200 hover:border-indigo-100 shadow-sm"
-                                                            title="Edit Item Stock"
-                                                        >
-                                                            <Edit3 className="w-4 h-4" />
-                                                        </button>
-                                                        <button 
-                                                            onClick={() => setModalConfig({ type: 'DELETE', data: item })}
-                                                            className="p-2 bg-slate-50 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all border border-slate-200 hover:border-red-100 shadow-sm"
-                                                            title="Delete Item Record"
-                                                        >
-                                                            <Trash2 className="w-4 h-4" />
-                                                        </button>
+                                                        {userRole === 'ADMIN' && (
+                                                            <>
+                                                                <button 
+                                                                    onClick={() => setModalConfig({ type: 'ITEM', data: item })}
+                                                                    className="p-2 bg-slate-50 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all border border-slate-200 hover:border-indigo-100 shadow-sm"
+                                                                    title="Edit Item Stock"
+                                                                >
+                                                                    <Edit3 className="w-4 h-4" />
+                                                                </button>
+                                                                <button 
+                                                                    onClick={() => setModalConfig({ type: 'DELETE', data: item })}
+                                                                    className="p-2 bg-slate-50 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all border border-slate-200 hover:border-red-100 shadow-sm"
+                                                                    title="Delete Item Record"
+                                                                >
+                                                                    <Trash2 className="w-4 h-4" />
+                                                                </button>
+                                                            </>
+                                                        )}
                                                     </div>
                                                 </td>
                                             </tr>
@@ -683,17 +886,22 @@ const StoreStockReport: React.FC = () => {
 
                         {/* ITEM CARDS (MOBILE RESIZED VIEW) */}
                         <div className="md:hidden space-y-4">
-                            {selectedReport.items.filter(i => 
-                                i.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                i.itemCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                i.category.toLowerCase().includes(searchQuery.toLowerCase())
-                            ).map((item, index) => (
+                            {filteredReportItems.map((item, index) => (
                                 <div key={item.itemCode} className="p-6 bg-white rounded-3xl border border-slate-100 shadow-sm space-y-4 hover:border-indigo-500/20 transition-all">
                                     <div className="flex justify-between items-start">
-                                        <div>
-                                            <span className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">#{(index + 1).toString().padStart(3, '0')}</span>
-                                            <h4 className="font-black text-slate-900 text-base mt-0.5">{item.name}</h4>
-                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{item.itemCode}</p>
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 rounded-xl bg-slate-100 overflow-hidden flex items-center justify-center border border-slate-200/50 shrink-0">
+                                                {item.photoUrl ? (
+                                                    <img src={item.photoUrl} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <Package className="w-6 h-6 text-slate-400" />
+                                                )}
+                                            </div>
+                                            <div>
+                                                <span className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">#{(index + 1).toString().padStart(3, '0')}</span>
+                                                <h4 className="font-black text-slate-900 text-base mt-0.5">{item.name}</h4>
+                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{item.itemCode}</p>
+                                            </div>
                                         </div>
                                         <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${item.currentStock >= item.minThreshold ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
                                             {item.currentStock >= item.minThreshold ? 'Secure' : 'Replenish'}
@@ -727,20 +935,24 @@ const StoreStockReport: React.FC = () => {
                                             >
                                                 <Printer className="w-3.5 h-3.5" />
                                             </button>
-                                            <button 
-                                                onClick={() => setModalConfig({ type: 'ITEM', data: item })}
-                                                className="px-4 py-2 bg-slate-900 text-white hover:bg-slate-800 rounded-xl text-[9px] font-black uppercase tracking-widest shadow-md flex items-center gap-1.5"
-                                                title="Edit Item Stock"
-                                            >
-                                                <Edit3 className="w-3.5 h-3.5" /> Edit
-                                            </button>
-                                            <button 
-                                                onClick={() => setModalConfig({ type: 'DELETE', data: item })}
-                                                className="p-2 bg-rose-50 text-rose-600 rounded-xl hover:bg-rose-100 transition-all border border-rose-100 animate-pulse"
-                                                title="Delete Item Record"
-                                            >
-                                                <Trash2 className="w-3.5 h-3.5" />
-                                            </button>
+                                            {userRole === 'ADMIN' && (
+                                                <>
+                                                    <button 
+                                                        onClick={() => setModalConfig({ type: 'ITEM', data: item })}
+                                                        className="px-4 py-2 bg-slate-900 text-white hover:bg-slate-800 rounded-xl text-[9px] font-black uppercase tracking-widest shadow-md flex items-center gap-1.5"
+                                                        title="Edit Item Stock"
+                                                    >
+                                                        <Edit3 className="w-3.5 h-3.5" /> Edit
+                                                    </button>
+                                                    <button 
+                                                        onClick={() => setModalConfig({ type: 'DELETE', data: item })}
+                                                        className="p-2 bg-rose-50 text-rose-600 rounded-xl hover:bg-rose-100 transition-all border border-rose-100 animate-pulse"
+                                                        title="Delete Item Record"
+                                                    >
+                                                        <Trash2 className="w-3.5 h-3.5" />
+                                                    </button>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -781,6 +993,128 @@ const StoreStockReport: React.FC = () => {
                     </div>
                 )}
 
+                {view === 'TRANSACTIONS' && (
+                    <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
+                        {/* HEADER BLOCK */}
+                        <div className="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-sm relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full -translate-y-1/2 translate-x-1/2 opacity-50 blur-3xl"></div>
+                            <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                                <div>
+                                    <h2 className="text-3xl font-black text-slate-900 tracking-tighter">Transits Ledger</h2>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Check-In & Check-Out Audit Logs</p>
+                                </div>
+                                <div className="flex gap-4">
+                                    <div className="bg-slate-50 border border-slate-100 rounded-2xl px-6 py-3 flex flex-col items-center">
+                                        <span className="text-[9px] font-black text-slate-400 uppercase">Check-Ins</span>
+                                        <span className="text-xl font-black text-emerald-600">{transactions.filter(t => t.type === 'INWARD').length}</span>
+                                    </div>
+                                    <div className="bg-slate-50 border border-slate-100 rounded-2xl px-6 py-3 flex flex-col items-center">
+                                        <span className="text-[9px] font-black text-slate-400 uppercase">Check-Outs</span>
+                                        <span className="text-xl font-black text-amber-600">{transactions.filter(t => t.type === 'OUTWARD').length}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* TRANSACTION LOGS TABLE */}
+                        <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
+                            {transactions.length === 0 ? (
+                                <div className="p-20 text-center flex flex-col items-center gap-4 text-slate-300">
+                                    <Clock className="w-16 h-16 opacity-20" />
+                                    <p className="font-black text-lg uppercase tracking-widest">No Transits Logged</p>
+                                    <p className="text-sm text-slate-400 max-w-sm">No inward or outward stock transactions have been recorded in this cycle yet.</p>
+                                </div>
+                            ) : (
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left border-collapse">
+                                        <thead>
+                                            <tr className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 bg-slate-50/30">
+                                                <th className="py-6 px-8">Timestamp</th>
+                                                <th className="py-6 px-4">Flow</th>
+                                                <th className="py-6 px-8">Item Identity</th>
+                                                <th className="py-6 px-4 text-center">Quantity</th>
+                                                <th className="py-6 px-4 text-center">Stock Shift</th>
+                                                <th className="py-6 px-4">Reference</th>
+                                                <th className="py-6 px-4">Project ID</th>
+                                                <th className="py-6 px-4">Operator</th>
+                                                <th className="py-6 px-8 text-right">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-slate-50 text-xs">
+                                            {transactions.filter(tx => {
+                                                const query = searchQuery.toLowerCase();
+                                                return (
+                                                    tx.itemId.toLowerCase().includes(query) ||
+                                                    tx.referenceId.toLowerCase().includes(query) ||
+                                                    tx.partyName.toLowerCase().includes(query) ||
+                                                    (tx.projectId && tx.projectId.toLowerCase().includes(query))
+                                                );
+                                            }).map((tx) => (
+                                                <tr key={tx.id} className="hover:bg-slate-50/30 transition-colors">
+                                                    <td className="py-5 px-8 font-medium text-slate-500">
+                                                        {new Date(tx.timestamp).toLocaleString('en-GB')}
+                                                    </td>
+                                                    <td className="py-5 px-4">
+                                                        <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-wider ${
+                                                            tx.type === 'INWARD' 
+                                                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' 
+                                                                : 'bg-amber-50 text-amber-700 border border-amber-100'
+                                                        }`}>
+                                                            {tx.type === 'INWARD' ? (
+                                                                <>
+                                                                    <ArrowUpRight className="w-3.5 h-3.5" /> Check-In
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <ArrowDownRight className="w-3.5 h-3.5" /> Check-Out
+                                                                </>
+                                                            )}
+                                                        </span>
+                                                    </td>
+                                                    <td className="py-5 px-8">
+                                                        <p className="font-black text-slate-900">{tx.itemId.replace(/_/g, ' ')}</p>
+                                                        <p className="text-[9px] font-bold text-slate-400 mt-0.5 tracking-wider uppercase">{tx.itemId}</p>
+                                                    </td>
+                                                    <td className="py-5 px-4 text-center font-black text-slate-700">
+                                                        {tx.quantity}
+                                                    </td>
+                                                    <td className="py-5 px-4 text-center text-slate-500 font-bold">
+                                                        {tx.previousStock} → <span className="font-black text-slate-900">{tx.newStock}</span>
+                                                    </td>
+                                                    <td className="py-5 px-4 font-black text-indigo-600 uppercase">
+                                                        <div className="flex items-center gap-2">
+                                                            <span>{tx.referenceId}</span>
+                                                            {tx.photoUrl && (
+                                                                <div className="relative group shrink-0">
+                                                                    <Camera className="w-4 h-4 text-emerald-500 cursor-pointer hover:text-emerald-600" />
+                                                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-32 h-32 rounded-xl overflow-hidden border border-slate-200 shadow-xl bg-white hidden group-hover:block z-50">
+                                                                        <img src={tx.photoUrl} className="w-full h-full object-cover" />
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </td>
+                                                    <td className="py-5 px-4 font-black text-slate-700 uppercase">
+                                                        {tx.projectId || 'GENERAL'}
+                                                    </td>
+                                                    <td className="py-5 px-4 text-slate-600 font-medium">
+                                                        {tx.partyName}
+                                                    </td>
+                                                    <td className="py-5 px-8 text-right">
+                                                        <span className="inline-flex items-center gap-1 text-[9px] font-black text-emerald-600 uppercase tracking-widest bg-emerald-500/10 px-2 py-1 rounded-lg">
+                                                            <CheckCircle2 className="w-3 h-3" /> Ledger Parity
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+
                 {modalConfig && (
                     <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
                         <div className="bg-white rounded-[3rem] w-full max-w-lg shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
@@ -792,14 +1126,48 @@ const StoreStockReport: React.FC = () => {
                             </div>
                             <div className="p-10 space-y-6">
                                 {modalConfig.type === 'ITEM' ? (
-                                    <div>
-                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Available Stock Level</label>
-                                        <input 
-                                            type="number" 
-                                            defaultValue={modalConfig.data.currentStock}
-                                            id="stock-input"
-                                            className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-4 px-6 text-2xl font-black text-slate-900 outline-none focus:border-indigo-500 transition-all"
-                                        />
+                                    <div className="space-y-6">
+                                        <div>
+                                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Available Stock Level</label>
+                                            <input 
+                                                type="number" 
+                                                defaultValue={modalConfig.data.currentStock}
+                                                id="stock-input"
+                                                className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-4 px-6 text-2xl font-black text-slate-900 outline-none focus:border-indigo-500 transition-all"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Item Image / Photo</label>
+                                            <div className="flex items-center gap-4">
+                                                {editItemPhoto ? (
+                                                    <div className="w-16 h-16 rounded-xl bg-slate-100 overflow-hidden flex items-center justify-center border border-slate-200 relative">
+                                                        <img src={editItemPhoto} className="w-full h-full object-cover" />
+                                                        <button type="button" onClick={() => setEditItemPhoto('')} className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 hover:bg-red-600 shadow-sm"><X className="w-3.5 h-3.5" /></button>
+                                                    </div>
+                                                ) : (
+                                                    <label className="w-16 h-16 rounded-xl bg-slate-50 border border-dashed border-slate-300 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-100 transition-all">
+                                                        <Camera className="w-5 h-5 text-slate-400" />
+                                                        <span className="text-[7px] font-black uppercase text-slate-400 mt-1">Upload</span>
+                                                        <input 
+                                                            type="file" 
+                                                            accept="image/*" 
+                                                            onChange={async (e) => {
+                                                                const file = e.target.files?.[0];
+                                                                if (file) {
+                                                                    const reader = new FileReader();
+                                                                    reader.onload = (event) => {
+                                                                        setEditItemPhoto(event.target?.result as string);
+                                                                    };
+                                                                    reader.readAsDataURL(file);
+                                                                }
+                                                            }} 
+                                                            className="hidden" 
+                                                        />
+                                                    </label>
+                                                )}
+                                                <p className="text-[9px] text-slate-400 font-bold max-w-[200px]">Optional: Reference photograph for visual inventory audits.</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 ) : modalConfig.type === 'REPORT' ? (
                                     <div>
@@ -831,7 +1199,7 @@ const StoreStockReport: React.FC = () => {
                                     onClick={() => {
                                         if (modalConfig.type === 'ITEM') {
                                             const val = (document.getElementById('stock-input') as HTMLInputElement).value;
-                                            handleEditItem(modalConfig.data, parseInt(val));
+                                            handleEditItem(modalConfig.data, parseInt(val), editItemPhoto);
                                             setModalConfig(null);
                                         } else if (modalConfig.type === 'REPORT') {
                                             const val = (document.getElementById('report-id-input') as HTMLInputElement).value;
@@ -884,9 +1252,9 @@ const StoreStockReport: React.FC = () => {
                                     minThreshold: parseInt(minThreshold.value) || 10,
                                     totalInward: parseInt(stock.value) || 0,
                                     totalOutward: 0,
-                                    lastUpdated: new Date().toISOString()
+                                    lastUpdated: new Date().toISOString(),
+                                    photoUrl: newItemPhoto
                                 };
-
                                 try {
                                     await addInventoryItem(newItem);
                                 } catch (err) {
@@ -900,7 +1268,17 @@ const StoreStockReport: React.FC = () => {
                                     setReports(prev => prev.map(r => r.report_id === updatedReport.report_id ? updatedReport : r));
                                 }
 
+                                // Auto-select the newly registered item inside check-in/checkout modals
+                                setSelectedItemCode(newItem.itemCode);
+                                const unitStr = newItem.unit.toLowerCase();
+                                if (unitStr.includes('pc')) setSelectedUnit('Pcs');
+                                else if (unitStr.includes('kg')) setSelectedUnit('Kg');
+                                else if (unitStr.includes('lt')) setSelectedUnit('Ltr');
+                                else if (unitStr.includes('no')) setSelectedUnit('Nos');
+                                else setSelectedUnit('Pcs');
+
                                 setIsAddModalOpen(false);
+                                setNewItemPhoto('');
                             }} className="p-8 space-y-6">
                                 <div className="space-y-2">
                                     <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Item Name (Full Name)</label>
@@ -909,21 +1287,196 @@ const StoreStockReport: React.FC = () => {
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
                                         <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Item Code</label>
-                                        <input name="itemCode" required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none" placeholder="Ex: PAP-101" />
+                                        {addItemCodeMode === 'SELECT' ? (
+                                            <select 
+                                                name="itemCode" 
+                                                required 
+                                                value={addItemCode}
+                                                onChange={(e) => {
+                                                    const val = e.target.value;
+                                                    if (val === 'CUSTOM') {
+                                                        setAddItemCodeMode('CUSTOM');
+                                                        setAddItemCode('');
+                                                    } else {
+                                                        setAddItemCode(val);
+                                                    }
+                                                }}
+                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none"
+                                            >
+                                                <option value="">-- Choose Code --</option>
+                                                {existingItemCodes.map(code => (
+                                                    <option key={code} value={code}>{code}</option>
+                                                ))}
+                                                <option value="CUSTOM">+ Create New...</option>
+                                            </select>
+                                        ) : (
+                                            <div className="relative">
+                                                <input 
+                                                    name="itemCode" 
+                                                    required 
+                                                    value={addItemCode}
+                                                    onChange={(e) => setAddItemCode(e.target.value)}
+                                                    type="text" 
+                                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none pr-12" 
+                                                    placeholder="Ex: PAP-101" 
+                                                />
+                                                <button 
+                                                    type="button" 
+                                                    onClick={() => {
+                                                        setAddItemCodeMode('SELECT');
+                                                        setAddItemCode('');
+                                                    }}
+                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-black text-indigo-600 hover:text-indigo-800 uppercase"
+                                                >
+                                                    Select
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Category</label>
-                                        <input name="category" required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none" placeholder="Ex: Stationery" />
+                                        {addCategoryMode === 'SELECT' ? (
+                                            <select 
+                                                name="category" 
+                                                required 
+                                                value={addCategory}
+                                                onChange={(e) => {
+                                                    const val = e.target.value;
+                                                    if (val === 'CUSTOM') {
+                                                        setAddCategoryMode('CUSTOM');
+                                                        setAddCategory('');
+                                                    } else {
+                                                        setAddCategory(val);
+                                                    }
+                                                }}
+                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none"
+                                            >
+                                                <option value="">-- Choose Category --</option>
+                                                {existingCategories.map(cat => (
+                                                    <option key={cat} value={cat}>{cat}</option>
+                                                ))}
+                                                <option value="CUSTOM">+ Create New...</option>
+                                            </select>
+                                        ) : (
+                                            <div className="relative">
+                                                <input 
+                                                    name="category" 
+                                                    required 
+                                                    value={addCategory}
+                                                    onChange={(e) => setAddCategory(e.target.value)}
+                                                    type="text" 
+                                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none pr-12" 
+                                                    placeholder="Ex: Stationery" 
+                                                />
+                                                <button 
+                                                    type="button" 
+                                                    onClick={() => {
+                                                        setAddCategoryMode('SELECT');
+                                                        setAddCategory('');
+                                                    }}
+                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-black text-indigo-600 hover:text-indigo-800 uppercase"
+                                                >
+                                                    Select
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
                                         <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Location (Rack)</label>
-                                        <input name="location" required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none" placeholder="Ex: Rack-2" />
+                                        {addLocationMode === 'SELECT' ? (
+                                            <select 
+                                                name="location" 
+                                                required 
+                                                value={addLocation}
+                                                onChange={(e) => {
+                                                    const val = e.target.value;
+                                                    if (val === 'CUSTOM') {
+                                                        setAddLocationMode('CUSTOM');
+                                                        setAddLocation('');
+                                                    } else {
+                                                        setAddLocation(val);
+                                                    }
+                                                }}
+                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none"
+                                            >
+                                                <option value="">-- Choose Location --</option>
+                                                {existingLocations.map(loc => (
+                                                    <option key={loc} value={loc}>{loc}</option>
+                                                ))}
+                                                <option value="CUSTOM">+ Create New...</option>
+                                            </select>
+                                        ) : (
+                                            <div className="relative">
+                                                <input 
+                                                    name="location" 
+                                                    required 
+                                                    value={addLocation}
+                                                    onChange={(e) => setAddLocation(e.target.value)}
+                                                    type="text" 
+                                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none pr-12" 
+                                                    placeholder="Ex: Rack-2" 
+                                                />
+                                                <button 
+                                                    type="button" 
+                                                    onClick={() => {
+                                                        setAddLocationMode('SELECT');
+                                                        setAddLocation('');
+                                                    }}
+                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-black text-indigo-600 hover:text-indigo-800 uppercase"
+                                                >
+                                                    Select
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Unit</label>
-                                        <input name="unit" required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none" placeholder="Ex: Pcs" />
+                                        <select 
+                                            name="unit" 
+                                            required 
+                                            value={addUnit}
+                                            onChange={(e) => setAddUnit(e.target.value)}
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none"
+                                        >
+                                            <option value="Pcs">Pcs</option>
+                                            <option value="Kg">Kg</option>
+                                            <option value="Ltr">Ltr</option>
+                                            <option value="Nos">Nos</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Item Image / Photo</label>
+                                    <div className="flex items-center gap-4">
+                                        {newItemPhoto ? (
+                                            <div className="w-16 h-16 rounded-xl bg-slate-100 overflow-hidden flex items-center justify-center border border-slate-200 relative">
+                                                <img src={newItemPhoto} className="w-full h-full object-cover" />
+                                                <button type="button" onClick={() => setNewItemPhoto('')} className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 hover:bg-red-600 shadow-sm"><X className="w-3.5 h-3.5" /></button>
+                                            </div>
+                                        ) : (
+                                            <label className="w-16 h-16 rounded-xl bg-slate-50 border border-dashed border-slate-300 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-100 transition-all">
+                                                <Camera className="w-5 h-5 text-slate-400" />
+                                                <span className="text-[7px] font-black uppercase text-slate-400 mt-1">Upload</span>
+                                                <input 
+                                                    type="file" 
+                                                    accept="image/*" 
+                                                    onChange={async (e) => {
+                                                        const file = e.target.files?.[0];
+                                                        if (file) {
+                                                            const reader = new FileReader();
+                                                            reader.onload = (event) => {
+                                                                setNewItemPhoto(event.target?.result as string);
+                                                            };
+                                                            reader.readAsDataURL(file);
+                                                        }
+                                                    }} 
+                                                    className="hidden" 
+                                                />
+                                            </label>
+                                        )}
+                                        <p className="text-[9px] text-slate-400 font-bold max-w-[200px]">Optional: Attach a reference photograph for visual inventory audits.</p>
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
@@ -944,6 +1497,209 @@ const StoreStockReport: React.FC = () => {
                     </div>
                 )}
 
+                {/* RECORD TRANSIT MODAL */}
+                {isTxModalOpen && (
+                    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6 print:hidden animate-in fade-in duration-300">
+                        <div className="bg-white rounded-[2.5rem] w-full max-w-md overflow-hidden shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-300">
+                            <div className="p-8 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
+                                <div>
+                                    <h3 className="text-xl font-black text-slate-900 tracking-tight">
+                                        {isCheckOutOnly ? 'Manual Material Check-Out' : isCheckInOnly ? 'Manual Material Check-In' : 'Record Stock Transit'}
+                                    </h3>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">
+                                        {isCheckOutOnly ? 'Immediate Store Inventory Release' : isCheckInOnly ? 'Immediate Store Inventory Addition' : 'Manual Check-In & Check-Out Entry'}
+                                    </p>
+                                </div>
+                                <button onClick={() => { setIsTxModalOpen(false); setIsCheckOutOnly(false); setIsCheckInOnly(false); setSelectedProjectTx(''); setCheckoutPhoto(''); }} className="p-2 hover:bg-slate-100 rounded-full transition-colors"><X className="w-5 h-5 text-slate-400" /></button>
+                            </div>
+                            <form onSubmit={async (e) => {
+                                e.preventDefault();
+                                const form = e.target as HTMLFormElement;
+                                const itemCodeVal = (form.elements.namedItem('itemCode') as HTMLSelectElement).value;
+                                const typeVal = isCheckOutOnly ? 'OUTWARD' : isCheckInOnly ? 'INWARD' : ((form.elements.namedItem('type') as HTMLSelectElement).value as 'INWARD' | 'OUTWARD');
+                                const quantityVal = parseInt((form.elements.namedItem('quantity') as HTMLInputElement).value) || 0;
+                                const partyVal = (form.elements.namedItem('partyName') as HTMLSelectElement).value;
+                                const invoiceVal = (form.elements.namedItem('invoiceNumber') as HTMLInputElement).value;
+
+                                const itemCatalog = selectedReport ? selectedReport.items : (reports[0] ? reports[0].items : []);
+                                const selectedItem = itemCatalog.find(i => i.itemCode === itemCodeVal);
+                                if (!selectedItem) {
+                                    alert("Please select a valid item.");
+                                    return;
+                                }
+
+                                try {
+                                    setIsLoading(true);
+                                    const res: any = await recordManualTransaction(
+                                        selectedItem.name,
+                                        quantityVal,
+                                        selectedUnit,
+                                        typeVal,
+                                        partyVal,
+                                        invoiceVal,
+                                        undefined,
+                                        checkoutPhoto,
+                                        selectedProjectTx
+                                    );
+                                    if (res.success) {
+                                        setRefreshTrigger(prev => prev + 1);
+                                        setIsTxModalOpen(false);
+                                        setIsCheckOutOnly(false);
+                                        setIsCheckInOnly(false);
+                                        setSelectedProjectTx('');
+                                        setCheckoutPhoto('');
+                                    } else {
+                                        alert(`Failed to record transaction: ${res.error || 'Unknown error'}`);
+                                    }
+                                } catch (err: any) {
+                                    alert(`System error: ${err.message || err}`);
+                                } finally {
+                                    setIsLoading(false);
+                                }
+                            }} className="p-8 space-y-5">
+                                <div className="space-y-2">
+                                    <div className="flex justify-between items-center">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Select Item / Asset</label>
+                                        <button 
+                                            type="button"
+                                            onClick={openAddModal}
+                                            className="text-[9px] font-black text-[#0e4368] hover:text-[#0b3350] uppercase tracking-widest flex items-center gap-1 transition-all"
+                                        >
+                                            <Plus className="w-3.5 h-3.5" /> New Item
+                                        </button>
+                                    </div>
+                                    <select 
+                                        name="itemCode" 
+                                        required 
+                                        value={selectedItemCode}
+                                        onChange={(e) => {
+                                            const code = e.target.value;
+                                            setSelectedItemCode(code);
+                                            const items = selectedReport ? selectedReport.items : (reports[0] ? reports[0].items : []);
+                                            const found = items.find(i => i.itemCode === code);
+                                            if (found) {
+                                                const unitStr = found.unit.toLowerCase();
+                                                if (unitStr.includes('pc')) setSelectedUnit('Pcs');
+                                                else if (unitStr.includes('kg')) setSelectedUnit('Kg');
+                                                else if (unitStr.includes('lt')) setSelectedUnit('Ltr');
+                                                else if (unitStr.includes('no')) setSelectedUnit('Nos');
+                                                else setSelectedUnit('Pcs');
+                                            }
+                                        }}
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none"
+                                    >
+                                        <option value="">-- Choose Stock Item --</option>
+                                        {(selectedReport ? selectedReport.items : (reports[0] ? reports[0].items : [])).map((item) => (
+                                            <option key={item.itemCode} value={item.itemCode}>
+                                                [{item.itemCode}] {item.name} ({item.currentStock} {item.unit} available)
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    {(!isCheckOutOnly && !isCheckInOnly) ? (
+                                        <div className="space-y-2">
+                                            <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Flow Type</label>
+                                            <select name="type" required className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none">
+                                                <option value="INWARD">Check-In (Inward)</option>
+                                                <option value="OUTWARD">Check-Out (Outward)</option>
+                                            </select>
+                                        </div>
+                                    ) : null}
+                                    <div className={`space-y-2 ${(isCheckOutOnly || isCheckInOnly) ? 'col-span-2' : ''}`}>
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Quantity</label>
+                                        <input name="quantity" required type="number" min="1" defaultValue="1" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none" />
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Unit</label>
+                                    <div className="flex gap-2 bg-slate-50 p-1.5 border border-slate-200 rounded-xl items-center">
+                                        {['Pcs', 'Kg', 'Ltr', 'Nos'].map((u) => (
+                                            <button
+                                                key={u}
+                                                type="button"
+                                                onClick={() => setSelectedUnit(u)}
+                                                className={`flex-1 py-3.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
+                                                    selectedUnit === u
+                                                    ? 'bg-slate-900 text-white shadow-md'
+                                                    : 'text-slate-400 hover:text-slate-600 hover:bg-slate-100'
+                                                }`}
+                                            >
+                                                {u}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Assigned Operator / Staff</label>
+                                    <select name="partyName" required className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none">
+                                        <option value="">-- Select Staff Member --</option>
+                                        {STAFF_ROSTER.map(name => (
+                                            <option key={name} value={name}>{name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Reference / Invoice No.</label>
+                                    <input name="invoiceNumber" required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold focus:border-indigo-500 outline-none" placeholder="Ex: ENG-01-0001" defaultValue={getNextInvoiceNumber()} />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Project ID / Use</label>
+                                    <select 
+                                        value={selectedProjectTx || 'GENERAL'}
+                                        onChange={(e) => setSelectedProjectTx(e.target.value === 'GENERAL' ? '' : e.target.value)}
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3.5 px-4 text-xs font-bold focus:border-indigo-500 outline-none"
+                                    >
+                                        <option value="GENERAL">GENERAL</option>
+                                        {projectList.filter(pid => pid !== 'GENERAL').map((pid) => (
+                                            <option key={pid} value={pid}>{pid}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="space-y-2">
+                                     <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
+                                         {isCheckInOnly ? 'Cargo / Inward Photo' : 'Cargo / Release Photo'}
+                                     </label>
+                                     <div className="flex items-center gap-4">
+                                         {checkoutPhoto ? (
+                                             <div className="w-16 h-16 rounded-xl bg-slate-100 overflow-hidden flex items-center justify-center border border-slate-200 relative">
+                                                 <img src={checkoutPhoto} className="w-full h-full object-cover" />
+                                                 <button type="button" onClick={() => setCheckoutPhoto('')} className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 hover:bg-red-600 shadow-sm"><X className="w-3.5 h-3.5" /></button>
+                                             </div>
+                                         ) : (
+                                             <label className="w-16 h-16 rounded-xl bg-slate-50 border border-dashed border-slate-300 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-100 transition-all">
+                                                 <Camera className="w-5 h-5 text-slate-400" />
+                                                 <span className="text-[7px] font-black uppercase text-slate-400 mt-1">Upload</span>
+                                                 <input 
+                                                     type="file" 
+                                                     accept="image/*" 
+                                                     onChange={async (e) => {
+                                                         const file = e.target.files?.[0];
+                                                         if (file) {
+                                                             const reader = new FileReader();
+                                                             reader.onload = (event) => {
+                                                                 setCheckoutPhoto(event.target?.result as string);
+                                                             };
+                                                             reader.readAsDataURL(file);
+                                                         }
+                                                     }} 
+                                                     className="hidden" 
+                                                 />
+                                             </label>
+                                         )}
+                                         <p className="text-[9px] text-slate-400 font-bold max-w-[200px]">
+                                             Optional: Attach a live {isCheckInOnly ? 'check-in' : 'check-out'} photo for material security compliance.
+                                         </p>
+                                     </div>
+                                 </div>
+                                <button type="submit" disabled={isLoading} className="w-full bg-slate-900 text-white font-black py-4 rounded-xl hover:bg-slate-800 transition-all text-xs uppercase tracking-widest shadow-lg disabled:opacity-50 mt-4">
+                                    {isLoading ? 'Syncing Ledger...' : (isCheckOutOnly ? 'Confirm Check-Out' : isCheckInOnly ? 'Confirm Check-In' : 'Commit Transit Entry')}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
                 {/* VIEW SLIP MODAL */}
                 {viewingSlipItem && (
                     <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6 print:p-0 animate-in fade-in duration-300">
@@ -953,7 +1709,7 @@ const StoreStockReport: React.FC = () => {
                                 <div className="flex items-center gap-4">
                                     <img src={logo} alt="Englabs" className="h-16 print:h-20 object-contain" />
                                     <div>
-                                        <h2 className="text-xl font-black tracking-tighter">ENGLABS</h2>
+                                        <h2 className="text-xl font-black tracking-tighter">ENGLABS STORE</h2>
                                         <p className="text-[8px] font-black uppercase tracking-[0.2em] opacity-60">India Private Limited • Store Stock Slip</p>
                                     </div>
                                 </div>
@@ -965,7 +1721,7 @@ const StoreStockReport: React.FC = () => {
                             {/* Content */}
                             <div id="stock-slip-print-area" className="p-10 flex-1 relative overflow-hidden">
                                 <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none rotate-[-30deg]">
-                                    <h1 className="text-[100px] font-black">ENGLABS</h1>
+                                    <h1 className="text-[100px] font-black">ENGLABS STORE</h1>
                                 </div>
 
                                 <div className="space-y-8 relative z-10">
@@ -1054,25 +1810,37 @@ const StoreStockReport: React.FC = () => {
     );
 };
 
-const FolderCard = ({ year, month, count, locked, onClick }: any) => (
+const FolderCard = ({ year, month, count, locked, onClick, isAlert }: any) => (
     <div 
         onClick={!locked ? onClick : undefined}
-        className={`p-8 rounded-[2rem] border border-slate-100 shadow-sm transition-all group ${locked ? 'bg-slate-50/50 grayscale' : 'bg-white hover:shadow-xl hover:-translate-y-1 cursor-pointer'}`}
+        className={`p-8 rounded-[2rem] border transition-all group ${
+            locked 
+                ? 'bg-slate-50/50 grayscale border-slate-100 shadow-sm' 
+                : isAlert 
+                    ? 'bg-rose-50/30 border-rose-100 hover:border-rose-200 hover:shadow-xl hover:-translate-y-1 cursor-pointer animate-pulse'
+                    : 'bg-white border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 cursor-pointer'
+        }`}
     >
-        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110 ${locked ? 'bg-slate-100 text-slate-400' : 'bg-indigo-50 text-indigo-600'}`}>
+        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110 ${
+            locked 
+                ? 'bg-slate-100 text-slate-400' 
+                : isAlert 
+                    ? 'bg-rose-100 text-rose-600' 
+                    : 'bg-indigo-50 text-indigo-600'
+        }`}>
             <Folder className="w-7 h-7" />
         </div>
         <div className="flex justify-between items-end">
             <div>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{year}</p>
+                <p className={`text-[10px] font-black uppercase tracking-widest mb-1 ${isAlert ? 'text-rose-400' : 'text-slate-400'}`}>{year}</p>
                 <p className="text-2xl font-black text-slate-900 tracking-tighter">{month}</p>
             </div>
             {locked ? (
                 <span className="text-[8px] font-black text-slate-300 uppercase tracking-widest mb-1">Locked</span>
             ) : (
                 <div className="flex flex-col items-end">
-                    <span className="text-indigo-600 text-sm font-black">{count}</span>
-                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Reports</span>
+                    <span className={`text-sm font-black ${isAlert ? 'text-rose-600' : 'text-indigo-600'}`}>{count}</span>
+                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{isAlert ? 'Items' : 'Reports'}</span>
                 </div>
             )}
         </div>

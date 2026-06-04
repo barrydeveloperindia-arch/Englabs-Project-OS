@@ -65,6 +65,11 @@ if (target) {
     parseStockReport(target).then(data => {
         // Save to a local forensic ledger for the application to pick up
         const ledgerPath = path.join(process.cwd(), 'src', 'data', 'store_stock_ledger.json');
+        const ledgerDir = path.dirname(ledgerPath);
+        
+        if (!fs.existsSync(ledgerDir)) {
+            fs.mkdirSync(ledgerDir, { recursive: true });
+        }
         
         let existing = [];
         if (fs.existsSync(ledgerPath)) {

@@ -70,6 +70,7 @@ export interface InventoryItem {
     minThreshold: number;
     lastUpdated: string;
     location?: string;
+    photoUrl?: string;
 }
 
 export interface StockTransaction {
@@ -83,4 +84,6 @@ export interface StockTransaction {
     referenceId: string; // ID of the GateEntry
     partyName: string;
     invoiceNumber: string;
+    photoUrl?: string;
+    projectId?: string;
 }

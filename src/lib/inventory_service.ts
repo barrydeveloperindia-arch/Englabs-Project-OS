@@ -55,7 +55,9 @@ async function updateStock(
     refId: string,
     party: string,
     invoice: string,
-    hsn?: string
+    hsn?: string,
+    photoUrl?: string,
+    projectId?: string
 ) {
     if (!db) return { success: false, error: "Database offline" };
 
@@ -129,7 +131,9 @@ async function updateStock(
                 timestamp: new Date().toISOString(),
                 referenceId: refId,
                 partyName: party,
-                invoiceNumber: invoice
+                invoiceNumber: invoice,
+                photoUrl: photoUrl,
+                projectId: projectId
             };
             transaction.set(logRef, stockTx);
 
@@ -208,5 +212,20 @@ export async function addInventoryItem(item: InventoryItem) {
     if (!db) return;
     const docRef = doc(db, STOCK_COLLECTION, item.itemCode);
     await setDoc(docRef, item);
+}
+
+export async function recordManualTransaction(
+    name: string,
+    qty: number,
+    unit: string,
+    type: 'INWARD' | 'OUTWARD',
+    party: string,
+    invoice: string,
+    hsn?: string,
+    photoUrl?: string,
+    projectId?: string
+) {
+    const refId = `MANUAL_TX_${Date.now()}`;
+    return updateStock(name, qty, unit, type, refId, party, invoice, hsn, photoUrl, projectId);
 }
 

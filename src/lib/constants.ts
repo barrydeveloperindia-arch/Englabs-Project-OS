@@ -1,0 +1,14 @@
+export const STAFF_ROSTER = [
+    "Thakur",
+    "Rajinder",
+    "Arjun",
+    "Kunwarlal",
+    "Anurag",
+    "Shubham",
+    "Ratnesh",
+    "Devarshu",
+    "Shiv Kumar",
+    "Uditanshu",
+    "RAM",
+    "Gaurav Panchal"
+];
