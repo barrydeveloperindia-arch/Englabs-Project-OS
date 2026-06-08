@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import App from '../App';
 import React from 'react';
@@ -58,7 +58,14 @@ vi.mock('lucide-react', () => ({
     Paperclip: () => <div data-testid="icon-paperclip" />,
     Send: () => <div data-testid="icon-send" />,
     FolderTree: () => <div data-testid="icon-folder" />,
-    PieChart: () => <div data-testid="icon-piechart" />
+    PieChart: () => <div data-testid="icon-piechart" />,
+    Lock: () => <div data-testid="icon-lock" />,
+    MoreVertical: () => <div data-testid="icon-more-vertical" />,
+    Share2: () => <div data-testid="icon-share" />,
+    RefreshCcw: () => <div data-testid="icon-refresh" />,
+    ChevronLeft: () => <div data-testid="icon-chevron-left" />,
+    HelpCircle: () => <div data-testid="icon-help" />,
+    UserCheck: () => <div data-testid="icon-user-check" />
 }));
 
 // 🛡️ SERVICE MOCKS: Decouple UI from backend logic
@@ -98,6 +105,15 @@ vi.mock('@google/generative-ai', () => ({
 }));
 
 describe('Antigravity Dashboard UI', () => {
+    beforeEach(() => {
+        localStorage.setItem('englabs_authenticated', 'true');
+        localStorage.setItem('englabs_user_role', 'ADMIN');
+    });
+
+    afterEach(() => {
+        localStorage.clear();
+    });
+
     it('renders the main dashboard title', async () => {
         render(<App />);
         try {

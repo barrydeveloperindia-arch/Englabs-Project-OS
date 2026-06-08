@@ -11,8 +11,15 @@ async function validateNoHorizontalOverflow(page: Page) {
 test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Suite', () => {
   
   test.beforeEach(async ({ page }) => {
+    page.on('console', msg => console.log('BROWSER LOG:', msg.text()));
+    page.on('pageerror', err => console.error('BROWSER ERROR:', err.message));
     // Navigate to local dashboard baseline
     await page.goto('/');
+    await page.evaluate(() => {
+      localStorage.setItem('englabs_authenticated', 'true');
+      localStorage.setItem('englabs_user_role', 'ADMIN');
+    });
+    await page.goto('/'); // Reload to apply localStorage authentication
     try {
       const initBtn = page.getByRole('button', { name: 'Initialize Workday' });
       await expect(initBtn).toBeVisible({ timeout: 2000 });
@@ -190,6 +197,63 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
 
     // Confirm modal closes
     await expect(page.getByText('Adjust Stock:', { exact: false })).not.toBeVisible({ timeout: 15000 });
+  });
+
+  test('7.5. Record Transit (Check-Out) Flow with Searchable Combobox', async ({ page, isMobile }) => {
+    const navBtn = isMobile 
+      ? page.getByTestId('mobile-nav-btn-report') 
+      : page.getByTestId('sidebar-btn-store-stock-report');
+
+    await expect(navBtn).toBeVisible({ timeout: 15000 });
+    await navBtn.click({ force: true });
+
+    // Open Report
+    const reportRow = page.getByText('SR-20260514-MASTER');
+    await expect(reportRow).toBeVisible({ timeout: 30000 });
+    await reportRow.click({ force: true });
+
+    // Open Check Out Item Modal
+    const checkOutBtn = page.getByRole('button', { name: 'Check Out Item' });
+    await expect(checkOutBtn).toBeVisible({ timeout: 15000 });
+    await checkOutBtn.click({ force: true });
+
+    // Verify modal header is visible
+    await expect(page.getByText('Manual Material Check-Out', { exact: false })).toBeVisible({ timeout: 15000 });
+
+    // Find the searchable combobox input
+    const comboboxInput = page.locator('input[placeholder="-- Type to Search Stock Item --"]');
+    await expect(comboboxInput).toBeVisible({ timeout: 15000 });
+    await comboboxInput.click();
+
+    // Type query to filter
+    await comboboxInput.fill('Chemilac');
+
+    // Suggestion dropdown should be visible
+    const firstSuggestion = page.getByText('Chemilac Black Paint').last();
+    await expect(firstSuggestion).toBeVisible({ timeout: 15000 });
+    await firstSuggestion.click();
+
+    // The input should now have the item name filled
+    await expect(comboboxInput).toHaveValue(/Chemilac/);
+
+    // Enter checkout quantity
+    const quantityInput = page.locator('input[name="quantity"]');
+    await expect(quantityInput).toBeVisible({ timeout: 15000 });
+    await quantityInput.fill('2');
+
+    // Select operator/staff if needed
+    const staffSelect = page.locator('select[name="partyName"]');
+    if (await staffSelect.count() > 0) {
+      await staffSelect.selectOption({ index: 1 });
+    }
+
+    // Submit check-out
+    const confirmBtn = page.getByRole('button', { name: 'Confirm Check-Out' });
+    await expect(confirmBtn).toBeVisible({ timeout: 15000 });
+    await confirmBtn.click({ force: true });
+
+    // Verify modal is closed
+    await expect(page.getByText('Manual Material Check-Out', { exact: false })).not.toBeVisible({ timeout: 15000 });
   });
 
   test('8. Porter Logistics Dispatch & Mobile Intake validation', async ({ page, isMobile }) => {

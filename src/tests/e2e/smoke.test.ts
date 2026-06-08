@@ -3,6 +3,11 @@ import { test, expect } from '@playwright/test';
 test.describe('Englabs Projects OS - Core Workflow', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
+    await page.evaluate(() => {
+      localStorage.setItem('englabs_authenticated', 'true');
+      localStorage.setItem('englabs_user_role', 'ADMIN');
+    });
+    await page.goto('/'); // Reload to apply localStorage authentication
     try {
       const initBtn = page.getByRole('button', { name: 'Initialize Workday' });
       await expect(initBtn).toBeVisible({ timeout: 2000 });

@@ -41,6 +41,14 @@ test.describe('Englabs OS Native Android Tests', () => {
         
         // Wait for app to render
         await page.waitForLoadState('networkidle');
+
+        // Bypass Lock Screen
+        await page.evaluate(() => {
+            localStorage.setItem('englabs_authenticated', 'true');
+            localStorage.setItem('englabs_user_role', 'ADMIN');
+        });
+        await page.reload();
+        await page.waitForLoadState('networkidle');
         
         try {
             await page.waitForSelector('text=Mission Control', { timeout: 10000 });

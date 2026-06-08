@@ -42,6 +42,7 @@ import InventoryManager from './components/InventoryManager';
 import Sky5Terminal from './components/Sky5Terminal';
 import StoreStockReport from './components/StoreStockReport';
 import { STAFF_ROSTER } from './lib/constants';
+import AddStaffModal from './components/AddStaffModal';
 import PorterRegister from './components/PorterRegister';
 import HandoverDashboard from './components/HandoverDashboard';
 import ProjectLookupDashboard from './components/ProjectLookupDashboard';
@@ -381,6 +382,29 @@ const App: React.FC = () => {
     const [checkoutQty, setCheckoutQty] = useState(1);
     const [checkoutStaffName, setCheckoutStaffName] = useState("");
     const [checkoutLoading, setCheckoutLoading] = useState(false);
+    const [staffList, setStaffList] = useState<string[]>(() => {
+        try {
+            const stored = localStorage.getItem('englabs_staff_members');
+            if (stored) {
+                const parsed = JSON.parse(stored);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    return Array.from(new Set([...STAFF_ROSTER, ...parsed]));
+                }
+            }
+        } catch (e) {
+            console.error("Failed to load staff list from localStorage:", e);
+        }
+        return STAFF_ROSTER;
+    });
+    const [isAddStaffModalOpen, setIsAddStaffModalOpen] = useState(false);
+
+    const handleAddStaff = (newStaffName: string) => {
+        setStaffList(prev => {
+            const updated = [...prev, newStaffName];
+            localStorage.setItem('englabs_staff_members', JSON.stringify(updated));
+            return updated;
+        });
+    };
     const [porterTrips, setPorterTrips] = useState<any[]>(() => {
         try {
             const saved = localStorage.getItem('englabs_porter_v1');
@@ -678,31 +702,31 @@ const App: React.FC = () => {
                 <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-emerald-500/10 blur-[120px] animate-pulse" />
                 <div className="absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-blue-500/10 blur-[120px] animate-pulse" />
 
-                <div className="w-full max-w-[400px] bg-slate-950/40 backdrop-blur-xl border border-white/5 rounded-[2.5rem] p-8 flex flex-col items-center shadow-2xl relative z-10 animate-spring-zoom">
+                <div className="w-full max-w-[400px] max-h-full overflow-y-auto bg-slate-950/40 backdrop-blur-xl border border-white/5 rounded-[2.5rem] p-4 sm:p-8 flex flex-col items-center shadow-2xl relative z-10 animate-spring-zoom">
                     {/* Brand header */}
-                    <div className="flex items-center gap-3.5 mb-2">
-                        <div className="p-2 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl shadow-lg shadow-emerald-500/20">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-900">
+                    <div className="flex items-center gap-3.5 mb-1 sm:mb-2">
+                        <div className="p-1.5 sm:p-2 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl shadow-lg shadow-emerald-500/20">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-900 sm:w-5 sm:h-5">
                                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                             </svg>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-base font-black tracking-tighter text-white">ENGLABS STORE</span>
-                            <span className="text-[8px] font-black text-slate-400 tracking-[0.3em] uppercase">Enterprise Stock OS</span>
+                            <span className="text-sm sm:text-base font-black tracking-tighter text-white">ENGLABS STORE</span>
+                            <span className="text-[7px] sm:text-[8px] font-black text-slate-400 tracking-[0.3em] uppercase">Enterprise Stock OS</span>
                         </div>
                     </div>
 
-                    <div className="h-[1px] w-full bg-white/5 my-6" />
+                    <div className="h-[1px] w-full bg-white/5 my-3 sm:my-6" />
 
-                    <h2 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-1 text-center">SYSTEM ACCESS LOCK</h2>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-8 text-center">Enter PIN to authorize access</p>
+                    <h2 className="text-xs sm:text-sm font-black text-slate-400 uppercase tracking-widest mb-0.5 sm:mb-1 text-center">SYSTEM ACCESS LOCK</h2>
+                    <p className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-4 sm:mb-8 text-center">Enter PIN to authorize access</p>
 
                     {/* PIN circular indicators */}
-                    <div className={`flex gap-4 mb-10 ${pinError ? 'animate-shake' : ''}`}>
+                    <div className={`flex gap-3 sm:gap-4 mb-4 sm:mb-10 ${pinError ? 'animate-shake' : ''}`}>
                         {[0, 1, 2, 3].map((index) => (
                             <div 
                                 key={index} 
-                                className={`w-4 h-4 rounded-full transition-all duration-300 ${
+                                className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full transition-all duration-300 ${
                                     pinError 
                                     ? 'bg-rose-500 border border-rose-400 shadow-[0_0_12px_rgba(239,68,68,0.5)]'
                                     : index < pin.length 
@@ -714,13 +738,13 @@ const App: React.FC = () => {
                     </div>
 
                     {/* Numeric Keypad */}
-                    <div className="grid grid-cols-3 gap-4 w-full max-w-[280px] mb-6">
+                    <div className="grid grid-cols-3 gap-2.5 sm:gap-4 w-full max-w-[240px] sm:max-w-[280px] mb-3 sm:mb-6">
                         {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((num) => (
                             <button
                                 key={num}
                                 type="button"
                                 onClick={() => handlePinInput(num)}
-                                className="w-16 h-16 rounded-full bg-white/5 border border-white/5 font-black text-xl hover:bg-white/10 hover:border-white/10 transition-all flex items-center justify-center shadow-lg active:scale-95 cursor-pointer text-white"
+                                className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white/5 border border-white/5 font-black text-lg sm:text-xl hover:bg-white/10 hover:border-white/10 transition-all flex items-center justify-center shadow-lg active:scale-95 cursor-pointer text-white"
                             >
                                 {num}
                             </button>
@@ -728,7 +752,7 @@ const App: React.FC = () => {
                         <button
                             type="button"
                             onClick={() => setPin("")}
-                            className="w-16 h-16 rounded-full font-black text-[10px] uppercase tracking-widest text-slate-500 hover:text-white flex items-center justify-center transition-all active:scale-95 cursor-pointer"
+                            className="w-12 h-12 sm:w-16 sm:h-16 rounded-full font-black text-[9px] sm:text-[10px] uppercase tracking-widest text-slate-500 hover:text-white flex items-center justify-center transition-all active:scale-95 cursor-pointer"
                         >
                             Clear
                         </button>
@@ -736,14 +760,14 @@ const App: React.FC = () => {
                             key="0"
                             type="button"
                             onClick={() => handlePinInput("0")}
-                            className="w-16 h-16 rounded-full bg-white/5 border border-white/5 font-black text-xl hover:bg-white/10 hover:border-white/10 transition-all flex items-center justify-center shadow-lg active:scale-95 cursor-pointer text-white"
+                            className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white/5 border border-white/5 font-black text-lg sm:text-xl hover:bg-white/10 hover:border-white/10 transition-all flex items-center justify-center shadow-lg active:scale-95 cursor-pointer text-white"
                         >
                             0
                         </button>
                         <button
                             type="button"
                             onClick={handlePinBackspace}
-                            className="w-16 h-16 rounded-full font-black text-[10px] uppercase tracking-widest text-slate-500 hover:text-white flex items-center justify-center transition-all active:scale-95 cursor-pointer"
+                            className="w-12 h-12 sm:w-16 sm:h-16 rounded-full font-black text-[9px] sm:text-[10px] uppercase tracking-widest text-slate-500 hover:text-white flex items-center justify-center transition-all active:scale-95 cursor-pointer"
                         >
                             Delete
                         </button>
@@ -1144,7 +1168,16 @@ const App: React.FC = () => {
                                                     />
                                                 </div>
                                                 <div className="space-y-1.5">
-                                                    <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Staff Name</label>
+                                                    <div className="flex justify-between items-center">
+                                                        <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Staff Name</label>
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => setIsAddStaffModalOpen(true)}
+                                                            className="text-[8px] font-black text-emerald-400 hover:text-emerald-300 uppercase tracking-widest flex items-center gap-0.5 transition-all"
+                                                        >
+                                                            <Plus className="w-3 h-3" /> New Staff
+                                                        </button>
+                                                    </div>
                                                     <select 
                                                         value={checkoutStaffName} 
                                                         onChange={(e) => setCheckoutStaffName(e.target.value)}
@@ -1152,7 +1185,7 @@ const App: React.FC = () => {
                                                         className="w-full bg-slate-800 border border-slate-700/50 rounded-xl py-2.5 px-3 text-xs font-bold text-white outline-none focus:border-emerald-500"
                                                     >
                                                         <option value="">-- Staff --</option>
-                                                        {STAFF_ROSTER.map((name) => (
+                                                        {staffList.map((name) => (
                                                             <option key={name} value={name}>
                                                                 {name}
                                                             </option>
@@ -1240,13 +1273,9 @@ const App: React.FC = () => {
                                             <Users className="w-5.5 h-5.5 text-emerald-500" /> Project Team
                                         </h3>
                                         <div className="grid grid-cols-2 gap-2 md:gap-3">
-                                            {[
-                                                "Thakur", "Rajinder", 
-                                                "Arjun", "Kunwarlal", "Anurag", "Shubham", 
-                                                "Ratnesh", "Devarshu", "Shiv Kumar", "Uditanshu", "RAM"
-                                            ].map(name => (
-                                                <div key={name} className="flex items-center gap-1.5 p-1.5 md:p-2 bg-slate-50 rounded-lg border border-slate-100">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                                            {staffList.map(name => (
+                                                <div key={name} className="flex items-center gap-1.5 p-1.5 md:p-2 bg-slate-50 rounded-lg border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
                                                     <span className="text-[8px] md:text-[10px] font-bold text-slate-700 uppercase">{name}</span>
                                                 </div>
                                             ))}
@@ -1281,7 +1310,12 @@ const App: React.FC = () => {
             ) : currentView === 'INVENTORY' ? (
                 <InventoryManager />
             ) : currentView === 'STOCK_REPORT' ? (
-                <StoreStockReport userRole={userRole || 'STAFF'} projects={projects} />
+                <StoreStockReport 
+                    userRole={userRole || 'STAFF'} 
+                    projects={projects} 
+                    staffList={staffList}
+                    onAddStaff={handleAddStaff}
+                />
             ) : currentView === 'PORTER_SERVICE' ? (
                 <PorterRegister 
                     trips={porterTrips}
@@ -1428,6 +1462,7 @@ const App: React.FC = () => {
             )}
 
             <NewProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onAdd={(newProj) => setProjects(prev => [...prev, newProj])} />
+            <AddStaffModal isOpen={isAddStaffModalOpen} onClose={() => setIsAddStaffModalOpen(false)} onAdd={handleAddStaff} existingStaff={staffList} />
         </div>
     );
 };

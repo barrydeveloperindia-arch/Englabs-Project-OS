@@ -10,5 +10,11 @@ export const STAFF_ROSTER = [
     "Shiv Kumar",
     "Uditanshu",
     "RAM",
-    "Gaurav Panchal"
+    "Gaurav Panchal",
+    "Kusum Didi",
+    "Hafeez",
+    "Sky-5",
+    "Parmod Bahl",
+    "A & A",
+    "Bright Kids School"
 ];
