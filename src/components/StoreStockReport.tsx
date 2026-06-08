@@ -131,6 +131,10 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
     const [checkOutSuccess, setCheckOutSuccess] = useState(false);
     const [checkOutTxDetails, setCheckOutTxDetails] = useState<any>(null);
     const [checkoutPhoto, setCheckoutPhoto] = useState('');
+    const [checkInSearch, setCheckInSearch] = useState('');
+    const [showCheckInDropdown, setShowCheckInDropdown] = useState(false);
+    const [checkOutSearch, setCheckOutSearch] = useState('');
+    const [showCheckOutDropdown, setShowCheckOutDropdown] = useState(false);
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
     const [modalConfig, setModalConfig] = useState<{ type: 'ITEM' | 'DELETE', data: any } | null>(null);
 
@@ -896,6 +900,7 @@ ENGLABS STORE`;
                                             // Reset
                                             setCheckInItemCode('');
                                             setCheckInItemName('');
+                                            setCheckInSearch('');
                                             setCheckInQty(1);
                                             setCheckInSupplier('');
                                             setCheckInProject('');
@@ -968,17 +973,55 @@ ENGLABS STORE`;
                                                 </div>
                                             </div>
                                         ) : (
-                                            <select
-                                                required
-                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
-                                                value={checkInItemCode}
-                                                onChange={(e) => setCheckInItemCode(e.target.value)}
-                                            >
-                                                <option value="">Select Material...</option>
-                                                {currentStock.map(item => (
-                                                    <option key={item.itemCode} value={item.itemCode}>{item.name} ({item.unit})</option>
-                                                ))}
-                                            </select>
+                                            <div className="relative">
+                                                 <input
+                                                     type="text"
+                                                     placeholder="Type to search material..."
+                                                     className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                                     value={checkInSearch}
+                                                     onChange={(e) => {
+                                                         setCheckInSearch(e.target.value);
+                                                         if (!e.target.value) {
+                                                             setCheckInItemCode('');
+                                                         }
+                                                         setShowCheckInDropdown(true);
+                                                     }}
+                                                     onFocus={() => setShowCheckInDropdown(true)}
+                                                 />
+                                                 <input 
+                                                     type="hidden" 
+                                                     value={checkInItemCode} 
+                                                     required 
+                                                 />
+                                                 {showCheckInDropdown && (
+                                                     <>
+                                                         <div className="fixed inset-0 z-10" onClick={() => setShowCheckInDropdown(false)} />
+                                                         <div className="absolute z-20 w-full max-h-60 overflow-y-auto bg-white border border-slate-200 rounded-xl mt-1 shadow-lg custom-scrollbar">
+                                                             {currentStock
+                                                                 .filter(item => item.name.toLowerCase().includes(checkInSearch.toLowerCase()) || item.itemCode.toLowerCase().includes(checkInSearch.toLowerCase()))
+                                                                 .map(item => (
+                                                                     <button
+                                                                         type="button"
+                                                                         key={item.itemCode}
+                                                                         onClick={() => {
+                                                                             setCheckInItemCode(item.itemCode);
+                                                                             setCheckInSearch(item.name);
+                                                                             setShowCheckInDropdown(false);
+                                                                         }}
+                                                                         className="w-full text-left px-4 py-2.5 text-xs font-bold hover:bg-slate-50 text-slate-700 transition-colors border-b border-slate-50 last:border-0"
+                                                                     >
+                                                                         <span className="block text-slate-900">{item.name}</span>
+                                                                         <span className="block text-[8px] text-slate-400 font-bold uppercase tracking-wider">{item.itemCode} • {item.unit}</span>
+                                                                     </button>
+                                                                 ))
+                                                             }
+                                                             {currentStock.filter(item => item.name.toLowerCase().includes(checkInSearch.toLowerCase()) || item.itemCode.toLowerCase().includes(checkInSearch.toLowerCase())).length === 0 && (
+                                                                 <div className="p-4 text-center text-slate-400 text-xs font-bold">No matching materials found</div>
+                                                             )}
+                                                         </div>
+                                                     </>
+                                                 )}
+                                             </div>
                                         )}
                                     </div>
 
@@ -1173,6 +1216,7 @@ ENGLABS STORE`;
                                             setCheckOutSuccess(true);
                                             // Reset
                                             setCheckOutItemCode('');
+                                            setCheckOutSearch('');
                                             setCheckOutQty(1);
                                             setCheckOutStaffName('');
                                             setCheckOutProjectName('');
@@ -1191,21 +1235,61 @@ ENGLABS STORE`;
                                     {/* Material Selector */}
                                     <div className="space-y-1.5">
                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Select Material</label>
-                                        <select
-                                            required
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
-                                            value={checkOutItemCode}
-                                            onChange={(e) => setCheckOutItemCode(e.target.value)}
-                                        >
-                                            <option value="">Select Material...</option>
-                                            {currentStock
-                                                .filter(item => item.availableStock > 0)
-                                                .map(item => (
-                                                    <option key={item.itemCode} value={item.itemCode}>
-                                                        {item.name} (Available: {item.availableStock} {item.unit})
-                                                    </option>
-                                                ))}
-                                        </select>
+                                        <div className="relative">
+                                            <input
+                                                type="text"
+                                                placeholder="Type to search material..."
+                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                                value={checkOutSearch}
+                                                onChange={(e) => {
+                                                    setCheckOutSearch(e.target.value);
+                                                    if (!e.target.value) {
+                                                        setCheckOutItemCode('');
+                                                    }
+                                                    setShowCheckOutDropdown(true);
+                                                }}
+                                                onFocus={() => setShowCheckOutDropdown(true)}
+                                            />
+                                            <input 
+                                                type="hidden" 
+                                                value={checkOutItemCode} 
+                                                required 
+                                            />
+                                            {showCheckOutDropdown && (
+                                                <>
+                                                    <div className="fixed inset-0 z-10" onClick={() => setShowCheckOutDropdown(false)} />
+                                                    <div className="absolute z-20 w-full max-h-60 overflow-y-auto bg-white border border-slate-200 rounded-xl mt-1 shadow-lg custom-scrollbar">
+                                                        {currentStock
+                                                            .filter(item => item.availableStock > 0)
+                                                            .filter(item => item.name.toLowerCase().includes(checkOutSearch.toLowerCase()) || item.itemCode.toLowerCase().includes(checkOutSearch.toLowerCase()))
+                                                            .map(item => (
+                                                                <button
+                                                                    type="button"
+                                                                    key={item.itemCode}
+                                                                    onClick={() => {
+                                                                        setCheckOutItemCode(item.itemCode);
+                                                                        setCheckOutSearch(item.name);
+                                                                        setShowCheckOutDropdown(false);
+                                                                    }}
+                                                                    className="w-full text-left px-4 py-2.5 text-xs font-bold hover:bg-slate-50 text-slate-700 transition-colors border-b border-slate-50 last:border-0"
+                                                                >
+                                                                    <div className="flex justify-between items-center">
+                                                                        <span className="text-slate-900 block">{item.name}</span>
+                                                                        <span className="text-[9px] font-black text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">
+                                                                            {item.availableStock} {item.unit}
+                                                                        </span>
+                                                                    </div>
+                                                                    <span className="block text-[8px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">{item.itemCode}</span>
+                                                                </button>
+                                                            ))
+                                                        }
+                                                        {currentStock.filter(item => item.availableStock > 0).filter(item => item.name.toLowerCase().includes(checkOutSearch.toLowerCase()) || item.itemCode.toLowerCase().includes(checkOutSearch.toLowerCase())).length === 0 && (
+                                                            <div className="p-4 text-center text-slate-400 text-xs font-bold">No available matching materials</div>
+                                                        )}
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
                                     </div>
 
                                     {/* Quantity */}
