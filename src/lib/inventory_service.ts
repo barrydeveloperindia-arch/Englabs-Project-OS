@@ -76,6 +76,17 @@ export function getEstimatedPrice(category: string): number {
     return 100;
 }
 
+function cleanUndefined(obj: any): any {
+    if (!obj || typeof obj !== 'object') return obj;
+    const clean: any = {};
+    for (const key in obj) {
+        if (obj[key] !== undefined) {
+            clean[key] = obj[key];
+        }
+    }
+    return clean;
+}
+
 // Automated seeding for new collections if they are empty
 export async function seedStoreStockReport() {
     if (!db) return;
@@ -445,11 +456,11 @@ async function updateStock(
             const monthlyEntry = { ...masterEntry, id: monthlyTxRef.id };
 
             // --- WRITES START HERE ---
-            transaction.set(legacyDocRef, legacyItem);
-            transaction.set(currentStockRef, currentStockItem);
+            transaction.set(legacyDocRef, cleanUndefined(legacyItem));
+            transaction.set(currentStockRef, cleanUndefined(currentStockItem));
 
             if (!catalogSnap.exists()) {
-                transaction.set(catalogRef, {
+                transaction.set(catalogRef, cleanUndefined({
                     itemCode,
                     name,
                     category: hsn || 'GENERAL',
@@ -458,16 +469,16 @@ async function updateStock(
                     minThreshold: 5,
                     unitPrice: getEstimatedPrice(hsn || 'GENERAL'),
                     lastUpdated: new Date().toISOString()
-                });
+                }));
             }
 
-            transaction.set(masterTxRef, masterEntry);
-            transaction.set(monthlyTxRef, monthlyEntry);
-            transaction.set(lockDocRef, {
+            transaction.set(masterTxRef, cleanUndefined(masterEntry));
+            transaction.set(monthlyTxRef, cleanUndefined(monthlyEntry));
+            transaction.set(lockDocRef, cleanUndefined({
                 timestamp,
                 referenceId: refId,
                 itemId: itemCode
-            });
+            }));
 
             // --- 7. LEGACY LOGS UPDATE ---
             const logRef = doc(collection(db, LOG_COLLECTION));
@@ -485,7 +496,7 @@ async function updateStock(
                 photoUrl: photoUrl,
                 projectId: projectId
             };
-            transaction.set(logRef, stockTx);
+            transaction.set(logRef, cleanUndefined(stockTx));
 
             return { success: true, itemCode };
         });
@@ -622,11 +633,11 @@ async function updateStock(
 
             // Perform batch write
             const batch = writeBatch(db);
-            batch.set(legacyDocRef, legacyItem);
-            batch.set(currentStockRef, currentStockItem);
+            batch.set(legacyDocRef, cleanUndefined(legacyItem));
+            batch.set(currentStockRef, cleanUndefined(currentStockItem));
 
             if (!catalogSnap.exists()) {
-                batch.set(catalogRef, {
+                batch.set(catalogRef, cleanUndefined({
                     itemCode,
                     name,
                     category: hsn || 'GENERAL',
@@ -635,16 +646,16 @@ async function updateStock(
                     minThreshold: 5,
                     unitPrice: getEstimatedPrice(hsn || 'GENERAL'),
                     lastUpdated: new Date().toISOString()
-                });
+                }));
             }
 
-            batch.set(masterTxRef, masterEntry);
-            batch.set(monthlyTxRef, monthlyEntry);
-            batch.set(lockDocRef, {
+            batch.set(masterTxRef, cleanUndefined(masterEntry));
+            batch.set(monthlyTxRef, cleanUndefined(monthlyEntry));
+            batch.set(lockDocRef, cleanUndefined({
                 timestamp,
                 referenceId: refId,
                 itemId: itemCode
-            });
+            }));
 
             // Legacy logs update
             const logRef = doc(collection(db, LOG_COLLECTION));
@@ -662,7 +673,7 @@ async function updateStock(
                 photoUrl: photoUrl,
                 projectId: projectId
             };
-            batch.set(logRef, stockTx);
+            batch.set(logRef, cleanUndefined(stockTx));
 
             await batch.commit();
             console.log("Offline batch update succeeded locally!");

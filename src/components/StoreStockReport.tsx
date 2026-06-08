@@ -1035,15 +1035,30 @@ ENGLABS STORE`;
 
                                     {/* Quantity */}
                                     <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Quantity</label>
-                                        <input
-                                            type="number"
-                                            min="1"
-                                            required
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
-                                            value={checkInQty}
-                                            onChange={(e) => setCheckInQty(parseInt(e.target.value) || 0)}
-                                        />
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">
+                                            Quantity {!isNewItemMode && checkInItemCode && `(in ${currentStock.find(i => i.itemCode === checkInItemCode)?.unit || ''})`}
+                                            {isNewItemMode && `(in ${checkInUnit})`}
+                                        </label>
+                                        <div className="relative flex items-center">
+                                            <input
+                                                type="number"
+                                                min="1"
+                                                required
+                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 pl-3 pr-12 text-xs font-bold focus:border-indigo-500 outline-none"
+                                                value={checkInQty}
+                                                onChange={(e) => setCheckInQty(parseInt(e.target.value) || 0)}
+                                            />
+                                            {!isNewItemMode && checkInItemCode && (
+                                                <span className="absolute right-3 text-slate-400 text-[10px] font-black uppercase pointer-events-none">
+                                                    {currentStock.find(i => i.itemCode === checkInItemCode)?.unit || ''}
+                                                </span>
+                                            )}
+                                            {isNewItemMode && (
+                                                <span className="absolute right-3 text-slate-400 text-[10px] font-black uppercase pointer-events-none">
+                                                    {checkInUnit}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
 
                                     {/* Supplier */}
@@ -1310,22 +1325,31 @@ ENGLABS STORE`;
                                     {/* Quantity */}
                                     <div className="space-y-1.5">
                                         <div className="flex justify-between items-center">
-                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Quantity</label>
+                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                                                Quantity {checkOutItemCode && `(in ${currentStock.find(i => i.itemCode === checkOutItemCode)?.unit || ''})`}
+                                            </label>
                                             {checkOutItemCode && (
                                                 <span className="text-[9px] font-black text-indigo-600 uppercase bg-indigo-50 px-2 py-0.5 rounded-md">
-                                                    Max Available: {currentStock.find(i => i.itemCode === checkOutItemCode)?.availableStock || 0}
+                                                    Max Available: {currentStock.find(i => i.itemCode === checkOutItemCode)?.availableStock || 0} {currentStock.find(i => i.itemCode === checkOutItemCode)?.unit || ''}
                                                 </span>
                                             )}
                                         </div>
-                                        <input
-                                            type="number"
-                                            min="1"
-                                            max={checkOutItemCode ? currentStock.find(i => i.itemCode === checkOutItemCode)?.availableStock : undefined}
-                                            required
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
-                                            value={checkOutQty}
-                                            onChange={(e) => setCheckOutQty(parseInt(e.target.value) || 0)}
-                                        />
+                                        <div className="relative flex items-center">
+                                            <input
+                                                type="number"
+                                                min="1"
+                                                max={checkOutItemCode ? currentStock.find(i => i.itemCode === checkOutItemCode)?.availableStock : undefined}
+                                                required
+                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 pl-3 pr-12 text-xs font-bold focus:border-indigo-500 outline-none"
+                                                value={checkOutQty}
+                                                onChange={(e) => setCheckOutQty(parseInt(e.target.value) || 0)}
+                                            />
+                                            {checkOutItemCode && (
+                                                <span className="absolute right-3 text-slate-400 text-[10px] font-black uppercase pointer-events-none">
+                                                    {currentStock.find(i => i.itemCode === checkOutItemCode)?.unit || ''}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
 
                                     {/* Issued To Staff */}
@@ -1772,13 +1796,22 @@ ENGLABS STORE`;
                         </div>
                         <div className="p-6 space-y-4">
                             <div className="space-y-1.5">
-                                <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Available Stock Level</label>
-                                <input 
-                                    type="number" 
-                                    defaultValue={modalConfig.data.availableStock}
-                                    id="stock-adjust-input"
-                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xl font-black text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all text-slate-850"
-                                />
+                                <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
+                                    Available Stock Level {modalConfig.data.unit && `(in ${modalConfig.data.unit})`}
+                                </label>
+                                <div className="relative flex items-center">
+                                    <input 
+                                        type="number" 
+                                        defaultValue={modalConfig.data.availableStock}
+                                        id="stock-adjust-input"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-4 pr-16 text-xl font-black text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all text-slate-850"
+                                    />
+                                    {modalConfig.data.unit && (
+                                        <span className="absolute right-4 text-slate-400 text-sm font-black uppercase pointer-events-none">
+                                            {modalConfig.data.unit}
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                             <button 
                                 onClick={async () => {
