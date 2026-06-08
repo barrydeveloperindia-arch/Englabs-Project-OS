@@ -11,7 +11,7 @@
     "grepInvert": null,
     "maxFailures": 0,
     "metadata": {
-      "actualWorkers": 12
+      "actualWorkers": 3
     },
     "preserveOutput": "always",
     "projects": [
@@ -20,7 +20,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 12
+          "actualWorkers": 3
         },
         "id": "chromium",
         "name": "chromium",
@@ -36,7 +36,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 12
+          "actualWorkers": 3
         },
         "id": "Mobile Chrome (Pixel 5)",
         "name": "Mobile Chrome (Pixel 5)",
@@ -52,7 +52,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 12
+          "actualWorkers": 3
         },
         "id": "Mobile Safari (iPhone 12)",
         "name": "Mobile Safari (iPhone 12)",
@@ -95,20 +95,20 @@
   },
   "suites": [
     {
-      "title": "smoke.test.ts",
-      "file": "smoke.test.ts",
+      "title": "mobile.test.ts",
+      "file": "mobile.test.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Englabs Projects OS - Core Workflow",
-          "file": "smoke.test.ts",
-          "line": 3,
+          "title": "Englabs Projects OS - Exhaustive Mobile UI & Data Integration Suite",
+          "file": "mobile.test.ts",
+          "line": 11,
           "column": 6,
           "specs": [
             {
-              "title": "Dashboard loads and shows core projects",
+              "title": "7.5. Record Transit (Check-Out) Flow with Searchable Combobox",
               "ok": true,
               "tags": [],
               "tests": [
@@ -123,12 +123,145 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4878,
+                      "duration": 15866,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "BROWSER LOG: [vite] connecting...\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Found project files: [/data/C001.json, /data/C002.json, /data/C2718.json, /data/C2737.json, /data/C2931.json, /data/C3020.json, /data/C4235.json, /data/C4465.json, /data/C4693.json, /data/C4811.json, /data/C4851.json, /data/C4860.json, /data/C4867.json, /data/C4883.json, /data/C4891.json, /data/C4894.json, /data/C4895.json, /data/C4909.json, /data/C4913.json, /data/C4922.json, /data/C4925.json, /data/C4927.json, /data/C4929.json, /data/C4935.json, /data/C4940.json, /data/C4950.json, /data/C4958.json, /data/C4963.json, /data/C4965.json, /data/C4967.json, /data/C4985.json, /data/C5005.json, /data/C5008.json, /data/C5010.json, /data/C5014.json, /data/C5023.json, /data/C5029.json, /data/C5033.json, /data/C5039.json, /data/C5040.json, /data/C5048.json, /data/C5054.json, /data/C5069.json, /data/C5075.json, /data/C5077.json, /data/C5080.json, /data/C5086.json, /data/C5090.json, /data/C5092.json, /data/C5095.json, /data/C5098.json, /data/C5103.json, /data/C5108.json, /data/C5110.json, /data/C5115.json, /data/C5120.json, /data/C5124.json, /data/C5128.json, /data/C5130.json, /data/C5131.json, /data/C5133.json, /data/C5135.json, /data/C5137.json, /data/C5138.json, /data/C5140.json, /data/C5142.json, /data/C5144.json, /data/C5153.json, /data/C5154.json, /data/C5159.json, /data/C5162.json, /data/C5172.json, /data/C5174.json, /data/C5176.json, /data/C5178.json, /data/C5179.json, /data/C5184.json, /data/C5185.json, /data/C5187.json, /data/C5190.json, /data/C5191.json, /data/C5192.json, /data/C5193.json, /data/C5195.json, /data/C5197.json, /data/C5198.json, /data/C5207.json, /data/C5209.json, /data/C5210.json, /data/C5212.json, /data/C5213.json, /data/C5216.json, /data/C5223.json, /data/C5224.json, /data/C5227.json, /data/C5228.json, /data/C5229.json, /data/ENGLABS.json, /data/forensic_gate_registry.json, /data/handover_state.json]\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Found project files: [/data/C001.json, /data/C002.json, /data/C2718.json, /data/C2737.json, /data/C2931.json, /data/C3020.json, /data/C4235.json, /data/C4465.json, /data/C4693.json, /data/C4811.json, /data/C4851.json, /data/C4860.json, /data/C4867.json, /data/C4883.json, /data/C4891.json, /data/C4894.json, /data/C4895.json, /data/C4909.json, /data/C4913.json, /data/C4922.json, /data/C4925.json, /data/C4927.json, /data/C4929.json, /data/C4935.json, /data/C4940.json, /data/C4950.json, /data/C4958.json, /data/C4963.json, /data/C4965.json, /data/C4967.json, /data/C4985.json, /data/C5005.json, /data/C5008.json, /data/C5010.json, /data/C5014.json, /data/C5023.json, /data/C5029.json, /data/C5033.json, /data/C5039.json, /data/C5040.json, /data/C5048.json, /data/C5054.json, /data/C5069.json, /data/C5075.json, /data/C5077.json, /data/C5080.json, /data/C5086.json, /data/C5090.json, /data/C5092.json, /data/C5095.json, /data/C5098.json, /data/C5103.json, /data/C5108.json, /data/C5110.json, /data/C5115.json, /data/C5120.json, /data/C5124.json, /data/C5128.json, /data/C5130.json, /data/C5131.json, /data/C5133.json, /data/C5135.json, /data/C5137.json, /data/C5138.json, /data/C5140.json, /data/C5142.json, /data/C5144.json, /data/C5153.json, /data/C5154.json, /data/C5159.json, /data/C5162.json, /data/C5172.json, /data/C5174.json, /data/C5176.json, /data/C5178.json, /data/C5179.json, /data/C5184.json, /data/C5185.json, /data/C5187.json, /data/C5190.json, /data/C5191.json, /data/C5192.json, /data/C5193.json, /data/C5195.json, /data/C5197.json, /data/C5198.json, /data/C5207.json, /data/C5209.json, /data/C5210.json, /data/C5212.json, /data/C5213.json, /data/C5216.json, /data/C5223.json, /data/C5224.json, /data/C5227.json, /data/C5228.json, /data/C5229.json, /data/ENGLABS.json, /data/forensic_gate_registry.json, /data/handover_state.json]\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [vite] connected.\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [vite] connecting...\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [vite] connected.\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Found project files: [/data/C001.json, /data/C002.json, /data/C2718.json, /data/C2737.json, /data/C2931.json, /data/C3020.json, /data/C4235.json, /data/C4465.json, /data/C4693.json, /data/C4811.json, /data/C4851.json, /data/C4860.json, /data/C4867.json, /data/C4883.json, /data/C4891.json, /data/C4894.json, /data/C4895.json, /data/C4909.json, /data/C4913.json, /data/C4922.json, /data/C4925.json, /data/C4927.json, /data/C4929.json, /data/C4935.json, /data/C4940.json, /data/C4950.json, /data/C4958.json, /data/C4963.json, /data/C4965.json, /data/C4967.json, /data/C4985.json, /data/C5005.json, /data/C5008.json, /data/C5010.json, /data/C5014.json, /data/C5023.json, /data/C5029.json, /data/C5033.json, /data/C5039.json, /data/C5040.json, /data/C5048.json, /data/C5054.json, /data/C5069.json, /data/C5075.json, /data/C5077.json, /data/C5080.json, /data/C5086.json, /data/C5090.json, /data/C5092.json, /data/C5095.json, /data/C5098.json, /data/C5103.json, /data/C5108.json, /data/C5110.json, /data/C5115.json, /data/C5120.json, /data/C5124.json, /data/C5128.json, /data/C5130.json, /data/C5131.json, /data/C5133.json, /data/C5135.json, /data/C5137.json, /data/C5138.json, /data/C5140.json, /data/C5142.json, /data/C5144.json, /data/C5153.json, /data/C5154.json, /data/C5159.json, /data/C5162.json, /data/C5172.json, /data/C5174.json, /data/C5176.json, /data/C5178.json, /data/C5179.json, /data/C5184.json, /data/C5185.json, /data/C5187.json, /data/C5190.json, /data/C5191.json, /data/C5192.json, /data/C5193.json, /data/C5195.json, /data/C5197.json, /data/C5198.json, /data/C5207.json, /data/C5209.json, /data/C5210.json, /data/C5212.json, /data/C5213.json, /data/C5216.json, /data/C5223.json, /data/C5224.json, /data/C5227.json, /data/C5228.json, /data/C5229.json, /data/ENGLABS.json, /data/forensic_gate_registry.json, /data/handover_state.json]\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Found project files: [/data/C001.json, /data/C002.json, /data/C2718.json, /data/C2737.json, /data/C2931.json, /data/C3020.json, /data/C4235.json, /data/C4465.json, /data/C4693.json, /data/C4811.json, /data/C4851.json, /data/C4860.json, /data/C4867.json, /data/C4883.json, /data/C4891.json, /data/C4894.json, /data/C4895.json, /data/C4909.json, /data/C4913.json, /data/C4922.json, /data/C4925.json, /data/C4927.json, /data/C4929.json, /data/C4935.json, /data/C4940.json, /data/C4950.json, /data/C4958.json, /data/C4963.json, /data/C4965.json, /data/C4967.json, /data/C4985.json, /data/C5005.json, /data/C5008.json, /data/C5010.json, /data/C5014.json, /data/C5023.json, /data/C5029.json, /data/C5033.json, /data/C5039.json, /data/C5040.json, /data/C5048.json, /data/C5054.json, /data/C5069.json, /data/C5075.json, /data/C5077.json, /data/C5080.json, /data/C5086.json, /data/C5090.json, /data/C5092.json, /data/C5095.json, /data/C5098.json, /data/C5103.json, /data/C5108.json, /data/C5110.json, /data/C5115.json, /data/C5120.json, /data/C5124.json, /data/C5128.json, /data/C5130.json, /data/C5131.json, /data/C5133.json, /data/C5135.json, /data/C5137.json, /data/C5138.json, /data/C5140.json, /data/C5142.json, /data/C5144.json, /data/C5153.json, /data/C5154.json, /data/C5159.json, /data/C5162.json, /data/C5172.json, /data/C5174.json, /data/C5176.json, /data/C5178.json, /data/C5179.json, /data/C5184.json, /data/C5185.json, /data/C5187.json, /data/C5190.json, /data/C5191.json, /data/C5192.json, /data/C5193.json, /data/C5195.json, /data/C5197.json, /data/C5198.json, /data/C5207.json, /data/C5209.json, /data/C5210.json, /data/C5212.json, /data/C5213.json, /data/C5216.json, /data/C5223.json, /data/C5224.json, /data/C5227.json, /data/C5228.json, /data/C5229.json, /data/ENGLABS.json, /data/forensic_gate_registry.json, /data/handover_state.json]\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/forensic_gate_registry.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/forensic_gate_registry.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/handover_state.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/handover_state.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/master_inventory_may_2026.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/master_inventory_may_2026.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/outlook_processed_db.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/outlook_processed_db.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/porter_missions_forensic.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/porter_missions_forensic.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/project_directory_cache.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Loaded projects: 98\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/project_directory_cache.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Loaded projects: 98\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Forensic Sync: 7 disk, 18 cloud, total 19 entries.\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Forensic Sync: 7 disk, 18 cloud, total 19 entries.\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Forensic Sync: 7 disk, 18 cloud, total 19 entries.\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Forensic Sync: 7 disk, 18 cloud, total 19 entries.\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: onSubmit triggered!\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Form values: {itemCodeVal: PAI-001, typeVal: OUTWARD, quantityVal: 2, partyVal: Thakur, invoiceVal: ENG-01-0001}\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Selected item: {name: Chemilac Black Paint, itemCode: PAI-001, category: Paints, currentStock: 20, unit: LTR}\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Failed to load resource: the server responded with a status of 429 ()\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [2026-06-05T04:38:45.642Z]  @firebase/firestore: Firestore (12.12.0): RestConnection RPC 'BatchGetDocuments' 0x2611c60c failed with error:  {\"code\":\"resource-exhausted\",\"name\":\"FirebaseError\"} url:  https://firestore.googleapis.com/v1/projects/englabs-enterprise/databases/(default)/documents:batchGet?key=AIzaSyB4Fqw7MM1ROCjCqlFytsgAe6xSjGr-mlg request: {\"documents\":[\"projects/englabs-enterprise/databases/(default)/documents/inventory_sync_locks/MANUAL_TX_1780634322290_PAI-001\"]}\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Failed to load resource: the server responded with a status of 429 ()\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [2026-06-05T04:38:45.976Z]  @firebase/firestore: Firestore (12.12.0): RestConnection RPC 'BatchGetDocuments' 0x2611c60e failed with error:  {\"code\":\"resource-exhausted\",\"name\":\"FirebaseError\"} url:  https://firestore.googleapis.com/v1/projects/englabs-enterprise/databases/(default)/documents:batchGet?key=AIzaSyB4Fqw7MM1ROCjCqlFytsgAe6xSjGr-mlg request: {\"documents\":[\"projects/englabs-enterprise/databases/(default)/documents/inventory_sync_locks/MANUAL_TX_1780634322290_PAI-001\"]}\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Failed to load resource: the server responded with a status of 429 ()\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [2026-06-05T04:38:47.322Z]  @firebase/firestore: Firestore (12.12.0): RestConnection RPC 'BatchGetDocuments' 0x2611c610 failed with error:  {\"code\":\"resource-exhausted\",\"name\":\"FirebaseError\"} url:  https://firestore.googleapis.com/v1/projects/englabs-enterprise/databases/(default)/documents:batchGet?key=AIzaSyB4Fqw7MM1ROCjCqlFytsgAe6xSjGr-mlg request: {\"documents\":[\"projects/englabs-enterprise/databases/(default)/documents/inventory_sync_locks/MANUAL_TX_1780634322290_PAI-001\"]}\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Failed to load resource: the server responded with a status of 429 ()\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [2026-06-05T04:38:49.807Z]  @firebase/firestore: Firestore (12.12.0): RestConnection RPC 'BatchGetDocuments' 0x2611c612 failed with error:  {\"code\":\"resource-exhausted\",\"name\":\"FirebaseError\"} url:  https://firestore.googleapis.com/v1/projects/englabs-enterprise/databases/(default)/documents:batchGet?key=AIzaSyB4Fqw7MM1ROCjCqlFytsgAe6xSjGr-mlg request: {\"documents\":[\"projects/englabs-enterprise/databases/(default)/documents/inventory_sync_locks/MANUAL_TX_1780634322290_PAI-001\"]}\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Failed to load resource: the server responded with a status of 429 ()\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [2026-06-05T04:38:54.479Z]  @firebase/firestore: Firestore (12.12.0): RestConnection RPC 'BatchGetDocuments' 0x2611c614 failed with error:  {\"code\":\"resource-exhausted\",\"name\":\"FirebaseError\"} url:  https://firestore.googleapis.com/v1/projects/englabs-enterprise/databases/(default)/documents:batchGet?key=AIzaSyB4Fqw7MM1ROCjCqlFytsgAe6xSjGr-mlg request: {\"documents\":[\"projects/englabs-enterprise/databases/(default)/documents/inventory_sync_locks/MANUAL_TX_1780634322290_PAI-001\"]}\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Stock update failure: FirebaseError: Quota exceeded.\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: recordManualTransaction response: {success: false, error: Quota exceeded.}\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Database sync failed, falling back to local state updates: Quota exceeded.\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-04T06:48:39.810Z",
+                      "startTime": "2026-06-05T04:38:38.998Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -136,13 +269,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "4a239ced0e52b6754d8b-e8bb48ebffc8fbc1da7f",
-              "file": "smoke.test.ts",
-              "line": 15,
+              "id": "b918482cffc7046160dc-05a17e88014998298879",
+              "file": "mobile.test.ts",
+              "line": 202,
               "column": 3
             },
             {
-              "title": "Gate Register workflow",
+              "title": "7.5. Record Transit (Check-Out) Flow with Searchable Combobox",
               "ok": true,
               "tags": [],
               "tests": [
@@ -150,19 +283,152 @@
                   "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
+                  "projectId": "Mobile Chrome (Pixel 5)",
+                  "projectName": "Mobile Chrome (Pixel 5)",
                   "results": [
                     {
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 4717,
+                      "duration": 13716,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "BROWSER LOG: [vite] connecting...\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Found project files: [/data/C001.json, /data/C002.json, /data/C2718.json, /data/C2737.json, /data/C2931.json, /data/C3020.json, /data/C4235.json, /data/C4465.json, /data/C4693.json, /data/C4811.json, /data/C4851.json, /data/C4860.json, /data/C4867.json, /data/C4883.json, /data/C4891.json, /data/C4894.json, /data/C4895.json, /data/C4909.json, /data/C4913.json, /data/C4922.json, /data/C4925.json, /data/C4927.json, /data/C4929.json, /data/C4935.json, /data/C4940.json, /data/C4950.json, /data/C4958.json, /data/C4963.json, /data/C4965.json, /data/C4967.json, /data/C4985.json, /data/C5005.json, /data/C5008.json, /data/C5010.json, /data/C5014.json, /data/C5023.json, /data/C5029.json, /data/C5033.json, /data/C5039.json, /data/C5040.json, /data/C5048.json, /data/C5054.json, /data/C5069.json, /data/C5075.json, /data/C5077.json, /data/C5080.json, /data/C5086.json, /data/C5090.json, /data/C5092.json, /data/C5095.json, /data/C5098.json, /data/C5103.json, /data/C5108.json, /data/C5110.json, /data/C5115.json, /data/C5120.json, /data/C5124.json, /data/C5128.json, /data/C5130.json, /data/C5131.json, /data/C5133.json, /data/C5135.json, /data/C5137.json, /data/C5138.json, /data/C5140.json, /data/C5142.json, /data/C5144.json, /data/C5153.json, /data/C5154.json, /data/C5159.json, /data/C5162.json, /data/C5172.json, /data/C5174.json, /data/C5176.json, /data/C5178.json, /data/C5179.json, /data/C5184.json, /data/C5185.json, /data/C5187.json, /data/C5190.json, /data/C5191.json, /data/C5192.json, /data/C5193.json, /data/C5195.json, /data/C5197.json, /data/C5198.json, /data/C5207.json, /data/C5209.json, /data/C5210.json, /data/C5212.json, /data/C5213.json, /data/C5216.json, /data/C5223.json, /data/C5224.json, /data/C5227.json, /data/C5228.json, /data/C5229.json, /data/ENGLABS.json, /data/forensic_gate_registry.json, /data/handover_state.json]\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Found project files: [/data/C001.json, /data/C002.json, /data/C2718.json, /data/C2737.json, /data/C2931.json, /data/C3020.json, /data/C4235.json, /data/C4465.json, /data/C4693.json, /data/C4811.json, /data/C4851.json, /data/C4860.json, /data/C4867.json, /data/C4883.json, /data/C4891.json, /data/C4894.json, /data/C4895.json, /data/C4909.json, /data/C4913.json, /data/C4922.json, /data/C4925.json, /data/C4927.json, /data/C4929.json, /data/C4935.json, /data/C4940.json, /data/C4950.json, /data/C4958.json, /data/C4963.json, /data/C4965.json, /data/C4967.json, /data/C4985.json, /data/C5005.json, /data/C5008.json, /data/C5010.json, /data/C5014.json, /data/C5023.json, /data/C5029.json, /data/C5033.json, /data/C5039.json, /data/C5040.json, /data/C5048.json, /data/C5054.json, /data/C5069.json, /data/C5075.json, /data/C5077.json, /data/C5080.json, /data/C5086.json, /data/C5090.json, /data/C5092.json, /data/C5095.json, /data/C5098.json, /data/C5103.json, /data/C5108.json, /data/C5110.json, /data/C5115.json, /data/C5120.json, /data/C5124.json, /data/C5128.json, /data/C5130.json, /data/C5131.json, /data/C5133.json, /data/C5135.json, /data/C5137.json, /data/C5138.json, /data/C5140.json, /data/C5142.json, /data/C5144.json, /data/C5153.json, /data/C5154.json, /data/C5159.json, /data/C5162.json, /data/C5172.json, /data/C5174.json, /data/C5176.json, /data/C5178.json, /data/C5179.json, /data/C5184.json, /data/C5185.json, /data/C5187.json, /data/C5190.json, /data/C5191.json, /data/C5192.json, /data/C5193.json, /data/C5195.json, /data/C5197.json, /data/C5198.json, /data/C5207.json, /data/C5209.json, /data/C5210.json, /data/C5212.json, /data/C5213.json, /data/C5216.json, /data/C5223.json, /data/C5224.json, /data/C5227.json, /data/C5228.json, /data/C5229.json, /data/ENGLABS.json, /data/forensic_gate_registry.json, /data/handover_state.json]\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [vite] connected.\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [vite] connecting...\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [vite] connected.\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Found project files: [/data/C001.json, /data/C002.json, /data/C2718.json, /data/C2737.json, /data/C2931.json, /data/C3020.json, /data/C4235.json, /data/C4465.json, /data/C4693.json, /data/C4811.json, /data/C4851.json, /data/C4860.json, /data/C4867.json, /data/C4883.json, /data/C4891.json, /data/C4894.json, /data/C4895.json, /data/C4909.json, /data/C4913.json, /data/C4922.json, /data/C4925.json, /data/C4927.json, /data/C4929.json, /data/C4935.json, /data/C4940.json, /data/C4950.json, /data/C4958.json, /data/C4963.json, /data/C4965.json, /data/C4967.json, /data/C4985.json, /data/C5005.json, /data/C5008.json, /data/C5010.json, /data/C5014.json, /data/C5023.json, /data/C5029.json, /data/C5033.json, /data/C5039.json, /data/C5040.json, /data/C5048.json, /data/C5054.json, /data/C5069.json, /data/C5075.json, /data/C5077.json, /data/C5080.json, /data/C5086.json, /data/C5090.json, /data/C5092.json, /data/C5095.json, /data/C5098.json, /data/C5103.json, /data/C5108.json, /data/C5110.json, /data/C5115.json, /data/C5120.json, /data/C5124.json, /data/C5128.json, /data/C5130.json, /data/C5131.json, /data/C5133.json, /data/C5135.json, /data/C5137.json, /data/C5138.json, /data/C5140.json, /data/C5142.json, /data/C5144.json, /data/C5153.json, /data/C5154.json, /data/C5159.json, /data/C5162.json, /data/C5172.json, /data/C5174.json, /data/C5176.json, /data/C5178.json, /data/C5179.json, /data/C5184.json, /data/C5185.json, /data/C5187.json, /data/C5190.json, /data/C5191.json, /data/C5192.json, /data/C5193.json, /data/C5195.json, /data/C5197.json, /data/C5198.json, /data/C5207.json, /data/C5209.json, /data/C5210.json, /data/C5212.json, /data/C5213.json, /data/C5216.json, /data/C5223.json, /data/C5224.json, /data/C5227.json, /data/C5228.json, /data/C5229.json, /data/ENGLABS.json, /data/forensic_gate_registry.json, /data/handover_state.json]\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Found project files: [/data/C001.json, /data/C002.json, /data/C2718.json, /data/C2737.json, /data/C2931.json, /data/C3020.json, /data/C4235.json, /data/C4465.json, /data/C4693.json, /data/C4811.json, /data/C4851.json, /data/C4860.json, /data/C4867.json, /data/C4883.json, /data/C4891.json, /data/C4894.json, /data/C4895.json, /data/C4909.json, /data/C4913.json, /data/C4922.json, /data/C4925.json, /data/C4927.json, /data/C4929.json, /data/C4935.json, /data/C4940.json, /data/C4950.json, /data/C4958.json, /data/C4963.json, /data/C4965.json, /data/C4967.json, /data/C4985.json, /data/C5005.json, /data/C5008.json, /data/C5010.json, /data/C5014.json, /data/C5023.json, /data/C5029.json, /data/C5033.json, /data/C5039.json, /data/C5040.json, /data/C5048.json, /data/C5054.json, /data/C5069.json, /data/C5075.json, /data/C5077.json, /data/C5080.json, /data/C5086.json, /data/C5090.json, /data/C5092.json, /data/C5095.json, /data/C5098.json, /data/C5103.json, /data/C5108.json, /data/C5110.json, /data/C5115.json, /data/C5120.json, /data/C5124.json, /data/C5128.json, /data/C5130.json, /data/C5131.json, /data/C5133.json, /data/C5135.json, /data/C5137.json, /data/C5138.json, /data/C5140.json, /data/C5142.json, /data/C5144.json, /data/C5153.json, /data/C5154.json, /data/C5159.json, /data/C5162.json, /data/C5172.json, /data/C5174.json, /data/C5176.json, /data/C5178.json, /data/C5179.json, /data/C5184.json, /data/C5185.json, /data/C5187.json, /data/C5190.json, /data/C5191.json, /data/C5192.json, /data/C5193.json, /data/C5195.json, /data/C5197.json, /data/C5198.json, /data/C5207.json, /data/C5209.json, /data/C5210.json, /data/C5212.json, /data/C5213.json, /data/C5216.json, /data/C5223.json, /data/C5224.json, /data/C5227.json, /data/C5228.json, /data/C5229.json, /data/ENGLABS.json, /data/forensic_gate_registry.json, /data/handover_state.json]\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/forensic_gate_registry.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/forensic_gate_registry.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/handover_state.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/handover_state.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/master_inventory_may_2026.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/master_inventory_may_2026.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/outlook_processed_db.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/outlook_processed_db.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/porter_missions_forensic.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/porter_missions_forensic.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/project_directory_cache.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Loaded projects: 98\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/project_directory_cache.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Loaded projects: 98\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Forensic Sync: 7 disk, 18 cloud, total 19 entries.\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Forensic Sync: 7 disk, 18 cloud, total 19 entries.\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Forensic Sync: 7 disk, 18 cloud, total 19 entries.\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Forensic Sync: 7 disk, 18 cloud, total 19 entries.\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: onSubmit triggered!\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Form values: {itemCodeVal: PAI-001, typeVal: OUTWARD, quantityVal: 2, partyVal: Thakur, invoiceVal: ENG-01-0001}\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Selected item: {name: Chemilac Black Paint, itemCode: PAI-001, category: Paints, currentStock: 20, unit: LTR}\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Failed to load resource: the server responded with a status of 429 ()\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [2026-06-05T04:38:45.512Z]  @firebase/firestore: Firestore (12.12.0): RestConnection RPC 'BatchGetDocuments' 0x504cdd60 failed with error:  {\"code\":\"resource-exhausted\",\"name\":\"FirebaseError\"} url:  https://firestore.googleapis.com/v1/projects/englabs-enterprise/databases/(default)/documents:batchGet?key=AIzaSyB4Fqw7MM1ROCjCqlFytsgAe6xSjGr-mlg request: {\"documents\":[\"projects/englabs-enterprise/databases/(default)/documents/inventory_sync_locks/MANUAL_TX_1780634322257_PAI-001\"]}\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Failed to load resource: the server responded with a status of 429 ()\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [2026-06-05T04:38:45.848Z]  @firebase/firestore: Firestore (12.12.0): RestConnection RPC 'BatchGetDocuments' 0x504cdd62 failed with error:  {\"code\":\"resource-exhausted\",\"name\":\"FirebaseError\"} url:  https://firestore.googleapis.com/v1/projects/englabs-enterprise/databases/(default)/documents:batchGet?key=AIzaSyB4Fqw7MM1ROCjCqlFytsgAe6xSjGr-mlg request: {\"documents\":[\"projects/englabs-enterprise/databases/(default)/documents/inventory_sync_locks/MANUAL_TX_1780634322257_PAI-001\"]}\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Failed to load resource: the server responded with a status of 429 ()\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [2026-06-05T04:38:47.421Z]  @firebase/firestore: Firestore (12.12.0): RestConnection RPC 'BatchGetDocuments' 0x504cdd64 failed with error:  {\"code\":\"resource-exhausted\",\"name\":\"FirebaseError\"} url:  https://firestore.googleapis.com/v1/projects/englabs-enterprise/databases/(default)/documents:batchGet?key=AIzaSyB4Fqw7MM1ROCjCqlFytsgAe6xSjGr-mlg request: {\"documents\":[\"projects/englabs-enterprise/databases/(default)/documents/inventory_sync_locks/MANUAL_TX_1780634322257_PAI-001\"]}\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Failed to load resource: the server responded with a status of 429 ()\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [2026-06-05T04:38:49.359Z]  @firebase/firestore: Firestore (12.12.0): RestConnection RPC 'BatchGetDocuments' 0x504cdd66 failed with error:  {\"code\":\"resource-exhausted\",\"name\":\"FirebaseError\"} url:  https://firestore.googleapis.com/v1/projects/englabs-enterprise/databases/(default)/documents:batchGet?key=AIzaSyB4Fqw7MM1ROCjCqlFytsgAe6xSjGr-mlg request: {\"documents\":[\"projects/englabs-enterprise/databases/(default)/documents/inventory_sync_locks/MANUAL_TX_1780634322257_PAI-001\"]}\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Failed to load resource: the server responded with a status of 429 ()\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [2026-06-05T04:38:52.221Z]  @firebase/firestore: Firestore (12.12.0): RestConnection RPC 'BatchGetDocuments' 0x504cdd68 failed with error:  {\"code\":\"resource-exhausted\",\"name\":\"FirebaseError\"} url:  https://firestore.googleapis.com/v1/projects/englabs-enterprise/databases/(default)/documents:batchGet?key=AIzaSyB4Fqw7MM1ROCjCqlFytsgAe6xSjGr-mlg request: {\"documents\":[\"projects/englabs-enterprise/databases/(default)/documents/inventory_sync_locks/MANUAL_TX_1780634322257_PAI-001\"]}\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Stock update failure: FirebaseError: Quota exceeded.\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: recordManualTransaction response: {success: false, error: Quota exceeded.}\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Database sync failed, falling back to local state updates: Quota exceeded.\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-04T06:48:39.842Z",
+                      "startTime": "2026-06-05T04:38:38.983Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -170,349 +436,143 @@
                   "status": "expected"
                 }
               ],
-              "id": "4a239ced0e52b6754d8b-1e65ccd1c76797d33d73",
-              "file": "smoke.test.ts",
-              "line": 25,
+              "id": "b918482cffc7046160dc-8c99ad48b3f4dfba4278",
+              "file": "mobile.test.ts",
+              "line": 202,
               "column": 3
             },
             {
-              "title": "Inventory visibility",
-              "ok": true,
+              "title": "7.5. Record Transit (Check-Out) Flow with Searchable Combobox",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
                   "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
+                  "projectId": "Mobile Safari (iPhone 12)",
+                  "projectName": "Mobile Safari (iPhone 12)",
                   "results": [
                     {
                       "workerIndex": 2,
                       "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 7726,
-                      "errors": [],
-                      "stdout": [],
+                      "status": "failed",
+                      "duration": 21768,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('Manual Material Check-Out')\nExpected: not visible\nReceived: visible\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"not toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Manual Material Check-Out')\u001b[22m\n\u001b[2m    33 × locator resolved to <h3 class=\"text-xl font-black text-slate-900 tracking-tight\">Manual Material Check-Out</h3>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('Manual Material Check-Out')\nExpected: not visible\nReceived: visible\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"not toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Manual Material Check-Out')\u001b[22m\n\u001b[2m    33 × locator resolved to <h3 class=\"text-xl font-black text-slate-900 tracking-tight\">Manual Material Check-Out</h3>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n\n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\mobile.test.ts:256:85",
+                        "location": {
+                          "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\mobile.test.ts",
+                          "column": 85,
+                          "line": 256
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 254 |\u001b[39m\n \u001b[90m 255 |\u001b[39m     \u001b[90m// Verify modal is closed\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 256 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Manual Material Check-Out'\u001b[39m\u001b[33m,\u001b[39m { exact\u001b[33m:\u001b[39m \u001b[36mfalse\u001b[39m }))\u001b[33m.\u001b[39mnot\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m15000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 257 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 258 |\u001b[39m\n \u001b[90m 259 |\u001b[39m   test(\u001b[32m'8. Porter Logistics Dispatch & Mobile Intake validation'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page\u001b[33m,\u001b[39m isMobile }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\mobile.test.ts",
+                            "column": 85,
+                            "line": 256
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('Manual Material Check-Out')\nExpected: not visible\nReceived: visible\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"not toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Manual Material Check-Out')\u001b[22m\n\u001b[2m    33 × locator resolved to <h3 class=\"text-xl font-black text-slate-900 tracking-tight\">Manual Material Check-Out</h3>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n\n\n  254 |\n  255 |     // Verify modal is closed\n> 256 |     await expect(page.getByText('Manual Material Check-Out', { exact: false })).not.toBeVisible({ timeout: 15000 });\n      |                                                                                     ^\n  257 |   });\n  258 |\n  259 |   test('8. Porter Logistics Dispatch & Mobile Intake validation', async ({ page, isMobile }) => {\n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\mobile.test.ts:256:85"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "BROWSER LOG: [vite] connecting...\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [vite] connected.\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [vite] connecting...\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: [vite] connected.\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Found project files: [/data/C001.json, /data/C002.json, /data/C2718.json, /data/C2737.json, /data/C2931.json, /data/C3020.json, /data/C4235.json, /data/C4465.json, /data/C4693.json, /data/C4811.json]\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Found project files: [/data/C001.json, /data/C002.json, /data/C2718.json, /data/C2737.json, /data/C2931.json, /data/C3020.json, /data/C4235.json, /data/C4465.json, /data/C4693.json, /data/C4811.json]\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/forensic_gate_registry.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/handover_state.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/master_inventory_may_2026.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/forensic_gate_registry.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/handover_state.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/master_inventory_may_2026.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/outlook_processed_db.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/porter_missions_forensic.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/outlook_processed_db.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/porter_missions_forensic.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/project_directory_cache.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Loaded projects: 98\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Skipping non-project file: /data/project_directory_cache.json\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Loaded projects: 98\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: onSubmit triggered!\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Form values: {itemCodeVal: PAI-001, typeVal: OUTWARD, quantityVal: 2, partyVal: Thakur, invoiceVal: ENG-01-0001}\n"
+                        },
+                        {
+                          "text": "BROWSER LOG: Selected item: {name: Chemilac Black Paint, itemCode: PAI-001, category: Paints, currentStock: 20, unit: LTR}\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-04T06:48:39.810Z",
+                      "startTime": "2026-06-05T04:38:38.998Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\test-results\\mobile-Englabs-Projects-OS-0cd20-ow-with-Searchable-Combobox-Mobile-Safari-iPhone-12-\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\mobile.test.ts",
+                        "column": 85,
+                        "line": 256
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
-              "id": "4a239ced0e52b6754d8b-e1558aa3e99c7ec3f0a9",
-              "file": "smoke.test.ts",
-              "line": 48,
-              "column": 3
-            },
-            {
-              "title": "Porter Service workflow",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 4972,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-06-04T06:48:39.811Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "4a239ced0e52b6754d8b-97f1d6b6530e25aeb33f",
-              "file": "smoke.test.ts",
-              "line": 59,
-              "column": 3
-            },
-            {
-              "title": "Dashboard loads and shows core projects",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome (Pixel 5)",
-                  "projectName": "Mobile Chrome (Pixel 5)",
-                  "results": [
-                    {
-                      "workerIndex": 4,
-                      "parallelIndex": 4,
-                      "status": "passed",
-                      "duration": 4608,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-06-04T06:48:39.842Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "4a239ced0e52b6754d8b-853756e0e99d1ef99e7d",
-              "file": "smoke.test.ts",
-              "line": 15,
-              "column": 3
-            },
-            {
-              "title": "Gate Register workflow",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome (Pixel 5)",
-                  "projectName": "Mobile Chrome (Pixel 5)",
-                  "results": [
-                    {
-                      "workerIndex": 5,
-                      "parallelIndex": 5,
-                      "status": "passed",
-                      "duration": 4682,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-06-04T06:48:39.841Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "4a239ced0e52b6754d8b-48ee60899bc1a986e184",
-              "file": "smoke.test.ts",
-              "line": 25,
-              "column": 3
-            },
-            {
-              "title": "Inventory visibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome (Pixel 5)",
-                  "projectName": "Mobile Chrome (Pixel 5)",
-                  "results": [
-                    {
-                      "workerIndex": 6,
-                      "parallelIndex": 6,
-                      "status": "passed",
-                      "duration": 6959,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-06-04T06:48:39.843Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "4a239ced0e52b6754d8b-edccf8b7ead3d6ffadb7",
-              "file": "smoke.test.ts",
-              "line": 48,
-              "column": 3
-            },
-            {
-              "title": "Porter Service workflow",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome (Pixel 5)",
-                  "projectName": "Mobile Chrome (Pixel 5)",
-                  "results": [
-                    {
-                      "workerIndex": 7,
-                      "parallelIndex": 7,
-                      "status": "passed",
-                      "duration": 4882,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-06-04T06:48:39.833Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "4a239ced0e52b6754d8b-527aee92aca2bfe1201b",
-              "file": "smoke.test.ts",
-              "line": 59,
-              "column": 3
-            },
-            {
-              "title": "Dashboard loads and shows core projects",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari (iPhone 12)",
-                  "projectName": "Mobile Safari (iPhone 12)",
-                  "results": [
-                    {
-                      "workerIndex": 8,
-                      "parallelIndex": 8,
-                      "status": "passed",
-                      "duration": 3756,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-06-04T06:48:39.842Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "4a239ced0e52b6754d8b-7599ee5f39b2d9209314",
-              "file": "smoke.test.ts",
-              "line": 15,
-              "column": 3
-            },
-            {
-              "title": "Gate Register workflow",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari (iPhone 12)",
-                  "projectName": "Mobile Safari (iPhone 12)",
-                  "results": [
-                    {
-                      "workerIndex": 9,
-                      "parallelIndex": 9,
-                      "status": "passed",
-                      "duration": 3753,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-06-04T06:48:39.887Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "4a239ced0e52b6754d8b-94c872889f0151880d64",
-              "file": "smoke.test.ts",
-              "line": 25,
-              "column": 3
-            },
-            {
-              "title": "Inventory visibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari (iPhone 12)",
-                  "projectName": "Mobile Safari (iPhone 12)",
-                  "results": [
-                    {
-                      "workerIndex": 10,
-                      "parallelIndex": 10,
-                      "status": "passed",
-                      "duration": 7151,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-06-04T06:48:39.841Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "4a239ced0e52b6754d8b-1b4f46ef10a86f533588",
-              "file": "smoke.test.ts",
-              "line": 48,
-              "column": 3
-            },
-            {
-              "title": "Porter Service workflow",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari (iPhone 12)",
-                  "projectName": "Mobile Safari (iPhone 12)",
-                  "results": [
-                    {
-                      "workerIndex": 11,
-                      "parallelIndex": 11,
-                      "status": "passed",
-                      "duration": 3827,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-06-04T06:48:39.886Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "4a239ced0e52b6754d8b-58d16f7cf7aa90fe95b6",
-              "file": "smoke.test.ts",
-              "line": 59,
+              "id": "b918482cffc7046160dc-680e12286ea0853cc880",
+              "file": "mobile.test.ts",
+              "line": 202,
               "column": 3
             }
           ]
@@ -522,11 +582,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-06-04T06:48:39.212Z",
-    "duration": 8518.751,
-    "expected": 12,
+    "startTime": "2026-06-05T04:38:38.604Z",
+    "duration": 22272.481,
+    "expected": 2,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 1,
     "flaky": 0
   }
 }

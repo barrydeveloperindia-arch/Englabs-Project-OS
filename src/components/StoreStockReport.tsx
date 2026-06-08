@@ -31,7 +31,8 @@ import {
     ArrowUpCircle,
     User,
     Settings,
-    Smartphone
+    Smartphone,
+    Menu
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { InventoryItem, StockTransaction } from '../lib/gate_system';
@@ -130,6 +131,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
     const [checkOutSuccess, setCheckOutSuccess] = useState(false);
     const [checkOutTxDetails, setCheckOutTxDetails] = useState<any>(null);
     const [checkoutPhoto, setCheckoutPhoto] = useState('');
+    const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+    const [modalConfig, setModalConfig] = useState<{ type: 'ITEM' | 'DELETE', data: any } | null>(null);
 
     // Webcam / Camera Capture states (Optional Feature inside Checkout & Settings)
     const [webcamTarget, setWebcamTarget] = useState<'CHECKOUT' | null>(null);
@@ -149,6 +152,15 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
             setLocalStaffList(propStaffList);
         }
     }, [propStaffList]);
+
+    // Handle staff creation
+    const handleAddStaffSuccess = (name: string) => {
+        const newList = Array.from(new Set([...localStaffList, name]));
+        setLocalStaffList(newList);
+        localStorage.setItem('englabs_staff_members', JSON.stringify(newList));
+        if (onAddStaff) onAddStaff(name);
+        setIsAddStaffModalOpen(false);
+    };
 
     // Fetch initial data
     useEffect(() => {
@@ -421,55 +433,75 @@ ENGLABS STORE`;
     };
 
     // Handle staff creation
-    const handleAddStaffSuccess = (name: string) => {
-        const newList = Array.from(new Set([...localStaffList, name]));
-        setLocalStaffList(newList);
-        localStorage.setItem('englabs_staff_members', JSON.stringify(newList));
-        if (onAddStaff) onAddStaff(name);
-        setIsAddStaffModalOpen(false);
-    };
+    const renderSidebarContent = () => (
+        <>
+            <div className="p-6 border-b border-slate-800 flex items-center gap-3">
+                <img src={logo} alt="ENGLABS" className="w-6 h-6 object-contain" />
+                <div>
+                    <h2 className="text-xs font-black uppercase tracking-widest text-emerald-500">ENGLABS STORE</h2>
+                    <p className="text-[9px] text-slate-400 font-bold mt-0.5">Simple Stock System</p>
+                </div>
+            </div>
+            
+            <nav className="flex-1 p-4 space-y-1">
+                {[
+                    { id: 'DASHBOARD', label: 'Dashboard', icon: <TrendingUp className="w-4 h-4" /> },
+                    { id: 'CHECK_IN', label: 'Check In', icon: <ArrowDownCircle className="w-4 h-4" /> },
+                    { id: 'CHECK_OUT', label: 'Check Out', icon: <ArrowUpCircle className="w-4 h-4" /> },
+                    { id: 'LIVE_REGISTER', label: 'Live Register', icon: <Clock className="w-4 h-4" /> },
+                    { id: 'CURRENT_STOCK', label: 'Current Stock', icon: <Package className="w-4 h-4" /> },
+                    { id: 'REPORTS', label: 'Reports', icon: <FileText className="w-4 h-4" /> },
+                    { id: 'SETTINGS', label: 'Settings', icon: <Settings className="w-4 h-4" /> },
+                ].map((item) => (
+                    <button
+                        key={item.id}
+                        onClick={() => { 
+                            setView(item.id as any); 
+                            setCheckInSuccess(false); 
+                            setCheckOutSuccess(false);
+                            setIsMobileSidebarOpen(false); 
+                        }}
+                        className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
+                            view === item.id 
+                                ? 'bg-[#0e4368] text-white shadow-lg shadow-[#0e4368]/20 border border-slate-700' 
+                                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                        }`}
+                    >
+                        {item.icon}
+                        {item.label}
+                    </button>
+                ))}
+            </nav>
+            
+            <div className="p-4 border-t border-slate-800 text-center">
+                <span className="text-[8px] font-black tracking-widest text-slate-500 uppercase">MISSION CONTROL SYSTEM</span>
+            </div>
+        </>
+    );
 
     return (
-        <div className="flex-1 flex flex-col md:flex-row min-w-0 min-h-0 bg-[#F8FAFC] print:bg-white print:block">
+        <div className="flex-1 flex flex-col md:flex-row min-w-0 min-h-0 bg-[#F8FAFC] print:bg-white print:block relative">
             
-            {/* SUB-SIDEBAR (Desktop) */}
+            {/* MOBILE SIDEBAR DRAWER OVERLAY */}
+            {isMobileSidebarOpen && (
+                <div className="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm md:hidden animate-in fade-in duration-200" onClick={() => setIsMobileSidebarOpen(false)} />
+            )}
+
+            {/* MOBILE SIDEBAR DRAWER PANEL */}
+            <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-100 flex flex-col shrink-0 border-r border-slate-800 transition-transform duration-300 transform md:hidden ${
+                isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}>
+                <div className="absolute top-4 right-4 md:hidden">
+                    <button onClick={() => setIsMobileSidebarOpen(false)} className="p-1.5 hover:bg-slate-800 rounded-full text-slate-400">
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+                {renderSidebarContent()}
+            </aside>
+
+            {/* STATIC SUB-SIDEBAR (Desktop) */}
             <aside className="hidden md:flex w-64 bg-slate-900 text-slate-100 flex-col shrink-0 border-r border-slate-800 print:hidden">
-                <div className="p-6 border-b border-slate-800 flex items-center gap-3">
-                    <img src={logo} alt="ENGLABS" className="w-6 h-6 object-contain" />
-                    <div>
-                        <h2 className="text-xs font-black uppercase tracking-widest text-emerald-500">ENGLABS STORE</h2>
-                        <p className="text-[9px] text-slate-400 font-bold mt-0.5">Simple Stock System</p>
-                    </div>
-                </div>
-                
-                <nav className="flex-1 p-4 space-y-1">
-                    {[
-                        { id: 'DASHBOARD', label: 'Dashboard', icon: <TrendingUp className="w-4 h-4" /> },
-                        { id: 'CHECK_IN', label: 'Check In', icon: <ArrowDownCircle className="w-4 h-4" /> },
-                        { id: 'CHECK_OUT', label: 'Check Out', icon: <ArrowUpCircle className="w-4 h-4" /> },
-                        { id: 'LIVE_REGISTER', label: 'Live Register', icon: <Clock className="w-4 h-4" /> },
-                        { id: 'CURRENT_STOCK', label: 'Current Stock', icon: <Package className="w-4 h-4" /> },
-                        { id: 'REPORTS', label: 'Reports', icon: <FileText className="w-4 h-4" /> },
-                        { id: 'SETTINGS', label: 'Settings', icon: <Settings className="w-4 h-4" /> },
-                    ].map((item) => (
-                        <button
-                            key={item.id}
-                            onClick={() => { setView(item.id as any); setCheckInSuccess(false); setCheckOutSuccess(false); }}
-                            className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
-                                view === item.id 
-                                    ? 'bg-[#0e4368] text-white shadow-lg shadow-[#0e4368]/20 border border-slate-700' 
-                                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-                            }`}
-                        >
-                            {item.icon}
-                            {item.label}
-                        </button>
-                    ))}
-                </nav>
-                
-                <div className="p-4 border-t border-slate-800 text-center">
-                    <span className="text-[8px] font-black tracking-widest text-slate-500 uppercase">MISSION CONTROL SYSTEM</span>
-                </div>
+                {renderSidebarContent()}
             </aside>
 
             {/* MAIN CONTENT AREA */}
@@ -477,17 +509,28 @@ ENGLABS STORE`;
                 {/* TOP BAR / HEADER */}
                 <header className="h-auto md:h-20 bg-white border-b border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between px-4 md:px-8 py-4 md:py-0 shrink-0 gap-4 md:gap-0 print:hidden">
                     <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 w-full md:w-auto">
-                        <div className="flex flex-col">
-                            <h1 className="text-base font-black text-slate-900 leading-none">
-                                {view === 'DASHBOARD' && 'Dashboard Overview'}
-                                {view === 'CHECK_IN' && 'Material Check-In'}
-                                {view === 'CHECK_OUT' && 'Material Check-Out'}
-                                {view === 'LIVE_REGISTER' && 'Live Transaction Register'}
-                                {view === 'CURRENT_STOCK' && 'Current Stock Inventory'}
-                                {view === 'REPORTS' && 'Monthly Audit Reports'}
-                                {view === 'SETTINGS' && 'System Settings'}
-                            </h1>
-                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Forensic Store Audits & Slips</span>
+                        <div className="flex items-center gap-3">
+                            {/* Mobile Hamburger toggle button */}
+                            <button 
+                                type="button"
+                                onClick={() => setIsMobileSidebarOpen(true)}
+                                className="p-2 hover:bg-slate-50 rounded-xl border border-slate-200 text-slate-600 md:hidden transition-all shadow-sm"
+                                title="Open Sidebar Menu"
+                            >
+                                <Menu className="w-4 h-4" />
+                            </button>
+                            <div className="flex flex-col">
+                                <h1 className="text-base font-black text-slate-900 leading-none">
+                                    {view === 'DASHBOARD' && 'Dashboard Overview'}
+                                    {view === 'CHECK_IN' && 'Material Check-In'}
+                                    {view === 'CHECK_OUT' && 'Material Check-Out'}
+                                    {view === 'LIVE_REGISTER' && 'Live Transaction Register'}
+                                    {view === 'CURRENT_STOCK' && 'Current Stock Inventory'}
+                                    {view === 'REPORTS' && 'Monthly Audit Reports'}
+                                    {view === 'SETTINGS' && 'System Settings'}
+                                </h1>
+                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Forensic Store Audits & Slips</span>
+                            </div>
                         </div>
                         
                         <div className="hidden md:block h-6 w-px bg-slate-100"></div>
@@ -1404,6 +1447,7 @@ ENGLABS STORE`;
                                                 <th className="py-4 px-4 text-center">Available Qty</th>
                                                 <th className="py-4 px-4">Unit</th>
                                                 <th className="py-4 px-4 text-center">Status</th>
+                                                <th className="py-4 px-4 text-center print:hidden">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-slate-50">
@@ -1438,12 +1482,34 @@ ENGLABS STORE`;
                                                                     </span>
                                                                 )}
                                                             </td>
+                                                            <td className="py-4 px-4 text-center print:hidden">
+                                                                <div className="flex items-center justify-center gap-1.5">
+                                                                    <button 
+                                                                        type="button"
+                                                                        onClick={() => setModalConfig({ type: 'ITEM', data: item })}
+                                                                        className="p-1.5 hover:bg-slate-100 rounded-xl text-indigo-600 hover:text-indigo-800 transition-all border border-transparent hover:border-slate-150"
+                                                                        title="Adjust stock level"
+                                                                    >
+                                                                        <Edit3 className="w-3.5 h-3.5" />
+                                                                    </button>
+                                                                    {userRole === 'ADMIN' && (
+                                                                        <button 
+                                                                            type="button"
+                                                                            onClick={() => setModalConfig({ type: 'DELETE', data: item })}
+                                                                            className="p-1.5 hover:bg-slate-100 rounded-xl text-rose-600 hover:text-rose-800 transition-all border border-transparent hover:border-slate-150"
+                                                                            title="Delete material"
+                                                                        >
+                                                                            <Trash2 className="w-3.5 h-3.5" />
+                                                                        </button>
+                                                                    )}
+                                                                </div>
+                                                            </td>
                                                         </tr>
                                                     );
                                                 })}
                                             {currentStock.length === 0 && (
                                                 <tr>
-                                                    <td colSpan={7} className="py-12 text-center text-slate-400 font-bold">No stock items in catalog.</td>
+                                                    <td colSpan={8} className="py-12 text-center text-slate-400 font-bold">No stock items in catalog.</td>
                                                 </tr>
                                             )}
                                         </tbody>
@@ -1590,6 +1656,94 @@ ENGLABS STORE`;
                     onAdd={handleAddStaffSuccess}
                     existingStaff={localStaffList}
                 />
+            )}
+
+            {/* EDIT STOCK LEVEL MODAL */}
+            {modalConfig && modalConfig.type === 'ITEM' && (
+                <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-[110] flex items-center justify-center p-6 print:hidden animate-in fade-in duration-200">
+                    <div className="relative w-full max-w-sm bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-slate-100 animate-in zoom-in-95 duration-200">
+                        <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                            <div>
+                                <h3 className="text-sm font-black text-slate-900 tracking-tight">Adjust Stock: {modalConfig.data.name}</h3>
+                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Audit Correction ({modalConfig.data.itemCode})</p>
+                            </div>
+                            <button onClick={() => setModalConfig(null)} className="p-1.5 hover:bg-white rounded-full transition-colors text-slate-400 hover:text-slate-900 shadow-sm border border-transparent hover:border-slate-100">
+                                <X className="w-4 h-4" />
+                            </button>
+                        </div>
+                        <div className="p-6 space-y-4">
+                            <div className="space-y-1.5">
+                                <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Available Stock Level</label>
+                                <input 
+                                    type="number" 
+                                    defaultValue={modalConfig.data.availableStock}
+                                    id="stock-adjust-input"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xl font-black text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all text-slate-850"
+                                />
+                            </div>
+                            <button 
+                                onClick={async () => {
+                                    const input = document.getElementById('stock-adjust-input') as HTMLInputElement;
+                                    const newQty = parseInt(input.value);
+                                    if (isNaN(newQty) || newQty < 0) {
+                                        alert("Please enter a valid stock level.");
+                                        return;
+                                    }
+                                    try {
+                                        setIsLoading(true);
+                                        await updateInventoryItemStock(modalConfig.data.itemCode, newQty);
+                                        setRefreshTrigger(prev => prev + 1);
+                                        setModalConfig(null);
+                                    } catch (err: any) {
+                                        alert(`Failed to update stock: ${err.message || err}`);
+                                    } finally {
+                                        setIsLoading(false);
+                                    }
+                                }} 
+                                disabled={isLoading} 
+                                className="w-full py-3.5 bg-[#0e4368] hover:bg-[#0b3350] text-white font-black rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg text-[10px] uppercase tracking-widest disabled:opacity-50"
+                            >
+                                {isLoading ? 'Updating Stock...' : 'APPLY CORRECTION'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* DELETE MATERIAL RECORD MODAL */}
+            {modalConfig && modalConfig.type === 'DELETE' && (
+                <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-[110] flex items-center justify-center p-6 print:hidden animate-in fade-in duration-200">
+                    <div className="relative w-full max-w-sm bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-slate-100 animate-in zoom-in-95 duration-200 p-8 text-center space-y-6">
+                        <div className="mx-auto w-12 h-12 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center border border-rose-100">
+                            <Trash2 className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Delete Material Record?</h3>
+                            <p className="text-xs text-slate-400 mt-2 font-bold leading-normal">Are you sure you want to permanently delete <strong className="text-slate-700">{modalConfig.data.name}</strong> ({modalConfig.data.itemCode})? This action cannot be undone.</p>
+                        </div>
+                        <div className="flex gap-3">
+                            <button onClick={() => setModalConfig(null)} className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Cancel</button>
+                            <button 
+                                onClick={async () => {
+                                    try {
+                                        setIsLoading(true);
+                                        await deleteInventoryItem(modalConfig.data.itemCode);
+                                        setRefreshTrigger(prev => prev + 1);
+                                        setModalConfig(null);
+                                    } catch (err: any) {
+                                        alert(`Failed to delete: ${err.message || err}`);
+                                    } finally {
+                                        setIsLoading(false);
+                                    }
+                                }} 
+                                disabled={isLoading} 
+                                className="flex-1 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all disabled:opacity-50"
+                            >
+                                {isLoading ? 'Deleting...' : 'DELETE'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
 
         </div>
