@@ -146,9 +146,10 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
 
     // Project List from props
     const DEFAULT_PROJECT_IDS = ['C2718', 'C2737', 'C2931', 'C3020', 'C4867', 'C5178', 'C5191', 'C5192', 'C5193', 'C5195', 'C5197', 'C5198', 'C5207', 'C5209', 'C5210', 'C5212', 'C5213', 'C5216', 'C5223', 'C5224', 'C5227', 'C5228', 'C5229'];
-    const projectList = (projects && projects.length > 0)
+    const rawProjectList = (projects && projects.length > 0)
         ? projects.map((p: any) => p.projectId)
         : DEFAULT_PROJECT_IDS;
+    const projectList = ['GENERAL', ...rawProjectList.filter((p: string) => p !== 'GENERAL')];
 
     // Load staff list on prop change
     useEffect(() => {
@@ -792,7 +793,13 @@ ENGLABS STORE`;
                                     </div>
                                     <div>
                                         <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Check-In Successful!</h3>
-                                        <p className="text-xs text-slate-400 font-bold mt-1">The store inventory has been updated.</p>
+                                        {checkInTxDetails?.offline ? (
+                                            <p className="text-xs text-amber-600 font-bold mt-1.5 bg-amber-50 border border-amber-100 rounded-lg px-2.5 py-1.5 inline-block">
+                                                ⚠️ Saved offline. Syncs automatically when online.
+                                            </p>
+                                        ) : (
+                                            <p className="text-xs text-slate-400 font-bold mt-1">The store inventory has been updated.</p>
+                                        )}
                                     </div>
                                     
                                     <div className="bg-slate-50 rounded-2xl p-4 text-left text-xs space-y-2.5 border border-slate-100 max-w-sm mx-auto font-medium text-slate-600">
@@ -894,7 +901,8 @@ ENGLABS STORE`;
                                                 staffName: checkInSupplier,
                                                 issuedBy: checkInReceivedBy || 'Store Manager',
                                                 projectId: checkInProject || 'GENERAL',
-                                                balanceStockAfterIssue: currentBalance
+                                                balanceStockAfterIssue: currentBalance,
+                                                offline: res.offline || false
                                             });
                                             setCheckInSuccess(true);
                                             // Reset
@@ -1126,7 +1134,13 @@ ENGLABS STORE`;
                                     </div>
                                     <div>
                                         <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Material Issued!</h3>
-                                        <p className="text-xs text-slate-400 font-bold mt-1">Transaction logged and stock deducted.</p>
+                                        {checkOutTxDetails?.offline ? (
+                                            <p className="text-xs text-amber-600 font-bold mt-1.5 bg-amber-50 border border-amber-100 rounded-lg px-2.5 py-1.5 inline-block">
+                                                ⚠️ Saved offline. Syncs automatically when online.
+                                            </p>
+                                        ) : (
+                                            <p className="text-xs text-slate-400 font-bold mt-1">Transaction logged and stock deducted.</p>
+                                        )}
                                     </div>
                                     
                                     <div className="bg-slate-50 rounded-2xl p-4 text-left text-xs space-y-2.5 border border-slate-100 max-w-sm mx-auto font-medium text-slate-600">
@@ -1211,7 +1225,8 @@ ENGLABS STORE`;
                                                 issuedBy: checkOutIssuedBy || 'Gate Operator',
                                                 projectId: checkOutProjectName,
                                                 balanceStockAfterIssue: currentBalance,
-                                                photoUrl: checkoutPhoto || undefined
+                                                photoUrl: checkoutPhoto || undefined,
+                                                offline: res.offline || false
                                             });
                                             setCheckOutSuccess(true);
                                             // Reset

@@ -508,9 +508,175 @@ async function updateStock(
 
         return result;
     } catch (e: any) {
-        console.error("Stock update failure:", e);
-        saveLocalStockFallback(itemCode, type, qty, refId, party, invoice, photoUrl, projectId, name, unit, hsn);
-        return { success: false, error: e.message || e };
+        console.error("Stock update failure, checking for offline fallback:", e);
+        const errMsg = e.message || String(e);
+        if (errMsg.includes("Insufficient stock")) {
+            return { success: false, error: errMsg };
+        }
+
+        // If it's a network/connection error (or any other Firestore transaction failure that is not a validation error)
+        try {
+            console.log("Attempting offline Firestore batch update fallback...");
+            const currentStockRef = doc(db, "current_stock", itemCode);
+            const catalogRef = doc(db, "material_catalog", itemCode);
+            const legacyDocRef = doc(db, STOCK_COLLECTION, itemCode);
+            const lockDocRef = doc(db, "inventory_sync_locks", `${refId}_${itemCode}`);
+
+            // Fetch current documents from Firestore local cache
+            const lockSnap = await getDoc(lockDocRef);
+            if (lockSnap.exists()) {
+                return { success: true, message: "Already synced offline", itemCode };
+            }
+
+            const legacySnap = await getDoc(legacyDocRef);
+            const currentStockSnap = await getDoc(currentStockRef);
+            const catalogSnap = await getDoc(catalogRef);
+
+            // Compute legacy stock
+            let legacyItem: InventoryItem;
+            if (legacySnap.exists()) {
+                legacyItem = legacySnap.data() as InventoryItem;
+            } else {
+                legacyItem = {
+                    itemCode,
+                    name,
+                    category: hsn || 'GENERAL',
+                    unit,
+                    currentStock: 0,
+                    totalInward: 0,
+                    totalOutward: 0,
+                    minThreshold: 10,
+                    lastUpdated: new Date().toISOString()
+                };
+            }
+
+            const prevStock = legacyItem.currentStock;
+            if (type === 'INWARD') {
+                legacyItem.currentStock += qty;
+                legacyItem.totalInward += qty;
+            } else {
+                if (legacyItem.currentStock < qty) {
+                    return { success: false, error: `Insufficient stock for ${name}. Available: ${legacyItem.currentStock}` };
+                }
+                legacyItem.currentStock -= qty;
+                legacyItem.totalOutward += qty;
+            }
+            legacyItem.lastUpdated = new Date().toISOString();
+
+            // Compute current stock item
+            let currentStockItem: CurrentStockItem;
+            if (currentStockSnap.exists()) {
+                currentStockItem = currentStockSnap.data() as CurrentStockItem;
+            } else {
+                currentStockItem = {
+                    itemCode,
+                    name,
+                    category: hsn || 'GENERAL',
+                    openingStock: 0,
+                    totalInward: 0,
+                    totalOutward: 0,
+                    availableStock: 0,
+                    lastUpdated: new Date().toISOString(),
+                    unit
+                };
+            }
+
+            if (type === 'INWARD') {
+                currentStockItem.totalInward += qty;
+            } else {
+                currentStockItem.totalOutward += qty;
+            }
+            currentStockItem.availableStock = currentStockItem.openingStock + currentStockItem.totalInward - currentStockItem.totalOutward;
+            currentStockItem.lastUpdated = new Date().toISOString();
+
+            // Prepare master register entry
+            const timestamp = new Date().toISOString();
+            const masterTxRef = doc(collection(db, "master_register"));
+            
+            const months = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            const txDate = new Date();
+            const monthName = months[txDate.getMonth()];
+
+            const masterEntry: MasterRegisterEntry = {
+                id: masterTxRef.id,
+                timestamp,
+                projectId: projectId || 'GENERAL',
+                materialName: name,
+                itemCode,
+                category: hsn || currentStockItem.category || 'GENERAL',
+                quantity: qty,
+                unit,
+                staffName: party || 'UNKNOWN',
+                issuedBy: type === 'OUTWARD' ? 'Gate Operator' : 'Store Manager',
+                balanceStockAfterIssue: currentStockItem.availableStock,
+                remarks: invoice || '',
+                type,
+                photoUrl: photoUrl || undefined
+            };
+
+            const monthlyTxRef = doc(collection(db, "monthly_registers", monthName, "entries"));
+            const monthlyEntry = { ...masterEntry, id: monthlyTxRef.id };
+
+            // Perform batch write
+            const batch = writeBatch(db);
+            batch.set(legacyDocRef, legacyItem);
+            batch.set(currentStockRef, currentStockItem);
+
+            if (!catalogSnap.exists()) {
+                batch.set(catalogRef, {
+                    itemCode,
+                    name,
+                    category: hsn || 'GENERAL',
+                    unit,
+                    location: 'MAIN STORE',
+                    minThreshold: 5,
+                    unitPrice: getEstimatedPrice(hsn || 'GENERAL'),
+                    lastUpdated: new Date().toISOString()
+                });
+            }
+
+            batch.set(masterTxRef, masterEntry);
+            batch.set(monthlyTxRef, monthlyEntry);
+            batch.set(lockDocRef, {
+                timestamp,
+                referenceId: refId,
+                itemId: itemCode
+            });
+
+            // Legacy logs update
+            const logRef = doc(collection(db, LOG_COLLECTION));
+            const stockTx: StockTransaction = {
+                id: logRef.id,
+                itemId: itemCode,
+                type,
+                quantity: qty,
+                previousStock: prevStock,
+                newStock: legacyItem.currentStock,
+                timestamp,
+                referenceId: refId,
+                partyName: party,
+                invoiceNumber: invoice,
+                photoUrl: photoUrl,
+                projectId: projectId
+            };
+            batch.set(logRef, stockTx);
+
+            await batch.commit();
+            console.log("Offline batch update succeeded locally!");
+
+            // Run local storage fallback just in case
+            saveLocalStockFallback(itemCode, type, qty, refId, party, invoice, photoUrl, projectId, name, unit, hsn);
+
+            return { success: true, offline: true, itemCode };
+
+        } catch (fallbackErr: any) {
+            console.error("Offline batch fallback also failed:", fallbackErr);
+            saveLocalStockFallback(itemCode, type, qty, refId, party, invoice, photoUrl, projectId, name, unit, hsn);
+            return { success: false, error: `Offline write failed: ${fallbackErr.message || fallbackErr}` };
+        }
     }
 }
 
