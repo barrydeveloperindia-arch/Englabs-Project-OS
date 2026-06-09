@@ -6,7 +6,8 @@
         "budget": 0,
         "deliveryTerms": "ToPay",
         "poConfirmed": false,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": ""
     },
     "production": {
         "currentStage": "Engineering Design",

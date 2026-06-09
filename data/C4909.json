@@ -1,12 +1,13 @@
 {
     "projectId": "C4909",
-    "client": "Unknown Client",
+    "client": "ELIN",
     "planning": {
         "value": 82880,
         "budget": 58016,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-16743"
     },
     "production": {
         "currentStage": "Engineering Design",

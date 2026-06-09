@@ -1,12 +1,13 @@
 {
     "projectId": "C4965",
-    "client": "Unknown Client",
+    "client": "MICROTEK ( ARVIND )",
     "planning": {
         "value": 8000,
         "budget": 5600,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-16772"
     },
     "production": {
         "currentStage": "Engineering Design",

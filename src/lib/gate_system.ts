@@ -71,6 +71,7 @@ export interface InventoryItem {
     lastUpdated: string;
     location?: string;
     photoUrl?: string;
+    unitPrice?: number;
 }
 
 export interface StockTransaction {
@@ -83,7 +84,11 @@ export interface StockTransaction {
     timestamp: string;
     referenceId: string; // ID of the GateEntry
     partyName: string;
-    invoiceNumber: string;
+    invoiceNumber?: string;
     photoUrl?: string;
     projectId?: string;
+    remarks?: string;
+    materialName?: string;
+    category?: string;
+    unit?: string;
 }

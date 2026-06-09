@@ -1,12 +1,13 @@
 {
     "projectId": "C4883",
-    "client": "Unknown Client",
+    "client": "SONALIKA",
     "planning": {
         "value": 42868,
         "budget": 30008,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-16742"
     },
     "production": {
         "currentStage": "Engineering Design",

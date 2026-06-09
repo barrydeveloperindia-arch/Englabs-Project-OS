@@ -16,6 +16,7 @@ export interface ProjectData {
         budget: number;
         deliveryTerms: 'ToPay' | 'Porter';
         poConfirmed: boolean;
+        poNumber?: string;
         startDate: string;
     };
     production: {

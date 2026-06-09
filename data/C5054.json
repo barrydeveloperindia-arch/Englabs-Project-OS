@@ -1,12 +1,13 @@
 {
     "projectId": "C5054",
-    "client": "Unknown Client",
+    "client": "BAAZ BIKES",
     "planning": {
         "value": 25350,
         "budget": 17745,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-16808"
     },
     "production": {
         "currentStage": "Engineering Design",

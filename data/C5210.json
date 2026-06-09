@@ -6,7 +6,8 @@
         "budget": 11200,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-62000"
     },
     "production": {
         "currentStage": "Engineering Design",

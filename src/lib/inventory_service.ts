@@ -10,9 +10,32 @@ import {
     orderBy, 
     runTransaction,
     writeBatch,
-    limit
+    limit,
+    where,
+    deleteDoc
 } from 'firebase/firestore';
 import masterInventory from '../../data/master_inventory_may_2026.json';
+
+async function getDocsWithTimeout(q: any, timeoutMs = 1500): Promise<any> {
+    return Promise.race([
+        getDocs(q),
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Firestore query timeout")), timeoutMs))
+    ]);
+}
+
+async function getDocWithTimeout(docRef: any, timeoutMs = 1500): Promise<any> {
+    return Promise.race([
+        getDoc(docRef),
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Firestore doc read timeout")), timeoutMs))
+    ]);
+}
+
+async function setDocWithTimeout(docRef: any, data: any, timeoutMs = 1500): Promise<any> {
+    return Promise.race([
+        setDoc(docRef, data),
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Firestore doc write timeout")), timeoutMs))
+    ]);
+}
 
 // Interfaces for the Store Stock Report Management System
 export interface MasterRegisterEntry {
@@ -30,6 +53,7 @@ export interface MasterRegisterEntry {
     remarks: string;
     type: 'INWARD' | 'OUTWARD';
     photoUrl?: string;
+    location?: string;
 }
 
 export interface CurrentStockItem {
@@ -91,8 +115,9 @@ function cleanUndefined(obj: any): any {
 export async function seedStoreStockReport() {
     if (!db) return;
     try {
-        const catalogSnap = await getDocs(query(collection(db, "material_catalog"), limit(1)));
-        if (!catalogSnap.empty) return; // Already seeded
+        const catalogSnap = await getDocsWithTimeout(query(collection(db, "material_catalog"), limit(1)));
+        const stockSnap = await getDocsWithTimeout(query(collection(db, "current_stock"), limit(1)));
+        if (!catalogSnap.empty && !stockSnap.empty) return; // Already seeded
 
         console.log("Seeding material_catalog and current_stock collections...");
         const uniqueItems = new Map<string, any>();
@@ -338,7 +363,8 @@ async function updateStock(
     invoice: string,
     hsn?: string,
     photoUrl?: string,
-    projectId?: string
+    projectId?: string,
+    location?: string
 ) {
     const itemCode = nameToCodeMap.get(name.trim().toLowerCase()) || name.toUpperCase().replace(/\s+/g, '_');
 
@@ -396,6 +422,9 @@ async function updateStock(
                 legacyItem.currentStock -= qty;
                 legacyItem.totalOutward += qty;
             }
+            if (location) {
+                legacyItem.location = location;
+            }
             legacyItem.lastUpdated = new Date().toISOString();
 
             // --- current_stock UPDATE LOGIC ---
@@ -422,6 +451,9 @@ async function updateStock(
                 currentStockItem.totalOutward += qty;
             }
             currentStockItem.availableStock = currentStockItem.openingStock + currentStockItem.totalInward - currentStockItem.totalOutward;
+            if (location) {
+                currentStockItem.location = location;
+            }
             currentStockItem.lastUpdated = new Date().toISOString();
 
             // --- PREPARE master_register ENTRY ---
@@ -449,7 +481,8 @@ async function updateStock(
                 balanceStockAfterIssue: currentStockItem.availableStock,
                 remarks: invoice || '',
                 type,
-                photoUrl: photoUrl || undefined
+                photoUrl: photoUrl || undefined,
+                location: location || undefined
             };
 
             const monthlyTxRef = doc(collection(db, "monthly_registers", monthName, "entries"));
@@ -459,13 +492,20 @@ async function updateStock(
             transaction.set(legacyDocRef, cleanUndefined(legacyItem));
             transaction.set(currentStockRef, cleanUndefined(currentStockItem));
 
-            if (!catalogSnap.exists()) {
+            if (catalogSnap.exists()) {
+                const catalogItem = catalogSnap.data();
+                if (location) {
+                    catalogItem.location = location;
+                    catalogItem.lastUpdated = new Date().toISOString();
+                    transaction.set(catalogRef, cleanUndefined(catalogItem));
+                }
+            } else {
                 transaction.set(catalogRef, cleanUndefined({
                     itemCode,
                     name,
                     category: hsn || 'GENERAL',
                     unit,
-                    location: 'MAIN STORE',
+                    location: location || 'MAIN STORE',
                     minThreshold: 5,
                     unitPrice: getEstimatedPrice(hsn || 'GENERAL'),
                     lastUpdated: new Date().toISOString()
@@ -693,82 +733,235 @@ async function updateStock(
 
 // Fetch all materials from current_stock
 export async function fetchCurrentStock(): Promise<CurrentStockItem[]> {
-    if (!db) return [];
-    await seedStoreStockReport();
-    const q = query(collection(db, "current_stock"));
-    const snap = await getDocs(q);
-    return snap.docs.map(d => d.data() as CurrentStockItem);
+    if (!db) {
+        return getLocalStockFallback();
+    }
+    try {
+        await seedStoreStockReport();
+        const q = query(collection(db, "current_stock"));
+        const snap = await getDocsWithTimeout(q);
+        if (snap.empty) {
+            return getLocalStockFallback();
+        }
+        return snap.docs.map((d: any) => d.data() as CurrentStockItem);
+    } catch (err) {
+        console.warn("Firestore fetchCurrentStock failed, falling back to local masterInventory:", err);
+        return getLocalStockFallback();
+    }
+}
+
+function getLocalStockFallback(): CurrentStockItem[] {
+    if (typeof window !== 'undefined' && window.localStorage) {
+        const localCurrentStockSaved = window.localStorage.getItem('local_current_stock');
+        if (localCurrentStockSaved) {
+            try {
+                const localCurrentStock: Record<string, CurrentStockItem> = JSON.parse(localCurrentStockSaved);
+                return Object.values(localCurrentStock);
+            } catch (e) {
+                console.error("Failed to parse local_current_stock", e);
+            }
+        }
+    }
+    
+    // No local current stock saved, seed from masterInventory
+    const uniqueItems = new Map<string, any>();
+    if (Array.isArray(masterInventory)) {
+        masterInventory.forEach((report: any) => {
+            if (report && Array.isArray(report.items)) {
+                report.items.forEach((item: any) => {
+                    if (item && item.itemCode) {
+                        uniqueItems.set(item.itemCode, item);
+                    }
+                });
+            }
+        });
+    }
+    const localStock: CurrentStockItem[] = [];
+    for (const item of uniqueItems.values()) {
+        localStock.push({
+            itemCode: item.itemCode,
+            name: item.name,
+            category: item.category || 'GENERAL',
+            unit: item.unit || 'Nos',
+            openingStock: item.currentStock || 0,
+            totalInward: 0,
+            totalOutward: 0,
+            availableStock: item.currentStock || 0,
+            lastUpdated: new Date().toISOString(),
+            location: item.location || 'MAIN STORE',
+            minThreshold: item.minThreshold || 5,
+            unitPrice: getEstimatedPrice(item.category || 'GENERAL')
+        });
+    }
+    
+    // Save it to local storage so that subsequent modifications can be applied
+    if (typeof window !== 'undefined' && window.localStorage) {
+        const localCurrentStockMap: Record<string, CurrentStockItem> = {};
+        localStock.forEach(item => {
+            localCurrentStockMap[item.itemCode] = item;
+        });
+        window.localStorage.setItem('local_current_stock', JSON.stringify(localCurrentStockMap));
+    }
+    
+    return localStock;
 }
 
 // Fetch master register transaction entries
 export async function fetchMasterRegister(): Promise<MasterRegisterEntry[]> {
-    if (!db) return [];
-    const q = query(collection(db, "master_register"), orderBy("timestamp", "desc"));
-    const snap = await getDocs(q);
-    return snap.docs.map(d => d.data() as MasterRegisterEntry);
+    if (!db) {
+        return getLocalMasterRegisterFallback();
+    }
+    try {
+        const q = query(collection(db, "master_register"), orderBy("timestamp", "desc"));
+        const snap = await getDocsWithTimeout(q);
+        return snap.docs.map((d: any) => d.data() as MasterRegisterEntry);
+    } catch (err) {
+        console.warn("Firestore fetchMasterRegister failed, falling back to local master register:", err);
+        return getLocalMasterRegisterFallback();
+    }
+}
+
+function getLocalMasterRegisterFallback(): MasterRegisterEntry[] {
+    if (typeof window !== 'undefined' && window.localStorage) {
+        const localMasterSaved = window.localStorage.getItem('local_master_register');
+        if (localMasterSaved) {
+            try {
+                return JSON.parse(localMasterSaved);
+            } catch (e) {
+                console.error("Failed to parse local_master_register", e);
+            }
+        }
+    }
+    return [];
 }
 
 // Fetch specific monthly register transaction entries
 export async function fetchMonthlyRegister(month: string): Promise<MasterRegisterEntry[]> {
-    if (!db) return [];
-    const q = query(collection(db, "monthly_registers", month, "entries"), orderBy("timestamp", "desc"));
-    const snap = await getDocs(q);
-    return snap.docs.map(d => d.data() as MasterRegisterEntry);
+    if (!db) {
+        return getLocalMonthlyRegisterFallback(month);
+    }
+    try {
+        const q = query(collection(db, "monthly_registers", month, "entries"), orderBy("timestamp", "desc"));
+        const snap = await getDocsWithTimeout(q);
+        return snap.docs.map((d: any) => d.data() as MasterRegisterEntry);
+    } catch (err) {
+        console.warn("Firestore fetchMonthlyRegister failed, falling back to local monthly register:", err);
+        return getLocalMonthlyRegisterFallback(month);
+    }
+}
+
+function getLocalMonthlyRegisterFallback(month: string): MasterRegisterEntry[] {
+    if (typeof window !== 'undefined' && window.localStorage) {
+        const localMonthlySaved = window.localStorage.getItem('local_monthly_registers');
+        if (localMonthlySaved) {
+            try {
+                const localMonthly: Record<string, MasterRegisterEntry[]> = JSON.parse(localMonthlySaved);
+                return localMonthly[month] || [];
+            } catch (e) {
+                console.error("Failed to parse local_monthly_registers", e);
+            }
+        }
+    }
+    return [];
 }
 
 export async function fetchInventoryMaster(): Promise<InventoryItem[]> {
-    if (!db) return [];
-    await seedStoreStockReport();
-    const q = query(collection(db, "current_stock"));
-    const snap = await getDocs(q);
-    if (snap.empty) {
-        const qOld = query(collection(db, STOCK_COLLECTION));
-        const snapOld = await getDocs(qOld);
-        return snapOld.docs.map(d => d.data() as InventoryItem);
+    if (!db) {
+        return getLocalInventoryMasterFallback();
     }
-    return snap.docs.map(d => {
-        const data = d.data() as CurrentStockItem;
-        return {
-            itemCode: data.itemCode,
-            name: data.name,
-            category: data.category,
-            unit: data.unit,
-            currentStock: data.availableStock,
-            totalInward: data.totalInward,
-            totalOutward: data.totalOutward,
-            minThreshold: data.minThreshold || 5,
-            lastUpdated: data.lastUpdated,
-            location: data.location || 'MAIN STORE'
-        } as InventoryItem;
-    });
+    try {
+        await seedStoreStockReport();
+        const q = query(collection(db, "current_stock"));
+        const snap = await getDocsWithTimeout(q);
+        if (snap.empty) {
+            const qOld = query(collection(db, STOCK_COLLECTION));
+            const snapOld = await getDocsWithTimeout(qOld);
+            return snapOld.docs.map((d: any) => d.data() as InventoryItem);
+        }
+        return snap.docs.map((d: any) => {
+            const data = d.data() as CurrentStockItem;
+            return {
+                itemCode: data.itemCode,
+                name: data.name,
+                category: data.category,
+                unit: data.unit,
+                currentStock: data.availableStock,
+                totalInward: data.totalInward,
+                totalOutward: data.totalOutward,
+                minThreshold: data.minThreshold || 5,
+                lastUpdated: data.lastUpdated,
+                location: data.location || 'MAIN STORE'
+            } as InventoryItem;
+        });
+    } catch (err) {
+        console.warn("Firestore fetchInventoryMaster failed, falling back to local masterInventory:", err);
+        return getLocalInventoryMasterFallback();
+    }
+}
+
+function getLocalInventoryMasterFallback(): InventoryItem[] {
+    const localStock = getLocalStockFallback();
+    return localStock.map(data => ({
+        itemCode: data.itemCode,
+        name: data.name,
+        category: data.category,
+        unit: data.unit,
+        currentStock: data.availableStock,
+        totalInward: data.totalInward,
+        totalOutward: data.totalOutward,
+        minThreshold: data.minThreshold || 5,
+        lastUpdated: data.lastUpdated,
+        location: data.location || 'MAIN STORE'
+    }));
 }
 
 export async function fetchStockMovement(): Promise<StockTransaction[]> {
-    if (!db) return [];
-    const q = query(collection(db, "master_register"), orderBy("timestamp", "desc"));
-    const snap = await getDocs(q);
-    if (snap.empty) {
-        const qOld = query(collection(db, LOG_COLLECTION), orderBy("timestamp", "desc"));
-        const snapOld = await getDocs(qOld);
-        return snapOld.docs.map(d => d.data() as StockTransaction);
+    if (!db) {
+        return getLocalStockMovementFallback();
     }
-    return snap.docs.map(d => {
-        const data = d.data() as MasterRegisterEntry;
-        return {
-            id: data.id,
-            itemId: data.itemCode,
-            type: data.type,
-            quantity: data.quantity,
-            previousStock: data.balanceStockAfterIssue + (data.type === 'OUTWARD' ? data.quantity : -data.quantity),
-            newStock: data.balanceStockAfterIssue,
-            timestamp: data.timestamp,
-            referenceId: data.id,
-            partyName: data.staffName,
-            invoiceNumber: data.remarks,
-            photoUrl: data.photoUrl,
-            projectId: data.projectId
-        } as StockTransaction;
-    });
+    try {
+        const q = query(collection(db, "master_register"), orderBy("timestamp", "desc"));
+        const snap = await getDocsWithTimeout(q);
+        if (snap.empty) {
+            const qOld = query(collection(db, LOG_COLLECTION), orderBy("timestamp", "desc"));
+            const snapOld = await getDocsWithTimeout(qOld);
+            return snapOld.docs.map((d: any) => d.data() as StockTransaction);
+        }
+        return snap.docs.map((d: any) => {
+            const data = d.data() as MasterRegisterEntry;
+            return {
+                id: data.id,
+                itemId: data.itemCode,
+                type: data.type,
+                quantity: data.quantity,
+                previousStock: data.balanceStockAfterIssue + (data.type === 'OUTWARD' ? data.quantity : -data.quantity),
+                newStock: data.balanceStockAfterIssue,
+                timestamp: data.timestamp,
+                referenceId: data.id,
+                partyName: data.staffName,
+                invoiceNumber: data.remarks,
+                photoUrl: data.photoUrl,
+                projectId: data.projectId
+            } as StockTransaction;
+        });
+    } catch (err) {
+        console.warn("Firestore fetchStockMovement failed, falling back to local stock transactions:", err);
+        return getLocalStockMovementFallback();
+    }
+}
+
+function getLocalStockMovementFallback(): StockTransaction[] {
+    if (typeof window !== 'undefined' && window.localStorage) {
+        const localTxSaved = window.localStorage.getItem('local_stock_transactions');
+        if (localTxSaved) {
+            try {
+                return JSON.parse(localTxSaved);
+            } catch (e) {
+                console.error("Failed to parse local_stock_transactions", e);
+            }
+        }
+    }
+    return [];
 }
 
 export async function seedInventoryMaster(items: InventoryItem[]) {
@@ -784,76 +977,259 @@ export async function seedInventoryMaster(items: InventoryItem[]) {
 }
 
 export async function updateInventoryItemStock(itemCode: string, currentStock: number) {
-    if (!db) return;
-    const docRef = doc(db, STOCK_COLLECTION, itemCode);
-    const snap = await getDoc(docRef);
-    if (snap.exists()) {
-        const item = snap.data() as InventoryItem;
-        const prevStock = item.currentStock;
-        item.currentStock = currentStock;
-        item.lastUpdated = new Date().toISOString();
-        await setDoc(docRef, item);
+    if (!db) {
+        updateLocalStockFallback(itemCode, currentStock);
+        return;
+    }
+    try {
+        const docRef = doc(db, STOCK_COLLECTION, itemCode);
+        const snap = await getDocWithTimeout(docRef);
+        if (snap.exists()) {
+            const item = snap.data() as InventoryItem;
+            const prevStock = item.currentStock;
+            item.currentStock = currentStock;
+            item.lastUpdated = new Date().toISOString();
+            await setDocWithTimeout(docRef, item);
 
-        // Also update new current_stock collection!
-        const newRef = doc(db, "current_stock", itemCode);
-        const newSnap = await getDoc(newRef);
-        if (newSnap.exists()) {
-            const newItem = newSnap.data() as CurrentStockItem;
-            const diff = currentStock - newItem.availableStock;
-            if (diff > 0) {
-                newItem.totalInward += diff;
-            } else {
-                newItem.totalOutward += Math.abs(diff);
+            // Also update new current_stock collection!
+            const newRef = doc(db, "current_stock", itemCode);
+            const newSnap = await getDocWithTimeout(newRef);
+            if (newSnap.exists()) {
+                const newItem = newSnap.data() as CurrentStockItem;
+                const diff = currentStock - newItem.availableStock;
+                if (diff > 0) {
+                    newItem.totalInward += diff;
+                } else {
+                    newItem.totalOutward += Math.abs(diff);
+                }
+                newItem.availableStock = currentStock;
+                newItem.lastUpdated = new Date().toISOString();
+                await setDocWithTimeout(newRef, newItem);
             }
-            newItem.availableStock = currentStock;
-            newItem.lastUpdated = new Date().toISOString();
-            await setDoc(newRef, newItem);
+
+            const logRef = doc(collection(db, LOG_COLLECTION));
+            const stockTx: StockTransaction = {
+                id: logRef.id,
+                itemId: itemCode,
+                type: currentStock >= prevStock ? 'INWARD' : 'OUTWARD',
+                quantity: Math.abs(currentStock - prevStock),
+                previousStock: prevStock,
+                newStock: currentStock,
+                timestamp: new Date().toISOString(),
+                referenceId: 'MANUAL_ADJUSTMENT',
+                partyName: 'STORE_AUDITOR',
+                invoiceNumber: 'AUDIT_CORRECTION'
+            };
+            await setDocWithTimeout(logRef, stockTx);
+
+            // Save in master_register
+            const masterRef = doc(collection(db, "master_register"));
+            const months = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            const monthName = months[new Date().getMonth()];
+            const masterEntry: MasterRegisterEntry = {
+                id: masterRef.id,
+                timestamp: new Date().toISOString(),
+                projectId: 'GENERAL',
+                materialName: item.name,
+                itemCode,
+                category: item.category || 'GENERAL',
+                quantity: Math.abs(currentStock - prevStock),
+                unit: item.unit || 'Nos',
+                staffName: 'STORE_AUDITOR',
+                issuedBy: 'Store Auditor',
+                balanceStockAfterIssue: currentStock,
+                remarks: 'AUDIT_CORRECTION',
+                type: currentStock >= prevStock ? 'INWARD' : 'OUTWARD'
+            };
+            await setDocWithTimeout(masterRef, masterEntry);
+
+            // Save in monthly_registers/{month}/entries
+            const monthlyRef = doc(collection(db, "monthly_registers", monthName, "entries"));
+            await setDocWithTimeout(monthlyRef, { ...masterEntry, id: monthlyRef.id });
         }
-
-        const logRef = doc(collection(db, LOG_COLLECTION));
-        const stockTx: StockTransaction = {
-            id: logRef.id,
-            itemId: itemCode,
-            type: currentStock >= prevStock ? 'INWARD' : 'OUTWARD',
-            quantity: Math.abs(currentStock - prevStock),
-            previousStock: prevStock,
-            newStock: currentStock,
-            timestamp: new Date().toISOString(),
-            referenceId: 'MANUAL_ADJUSTMENT',
-            partyName: 'STORE_AUDITOR',
-            invoiceNumber: 'AUDIT_CORRECTION'
-        };
-        await setDoc(logRef, stockTx);
-
-        // Save in master_register
-        const masterRef = doc(collection(db, "master_register"));
-        const months = [
-            "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        ];
-        const monthName = months[new Date().getMonth()];
-        const masterEntry: MasterRegisterEntry = {
-            id: masterRef.id,
-            timestamp: new Date().toISOString(),
-            projectId: 'GENERAL',
-            materialName: item.name,
-            itemCode,
-            category: item.category || 'GENERAL',
-            quantity: Math.abs(currentStock - prevStock),
-            unit: item.unit || 'Nos',
-            staffName: 'STORE_AUDITOR',
-            issuedBy: 'Store Auditor',
-            balanceStockAfterIssue: currentStock,
-            remarks: 'AUDIT_CORRECTION',
-            type: currentStock >= prevStock ? 'INWARD' : 'OUTWARD'
-        };
-        await setDoc(masterRef, masterEntry);
-
-        // Save in monthly_registers/{month}/entries
-        const monthlyRef = doc(collection(db, "monthly_registers", monthName, "entries"));
-        await setDoc(monthlyRef, { ...masterEntry, id: monthlyRef.id });
+    } catch (err) {
+        console.warn("Firestore updateInventoryItemStock failed, applying local update only:", err);
+        updateLocalStockFallback(itemCode, currentStock);
     }
 }
+
+function updateLocalStockFallback(itemCode: string, currentStock: number) {
+    if (typeof window !== 'undefined' && window.localStorage) {
+        const localCurrentStockSaved = window.localStorage.getItem('local_current_stock');
+        const localCurrentStock: Record<string, CurrentStockItem> = localCurrentStockSaved ? JSON.parse(localCurrentStockSaved) : {};
+        if (localCurrentStock[itemCode]) {
+            const item = localCurrentStock[itemCode];
+            const prevStock = item.availableStock;
+            const diff = currentStock - prevStock;
+            if (diff > 0) {
+                item.totalInward += diff;
+            } else {
+                item.totalOutward += Math.abs(diff);
+            }
+            item.availableStock = currentStock;
+            item.lastUpdated = new Date().toISOString();
+            window.localStorage.setItem('local_current_stock', JSON.stringify(localCurrentStock));
+        }
+    }
+}
+
+export async function updateInventoryItemDetails(
+    itemCode: string, 
+    currentStock: number, 
+    location: string,
+    name?: string,
+    category?: string,
+    unit?: string,
+    minThreshold?: number,
+    unitPrice?: number
+) {
+    if (!db) {
+        updateLocalDetailsFallback(itemCode, currentStock, location, name, category, unit, minThreshold, unitPrice);
+        return;
+    }
+    try {
+        const docRef = doc(db, STOCK_COLLECTION, itemCode);
+        const snap = await getDocWithTimeout(docRef);
+        if (snap.exists()) {
+            const item = snap.data() as InventoryItem;
+            const prevStock = item.currentStock;
+            item.currentStock = currentStock;
+            item.location = location || "";
+            if (name) item.name = name;
+            if (category) item.category = category;
+            if (unit) item.unit = unit;
+            if (minThreshold !== undefined) item.minThreshold = minThreshold;
+            item.lastUpdated = new Date().toISOString();
+            await setDocWithTimeout(docRef, item);
+
+            // Also update new current_stock collection!
+            const newRef = doc(db, "current_stock", itemCode);
+            const newSnap = await getDocWithTimeout(newRef);
+            if (newSnap.exists()) {
+                const newItem = newSnap.data() as CurrentStockItem;
+                const diff = currentStock - newItem.availableStock;
+                if (diff > 0) {
+                    newItem.totalInward += diff;
+                } else {
+                    newItem.totalOutward += Math.abs(diff);
+                }
+                newItem.availableStock = currentStock;
+                newItem.location = location || "";
+                if (name) newItem.name = name;
+                if (category) newItem.category = category;
+                if (unit) newItem.unit = unit;
+                if (minThreshold !== undefined) newItem.minThreshold = minThreshold;
+                newItem.lastUpdated = new Date().toISOString();
+                await setDocWithTimeout(newRef, newItem);
+            }
+
+            // Also update material_catalog!
+            const catalogRef = doc(db, "material_catalog", itemCode);
+            const catalogSnap = await getDocWithTimeout(catalogRef);
+            if (catalogSnap.exists()) {
+                const catalogItem = catalogSnap.data();
+                catalogItem.location = location || "";
+                if (name) catalogItem.name = name;
+                if (category) catalogItem.category = category;
+                if (unit) catalogItem.unit = unit;
+                if (minThreshold !== undefined) catalogItem.minThreshold = minThreshold;
+                if (unitPrice !== undefined) catalogItem.unitPrice = unitPrice;
+                catalogItem.lastUpdated = new Date().toISOString();
+                await setDocWithTimeout(catalogRef, catalogItem);
+            }
+
+            if (currentStock !== prevStock) {
+                const logRef = doc(collection(db, LOG_COLLECTION));
+                const stockTx: StockTransaction = {
+                    id: logRef.id,
+                    itemId: itemCode,
+                    type: currentStock >= prevStock ? 'INWARD' : 'OUTWARD',
+                    quantity: Math.abs(currentStock - prevStock),
+                    previousStock: prevStock,
+                    newStock: currentStock,
+                    timestamp: new Date().toISOString(),
+                    referenceId: 'MANUAL_ADJUSTMENT',
+                    partyName: 'STORE_AUDITOR',
+                    remarks: `MANUAL AUDIT CORRECTION (Rack: ${location || 'N/A'})`,
+                    materialName: name || item.name,
+                    category: category || item.category,
+                    unit: unit || item.unit
+                };
+                await setDocWithTimeout(logRef, stockTx);
+
+                // Save in master_register
+                const masterRef = doc(collection(db, "master_register"));
+                const months = [
+                    "January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                const monthName = months[new Date().getMonth()];
+                const masterEntry: MasterRegisterEntry = {
+                    id: masterRef.id,
+                    timestamp: new Date().toISOString(),
+                    projectId: 'GENERAL',
+                    materialName: name || item.name,
+                    itemCode,
+                    category: category || item.category || 'GENERAL',
+                    quantity: Math.abs(currentStock - prevStock),
+                    unit: unit || item.unit || 'Nos',
+                    staffName: 'STORE_AUDITOR',
+                    issuedBy: 'Store Auditor',
+                    balanceStockAfterIssue: currentStock,
+                    remarks: stockTx.remarks || '',
+                    type: currentStock >= prevStock ? 'INWARD' : 'OUTWARD',
+                    location: location || undefined
+                };
+                await setDocWithTimeout(masterRef, masterEntry);
+
+                // Save in monthly_registers/{month}/entries
+                const monthlyRef = doc(collection(db, "monthly_registers", monthName, "entries"));
+                await setDocWithTimeout(monthlyRef, { ...masterEntry, id: monthlyRef.id });
+            }
+        }
+    } catch (err) {
+        console.warn("Firestore updateInventoryItemDetails failed, applying local update only:", err);
+        updateLocalDetailsFallback(itemCode, currentStock, location, name, category, unit, minThreshold, unitPrice);
+    }
+}
+
+function updateLocalDetailsFallback(
+    itemCode: string, 
+    currentStock: number, 
+    location: string,
+    name?: string,
+    category?: string,
+    unit?: string,
+    minThreshold?: number,
+    unitPrice?: number
+) {
+    if (typeof window !== 'undefined' && window.localStorage) {
+        const localCurrentStockSaved = window.localStorage.getItem('local_current_stock');
+        const localCurrentStock: Record<string, CurrentStockItem> = localCurrentStockSaved ? JSON.parse(localCurrentStockSaved) : {};
+        if (localCurrentStock[itemCode]) {
+            const item = localCurrentStock[itemCode];
+            const prevStock = item.availableStock;
+            const diff = currentStock - prevStock;
+            if (diff > 0) {
+                item.totalInward += diff;
+            } else {
+                item.totalOutward += Math.abs(diff);
+            }
+            item.availableStock = currentStock;
+            item.location = location || "";
+            if (name) item.name = name;
+            if (category) item.category = category;
+            if (unit) item.unit = unit;
+            if (minThreshold !== undefined) item.minThreshold = minThreshold;
+            item.lastUpdated = new Date().toISOString();
+            window.localStorage.setItem('local_current_stock', JSON.stringify(localCurrentStock));
+        }
+    }
+}
+
 
 export async function deleteInventoryItem(itemCode: string) {
     if (!db) return;
@@ -877,7 +1253,7 @@ export async function addInventoryItem(item: InventoryItem) {
         unit: item.unit || 'Nos',
         location: item.location || 'MAIN STORE',
         minThreshold: item.minThreshold || 5,
-        unitPrice: getEstimatedPrice(item.category || 'GENERAL'),
+        unitPrice: item.unitPrice !== undefined ? item.unitPrice : getEstimatedPrice(item.category || 'GENERAL'),
         lastUpdated: new Date().toISOString()
     });
 
@@ -891,6 +1267,7 @@ export async function addInventoryItem(item: InventoryItem) {
         totalInward: 0,
         totalOutward: 0,
         availableStock: item.currentStock || 0,
+        location: item.location || 'MAIN STORE',
         lastUpdated: new Date().toISOString()
     });
 }
@@ -904,8 +1281,180 @@ export async function recordManualTransaction(
     invoice: string,
     hsn?: string,
     photoUrl?: string,
-    projectId?: string
+    projectId?: string,
+    location?: string
 ) {
     const refId = `MANUAL_TX_${Date.now()}`;
-    return updateStock(name, qty, unit, type, refId, party, invoice, hsn, photoUrl, projectId);
+    return updateStock(name, qty, unit, type, refId, party, invoice, hsn, photoUrl, projectId, location);
+}
+
+export async function deleteTransaction(tx: MasterRegisterEntry): Promise<{ success: boolean, error?: string }> {
+    if (!db) return { success: false, error: "Database offline" };
+    try {
+        const months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        const txDate = new Date(tx.timestamp);
+        const monthName = months[txDate.getMonth()];
+
+        const batch = writeBatch(db);
+
+        // 1. Delete from master_register
+        const masterRef = doc(db, "master_register", tx.id);
+        batch.delete(masterRef);
+
+        // 2. Query and delete from monthly collection
+        const monthlyQuery = query(
+            collection(db, "monthly_registers", monthName, "entries"),
+            where("timestamp", "==", tx.timestamp),
+            where("itemCode", "==", tx.itemCode)
+        );
+        const monthlySnap = await getDocs(monthlyQuery);
+        monthlySnap.forEach(d => {
+            batch.delete(d.ref);
+        });
+
+        // 3. Adjust stock levels
+        const currentStockRef = doc(db, "current_stock", tx.itemCode);
+        const legacyDocRef = doc(db, STOCK_COLLECTION, tx.itemCode);
+
+        const currentStockSnap = await getDoc(currentStockRef);
+        const legacySnap = await getDoc(legacyDocRef);
+
+        if (currentStockSnap.exists()) {
+            const currentStockItem = currentStockSnap.data() as CurrentStockItem;
+            if (tx.type === 'INWARD') {
+                currentStockItem.totalInward = Math.max(0, currentStockItem.totalInward - tx.quantity);
+            } else {
+                currentStockItem.totalOutward = Math.max(0, currentStockItem.totalOutward - tx.quantity);
+            }
+            currentStockItem.availableStock = currentStockItem.openingStock + currentStockItem.totalInward - currentStockItem.totalOutward;
+            currentStockItem.lastUpdated = new Date().toISOString();
+            batch.set(currentStockRef, cleanUndefined(currentStockItem));
+        }
+
+        if (legacySnap.exists()) {
+            const legacyItem = legacySnap.data() as InventoryItem;
+            if (tx.type === 'INWARD') {
+                legacyItem.currentStock = Math.max(0, legacyItem.currentStock - tx.quantity);
+                legacyItem.totalInward = Math.max(0, legacyItem.totalInward - tx.quantity);
+            } else {
+                legacyItem.currentStock = legacyItem.currentStock + tx.quantity;
+                legacyItem.totalOutward = Math.max(0, legacyItem.totalOutward - tx.quantity);
+            }
+            legacyItem.lastUpdated = new Date().toISOString();
+            batch.set(legacyDocRef, cleanUndefined(legacyItem));
+        }
+
+        await batch.commit();
+        return { success: true };
+    } catch (err: any) {
+        console.error("Delete transaction error:", err);
+        return { success: false, error: err.message || err };
+    }
+}
+
+export async function editTransaction(
+    tx: MasterRegisterEntry,
+    newQty: number,
+    newStaff: string,
+    newRemarks: string,
+    newProject: string
+): Promise<{ success: boolean, error?: string }> {
+    if (!db) return { success: false, error: "Database offline" };
+    try {
+        const months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        const txDate = new Date(tx.timestamp);
+        const monthName = months[txDate.getMonth()];
+
+        const batch = writeBatch(db);
+
+        // Calculate quantity difference
+        const qtyDiff = newQty - tx.quantity;
+
+        // 1. Update stock levels
+        const currentStockRef = doc(db, "current_stock", tx.itemCode);
+        const legacyDocRef = doc(db, STOCK_COLLECTION, tx.itemCode);
+
+        const currentStockSnap = await getDoc(currentStockRef);
+        const legacySnap = await getDoc(legacyDocRef);
+
+        let finalBalance = tx.balanceStockAfterIssue;
+
+        if (currentStockSnap.exists()) {
+            const currentStockItem = currentStockSnap.data() as CurrentStockItem;
+            if (tx.type === 'INWARD') {
+                currentStockItem.totalInward = Math.max(0, currentStockItem.totalInward + qtyDiff);
+            } else {
+                // For OUTWARD, check if we have enough stock before editing!
+                if (qtyDiff > 0 && currentStockItem.availableStock < qtyDiff) {
+                    return { success: false, error: `Insufficient stock for update. Available: ${currentStockItem.availableStock}` };
+                }
+                currentStockItem.totalOutward = Math.max(0, currentStockItem.totalOutward + qtyDiff);
+            }
+            currentStockItem.availableStock = currentStockItem.openingStock + currentStockItem.totalInward - currentStockItem.totalOutward;
+            currentStockItem.lastUpdated = new Date().toISOString();
+            finalBalance = currentStockItem.availableStock;
+            batch.set(currentStockRef, cleanUndefined(currentStockItem));
+        }
+
+        if (legacySnap.exists()) {
+            const legacyItem = legacySnap.data() as InventoryItem;
+            if (tx.type === 'INWARD') {
+                legacyItem.currentStock = Math.max(0, legacyItem.currentStock + qtyDiff);
+                legacyItem.totalInward = Math.max(0, legacyItem.totalInward + qtyDiff);
+            } else {
+                if (qtyDiff > 0 && legacyItem.currentStock < qtyDiff) {
+                    return { success: false, error: `Insufficient stock for update. Available: ${legacyItem.currentStock}` };
+                }
+                legacyItem.currentStock = legacyItem.currentStock - qtyDiff;
+                legacyItem.totalOutward = Math.max(0, legacyItem.totalOutward + qtyDiff);
+            }
+            legacyItem.lastUpdated = new Date().toISOString();
+            batch.set(legacyDocRef, cleanUndefined(legacyItem));
+        }
+
+        // 2. Update master_register
+        const masterRef = doc(db, "master_register", tx.id);
+        const updatedMasterEntry: MasterRegisterEntry = {
+            ...tx,
+            quantity: newQty,
+            staffName: newStaff,
+            remarks: newRemarks,
+            projectId: newProject,
+            balanceStockAfterIssue: finalBalance,
+            lastUpdated: new Date().toISOString()
+        } as any;
+        batch.set(masterRef, cleanUndefined(updatedMasterEntry));
+
+        // 3. Query and update monthly collection
+        const monthlyQuery = query(
+            collection(db, "monthly_registers", monthName, "entries"),
+            where("timestamp", "==", tx.timestamp),
+            where("itemCode", "==", tx.itemCode)
+        );
+        const monthlySnap = await getDocs(monthlyQuery);
+        monthlySnap.forEach(d => {
+            const data = d.data();
+            batch.set(d.ref, cleanUndefined({
+                ...data,
+                quantity: newQty,
+                staffName: newStaff,
+                remarks: newRemarks,
+                projectId: newProject,
+                balanceStockAfterIssue: finalBalance,
+                lastUpdated: new Date().toISOString()
+            }));
+        });
+
+        await batch.commit();
+        return { success: true };
+    } catch (err: any) {
+        console.error("Edit transaction error:", err);
+        return { success: false, error: err.message || err };
+    }
 }

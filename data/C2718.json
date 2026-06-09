@@ -6,7 +6,8 @@
         "budget": 3923,
         "deliveryTerms": "ToPay",
         "poConfirmed": false,
-        "startDate": "2022-09-05"
+        "startDate": "2022-09-05",
+        "poNumber": ""
     },
     "production": {
         "currentStage": "Engineering Design",

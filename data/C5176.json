@@ -6,7 +6,8 @@
         "budget": 0,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-74523"
     },
     "production": {
         "currentStage": "Engineering Design",

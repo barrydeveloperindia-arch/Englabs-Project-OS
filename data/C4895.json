@@ -1,12 +1,13 @@
 {
     "projectId": "C4895",
-    "client": "Unknown Client",
+    "client": "MY DESIGN MINDS",
     "planning": {
         "value": 8400,
         "budget": 5880,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-16743"
     },
     "production": {
         "currentStage": "Engineering Design",

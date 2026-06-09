@@ -1,7 +1,7 @@
-<?xml version='1.0' encoding='utf-8'?>
+﻿<?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Englabs Store</string>
-    <string name="title_activity_main">Englabs Store</string>
-    <string name="package_name">com.englabs.os</string>
-    <string name="custom_url_scheme">com.englabs.os</string>
+    <string name="app_name">ENGLABS PROJECTS</string>
+    <string name="title_activity_main">ENGLABS PROJECTS</string>
+    <string name="package_name">com.englabs.projects</string>
+    <string name="custom_url_scheme">com.englabs.projects</string>
 </resources>

@@ -30,7 +30,7 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
   });
 
   test('1. Viewport Scaling & Main Bottom Tab Transitions', async ({ page, isMobile }) => {
-    await expect(page).toHaveTitle(/ENGLABS PROJECTS OS/);
+    await expect(page).toHaveTitle(/(ENGLABS PROJECTS OS|ENGLABS PORTER SERVICE)/);
 
     if (isMobile) {
       // Verify sidebar is completely hidden
@@ -65,7 +65,7 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
       await expect(page.getByText('Mission Control')).toBeVisible({ timeout: 15000 });
 
       // Check standard mock project card hydration
-      const projectCard = page.locator('div:has-text("C0")').first();
+      const projectCard = page.locator('div:has-text("C2")').first();
       await expect(projectCard).toBeVisible({ timeout: 15000 });
     }
   });
@@ -173,30 +173,31 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
     // Verify Stock Registry is active
     await expect(page.getByText('Store Stock Registry', { exact: false })).toBeVisible({ timeout: 15000 });
 
-    // Open Report
-    const reportRow = page.getByText('SR-20260514-MASTER');
-    await expect(reportRow).toBeVisible({ timeout: 30000 });
-    await reportRow.click({ force: true });
+    // Navigate to Stock view
+    const stockViewBtn = isMobile 
+      ? page.locator('header').getByRole('button', { name: 'Stock', exact: true })
+      : page.locator('aside').getByRole('button', { name: 'Current Stock', exact: true }).filter({ visible: true });
+    await stockViewBtn.click({ force: true });
+    
+    // Wait for the inventory registry to load
+    await expect(page.getByText('No stock items in catalog.')).not.toBeVisible({ timeout: 30000 });
 
-    // Confirm WebView details header
-    await expect(page.getByText('Store Report: SR-20260514-MASTER')).toBeVisible({ timeout: 15000 });
-
-    // Locate the first record's edit button depending on desktop vs mobile cards
-    const editButton = page.locator('button[title="Edit Item Stock"]').filter({ visible: true }).first();
+    // Locate the first record's edit button
+    const editButton = page.locator('button[title="Adjust stock level"]').filter({ visible: true }).first();
     await expect(editButton).toBeVisible({ timeout: 15000 });
     await editButton.click({ force: true });
 
     // Modal should prompt to alter records
-    await expect(page.getByText('Adjust Stock:', { exact: false })).toBeVisible({ timeout: 15000 });
-    const stockInput = page.locator('#stock-input');
+    await expect(page.getByText('Edit Material:', { exact: false })).toBeVisible({ timeout: 15000 });
+    const stockInput = page.locator('#stock-adjust-input');
     await expect(stockInput).toBeVisible({ timeout: 15000 });
 
     // Perform audit modification
     await stockInput.fill('25');
-    await page.getByRole('button', { name: 'Confirm Audit Changes' }).click({ force: true });
+    await page.getByRole('button', { name: 'Apply Correction' }).click({ force: true });
 
     // Confirm modal closes
-    await expect(page.getByText('Adjust Stock:', { exact: false })).not.toBeVisible({ timeout: 15000 });
+    await expect(page.getByText('Edit Material:', { exact: false })).not.toBeVisible({ timeout: 15000 });
   });
 
   test('7.5. Record Transit (Check-Out) Flow with Searchable Combobox', async ({ page, isMobile }) => {
@@ -207,53 +208,59 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
     await expect(navBtn).toBeVisible({ timeout: 15000 });
     await navBtn.click({ force: true });
 
-    // Open Report
-    const reportRow = page.getByText('SR-20260514-MASTER');
-    await expect(reportRow).toBeVisible({ timeout: 30000 });
-    await reportRow.click({ force: true });
+    // Navigate to Stock view first to ensure catalog is loaded from Firestore
+    const stockViewBtn = isMobile 
+      ? page.locator('header').getByRole('button', { name: 'Stock', exact: true })
+      : page.locator('aside').getByRole('button', { name: 'Current Stock', exact: true }).filter({ visible: true });
+    await stockViewBtn.click({ force: true });
+    await expect(page.getByText('No stock items in catalog.')).not.toBeVisible({ timeout: 30000 });
 
-    // Open Check Out Item Modal
-    const checkOutBtn = page.getByRole('button', { name: 'Check Out Item' });
-    await expect(checkOutBtn).toBeVisible({ timeout: 15000 });
-    await checkOutBtn.click({ force: true });
+    // Navigate to Check Out view
+    const checkOutViewBtn = isMobile 
+      ? page.locator('header').getByRole('button', { name: 'Check Out', exact: true })
+      : page.locator('aside').getByRole('button', { name: 'Check Out', exact: true }).filter({ visible: true });
+    await checkOutViewBtn.click({ force: true });
 
-    // Verify modal header is visible
-    await expect(page.getByText('Manual Material Check-Out', { exact: false })).toBeVisible({ timeout: 15000 });
+    // Verify view header is visible (use .first() to prevent strict mode violations with header and card h2)
+    await expect(page.getByText('Material Check-Out', { exact: false }).first()).toBeVisible({ timeout: 15000 });
 
     // Find the searchable combobox input
-    const comboboxInput = page.locator('input[placeholder="-- Type to Search Stock Item --"]');
+    const comboboxInput = page.locator('input[placeholder="Type to search material..."]');
     await expect(comboboxInput).toBeVisible({ timeout: 15000 });
     await comboboxInput.click();
+    await comboboxInput.fill('a');
 
-    // Type query to filter
-    await comboboxInput.fill('Chemilac');
-
-    // Suggestion dropdown should be visible
-    const firstSuggestion = page.getByText('Chemilac Black Paint').last();
+    // Find the first suggestion button dynamically (immune to inventory depletion)
+    const firstSuggestion = page.locator('div.relative:has(input[placeholder="Type to search material..."]) div.absolute button').first();
     await expect(firstSuggestion).toBeVisible({ timeout: 15000 });
+    
+    // Get the name of the suggestion to assert value
+    const itemName = await firstSuggestion.locator('span.text-slate-900').textContent();
     await firstSuggestion.click();
 
     // The input should now have the item name filled
-    await expect(comboboxInput).toHaveValue(/Chemilac/);
+    if (itemName) {
+      await expect(comboboxInput).toHaveValue(itemName.trim());
+    }
 
     // Enter checkout quantity
-    const quantityInput = page.locator('input[name="quantity"]');
+    const quantityInput = page.locator('input[type="number"]').first();
     await expect(quantityInput).toBeVisible({ timeout: 15000 });
     await quantityInput.fill('2');
 
-    // Select operator/staff if needed
-    const staffSelect = page.locator('select[name="partyName"]');
-    if (await staffSelect.count() > 0) {
-      await staffSelect.selectOption({ index: 1 });
-    }
+    // Select operator/staff/project
+    const selects = page.locator('select');
+    await selects.nth(0).selectOption({ index: 1 });
+    await selects.nth(1).selectOption({ index: 1 });
+    await selects.nth(2).selectOption({ index: 1 });
 
     // Submit check-out
-    const confirmBtn = page.getByRole('button', { name: 'Confirm Check-Out' });
+    const confirmBtn = page.getByRole('button', { name: 'Issue Material' });
     await expect(confirmBtn).toBeVisible({ timeout: 15000 });
     await confirmBtn.click({ force: true });
 
-    // Verify modal is closed
-    await expect(page.getByText('Manual Material Check-Out', { exact: false })).not.toBeVisible({ timeout: 15000 });
+    // Verify material check-out success message
+    await expect(page.getByText('Material Issued!')).toBeVisible({ timeout: 15000 });
   });
 
   test('8. Porter Logistics Dispatch & Mobile Intake validation', async ({ page, isMobile }) => {

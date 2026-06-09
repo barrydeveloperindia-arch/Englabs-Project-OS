@@ -1,12 +1,13 @@
 {
     "projectId": "C5069",
-    "client": "Unknown Client",
+    "client": "NIPA",
     "planning": {
         "value": 3920,
         "budget": 2744,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-16822"
     },
     "production": {
         "currentStage": "Engineering Design",

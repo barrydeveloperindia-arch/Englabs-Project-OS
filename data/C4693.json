@@ -1,12 +1,13 @@
 {
     "projectId": "C4693",
-    "client": "Unknown Client",
+    "client": "LABAT ASIA",
     "planning": {
         "value": 23120,
         "budget": 16184,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-16853"
     },
     "production": {
         "currentStage": "Engineering Design",

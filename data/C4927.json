@@ -1,12 +1,13 @@
 {
     "projectId": "C4927",
-    "client": "Unknown Client",
+    "client": "HENKEL",
     "planning": {
         "value": 152300,
         "budget": 106610,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-16750"
     },
     "production": {
         "currentStage": "Engineering Design",

@@ -55,7 +55,7 @@ import forensicRegistry from '../data/forensic_gate_registry.json';
 import porterForensic from '../data/porter_missions_forensic.json';
 
 const staticProjects: ProjectData[] = [];
-const projectFiles: Record<string, () => Promise<any>> = {};
+const projectFiles = import.meta.glob('../data/*.json', { eager: true });
 
 interface MobileTabButtonProps {
     active: boolean;
@@ -311,11 +311,11 @@ const App: React.FC = () => {
     useEffect(() => {
         console.log("Found project files:", Object.keys(projectFiles));
         
-        const loadProjects = async () => {
+        const loadProjects = () => {
             const loadedProjects: ProjectData[] = [];
             for (const path in projectFiles) {
                 try {
-                    const module = await projectFiles[path]() as { default: any };
+                    const module = projectFiles[path] as { default: any };
                     const data = module.default;
                     if (data && typeof data === 'object' && !Array.isArray(data) && data.projectId) {
                         loadedProjects.push(data as ProjectData);
@@ -1135,6 +1135,7 @@ const App: React.FC = () => {
                     projects={projects} 
                     staffList={staffList}
                     onAddStaff={handleAddStaff}
+                    onAddProject={(newProj) => setProjects(prev => [...prev, newProj])}
                 />
             ) : currentView === 'PORTER_SERVICE' ? (
                 <PorterRegister 

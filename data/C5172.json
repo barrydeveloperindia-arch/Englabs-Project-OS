@@ -5,8 +5,9 @@
         "value": 0,
         "budget": 0,
         "deliveryTerms": "ToPay",
-        "poConfirmed": false,
-        "startDate": "2026-06-02"
+        "poConfirmed": true,
+        "startDate": "2026-06-02",
+        "poNumber": "C5172-EL40-26-27-INV-0056"
     },
     "production": {
         "currentStage": "Engineering Design",

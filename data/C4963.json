@@ -1,12 +1,13 @@
 {
     "projectId": "C4963",
-    "client": "Unknown Client",
+    "client": "MSL INDIA",
     "planning": {
         "value": 22800,
         "budget": 15960,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-16773"
     },
     "production": {
         "currentStage": "Engineering Design",

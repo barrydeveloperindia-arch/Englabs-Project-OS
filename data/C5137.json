@@ -1,12 +1,13 @@
 {
     "projectId": "C5137",
-    "client": "Unknown Client",
+    "client": "MARELLI",
     "planning": {
         "value": 7282.84,
         "budget": 5098,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-04-28"
+        "startDate": "2026-04-28",
+        "poNumber": "P2100-EL12-PO-16860"
     },
     "production": {
         "currentStage": "Workshop Fabrication",

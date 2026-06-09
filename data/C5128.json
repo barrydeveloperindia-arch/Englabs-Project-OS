@@ -1,12 +1,13 @@
 {
     "projectId": "C5128",
-    "client": "Unknown Client",
+    "client": "SG ENGINEERING",
     "planning": {
         "value": 20244,
         "budget": 14171,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-16866"
     },
     "production": {
         "currentStage": "Engineering Design",

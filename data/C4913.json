@@ -1,12 +1,13 @@
 {
     "projectId": "C4913",
-    "client": "Unknown Client",
+    "client": "HELLA",
     "planning": {
         "value": 38640,
         "budget": 27048,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-16743"
     },
     "production": {
         "currentStage": "Engineering Design",

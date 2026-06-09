@@ -1,12 +1,13 @@
 {
     "projectId": "C4894",
-    "client": "Unknown Client",
+    "client": "JAL BATH FITTINGS",
     "planning": {
         "value": 4480,
         "budget": 3136,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-16742"
     },
     "production": {
         "currentStage": "Engineering Design",

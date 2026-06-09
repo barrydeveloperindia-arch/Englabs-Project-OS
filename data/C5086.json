@@ -1,12 +1,13 @@
 {
     "projectId": "C5086",
-    "client": "Unknown Client",
+    "client": "SARK GROUP",
     "planning": {
         "value": 420,
         "budget": 294,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-16830"
     },
     "production": {
         "currentStage": "Engineering Design",

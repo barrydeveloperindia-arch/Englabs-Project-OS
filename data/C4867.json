@@ -1,66 +1,67 @@
 {
-  "projectId": "C4867",
-  "client": "BAJAJ ELECTRICALS",
-  "planning": {
-    "value": 11446,
-    "budget": 8012,
-    "deliveryTerms": "ToPay",
-    "poConfirmed": true,
-    "startDate": "2026-06-01"
-  },
-  "production": {
-    "currentStage": "Workshop Fabrication",
-    "stages": [
-      {
-        "name": "Engineering Design",
-        "status": "Completed",
-        "lead": "Gaurav Panchal"
-      },
-      {
-        "name": "Machine Processing",
-        "status": "Completed",
-        "lead": "Paras"
-      },
-      {
-        "name": "Workshop Fabrication",
-        "status": "Completed",
-        "lead": "Parth"
-      },
-      {
-        "name": "Sanding",
-        "status": "In Progress",
-        "lead": "Parth"
-      },
-      {
-        "name": "Painting",
-        "status": "Pending",
-        "lead": "Parth"
-      },
-      {
-        "name": "Drying",
-        "status": "Pending",
-        "lead": "Parth"
-      },
-      {
-        "name": "Finishing",
-        "status": "Pending",
-        "lead": "Parth"
-      },
-      {
-        "name": "Final Packaging",
-        "status": "Pending",
-        "lead": "Parth"
-      }
-    ]
-  },
-  "metrics": {
-    "totalComponents": 44,
-    "materialConsumption": "Aluminum 6061, MS Sheet",
-    "workforce": [
-      "Gaurav Panchal",
-      "Paras",
-      "Parth",
-      "Sandeep"
-    ]
-  }
+    "projectId": "C4867",
+    "client": "BAJAJ ELECTRICALS",
+    "planning": {
+        "value": 11446,
+        "budget": 8012,
+        "deliveryTerms": "ToPay",
+        "poConfirmed": true,
+        "startDate": "2026-06-01",
+        "poNumber": "P2100-EL40-INV-17380"
+    },
+    "production": {
+        "currentStage": "Workshop Fabrication",
+        "stages": [
+            {
+                "name": "Engineering Design",
+                "status": "Completed",
+                "lead": "Gaurav Panchal"
+            },
+            {
+                "name": "Machine Processing",
+                "status": "Completed",
+                "lead": "Paras"
+            },
+            {
+                "name": "Workshop Fabrication",
+                "status": "Completed",
+                "lead": "Parth"
+            },
+            {
+                "name": "Sanding",
+                "status": "In Progress",
+                "lead": "Parth"
+            },
+            {
+                "name": "Painting",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Drying",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Finishing",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Final Packaging",
+                "status": "Pending",
+                "lead": "Parth"
+            }
+        ]
+    },
+    "metrics": {
+        "totalComponents": 44,
+        "materialConsumption": "Aluminum 6061, MS Sheet",
+        "workforce": [
+            "Gaurav Panchal",
+            "Paras",
+            "Parth",
+            "Sandeep"
+        ]
+    }
 }

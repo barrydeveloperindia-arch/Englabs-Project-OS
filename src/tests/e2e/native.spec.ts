@@ -7,7 +7,19 @@ test.describe('Englabs OS Native Android Tests', () => {
 
     test('Full App Layout and Functionality Test', async ({}, testInfo) => {
         // Connect to the Android device via ADB
-        const devices = await android.devices();
+        if (!process.env.RUN_NATIVE_TESTS) {
+            console.log("RUN_NATIVE_TESTS env var not set. Skipping native test.");
+            test.skip();
+            return;
+        }
+        let devices;
+        try {
+            devices = await android.devices();
+        } catch (e) {
+            console.log("ADB server not running or no Android devices available. Skipping native test.");
+            test.skip();
+            return;
+        }
         if (devices.length === 0) {
             console.log("No Android device connected via ADB. Skipping native test.");
             test.skip();

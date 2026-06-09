@@ -46,17 +46,35 @@ import {
     recordManualTransaction,
     MasterRegisterEntry,
     CurrentStockItem,
-    getEstimatedPrice
+    getEstimatedPrice,
+    deleteTransaction,
+    editTransaction,
+    updateInventoryItemDetails
 } from '../lib/inventory_service';
 import logo from '../assets/englabs_logo.png';
 import { STAFF_ROSTER } from '../lib/constants';
 import AddStaffModal from './AddStaffModal';
+import NewProjectModal from './NewProjectModal';
+
+export const normalizeRackLocation = (loc: string): string => {
+    if (!loc) return 'MAIN STORE';
+    const trimmed = loc.trim();
+    if (trimmed.toUpperCase() === 'MAIN STORE' || trimmed.toUpperCase() === 'ALL' || trimmed.toUpperCase() === 'N/A' || trimmed.toUpperCase() === 'UNASSIGNED') {
+        return trimmed;
+    }
+    const match = trimmed.match(/rack\s*(?:no\.?|-|\s)?\s*(\d+)/i);
+    if (match) {
+        return `Rack No. ${match[1]}`;
+    }
+    return trimmed;
+};
 
 interface StoreStockReportProps {
     userRole?: 'ADMIN' | 'STAFF';
     projects?: any[];
     staffList?: string[];
     onAddStaff?: (name: string) => void;
+    onAddProject?: (newProj: any) => void;
 }
 
 const MONTH_NAMES = [
@@ -68,13 +86,16 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
     userRole = 'ADMIN', 
     projects = [],
     staffList: propStaffList,
-    onAddStaff
+    onAddStaff,
+    onAddProject
 }) => {
     // Navigation state matching folder structure: Dashboard, Check In, Check Out, Live Register, Current Stock, Reports, Settings
     const [view, setView] = useState<'DASHBOARD' | 'CHECK_IN' | 'CHECK_OUT' | 'LIVE_REGISTER' | 'CURRENT_STOCK' | 'REPORTS' | 'SETTINGS'>('DASHBOARD');
     
     // Live Register Filter state
-    const [liveFilter, setLiveFilter] = useState<'TODAY' | 'WEEK' | 'MONTH'>('MONTH');
+    const [liveFilter, setLiveFilter] = useState<'TODAY' | 'WEEK' | 'MONTH' | 'CUSTOM'>('MONTH');
+    const [customStartDate, setCustomStartDate] = useState<string>('');
+    const [customEndDate, setCustomEndDate] = useState<string>('');
 
     // Roster and Staff states
     const [localStaffList, setLocalStaffList] = useState<string[]>(() => {
@@ -102,6 +123,17 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
     // Filtering / Search states
     const [searchQuery, setSearchQuery] = useState("");
     const [monthlyViewMonth, setMonthlyViewMonth] = useState<string>(MONTH_NAMES[new Date().getMonth()]);
+    const [selectedStockCategory, setSelectedStockCategory] = useState("ALL");
+    const [selectedStockRack, setSelectedStockRack] = useState("ALL");
+    const [selectedStockStatus, setSelectedStockStatus] = useState("ALL");
+    const [isCreateMaterialModalOpen, setIsCreateMaterialModalOpen] = useState(false);
+    // Create Material modal form states
+    const [createCategory, setCreateCategory] = useState('');
+    const [customCategory, setCustomCategory] = useState('');
+    const [createUnit, setCreateUnit] = useState('');
+    const [customUnit, setCustomUnit] = useState('');
+    const [createLocation, setCreateLocation] = useState('');
+    const [customLocation, setCustomLocation] = useState('');
     
     // Loading and reload triggers
     const [isLoading, setIsLoading] = useState(false);
@@ -132,11 +164,16 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
     const [checkOutTxDetails, setCheckOutTxDetails] = useState<any>(null);
     const [checkoutPhoto, setCheckoutPhoto] = useState('');
     const [checkInSearch, setCheckInSearch] = useState('');
+    const [checkInLocation, setCheckInLocation] = useState('');
     const [showCheckInDropdown, setShowCheckInDropdown] = useState(false);
     const [checkOutSearch, setCheckOutSearch] = useState('');
     const [showCheckOutDropdown, setShowCheckOutDropdown] = useState(false);
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
-    const [modalConfig, setModalConfig] = useState<{ type: 'ITEM' | 'DELETE', data: any } | null>(null);
+    const [isAddProjectModalOpen, setIsAddProjectModalOpen] = useState(false);
+    const [rackSearchQuery, setRackSearchQuery] = useState('');
+    const [rackFilterType, setRackFilterType] = useState<'ALL' | 'LOW_STOCK' | 'EMPTY'>('ALL');
+    const [modalConfig, setModalConfig] = useState<{ type: 'ITEM' | 'DELETE' | 'EDIT_TX' | 'DELETE_TX', data: any } | null>(null);
+
 
     // Webcam / Camera Capture states (Optional Feature inside Checkout & Settings)
     const [webcamTarget, setWebcamTarget] = useState<'CHECKOUT' | null>(null);
@@ -260,10 +297,28 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
             }));
         } else if (view === 'CURRENT_STOCK') {
             sheetName = "Current Stock";
-            const filtered = currentStock.filter(i => {
-                return i.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    i.itemCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    i.category.toLowerCase().includes(searchQuery.toLowerCase());
+            const filtered = currentStock.filter(item => {
+                const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    item.itemCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    item.category.toLowerCase().includes(searchQuery.toLowerCase());
+                if (!matchesSearch) return false;
+
+                if (selectedStockCategory !== 'ALL' && item.category !== selectedStockCategory) return false;
+
+                if (selectedStockRack !== 'ALL') {
+                    const itemRack = normalizeRackLocation(item.location || 'MAIN STORE');
+                    if (itemRack !== selectedStockRack) return false;
+                }
+
+                if (selectedStockStatus !== 'ALL') {
+                    const isLow = item.availableStock <= (item.minThreshold || 5);
+                    const isOut = item.availableStock === 0;
+                    if (selectedStockStatus === 'OUT' && !isOut) return false;
+                    if (selectedStockStatus === 'LOW' && (!isLow || isOut)) return false;
+                    if (selectedStockStatus === 'SECURE' && isLow) return false;
+                }
+
+                return true;
             });
             dataList = filtered.map((item, idx) => ({
                 'Sr No.': idx + 1,
@@ -322,49 +377,167 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
         window.print();
     };
 
-    // WhatsApp Message Formatter
-    const formatWhatsAppMessage = (tx: any) => {
+    // Shared WhatsApp trigger for transaction slips
+    const handleShareWhatsApp = (tx: any) => {
         const dateStr = new Date(tx.timestamp || Date.now()).toLocaleDateString('en-GB', { 
             day: '2-digit', 
             month: 'short', 
             year: 'numeric' 
         }).replace(/ /g, '-');
         
+        const stockItem = currentStock.find(i => i.name === tx.materialName || i.itemCode === tx.materialName);
+        const itemRack = tx.location || (stockItem ? stockItem.location : '');
+        const rackInfo = itemRack ? ` [Rack: ${itemRack}]` : "";
+
         let text = "";
-        if (tx.type === 'INWARD') {
-            text = `STORE RECEIPT SLIP
-
-Date: ${dateStr}
-Material: ${tx.materialName}
-Quantity: ${tx.quantity} ${tx.unit || 'Nos'}
-Received From: ${tx.staffName}
-Project: ${tx.projectId || 'N/A'}
-
-Current Balance: ${tx.balanceStockAfterIssue} ${tx.unit || 'Nos'}
-
-ENGLABS STORE`;
+        if (tx.type === 'INWARD' || tx.type === 'IN') {
+            text = `STORE RECEIPT SLIP\n\nDate: ${dateStr}\nMaterial: ${tx.materialName}${rackInfo}\nQuantity: ${tx.quantity} ${tx.unit || 'Nos'}\nReceived From: ${tx.staffName}\nProject: ${tx.projectId || 'N/A'}\n\nCurrent Balance: ${tx.balanceStockAfterIssue} ${tx.unit || 'Nos'}\n\nENGLABS STORE`;
         } else {
-            text = `STORE ISSUE SLIP
-
-Date: ${dateStr}
-Material: ${tx.materialName}
-Quantity: ${tx.quantity} ${tx.unit || 'Nos'}
-Issued To: ${tx.staffName}
-Project: ${tx.projectId}
-
-Current Balance: ${tx.balanceStockAfterIssue} ${tx.unit || 'Nos'}
-
-ENGLABS STORE`;
+            text = `STORE ISSUE SLIP\n\nDate: ${dateStr}\nMaterial: ${tx.materialName}${rackInfo}\nQuantity: ${tx.quantity} ${tx.unit || 'Nos'}\nIssued To: ${tx.staffName}\nProject: ${tx.projectId}\n\nCurrent Balance: ${tx.balanceStockAfterIssue} ${tx.unit || 'Nos'}\n\nENGLABS STORE`;
         }
-        
-        return `https://wa.me/?text=${encodeURIComponent(text)}`;
+
+        if (navigator.share) {
+            navigator.share({
+                title: tx.type === 'INWARD' || tx.type === 'IN' ? 'STORE RECEIPT SLIP' : 'STORE ISSUE SLIP',
+                text: text
+            }).catch(err => {
+                console.error("Web share failed", err);
+                const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                window.open(url, '_blank');
+            });
+        } else {
+            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
     };
 
-    // Shared WhatsApp trigger
-    const handleShareWhatsApp = (tx: any) => {
-        const url = formatWhatsAppMessage(tx);
-        window.open(url, '_blank');
+    const handleShareStockWhatsApp = () => {
+        const filtered = currentStock.filter(item => {
+            const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                item.itemCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                item.category.toLowerCase().includes(searchQuery.toLowerCase());
+            if (!matchesSearch) return false;
+
+            if (selectedStockCategory !== 'ALL' && item.category !== selectedStockCategory) return false;
+
+            if (selectedStockRack !== 'ALL') {
+                const itemRack = normalizeRackLocation(item.location || 'MAIN STORE');
+                if (itemRack !== selectedStockRack) return false;
+            }
+
+            if (selectedStockStatus !== 'ALL') {
+                const isLow = item.availableStock <= (item.minThreshold || 5);
+                const isOut = item.availableStock === 0;
+                if (selectedStockStatus === 'OUT' && !isOut) return false;
+                if (selectedStockStatus === 'LOW' && (!isLow || isOut)) return false;
+                if (selectedStockStatus === 'SECURE' && isLow) return false;
+            }
+
+            return true;
+        });
+
+        const dateStr = new Date().toLocaleDateString('en-GB', { 
+            day: '2-digit', 
+            month: 'short', 
+            year: 'numeric' 
+        }).replace(/ /g, '-');
+
+        let text = `ENGLABS CURRENT STOCK REPORT\n`;
+        text += `Date: ${dateStr}\n`;
+        text += `Total Items: ${filtered.length}\n`;
+        if (searchQuery) {
+            text += `Filter Query: "${searchQuery}"\n`;
+        }
+        text += `\n`;
+
+        filtered.forEach((item, idx) => {
+            const isLowStock = item.availableStock <= (item.minThreshold || 5);
+            const status = isLowStock ? (item.availableStock === 0 ? '🔴 OUT' : '🟡 LOW') : '🟢 OK';
+            const rackLoc = item.location ? normalizeRackLocation(item.location) : 'N/A';
+            const idxStr = String(idx + 1).padStart(3, '0');
+            text += `${idxStr}. ${item.name} (${item.itemCode}): ${item.availableStock} ${item.unit || 'Nos'} [Rack: ${rackLoc}] [${status}]\n`;
+        });
+
+        text += `\nENGLABS STORE`;
+
+        // Check if Web Share API is available (optimal for Capacitor mobile)
+        if (navigator.share) {
+            navigator.share({
+                title: 'ENGLABS CURRENT STOCK REPORT',
+                text: text
+            }).catch(err => {
+                console.error("Web share failed, trying fallback to WhatsApp URL", err);
+                navigator.clipboard.writeText(text).then(() => {
+                    alert("Stock report copied to clipboard! Opening WhatsApp...");
+                }).catch(cErr => console.error("Clipboard copy failed:", cErr));
+                
+                const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                window.open(url, '_blank');
+            });
+        } else {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Stock report copied to clipboard! Opening WhatsApp...");
+            }).catch(cErr => console.error("Clipboard copy failed:", cErr));
+            
+            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
     };
+
+    // Helper to compute rack mapping
+    const computeRackInventory = () => {
+        const rackMap: Record<string, CurrentStockItem[]> = {};
+        
+        // Seed standard racks
+        const STANDARD_RACKS = ['Rack No. 1', 'Rack No. 2', 'Rack No. 3', 'Rack No. 4', 'Rack No. 5', 'Rack No. 6', 'Rack B-01'];
+        STANDARD_RACKS.forEach(r => {
+            rackMap[r] = [];
+        });
+
+        currentStock.forEach(item => {
+            const loc = item.location ? normalizeRackLocation(item.location) : 'Unassigned';
+            if (!rackMap[loc]) {
+                rackMap[loc] = [];
+            }
+            rackMap[loc].push(item);
+        });
+
+        // Convert to array
+        let racksList = Object.keys(rackMap).map(name => ({
+            name,
+            items: rackMap[name]
+        }));
+
+        // Apply filters
+        if (rackSearchQuery) {
+            const query = rackSearchQuery.toLowerCase();
+            racksList = racksList.filter(rack => {
+                const matchesRackName = rack.name.toLowerCase().includes(query);
+                const matchesMaterial = rack.items.some(item => 
+                    item.name.toLowerCase().includes(query) || 
+                    item.itemCode.toLowerCase().includes(query)
+                );
+                return matchesRackName || matchesMaterial;
+            });
+        }
+
+        if (rackFilterType === 'EMPTY') {
+            racksList = racksList.filter(rack => rack.items.length === 0);
+        } else if (rackFilterType === 'LOW_STOCK') {
+            racksList = racksList.filter(rack => 
+                rack.items.some(item => item.availableStock <= (item.minThreshold || 5))
+            );
+        }
+
+        // Sort by rack name
+        racksList.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+
+        return racksList;
+    };
+
+    const racksToDisplay = computeRackInventory();
+
+
 
     // Live Register Filter Query helper
     const getFilteredTransactions = (txs: MasterRegisterEntry[]) => {
@@ -383,9 +556,21 @@ ENGLABS STORE`;
                 return txDate.toDateString() === now.toDateString();
             } else if (liveFilter === 'WEEK') {
                 return (now.getTime() - txDate.getTime()) <= 7 * 24 * 60 * 60 * 1000;
-            } else {
-                // Month filter matches the current month
+            } else if (liveFilter === 'MONTH') {
                 return txDate.getMonth() === now.getMonth() && txDate.getFullYear() === now.getFullYear();
+            } else if (liveFilter === 'CUSTOM') {
+                if (!customStartDate && !customEndDate) return true;
+                const start = customStartDate ? new Date(customStartDate) : null;
+                const end = customEndDate ? new Date(customEndDate) : null;
+                if (start) {
+                    start.setHours(0, 0, 0, 0);
+                }
+                if (end) {
+                    end.setHours(23, 59, 59, 999);
+                }
+                if (start && txDate < start) return false;
+                if (end && txDate > end) return false;
+                return true;
             }
         });
     };
@@ -489,11 +674,11 @@ ENGLABS STORE`;
             
             {/* MOBILE SIDEBAR DRAWER OVERLAY */}
             {isMobileSidebarOpen && (
-                <div className="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm md:hidden animate-in fade-in duration-200" onClick={() => setIsMobileSidebarOpen(false)} />
+                <div className="fixed inset-0 z-[110] bg-slate-900/60 backdrop-blur-sm md:hidden animate-in fade-in duration-200" onClick={() => setIsMobileSidebarOpen(false)} />
             )}
 
             {/* MOBILE SIDEBAR DRAWER PANEL */}
-            <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-100 flex flex-col shrink-0 border-r border-slate-800 transition-transform duration-300 transform md:hidden ${
+            <aside className={`fixed inset-y-0 left-0 z-[120] w-64 bg-slate-900 text-slate-100 flex flex-col shrink-0 border-r border-slate-800 transition-transform duration-300 transform md:hidden ${
                 isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'
             }`}>
                 <div className="absolute top-4 right-4 md:hidden">
@@ -534,7 +719,7 @@ ENGLABS STORE`;
                                     {view === 'REPORTS' && 'Monthly Audit Reports'}
                                     {view === 'SETTINGS' && 'System Settings'}
                                 </h1>
-                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Forensic Store Audits & Slips</span>
+                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Store Stock Registry</span>
                             </div>
                         </div>
                         
@@ -593,7 +778,13 @@ ENGLABS STORE`;
                                     </button>
                                 </>
                             )}
+                            {view === 'CURRENT_STOCK' && (
+                                <button onClick={handleShareStockWhatsApp} className="p-2.5 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-xl transition-all border border-emerald-150 shadow-sm" title="Share Stock on WhatsApp">
+                                    <Share2 className="w-4 h-4" />
+                                </button>
+                            )}
                             <button onClick={() => setRefreshTrigger(p => p + 1)} className="p-2.5 bg-white text-slate-700 hover:bg-slate-50 rounded-xl transition-all border border-slate-100 shadow-sm" title="Refresh Database">
+
                                 <RefreshCcw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
                             </button>
                         </div>
@@ -724,6 +915,103 @@ ENGLABS STORE`;
                                 </div>
                             </div>
 
+                            {/* RACK-WISE INVENTORY VIEW */}
+                            <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+                                <div className="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-100 pb-3 mb-4 gap-3 sm:gap-0">
+                                    <div>
+                                        <h3 className="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                                            <Folder className="w-4 h-4 text-indigo-600" /> Rack-Wise Inventory Map
+                                        </h3>
+                                        <p className="text-[9px] text-slate-400 font-bold mt-0.5">Physical warehouse layout and item location map</p>
+                                    </div>
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <div className="relative">
+                                            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400" />
+                                            <input 
+                                                type="text" 
+                                                placeholder="Search Rack/Item..." 
+                                                className="bg-slate-50 border border-slate-200 rounded-lg py-1 pl-7 pr-3 text-[10px] font-bold focus:border-indigo-500 outline-none w-36"
+                                                value={rackSearchQuery}
+                                                onChange={(e) => setRackSearchQuery(e.target.value)}
+                                            />
+                                        </div>
+                                        <select
+                                            className="bg-slate-50 border border-slate-200 rounded-lg py-1 px-2 text-[10px] font-black uppercase text-slate-600 focus:border-indigo-500 outline-none"
+                                            value={rackFilterType}
+                                            onChange={(e) => setRackFilterType(e.target.value as any)}
+                                        >
+                                            <option value="ALL">All Racks</option>
+                                            <option value="LOW_STOCK">Low/Out Stock</option>
+                                            <option value="EMPTY">Empty Racks</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[360px] overflow-y-auto pr-2 custom-scrollbar">
+                                    {racksToDisplay.length === 0 ? (
+                                        <p className="text-slate-400 text-xs py-8 text-center font-bold col-span-full">No racks found matching criteria.</p>
+                                    ) : (
+                                        racksToDisplay.map(rack => {
+                                            const totalItems = rack.items.length;
+                                            const hasLowStock = rack.items.some(item => item.availableStock <= (item.minThreshold || 5));
+                                            const hasOutOfStock = rack.items.some(item => item.availableStock === 0);
+                                            
+                                            return (
+                                                <div key={rack.name} className={`border rounded-2xl p-4 transition-all hover:shadow-md flex flex-col justify-between ${
+                                                    hasOutOfStock 
+                                                        ? 'bg-rose-50/10 border-rose-100/60 hover:border-rose-200' 
+                                                        : hasLowStock 
+                                                            ? 'bg-amber-50/10 border-amber-100/60 hover:border-amber-200' 
+                                                            : 'bg-slate-50/30 border-slate-100 hover:border-slate-200'
+                                                }`}>
+                                                    <div>
+                                                        <div className="flex justify-between items-center border-b border-slate-100 pb-2 mb-3">
+                                                            <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider ${
+                                                                hasOutOfStock 
+                                                                    ? 'bg-rose-50 text-rose-650 border border-rose-100' 
+                                                                    : hasLowStock 
+                                                                        ? 'bg-amber-50 text-amber-650 border border-amber-100' 
+                                                                        : 'bg-slate-100 text-slate-700'
+                                                            }`}>
+                                                                📍 {rack.name}
+                                                            </span>
+                                                            <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">
+                                                                {totalItems} {totalItems === 1 ? 'Item' : 'Items'}
+                                                            </span>
+                                                        </div>
+
+                                                        {totalItems === 0 ? (
+                                                            <span className="text-[10px] italic text-slate-400 font-bold block py-4 text-center bg-slate-50 rounded-xl border border-slate-100">⚠️ EMPTY RACK</span>
+                                                        ) : (
+                                                            <div className="space-y-2">
+                                                                {rack.items.map(item => {
+                                                                    const isLow = item.availableStock <= (item.minThreshold || 5);
+                                                                    const isOut = item.availableStock === 0;
+                                                                    return (
+                                                                        <div key={item.itemCode} className="flex justify-between items-center text-[10px] font-bold">
+                                                                            <span className="text-slate-700 truncate pr-2" title={item.name}>{item.name}</span>
+                                                                            <span className={`shrink-0 font-black px-1.5 py-0.5 rounded ${
+                                                                                isOut 
+                                                                                    ? 'text-rose-600 bg-rose-50' 
+                                                                                    : isLow 
+                                                                                        ? 'text-amber-600 bg-amber-50' 
+                                                                                        : 'text-slate-600 bg-slate-100'
+                                                                            }`}>
+                                                                                {item.availableStock} {item.unit}
+                                                                            </span>
+                                                                        </div>
+                                                                    );
+                                                                })}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })
+                                    )}
+                                </div>
+                            </div>
+
                             {/* Recent Transactions List (Mini Register) */}
                             <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
                                 <h3 className="text-xs font-black text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-slate-50 pb-2">
@@ -787,7 +1075,8 @@ ENGLABS STORE`;
                             </div>
 
                             {checkInSuccess ? (
-                                <div className="space-y-6 text-center py-4">
+                                <div className="space-y-6 text-center py-4 animate-in fade-in duration-300">
+                                    <img src={logo} alt="ENGLABS" className="h-10 object-contain mx-auto mb-4" />
                                     <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto text-emerald-500">
                                         <CheckCircle2 className="w-10 h-10" />
                                     </div>
@@ -1074,20 +1363,33 @@ ENGLABS STORE`;
                                         />
                                     </div>
 
-                                    {/* Project (Optional) */}
-                                    <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Project Name (Optional)</label>
-                                        <select
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
-                                            value={checkInProject}
-                                            onChange={(e) => setCheckInProject(e.target.value)}
-                                        >
-                                            <option value="">General Store / None</option>
-                                            {projectList.map(p => (
-                                                <option key={p} value={p}>{p}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                     {/* Project ID (Optional) */}
+                                     <div className="space-y-1.5">
+                                         <div className="flex justify-between items-center">
+                                             <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Project ID (Optional)</label>
+                                             <button
+                                                 type="button"
+                                                 onClick={() => setIsAddProjectModalOpen(true)}
+                                                 className="text-[9px] font-black text-indigo-600 hover:text-indigo-800 uppercase tracking-widest flex items-center gap-1 cursor-pointer transition-colors"
+                                             >
+                                                 <Plus className="w-2.5 h-2.5" /> Create Project ID
+                                             </button>
+                                         </div>
+                                         <select
+                                             className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                             value={checkInProject}
+                                             onChange={(e) => setCheckInProject(e.target.value)}
+                                         >
+                                             <option value="">General Store / None</option>
+                                             {projectList.map(p => {
+                                                 const proj = projects.find(proj => proj.projectId === p);
+                                                 const displayLabel = proj && proj.client ? `${p} - ${proj.client}` : p;
+                                                 return (
+                                                     <option key={p} value={p}>{displayLabel}</option>
+                                                 );
+                                             })}
+                                         </select>
+                                     </div>
 
                                     {/* Received By */}
                                     <div className="space-y-1.5">
@@ -1143,7 +1445,8 @@ ENGLABS STORE`;
                             </div>
 
                             {checkOutSuccess ? (
-                                <div className="space-y-6 text-center py-4">
+                                <div className="space-y-6 text-center py-4 animate-in fade-in duration-300">
+                                    <img src={logo} alt="ENGLABS" className="h-10 object-contain mx-auto mb-4" />
                                     <div className="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mx-auto text-amber-500">
                                         <CheckCircle2 className="w-10 h-10" />
                                     </div>
@@ -1368,21 +1671,34 @@ ENGLABS STORE`;
                                         </select>
                                     </div>
 
-                                    {/* Project Name */}
-                                    <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Project Name</label>
-                                        <select
-                                            required
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
-                                            value={checkOutProjectName}
-                                            onChange={(e) => setCheckOutProjectName(e.target.value)}
-                                        >
-                                            <option value="">Select Project...</option>
-                                            {projectList.map(p => (
-                                                <option key={p} value={p}>{p}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                     {/* Project ID */}
+                                     <div className="space-y-1.5">
+                                         <div className="flex justify-between items-center">
+                                             <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Project ID</label>
+                                             <button
+                                                 type="button"
+                                                 onClick={() => setIsAddProjectModalOpen(true)}
+                                                 className="text-[9px] font-black text-indigo-600 hover:text-indigo-800 uppercase tracking-widest flex items-center gap-1 cursor-pointer transition-colors"
+                                             >
+                                                 <Plus className="w-2.5 h-2.5" /> Create Project ID
+                                             </button>
+                                         </div>
+                                         <select
+                                             required
+                                             className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                             value={checkOutProjectName}
+                                             onChange={(e) => setCheckOutProjectName(e.target.value)}
+                                         >
+                                             <option value="">Select Project...</option>
+                                             {projectList.map(p => {
+                                                 const proj = projects.find(proj => proj.projectId === p);
+                                                 const displayLabel = proj && proj.client ? `${p} - ${proj.client}` : p;
+                                                 return (
+                                                     <option key={p} value={p}>{displayLabel}</option>
+                                                 );
+                                             })}
+                                         </select>
+                                     </div>
 
                                     {/* Issued By */}
                                     <div className="space-y-1.5">
@@ -1463,24 +1779,46 @@ ENGLABS STORE`;
                         <div className="max-w-7xl mx-auto space-y-6 animate-in fade-in duration-300">
                             {/* Filter Bar & Search */}
                             <div className="bg-white rounded-3xl p-4 border border-slate-100 shadow-sm flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-                                <div className="flex gap-1.5 bg-slate-50 p-1 rounded-xl w-full md:w-auto overflow-x-auto">
-                                    {[
-                                        { id: 'TODAY', label: 'Today' },
-                                        { id: 'WEEK', label: 'This Week' },
-                                        { id: 'MONTH', label: 'This Month' }
-                                    ].map(f => (
-                                        <button
-                                            key={f.id}
-                                            onClick={() => setLiveFilter(f.id as any)}
-                                            className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all whitespace-nowrap ${
-                                                liveFilter === f.id 
-                                                    ? 'bg-[#0e4368] text-white shadow-sm' 
-                                                    : 'text-slate-500 hover:text-slate-800'
-                                            }`}
-                                        >
-                                            {f.label}
-                                        </button>
-                                    ))}
+                                <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
+                                    <div className="flex gap-1.5 bg-slate-50 p-1 rounded-xl overflow-x-auto">
+                                        {[
+                                            { id: 'TODAY', label: 'Today' },
+                                            { id: 'WEEK', label: 'This Week' },
+                                            { id: 'MONTH', label: 'This Month' },
+                                            { id: 'CUSTOM', label: 'Custom' }
+                                        ].map(f => (
+                                            <button
+                                                key={f.id}
+                                                onClick={() => setLiveFilter(f.id as any)}
+                                                className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all whitespace-nowrap ${
+                                                    liveFilter === f.id 
+                                                        ? 'bg-[#0e4368] text-white shadow-sm' 
+                                                        : 'text-slate-500 hover:text-slate-800'
+                                                }`}
+                                            >
+                                                {f.label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    
+                                    {liveFilter === 'CUSTOM' && (
+                                        <div className="flex items-center gap-2 bg-slate-50 p-1 rounded-xl border border-slate-100 animate-in slide-in-from-left duration-250">
+                                            <span className="text-[9px] font-black uppercase text-slate-400 pl-2">From:</span>
+                                            <input 
+                                                type="date" 
+                                                value={customStartDate} 
+                                                onChange={(e) => setCustomStartDate(e.target.value)}
+                                                className="bg-white border border-slate-200 rounded-lg px-2 py-1 text-[10px] font-bold text-slate-700 outline-none focus:border-[#0e4368]"
+                                            />
+                                            <span className="text-[9px] font-black uppercase text-slate-400">To:</span>
+                                            <input 
+                                                type="date" 
+                                                value={customEndDate} 
+                                                onChange={(e) => setCustomEndDate(e.target.value)}
+                                                className="bg-white border border-slate-200 rounded-lg px-2 py-1 text-[10px] font-bold text-slate-700 outline-none focus:border-[#0e4368]"
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                                     Showing {getFilteredTransactions(masterTransactions).length} transactions
@@ -1499,8 +1837,9 @@ ENGLABS STORE`;
                                                 <th className="py-4 px-4 text-center">Out</th>
                                                 <th className="py-4 px-4 text-center">Balance</th>
                                                 <th className="py-4 px-4">Staff / Supplier</th>
+                                                <th className="py-4 px-4">Project</th>
                                                 <th className="py-4 px-4">Remarks</th>
-                                                <th className="py-4 px-4 text-center">WhatsApp</th>
+                                                <th className="py-4 px-4 text-center">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-slate-50">
@@ -1531,21 +1870,42 @@ ENGLABS STORE`;
                                                         <span className="font-bold text-slate-700 block">{tx.staffName}</span>
                                                         <span className="text-[8px] text-slate-400 font-black uppercase tracking-wider block">Issued by: {tx.issuedBy}</span>
                                                     </td>
+                                                    <td className="py-4 px-4">
+                                                        <span className="font-bold text-[10px] text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200/50">
+                                                            {tx.projectId || 'GENERAL'}
+                                                        </span>
+                                                    </td>
                                                     <td className="py-4 px-4 text-slate-400 italic">{tx.remarks}</td>
                                                     <td className="py-4 px-4 text-center">
-                                                        <button
-                                                            onClick={() => handleShareWhatsApp(tx)}
-                                                            className="inline-flex items-center justify-center p-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl transition-all border border-emerald-150"
-                                                            title="Share slip on WhatsApp"
-                                                        >
-                                                            <Smartphone className="w-3.5 h-3.5" />
-                                                        </button>
+                                                        <div className="flex items-center justify-center gap-1.5">
+                                                            <button
+                                                                onClick={() => handleShareWhatsApp(tx)}
+                                                                className="inline-flex items-center justify-center p-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl transition-all border border-emerald-150"
+                                                                title="Share slip on WhatsApp"
+                                                            >
+                                                                <Share2 className="w-3.5 h-3.5" />
+                                                            </button>
+                                                            <button
+                                                                onClick={() => setModalConfig({ type: 'EDIT_TX', data: tx })}
+                                                                className="inline-flex items-center justify-center p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition-all border border-blue-150"
+                                                                title="Edit Transaction"
+                                                            >
+                                                                <Edit3 className="w-3.5 h-3.5" />
+                                                            </button>
+                                                            <button
+                                                                onClick={() => setModalConfig({ type: 'DELETE_TX', data: tx })}
+                                                                className="inline-flex items-center justify-center p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-all border border-red-150"
+                                                                title="Delete Transaction"
+                                                            >
+                                                                <Trash2 className="w-3.5 h-3.5" />
+                                                            </button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             ))}
                                             {getFilteredTransactions(masterTransactions).length === 0 && (
                                                 <tr>
-                                                    <td colSpan={8} className="py-12 text-center text-slate-400 font-bold">No register entries found.</td>
+                                                    <td colSpan={9} className="py-12 text-center text-slate-400 font-bold">No register entries found.</td>
                                                 </tr>
                                             )}
                                         </tbody>
@@ -1558,6 +1918,72 @@ ENGLABS STORE`;
                     {/* 5. CURRENT STOCK VIEW */}
                     {view === 'CURRENT_STOCK' && (
                         <div className="max-w-7xl mx-auto space-y-6 animate-in fade-in duration-300">
+                            {/* Actions and Filters Bar */}
+                            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm print:hidden">
+                                <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                                    {/* Category Filter */}
+                                    <div className="flex flex-col gap-1">
+                                        <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest pl-1">Category</label>
+                                        <select
+                                            value={selectedStockCategory}
+                                            onChange={(e) => setSelectedStockCategory(e.target.value)}
+                                            className="bg-slate-50 border border-slate-250 rounded-xl py-2 px-3 text-[11px] font-bold text-slate-700 focus:outline-none focus:border-indigo-500 transition-all min-w-[140px]"
+                                        >
+                                            <option value="ALL">All Categories</option>
+                                            {Array.from(new Set(currentStock.map(i => i.category).filter(Boolean))).sort().map(cat => (
+                                                <option key={cat} value={cat}>{cat}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    {/* Rack Filter */}
+                                    <div className="flex flex-col gap-1">
+                                        <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest pl-1">Rack Location</label>
+                                        <select
+                                            value={selectedStockRack}
+                                            onChange={(e) => setSelectedStockRack(e.target.value)}
+                                            className="bg-slate-50 border border-slate-250 rounded-xl py-2 px-3 text-[11px] font-bold text-slate-700 focus:outline-none focus:border-indigo-500 transition-all min-w-[140px]"
+                                        >
+                                            <option value="ALL">All Racks</option>
+                                            {Array.from(new Set(currentStock.map(i => normalizeRackLocation(i.location || 'MAIN STORE')).filter(Boolean))).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })).map(loc => (
+                                                <option key={loc} value={loc}>{loc}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    {/* Status Filter */}
+                                    <div className="flex flex-col gap-1">
+                                        <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest pl-1">Stock Status</label>
+                                        <select
+                                            value={selectedStockStatus}
+                                            onChange={(e) => setSelectedStockStatus(e.target.value)}
+                                            className="bg-slate-50 border border-slate-250 rounded-xl py-2 px-3 text-[11px] font-bold text-slate-700 focus:outline-none focus:border-indigo-500 transition-all min-w-[140px]"
+                                        >
+                                            <option value="ALL">All Statuses</option>
+                                            <option value="SECURE">Secure Stock</option>
+                                            <option value="LOW">Low Stock</option>
+                                            <option value="OUT">Out of Stock</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setCreateCategory('');
+                                        setCustomCategory('');
+                                        setCreateUnit('');
+                                        setCustomUnit('');
+                                        setCreateLocation('');
+                                        setCustomLocation('');
+                                        setIsCreateMaterialModalOpen(true);
+                                    }}
+                                    className="bg-[#0e4368] hover:bg-[#0b3350] text-emerald-400 font-black px-6 py-3.5 rounded-xl flex items-center gap-2 text-[10px] uppercase tracking-widest transition-all shadow-md active:scale-95 cursor-pointer self-stretch md:self-auto justify-center border border-slate-750"
+                                >
+                                    <Plus className="w-4 h-4 text-emerald-400" /> Add Material
+                                </button>
+                            </div>
+
                             <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 overflow-hidden">
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-left border-collapse text-xs print:text-[10px]">
@@ -1567,6 +1993,7 @@ ENGLABS STORE`;
                                                 <th className="py-4 px-4">Material Code</th>
                                                 <th className="py-4 px-4">Material Name</th>
                                                 <th className="py-4 px-4">Category</th>
+                                                <th className="py-4 px-4">Rack</th>
                                                 <th className="py-4 px-4 text-center">Available Qty</th>
                                                 <th className="py-4 px-4">Unit</th>
                                                 <th className="py-4 px-4 text-center">Status</th>
@@ -1576,9 +2003,33 @@ ENGLABS STORE`;
                                         <tbody className="divide-y divide-slate-50">
                                             {currentStock
                                                 .filter(item => {
-                                                    return item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                                    // Search query filter
+                                                    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                                                         item.itemCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
                                                         item.category.toLowerCase().includes(searchQuery.toLowerCase());
+                                                    if (!matchesSearch) return false;
+
+                                                    // Category filter
+                                                    if (selectedStockCategory !== 'ALL') {
+                                                        if (item.category !== selectedStockCategory) return false;
+                                                    }
+
+                                                    // Rack filter
+                                                    if (selectedStockRack !== 'ALL') {
+                                                        const itemRack = normalizeRackLocation(item.location || 'MAIN STORE');
+                                                        if (itemRack !== selectedStockRack) return false;
+                                                    }
+
+                                                    // Status filter
+                                                    if (selectedStockStatus !== 'ALL') {
+                                                        const isLow = item.availableStock <= (item.minThreshold || 5);
+                                                        const isOut = item.availableStock === 0;
+                                                        if (selectedStockStatus === 'OUT' && !isOut) return false;
+                                                        if (selectedStockStatus === 'LOW' && (!isLow || isOut)) return false;
+                                                        if (selectedStockStatus === 'SECURE' && isLow) return false;
+                                                    }
+
+                                                    return true;
                                                 })
                                                 .map((item, idx) => {
                                                     const isLowStock = item.availableStock <= (item.minThreshold || 5);
@@ -1589,9 +2040,10 @@ ENGLABS STORE`;
                                                                 : 'hover:bg-slate-50/30'
                                                         }`}>
                                                             <td className="py-4 px-4 font-bold text-slate-500">{String(idx + 1).padStart(3, '0')}</td>
-                                                            <td className="py-4 px-4 font-bold text-slate-600">{item.itemCode}</td>
+                                                            <td className="py-4 px-4 font-bold text-slate-650">{item.itemCode}</td>
                                                             <td className="py-4 px-4 font-black">{item.name}</td>
                                                             <td className="py-4 px-4 font-bold text-slate-500 uppercase">{item.category}</td>
+                                                            <td className="py-4 px-4 font-bold text-slate-700">{normalizeRackLocation(item.location || 'N/A')}</td>
                                                             <td className="py-4 px-4 text-center font-black text-sm">{item.availableStock}</td>
                                                             <td className="py-4 px-4 font-bold text-slate-500 uppercase">{item.unit}</td>
                                                             <td className="py-4 px-4 text-center">
@@ -1615,16 +2067,23 @@ ENGLABS STORE`;
                                                                     >
                                                                         <Edit3 className="w-3.5 h-3.5" />
                                                                     </button>
-                                                                    {userRole === 'ADMIN' && (
-                                                                        <button 
-                                                                            type="button"
-                                                                            onClick={() => setModalConfig({ type: 'DELETE', data: item })}
-                                                                            className="p-1.5 hover:bg-slate-100 rounded-xl text-rose-600 hover:text-rose-800 transition-all border border-transparent hover:border-slate-150"
-                                                                            title="Delete material"
-                                                                        >
-                                                                            <Trash2 className="w-3.5 h-3.5" />
-                                                                        </button>
-                                                                    )}
+                                                                    <button 
+                                                                        type="button"
+                                                                        onClick={() => {
+                                                                            if (userRole !== 'ADMIN') {
+                                                                                const pass = prompt("ADMIN AUTHORIZATION REQUIRED\nEnter Passcode to Delete Material:");
+                                                                                if (pass !== '9999' && pass !== '0001') {
+                                                                                    alert("Incorrect PIN. Access Denied.");
+                                                                                    return;
+                                                                                }
+                                                                            }
+                                                                            setModalConfig({ type: 'DELETE', data: item });
+                                                                        }}
+                                                                        className="p-1.5 hover:bg-slate-100 rounded-xl text-rose-600 hover:text-rose-800 transition-all border border-transparent hover:border-slate-150"
+                                                                        title="Delete material"
+                                                                    >
+                                                                        <Trash2 className="w-3.5 h-3.5" />
+                                                                    </button>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -1756,7 +2215,18 @@ ENGLABS STORE`;
 
                             {/* Project registry settings */}
                             <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
-                                <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest border-b border-slate-50 pb-3 mb-4">Active Projects</h3>
+                                <div className="flex justify-between items-center border-b border-slate-50 pb-3 mb-4">
+                                    <div>
+                                        <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">Active Projects</h3>
+                                        <p className="text-[9px] text-slate-400 font-bold mt-0.5">Manage active project IDs for inward/outward transactions</p>
+                                    </div>
+                                    <button
+                                        onClick={() => setIsAddProjectModalOpen(true)}
+                                        className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-emerald-700 transition-all"
+                                    >
+                                        <Plus className="w-3 h-3" /> Add Project
+                                    </button>
+                                </div>
                                 <div className="flex flex-wrap gap-2">
                                     {projectList.map(proj => (
                                         <span key={proj} className="px-3 py-1.5 bg-slate-100 text-slate-600 rounded-xl text-[10px] font-black tracking-wide uppercase border border-slate-150">
@@ -1781,28 +2251,98 @@ ENGLABS STORE`;
                 />
             )}
 
+            {isAddProjectModalOpen && (
+                <NewProjectModal 
+                    isOpen={isAddProjectModalOpen}
+                    onClose={() => setIsAddProjectModalOpen(false)}
+                    onAdd={(newProj) => {
+                        if (onAddProject) {
+                            onAddProject(newProj);
+                        }
+                    }}
+                    existingProjects={projectList}
+                />
+            )}
+
             {/* EDIT STOCK LEVEL MODAL */}
             {modalConfig && modalConfig.type === 'ITEM' && (
-                <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-[110] flex items-center justify-center p-6 print:hidden animate-in fade-in duration-200">
-                    <div className="relative w-full max-w-sm bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-slate-100 animate-in zoom-in-95 duration-200">
-                        <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-[110] flex items-center justify-center p-4 sm:p-6 print:hidden animate-in fade-in duration-200">
+                    <div className="relative w-full max-w-md bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-slate-100 animate-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
+                        <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 shrink-0">
                             <div>
-                                <h3 className="text-sm font-black text-slate-900 tracking-tight">Adjust Stock: {modalConfig.data.name}</h3>
-                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Audit Correction ({modalConfig.data.itemCode})</p>
+                                <h3 className="text-sm font-black text-slate-900 tracking-tight">Edit Material: {modalConfig.data.name}</h3>
+                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Catalog Code ({modalConfig.data.itemCode})</p>
                             </div>
                             <button onClick={() => setModalConfig(null)} className="p-1.5 hover:bg-white rounded-full transition-colors text-slate-400 hover:text-slate-900 shadow-sm border border-transparent hover:border-slate-100">
                                 <X className="w-4 h-4" />
                             </button>
                         </div>
-                        <div className="p-6 space-y-4">
+                        
+                        <div className="p-6 space-y-4 overflow-y-auto custom-scrollbar flex-1">
+                            {/* Material Name */}
+                            <div className="space-y-1.5">
+                                <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Material Name</label>
+                                <input 
+                                    type="text" 
+                                    defaultValue={modalConfig.data.name}
+                                    id="stock-name-input"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                />
+                            </div>
+
+                            {/* Category & Unit in one row */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1.5">
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Category</label>
+                                    <input 
+                                        type="text" 
+                                        defaultValue={modalConfig.data.category}
+                                        id="stock-category-input"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Unit</label>
+                                    <input 
+                                        type="text" 
+                                        defaultValue={modalConfig.data.unit}
+                                        id="stock-unit-input"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Unit Price & Min Threshold in one row */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1.5">
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Unit Price (₹)</label>
+                                    <input 
+                                        type="number" 
+                                        defaultValue={modalConfig.data.unitPrice || 0}
+                                        id="stock-price-input"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Min Threshold</label>
+                                    <input 
+                                        type="number" 
+                                        defaultValue={modalConfig.data.minThreshold || 5}
+                                        id="stock-threshold-input"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Available Stock Level */}
                             <div className="space-y-1.5">
                                 <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
-                                    Available Stock Level {modalConfig.data.unit && `(in ${modalConfig.data.unit})`}
+                                    Available Stock Level
                                 </label>
                                 <div className="relative flex items-center">
                                     <input 
                                         type="number" 
-                                        defaultValue={modalConfig.data.availableStock}
+                                        defaultValue={modalConfig.data.availableStock || modalConfig.data.currentStock}
                                         id="stock-adjust-input"
                                         className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-4 pr-16 text-xl font-black text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all text-slate-850"
                                     />
@@ -1813,29 +2353,96 @@ ENGLABS STORE`;
                                     )}
                                 </div>
                             </div>
+
+                            {/* Rack Location */}
+                            <div className="space-y-1.5">
+                                <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
+                                    Rack Location
+                                </label>
+                                <input 
+                                    type="text" 
+                                    defaultValue={modalConfig.data.location || ''}
+                                    placeholder="e.g. Rack No. 4"
+                                    id="stock-location-input"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="p-6 border-t border-slate-100 bg-slate-50 shrink-0 flex gap-3">
+                            <button 
+                                type="button"
+                                onClick={async () => {
+                                    if (userRole !== 'ADMIN') {
+                                        const pass = prompt("ADMIN AUTHORIZATION REQUIRED\nEnter Passcode to Delete Material:");
+                                        if (pass !== '9999' && pass !== '0001') {
+                                            alert("Incorrect PIN. Access Denied.");
+                                            return;
+                                        }
+                                    }
+                                    if (confirm(`Are you sure you want to permanently delete ${modalConfig.data.name}?`)) {
+                                        try {
+                                            setIsLoading(true);
+                                            await deleteInventoryItem(modalConfig.data.itemCode);
+                                            setRefreshTrigger(prev => prev + 1);
+                                            setModalConfig(null);
+                                        } catch (err: any) {
+                                            alert(`Failed to delete: ${err.message || err}`);
+                                        } finally {
+                                            setIsLoading(false);
+                                        }
+                                    }
+                                }}
+                                disabled={isLoading}
+                                className="px-4 py-3.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 font-black rounded-xl transition-all uppercase tracking-widest text-[9px] flex items-center justify-center gap-1.5 disabled:opacity-50"
+                                title="Delete Material Record"
+                            >
+                                <Trash2 className="w-3.5 h-3.5" />
+                                Delete
+                            </button>
+
                             <button 
                                 onClick={async () => {
-                                    const input = document.getElementById('stock-adjust-input') as HTMLInputElement;
-                                    const newQty = parseInt(input.value);
-                                    if (isNaN(newQty) || newQty < 0) {
+                                    const nameVal = (document.getElementById('stock-name-input') as HTMLInputElement).value.trim();
+                                    const catVal = (document.getElementById('stock-category-input') as HTMLInputElement).value.trim();
+                                    const unitVal = (document.getElementById('stock-unit-input') as HTMLInputElement).value.trim();
+                                    const priceVal = parseFloat((document.getElementById('stock-price-input') as HTMLInputElement).value);
+                                    const threshVal = parseInt((document.getElementById('stock-threshold-input') as HTMLInputElement).value);
+                                    const qtyVal = parseInt((document.getElementById('stock-adjust-input') as HTMLInputElement).value);
+                                    const locVal = normalizeRackLocation((document.getElementById('stock-location-input') as HTMLInputElement).value.trim());
+                                    
+                                    if (!nameVal) {
+                                        alert("Please enter a valid material name.");
+                                        return;
+                                    }
+                                    if (isNaN(qtyVal) || qtyVal < 0) {
                                         alert("Please enter a valid stock level.");
                                         return;
                                     }
                                     try {
                                         setIsLoading(true);
-                                        await updateInventoryItemStock(modalConfig.data.itemCode, newQty);
+                                        await updateInventoryItemDetails(
+                                            modalConfig.data.itemCode, 
+                                            qtyVal, 
+                                            locVal, 
+                                            nameVal, 
+                                            catVal, 
+                                            unitVal, 
+                                            isNaN(threshVal) ? undefined : threshVal,
+                                            isNaN(priceVal) ? undefined : priceVal
+                                        );
                                         setRefreshTrigger(prev => prev + 1);
                                         setModalConfig(null);
                                     } catch (err: any) {
-                                        alert(`Failed to update stock: ${err.message || err}`);
+                                        alert(`Failed to update details: ${err.message || err}`);
                                     } finally {
                                         setIsLoading(false);
                                     }
                                 }} 
                                 disabled={isLoading} 
-                                className="w-full py-3.5 bg-[#0e4368] hover:bg-[#0b3350] text-white font-black rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg text-[10px] uppercase tracking-widest disabled:opacity-50"
+                                className="flex-1 py-3.5 bg-[#0e4368] hover:bg-[#0b3350] text-white font-black rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg text-[9px] uppercase tracking-widest disabled:opacity-50"
                             >
-                                {isLoading ? 'Updating Stock...' : 'APPLY CORRECTION'}
+                                {isLoading ? 'Updating Details...' : 'Apply Correction'}
                             </button>
                         </div>
                     </div>
@@ -1874,6 +2481,400 @@ ENGLABS STORE`;
                                 {isLoading ? 'Deleting...' : 'DELETE'}
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* DELETE TRANSACTION MODAL */}
+            {modalConfig && modalConfig.type === 'DELETE_TX' && (
+                <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-[110] flex items-center justify-center p-6 print:hidden animate-in fade-in duration-200">
+                    <div className="relative w-full max-w-sm bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-slate-100 animate-in zoom-in-95 duration-200 p-8 text-center space-y-6">
+                        <div className="mx-auto w-12 h-12 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center border border-rose-100">
+                            <Trash2 className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Delete Transaction?</h3>
+                            <p className="text-xs text-slate-400 mt-2 font-bold leading-normal">
+                                Are you sure you want to delete this transaction for <strong className="text-slate-700">{modalConfig.data.materialName}</strong> ({modalConfig.data.quantity} {modalConfig.data.unit})? 
+                                This will automatically revert the stock level.
+                            </p>
+                        </div>
+                        <div className="flex gap-3">
+                            <button onClick={() => setModalConfig(null)} className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Cancel</button>
+                            <button 
+                                onClick={async () => {
+                                    try {
+                                        setIsLoading(true);
+                                        const res = await deleteTransaction(modalConfig.data);
+                                        if (res.success) {
+                                            setRefreshTrigger(prev => prev + 1);
+                                            setModalConfig(null);
+                                        } else {
+                                            alert(`Failed to delete transaction: ${res.error}`);
+                                        }
+                                    } catch (err: any) {
+                                        alert(`Failed to delete: ${err.message || err}`);
+                                    } finally {
+                                        setIsLoading(false);
+                                    }
+                                }} 
+                                disabled={isLoading} 
+                                className="flex-1 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all disabled:opacity-50"
+                            >
+                                {isLoading ? 'Deleting...' : 'DELETE'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* EDIT TRANSACTION MODAL */}
+            {modalConfig && modalConfig.type === 'EDIT_TX' && (
+                <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-[110] flex items-center justify-center p-6 print:hidden animate-in fade-in duration-200">
+                    <div className="relative w-full max-w-md bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-slate-100 animate-in zoom-in-95 duration-200">
+                        <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                            <div>
+                                <h3 className="text-sm font-black text-slate-900 tracking-tight">Edit Transaction: {modalConfig.data.materialName}</h3>
+                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{modalConfig.data.type} Log ({modalConfig.data.itemCode})</p>
+                            </div>
+                            <button onClick={() => setModalConfig(null)} className="p-1.5 hover:bg-white rounded-full transition-colors text-slate-400 hover:text-slate-900 shadow-sm border border-transparent hover:border-slate-100">
+                                <X className="w-4 h-4" />
+                            </button>
+                        </div>
+                        <div className="p-6 space-y-4">
+                            {/* Quantity */}
+                            <div className="space-y-1.5">
+                                <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Quantity (in {modalConfig.data.unit})</label>
+                                <input 
+                                    type="number" 
+                                    min="1"
+                                    defaultValue={modalConfig.data.quantity}
+                                    id="edit-tx-qty"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                />
+                            </div>
+
+                            {/* Staff / Supplier */}
+                            <div className="space-y-1.5">
+                                <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Staff / Supplier</label>
+                                <select 
+                                    defaultValue={modalConfig.data.staffName}
+                                    id="edit-tx-staff"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                >
+                                    {localStaffList.map(staff => (
+                                        <option key={staff} value={staff}>{staff}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {/* Project ID */}
+                            <div className="space-y-1.5">
+                                <div className="flex justify-between items-center">
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Project ID</label>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsAddProjectModalOpen(true)}
+                                        className="text-[9px] font-black text-indigo-600 hover:text-indigo-800 uppercase tracking-widest flex items-center gap-1 cursor-pointer transition-colors"
+                                    >
+                                        <Plus className="w-2.5 h-2.5" /> Create Project ID
+                                    </button>
+                                </div>
+                                <select 
+                                    defaultValue={modalConfig.data.projectId}
+                                    id="edit-tx-project"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                >
+                                    {projectList.map(p => {
+                                        const proj = projects.find(proj => proj.projectId === p);
+                                        const displayLabel = proj && proj.client ? `${p} - ${proj.client}` : p;
+                                        return (
+                                            <option key={p} value={p}>{displayLabel}</option>
+                                        );
+                                    })}
+                                </select>
+                            </div>
+
+                            {/* Remarks */}
+                            <div className="space-y-1.5">
+                                <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Remarks</label>
+                                <input 
+                                    type="text" 
+                                    defaultValue={modalConfig.data.remarks}
+                                    id="edit-tx-remarks"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                />
+                            </div>
+
+                            <button 
+                                onClick={async () => {
+                                    const qtyInput = document.getElementById('edit-tx-qty') as HTMLInputElement;
+                                    const staffSelect = document.getElementById('edit-tx-staff') as HTMLSelectElement;
+                                    const projectSelect = document.getElementById('edit-tx-project') as HTMLSelectElement;
+                                    const remarksInput = document.getElementById('edit-tx-remarks') as HTMLInputElement;
+
+                                    const newQty = parseInt(qtyInput.value);
+                                    if (isNaN(newQty) || newQty < 1) {
+                                        alert("Please enter a valid quantity.");
+                                        return;
+                                    }
+                                    try {
+                                        setIsLoading(true);
+                                        const res = await editTransaction(
+                                            modalConfig.data,
+                                            newQty,
+                                            staffSelect.value,
+                                            remarksInput.value,
+                                            projectSelect.value
+                                        );
+                                        if (res.success) {
+                                            setRefreshTrigger(prev => prev + 1);
+                                            setModalConfig(null);
+                                        } else {
+                                            alert(`Failed to update transaction: ${res.error}`);
+                                        }
+                                    } catch (err: any) {
+                                        alert(`Failed to edit: ${err.message || err}`);
+                                    } finally {
+                                        setIsLoading(false);
+                                    }
+                                }} 
+                                disabled={isLoading} 
+                                className="w-full py-3 bg-[#0e4368] hover:bg-[#0b3350] text-white font-black rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg text-[10px] uppercase tracking-widest disabled:opacity-50"
+                            >
+                                {isLoading ? 'Updating Log...' : 'SAVE CHANGES'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* CREATE MATERIAL MODAL */}
+            {isCreateMaterialModalOpen && (
+                <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-[110] flex items-center justify-center p-4 sm:p-6 print:hidden animate-in fade-in duration-200">
+                    <div className="relative w-full max-w-md bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-slate-100 animate-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
+                        <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 shrink-0">
+                            <div>
+                                <h3 className="text-sm font-black text-slate-900 tracking-tight">Create New Material</h3>
+                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Register Material to Catalog</p>
+                            </div>
+                            <button onClick={() => setIsCreateMaterialModalOpen(false)} className="p-1.5 hover:bg-white rounded-full transition-colors text-slate-400 hover:text-slate-900 shadow-sm border border-transparent hover:border-slate-100">
+                                <X className="w-4 h-4" />
+                            </button>
+                        </div>
+                        
+                        <form onSubmit={async (e) => {
+                            e.preventDefault();
+                            const codeVal = (document.getElementById('create-material-code') as HTMLInputElement).value.trim().toUpperCase().replace(/\s+/g, '_');
+                            const nameVal = (document.getElementById('create-material-name') as HTMLInputElement).value.trim();
+                            const catVal = createCategory === 'NEW' ? customCategory.trim() : createCategory;
+                            const unitVal = createUnit === 'NEW' ? customUnit.trim() : createUnit;
+                            const priceVal = parseFloat((document.getElementById('create-material-price') as HTMLInputElement).value) || 0;
+                            const threshVal = parseInt((document.getElementById('create-material-threshold') as HTMLInputElement).value) || 5;
+                            const qtyVal = parseInt((document.getElementById('create-material-qty') as HTMLInputElement).value) || 0;
+                            const locVal = normalizeRackLocation(createLocation === 'NEW' ? customLocation.trim() : (createLocation || 'MAIN STORE'));
+
+                            if (!codeVal || !nameVal || !catVal || !unitVal) {
+                                alert("Please fill in all required fields (Code, Name, Category, Unit).");
+                                return;
+                            }
+
+                            // Check if itemCode already exists in currentStock
+                            if (currentStock.some(i => i.itemCode === codeVal)) {
+                                alert(`Material Code "${codeVal}" already exists in the catalog.`);
+                                return;
+                            }
+
+                            try {
+                                setIsLoading(true);
+                                await addInventoryItem({
+                                    itemCode: codeVal,
+                                    name: nameVal,
+                                    category: catVal,
+                                    unit: unitVal,
+                                    currentStock: qtyVal,
+                                    totalInward: 0,
+                                    totalOutward: 0,
+                                    minThreshold: threshVal,
+                                    unitPrice: priceVal,
+                                    location: locVal,
+                                    lastUpdated: new Date().toISOString()
+                                });
+                                setRefreshTrigger(prev => prev + 1);
+                                setIsCreateMaterialModalOpen(false);
+                            } catch (err: any) {
+                                alert(`Failed to create material: ${err.message || err}`);
+                            } finally {
+                                setIsLoading(false);
+                            }
+                        }} className="flex-1 overflow-y-auto custom-scrollbar flex flex-col justify-between">
+                            <div className="p-6 space-y-4">
+                                {/* Material Code & Name */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Material Code *</label>
+                                        <input 
+                                            type="text" 
+                                            required
+                                            id="create-material-code"
+                                            list="existing-material-codes"
+                                            placeholder="e.g. ADH-015"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                        />
+                                        <datalist id="existing-material-codes">
+                                            {currentStock.map(item => (
+                                                <option key={item.itemCode} value={item.itemCode}>{item.name}</option>
+                                            ))}
+                                        </datalist>
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Material Name *</label>
+                                        <input 
+                                            type="text" 
+                                            required
+                                            id="create-material-name"
+                                            placeholder="e.g. Araldite"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Category & Unit */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Category *</label>
+                                        <select 
+                                            required
+                                            id="create-material-category-select"
+                                            value={createCategory}
+                                            onChange={(e) => setCreateCategory(e.target.value)}
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                        >
+                                            <option value="">Choose Category</option>
+                                            {Array.from(new Set(currentStock.map(i => i.category).filter(Boolean))).sort().map(cat => (
+                                                <option key={cat} value={cat}>{cat}</option>
+                                            ))}
+                                            <option value="NEW">+ Add New Category</option>
+                                        </select>
+                                        {createCategory === 'NEW' && (
+                                            <input 
+                                                type="text" 
+                                                required
+                                                id="create-material-category-custom"
+                                                placeholder="Enter new category name"
+                                                value={customCategory}
+                                                onChange={(e) => setCustomCategory(e.target.value)}
+                                                className="w-full mt-2 bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all animate-in slide-in-from-top-1 duration-200"
+                                            />
+                                        )}
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Unit *</label>
+                                        <select 
+                                            required
+                                            id="create-material-unit-select"
+                                            value={createUnit}
+                                            onChange={(e) => setCreateUnit(e.target.value)}
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                        >
+                                            <option value="">Choose Unit</option>
+                                            {['Nos', 'Kg', 'Meter', 'Liter', 'Packet', 'Box', 'Ton', 'Roll'].map(u => (
+                                                <option key={u} value={u}>{u}</option>
+                                            ))}
+                                            <option value="NEW">+ Add New Unit</option>
+                                        </select>
+                                        {createUnit === 'NEW' && (
+                                            <input 
+                                                type="text" 
+                                                required
+                                                id="create-material-unit-custom"
+                                                placeholder="Enter custom unit"
+                                                value={customUnit}
+                                                onChange={(e) => setCustomUnit(e.target.value)}
+                                                className="w-full mt-2 bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all animate-in slide-in-from-top-1 duration-200"
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Unit Price & Min Threshold */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Unit Price (₹)</label>
+                                        <input 
+                                            type="number" 
+                                            id="create-material-price"
+                                            placeholder="0"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                        />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Min Threshold</label>
+                                        <input 
+                                            type="number" 
+                                            id="create-material-threshold"
+                                            defaultValue={5}
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Available Initial Qty & Location */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Initial Available Qty</label>
+                                        <input 
+                                            type="number" 
+                                            id="create-material-qty"
+                                            defaultValue={0}
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                        />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Rack Location</label>
+                                        <select 
+                                            id="create-material-location-select"
+                                            value={createLocation}
+                                            onChange={(e) => setCreateLocation(e.target.value)}
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                        >
+                                            <option value="MAIN STORE">MAIN STORE</option>
+                                            {Array.from(new Set(currentStock.map(i => normalizeRackLocation(i.location || 'MAIN STORE')).filter(loc => loc && loc !== 'MAIN STORE'))).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })).map(loc => (
+                                                <option key={loc} value={loc}>{loc}</option>
+                                            ))}
+                                            <option value="NEW">+ Add New Location</option>
+                                        </select>
+                                        {createLocation === 'NEW' && (
+                                            <input 
+                                                type="text" 
+                                                required
+                                                id="create-material-location-custom"
+                                                placeholder="Enter rack location name"
+                                                value={customLocation}
+                                                onChange={(e) => setCustomLocation(e.target.value)}
+                                                className="w-full mt-2 bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all animate-in slide-in-from-top-1 duration-200"
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="p-6 border-t border-slate-100 bg-slate-50 shrink-0 flex gap-3">
+                                <button 
+                                    type="button" 
+                                    onClick={() => setIsCreateMaterialModalOpen(false)}
+                                    className="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-black rounded-xl transition-all text-[9px] uppercase tracking-widest text-center"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit"
+                                    disabled={isLoading}
+                                    className="flex-1 py-3.5 bg-[#0e4368] hover:bg-[#0b3350] text-white font-black rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg text-[9px] uppercase tracking-widest disabled:opacity-50"
+                                >
+                                    {isLoading ? 'Creating...' : 'Create Material'}
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}

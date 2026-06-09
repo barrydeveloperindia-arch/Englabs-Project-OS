@@ -15,11 +15,22 @@ let db: any;
 
 if (firebaseConfig.apiKey) {
     app = initializeApp(firebaseConfig);
-    db = initializeFirestore(app, {
-        localCache: persistentLocalCache({
-            tabManager: persistentMultipleTabManager()
-        })
-    });
+    const isTest = typeof window !== 'undefined' && (
+        window.navigator.webdriver || 
+        window.navigator.userAgent.toLowerCase().includes('playwright') ||
+        window.navigator.userAgent.toLowerCase().includes('headless')
+    );
+    
+    if (isTest) {
+        db = initializeFirestore(app, {});
+        console.log("Firestore initialized with in-memory cache for test environment.");
+    } else {
+        db = initializeFirestore(app, {
+            localCache: persistentLocalCache({
+                tabManager: persistentMultipleTabManager()
+            })
+        });
+    }
 } else {
     console.warn("Firebase API Key missing. Cloud sync disabled.");
 }

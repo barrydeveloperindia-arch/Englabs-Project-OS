@@ -29,6 +29,7 @@ import {
     MoreVertical,
     Package,
     Activity,
+    Lock,
     X
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
@@ -43,10 +44,13 @@ interface Props {
     onNewTrip: (trip: PorterTrip) => void;
     onUpdateTrip: (trip: PorterTrip) => void;
     onDeleteTrip: (id: string) => void;
+    onLogout?: () => void;
 }
 
-const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDeleteTrip }) => {
-    const [view, setView] = useState<'DASHBOARD' | 'LOGBOOK' | 'PAYMENTS'>('DASHBOARD');
+const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDeleteTrip, onLogout }) => {
+    const [view, setView] = useState<'DASHBOARD' | 'LOGBOOK' | 'PAYMENTS' | 'REPORTS'>('DASHBOARD');
+    const [reportsSubView, setReportsSubView] = useState<'WEEKLY' | 'MONTHLY'>('WEEKLY');
+    const [expandedKey, setExpandedKey] = useState<string | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editingTrip, setEditingTrip] = useState<PorterTrip | null>(null);
     const [viewingTimeline, setViewingTimeline] = useState<PorterTrip | null>(null);
@@ -54,6 +58,191 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedProof, setSelectedProof] = useState<string | null>(null);
     const [isHealed, setIsHealed] = useState(false);
+
+    // Grouping by Monday-Sunday weeks
+    const getStartOfWeek = (dateStr: string): string => {
+        const parts = dateStr.split('-');
+        const year = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1;
+        const day = parseInt(parts[2], 10);
+        const date = new Date(year, month, day);
+        
+        const dayOfWeek = date.getDay(); // 0 is Sunday, 1 is Monday...
+        const diff = date.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+        const monday = new Date(date.setDate(diff));
+        
+        const yyyy = monday.getFullYear();
+        const mm = String(monday.getMonth() + 1).padStart(2, '0');
+        const dd = String(monday.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+    };
+
+    const getEndOfWeek = (dateStr: string): string => {
+        const mondayStr = getStartOfWeek(dateStr);
+        const parts = mondayStr.split('-');
+        const year = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1;
+        const day = parseInt(parts[2], 10);
+        const monday = new Date(year, month, day);
+        
+        const sunday = new Date(monday.setDate(monday.getDate() + 6));
+        const yyyy = sunday.getFullYear();
+        const mm = String(sunday.getMonth() + 1).padStart(2, '0');
+        const dd = String(sunday.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+    };
+
+    const formatDateRange = (start: string, end: string): string => {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        
+        const sParts = start.split('-');
+        const eParts = end.split('-');
+        
+        const sDay = parseInt(sParts[2], 10);
+        const sMonth = months[parseInt(sParts[1], 10) - 1];
+        const sYear = sParts[0];
+        
+        const eDay = parseInt(eParts[2], 10);
+        const eMonth = months[parseInt(eParts[1], 10) - 1];
+        const eYear = eParts[0];
+        
+        if (sYear === eYear) {
+            if (sMonth === eMonth) {
+                return `${sDay} - ${eDay} ${sMonth} ${sYear}`;
+            }
+            return `${sDay} ${sMonth} - ${eDay} ${eMonth} ${sYear}`;
+        }
+        return `${sDay} ${sMonth} ${sYear} - ${eDay} ${eMonth} ${eYear}`;
+    };
+
+    const getMonthLabel = (dateStr: string): string => {
+        const parts = dateStr.split('-');
+        const year = parts[0];
+        const month = parseInt(parts[1], 10);
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        return `${months[month - 1]} ${year}`;
+    };
+
+    // Weekly reports
+    const weeklyDataMap: { [key: string]: { trips: PorterTrip[], start: string, end: string } } = {};
+    trips.forEach(trip => {
+        if (!trip.date) return;
+        const start = getStartOfWeek(trip.date);
+        const end = getEndOfWeek(trip.date);
+        const key = `${start}_${end}`;
+        if (!weeklyDataMap[key]) {
+            weeklyDataMap[key] = { trips: [], start, end };
+        }
+        weeklyDataMap[key].trips.push(trip);
+    });
+
+    const weeklyReports = Object.keys(weeklyDataMap).map(key => {
+        const { trips: weekTrips, start, end } = weeklyDataMap[key];
+        const totalTrips = weekTrips.length;
+        const totalKm = weekTrips.reduce((acc, curr) => acc + (curr.distanceKm || 0), 0);
+        const totalGross = weekTrips.reduce((acc, curr) => acc + (curr.grossAmount || 0), 0);
+        const totalAdvances = weekTrips.reduce((acc, curr) => acc + (curr.advanceAmount || 0), 0);
+        const totalRemaining = weekTrips.reduce((acc, curr) => acc + (curr.remainingBalance || 0), 0);
+        
+        return {
+            key,
+            start,
+            end,
+            label: formatDateRange(start, end),
+            totalTrips,
+            totalKm,
+            totalGross,
+            totalAdvances,
+            totalRemaining,
+            trips: weekTrips
+        };
+    }).sort((a, b) => b.start.localeCompare(a.start));
+
+    // Monthly reports
+    const monthlyDataMap: { [key: string]: { trips: PorterTrip[], monthKey: string } } = {};
+    trips.forEach(trip => {
+        if (!trip.date) return;
+        const parts = trip.date.split('-');
+        const key = `${parts[0]}-${parts[1]}`; // YYYY-MM
+        if (!monthlyDataMap[key]) {
+            monthlyDataMap[key] = { trips: [], monthKey: key };
+        }
+        monthlyDataMap[key].trips.push(trip);
+    });
+
+    const monthlyReports = Object.keys(monthlyDataMap).map(key => {
+        const { trips: monthTrips, monthKey } = monthlyDataMap[key];
+        const totalTrips = monthTrips.length;
+        const totalKm = monthTrips.reduce((acc, curr) => acc + (curr.distanceKm || 0), 0);
+        const totalGross = monthTrips.reduce((acc, curr) => acc + (curr.grossAmount || 0), 0);
+        const totalAdvances = monthTrips.reduce((acc, curr) => acc + (curr.advanceAmount || 0), 0);
+        const totalRemaining = monthTrips.reduce((acc, curr) => acc + (curr.remainingBalance || 0), 0);
+        
+        return {
+            key,
+            monthKey,
+            label: getMonthLabel(`${monthKey}-01`),
+            totalTrips,
+            totalKm,
+            totalGross,
+            totalAdvances,
+            totalRemaining,
+            trips: monthTrips
+        };
+    }).sort((a, b) => b.monthKey.localeCompare(a.monthKey));
+
+    const shareWeeklyReport = (report: any) => {
+        const porterName = report.trips[0]?.porterName || 'Gurpreet Singh';
+        const isOverpaid = report.totalRemaining < 0;
+        const balanceText = isOverpaid 
+            ? `*Net Balance:* -₹${Math.abs(report.totalRemaining).toLocaleString()} (Overpaid)`
+            : `*Net Balance:* ₹${report.totalRemaining.toLocaleString()}`;
+
+        const text = encodeURIComponent(
+            `📊 *ENGLABS PORTER WEEKLY AUDIT*\n` +
+            `*Period:* ${report.label}\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `👤 *Porter:* ${porterName}\n` +
+            `🚚 *Total Missions:* ${report.totalTrips}\n` +
+            `🛣️ *Total Distance:* ${report.totalKm} KM\n\n` +
+            `💰 *FINANCIAL SUMMARY*\n` +
+            `• Gross Total: ₹${report.totalGross.toLocaleString()}\n` +
+            `• Advances: ₹${report.totalAdvances.toLocaleString()}\n` +
+            `• ${balanceText}\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `🌐 _Command OS Forensic Dispatch_`
+        );
+        const url = `https://wa.me/?text=${text}`;
+        window.open(url, '_blank', 'noopener,noreferrer');
+    };
+
+    const shareMonthlyReport = (report: any) => {
+        const porterName = report.trips[0]?.porterName || 'Gurpreet Singh';
+        const isOverpaid = report.totalRemaining < 0;
+        const balanceText = isOverpaid 
+            ? `*Net Balance:* -₹${Math.abs(report.totalRemaining).toLocaleString()} (Overpaid)`
+            : `*Net Balance:* ₹${report.totalRemaining.toLocaleString()}`;
+
+        const text = encodeURIComponent(
+            `📊 *ENGLABS PORTER MONTHLY AUDIT*\n` +
+            `*Month:* ${report.label}\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `👤 *Porter:* ${porterName}\n` +
+            `🚚 *Total Missions:* ${report.totalTrips}\n` +
+            `🛣️ *Total Distance:* ${report.totalKm} KM\n\n` +
+            `💰 *FINANCIAL SUMMARY*\n` +
+            `• Gross Total: ₹${report.totalGross.toLocaleString()}\n` +
+            `• Advances: ₹${report.totalAdvances.toLocaleString()}\n` +
+            `• ${balanceText}\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `🌐 _Command OS Forensic Dispatch_`
+        );
+        const url = `https://wa.me/?text=${text}`;
+        window.open(url, '_blank', 'noopener,noreferrer');
+    };
 
     // PROTECTION AGENT: Initial Healing & Integrity Check
     React.useEffect(() => {
@@ -217,15 +406,21 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                     <div className="flex bg-slate-50 p-1.5 rounded-xl border border-slate-100">
                         <button 
                             onClick={() => setView('DASHBOARD')}
-                            className={`px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${view === 'DASHBOARD' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                            className={`px-4 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${view === 'DASHBOARD' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
                         >
                             Dashboard
                         </button>
                         <button 
                             onClick={() => setView('LOGBOOK')}
-                            className={`px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${view === 'LOGBOOK' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                            className={`px-4 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${view === 'LOGBOOK' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
                         >
                             Logbook
+                        </button>
+                        <button 
+                            onClick={() => setView('REPORTS')}
+                            className={`px-4 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${view === 'REPORTS' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                        >
+                            Reports
                         </button>
                     </div>
                     <button 
@@ -234,6 +429,14 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                     >
                         <Plus className="w-4 h-4" /> NEW TRIP
                     </button>
+                    {onLogout && (
+                        <button 
+                            onClick={onLogout}
+                            className="bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 border border-rose-500/20 font-black px-6 py-3.5 rounded-xl flex items-center gap-2 text-[10px] uppercase tracking-widest transition-all shadow-lg active:scale-95 cursor-pointer"
+                        >
+                            <Lock className="w-4 h-4" /> LOCK SYSTEM
+                        </button>
+                    )}
                 </div>
             </header>
 
@@ -343,6 +546,152 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                ) : view === 'REPORTS' ? (
+                    <div className="max-w-[1400px] mx-auto space-y-8">
+                        {/* Reports Header & Toggle */}
+                        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6 print:hidden">
+                            <div>
+                                <h2 className="text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+                                    <ClipboardList className="w-6 h-6 text-emerald-500" /> Logistics Audits & Reports
+                                </h2>
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Weekly and Monthly summary ledger with direct WhatsApp sharing</p>
+                            </div>
+                            <div className="flex bg-slate-50 p-1.5 rounded-xl border border-slate-100 shrink-0">
+                                <button 
+                                    onClick={() => { setReportsSubView('WEEKLY'); setExpandedKey(null); }}
+                                    className={`px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${reportsSubView === 'WEEKLY' ? 'bg-[#0e4368] text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                                >
+                                    Weekly Report
+                                </button>
+                                <button 
+                                    onClick={() => { setReportsSubView('MONTHLY'); setExpandedKey(null); }}
+                                    className={`px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${reportsSubView === 'MONTHLY' ? 'bg-[#0e4368] text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                                >
+                                    Monthly Report
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Reports Table */}
+                        <div className="bg-white rounded-[3rem] border border-slate-100 shadow-xl overflow-hidden">
+                            <div className="overflow-x-auto no-scrollbar">
+                                <table className="w-full text-left">
+                                    <thead>
+                                        <tr className="bg-slate-50/50 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                                            <th className="py-8 px-10">Period</th>
+                                            <th className="py-8 px-6 text-center">Total Trips</th>
+                                            <th className="py-8 px-6">Total Distance</th>
+                                            <th className="py-8 px-6">Gross Amount</th>
+                                            <th className="py-8 px-6">Advances Paid</th>
+                                            <th className="py-8 px-6">Outstanding Balance</th>
+                                            <th className="py-8 px-10 text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-50">
+                                        {(reportsSubView === 'WEEKLY' ? weeklyReports : monthlyReports).map((report: any) => {
+                                            const isExpanded = expandedKey === report.key;
+                                            const isOverpaid = report.totalRemaining < 0;
+                                            return (
+                                                <React.Fragment key={report.key}>
+                                                    <tr 
+                                                        className="group hover:bg-slate-50/50 transition-all border-b border-slate-50 cursor-pointer"
+                                                        onClick={() => setExpandedKey(isExpanded ? null : report.key)}
+                                                    >
+                                                        <td className="py-8 px-10">
+                                                            <div className="flex items-center gap-4">
+                                                                <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-[#0e4368] group-hover:text-emerald-400 transition-colors">
+                                                                    <Calendar className="w-5 h-5" />
+                                                                </div>
+                                                                <div>
+                                                                    <p className="font-black text-slate-900 text-sm tracking-tight">{report.label}</p>
+                                                                    <p className="text-[9px] font-black text-slate-400 uppercase mt-0.5">Click to view details</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td className="py-8 px-6 text-center font-black text-slate-900 text-sm">
+                                                            {report.totalTrips}
+                                                        </td>
+                                                        <td className="py-8 px-6 font-black text-slate-900 text-sm">
+                                                            {report.totalKm} KM
+                                                        </td>
+                                                        <td className="py-8 px-6 font-black text-slate-900 text-sm">
+                                                            ₹{report.totalGross.toLocaleString()}
+                                                        </td>
+                                                        <td className="py-8 px-6 font-black text-slate-900 text-sm text-emerald-600">
+                                                            ₹{report.totalAdvances.toLocaleString()}
+                                                        </td>
+                                                        <td className="py-8 px-6 font-black text-sm">
+                                                            <span className={isOverpaid ? 'text-rose-500' : 'text-emerald-500'}>
+                                                                {isOverpaid 
+                                                                    ? `Overpaid: ₹${Math.abs(report.totalRemaining).toLocaleString()}` 
+                                                                    : `Bal: ₹${report.totalRemaining.toLocaleString()}`}
+                                                            </span>
+                                                        </td>
+                                                        <td className="py-8 px-10 text-right" onClick={(e) => e.stopPropagation()}>
+                                                            <button 
+                                                                onClick={() => reportsSubView === 'WEEKLY' ? shareWeeklyReport(report) : shareMonthlyReport(report)}
+                                                                className="px-5 py-2.5 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-xl hover:bg-emerald-500 hover:text-white transition-all inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-widest shadow-sm cursor-pointer"
+                                                            >
+                                                                <MessageSquare className="w-4 h-4" /> Share WhatsApp
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    {isExpanded && (
+                                                        <tr>
+                                                            <td colSpan={7} className="bg-slate-50/50 p-8 border-t border-b border-slate-100">
+                                                                <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden p-6">
+                                                                    <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-6">Missions in this period</h4>
+                                                                    <table className="w-full text-left text-xs">
+                                                                        <thead>
+                                                                            <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider">
+                                                                                <th className="pb-3">ID</th>
+                                                                                <th className="pb-3">Date</th>
+                                                                                <th className="pb-3">Route</th>
+                                                                                <th className="pb-3">Material</th>
+                                                                                <th className="pb-3 text-center">KM</th>
+                                                                                <th className="pb-3">Gross</th>
+                                                                                <th className="pb-3">Advance</th>
+                                                                                <th className="pb-3">Balance</th>
+                                                                                <th className="pb-3">Status</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody className="divide-y divide-slate-50">
+                                                                            {report.trips.map((t: any) => {
+                                                                                const tOverpaid = t.remainingBalance < 0;
+                                                                                return (
+                                                                                    <tr key={t.id} className="hover:bg-slate-50/30">
+                                                                                        <td className="py-3 font-bold text-slate-900">{t.id}</td>
+                                                                                        <td className="py-3 text-slate-500">{t.date}</td>
+                                                                                        <td className="py-3 text-slate-900 font-medium">{t.fromLocation} ➔ {t.toLocation}</td>
+                                                                                        <td className="py-3 text-slate-500 max-w-[150px] truncate">{t.materialDescription}</td>
+                                                                                        <td className="py-3 text-center font-bold text-slate-900">{t.distanceKm} KM</td>
+                                                                                        <td className="py-3 text-slate-900 font-bold">₹{t.grossAmount}</td>
+                                                                                        <td className="py-3 text-emerald-600 font-bold">₹{t.advanceAmount || 0}</td>
+                                                                                        <td className={`py-3 font-bold ${tOverpaid ? 'text-rose-500' : 'text-emerald-500'}`}>
+                                                                                            {tOverpaid ? `-₹${Math.abs(t.remainingBalance)}` : `₹${t.remainingBalance}`}
+                                                                                        </td>
+                                                                                        <td className="py-3">
+                                                                                            <span className={`text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-tighter ${t.deliveryStatus === 'DELIVERED' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-blue-50 text-blue-600 border border-blue-100'}`}>
+                                                                                                {t.deliveryStatus}
+                                                                                            </span>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                );
+                                                                            })}
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    )}
+                                                </React.Fragment>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

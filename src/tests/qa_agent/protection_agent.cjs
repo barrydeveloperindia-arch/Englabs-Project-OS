@@ -55,7 +55,7 @@ const runTests = () => {
     
     console.log("🚀 [FUNCTIONAL TESTING] Running Unit & Logic Suites (Vitest)...");
     try {
-        execSync('npx vitest run --reporter=verbose', { stdio: 'pipe' });
+        execSync('npx vitest run --reporter=verbose', { stdio: 'inherit' });
         results.unit = true;
         console.log("✅ Unit tests passed.");
     } catch (e) {
@@ -66,7 +66,7 @@ const runTests = () => {
     console.log("🚀 [AUTOMATION & MOBILE TESTING] Running E2E Safari/Android/Chrome Suites (Playwright)...");
     try {
         // Run specific tests to avoid ultra-long execution during rapid QA loops
-        execSync('npx playwright test src/tests/e2e/smoke.test.ts', { stdio: 'pipe' });
+        execSync('npx playwright test src/tests/e2e/smoke.test.ts', { stdio: 'inherit' });
         results.e2e = true;
         console.log("✅ E2E tests passed.");
     } catch (e) {

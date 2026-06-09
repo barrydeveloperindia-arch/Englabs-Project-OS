@@ -7,9 +7,10 @@ interface NewProjectModalProps {
     isOpen: boolean;
     onClose: () => void;
     onAdd: (project: ProjectData) => void;
+    existingProjects?: string[];
 }
 
-const NewProjectModal: React.FC<NewProjectModalProps> = ({ isOpen, onClose, onAdd }) => {
+const NewProjectModal: React.FC<NewProjectModalProps> = ({ isOpen, onClose, onAdd, existingProjects = [] }) => {
     const [formData, setFormData] = useState({
         projectId: '',
         client: '',
@@ -71,11 +72,17 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({ isOpen, onClose, onAd
                             <Target className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                             <input 
                                 required
+                                list="existing-projects-list"
                                 className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[#0e4368]/10 focus:border-[#0e4368] transition-all"
                                 placeholder="e.g. C001"
                                 value={formData.projectId}
                                 onChange={e => setFormData({...formData, projectId: e.target.value})}
                             />
+                            <datalist id="existing-projects-list">
+                                {existingProjects.map(proj => (
+                                    <option key={proj} value={proj}>{proj}</option>
+                                ))}
+                            </datalist>
                         </div>
                     </div>
 

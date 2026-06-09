@@ -1,12 +1,13 @@
 {
     "projectId": "C5162",
-    "client": "Unknown Client",
+    "client": "YASH APPLIANCES",
     "planning": {
         "value": 7910,
         "budget": 5537,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-04-28"
+        "startDate": "2026-04-28",
+        "poNumber": "P2100-EL12-PO-16870"
     },
     "production": {
         "currentStage": "Workshop Fabrication",

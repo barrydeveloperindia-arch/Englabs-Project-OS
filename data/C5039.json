@@ -1,12 +1,13 @@
 {
     "projectId": "C5039",
-    "client": "Unknown Client",
+    "client": "ITL",
     "planning": {
         "value": 33918.95,
         "budget": 23743,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-16854"
     },
     "production": {
         "currentStage": "Engineering Design",

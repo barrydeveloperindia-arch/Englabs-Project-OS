@@ -4,7 +4,7 @@ android {
     namespace = "com.englabs.os"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.englabs.os"
+        applicationId "com.englabs.projects"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -20,6 +20,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
     }
 }

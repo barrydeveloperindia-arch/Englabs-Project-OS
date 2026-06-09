@@ -1,12 +1,13 @@
 {
     "projectId": "C4811",
-    "client": "Unknown Client",
+    "client": "AEBOCODE",
     "planning": {
         "value": 35280,
         "budget": 24696,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-16742"
     },
     "production": {
         "currentStage": "Engineering Design",

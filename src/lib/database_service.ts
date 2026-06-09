@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, query, orderBy, doc, setDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, query, orderBy, doc, setDoc, deleteDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import { GateEntry } from "./gate_system";
 
@@ -60,4 +60,16 @@ export const saveProjectToFirebase = async (project: any) => {
 export const syncAllProjectsToFirebase = async (projects: any[]) => {
     const results = await Promise.all(projects.map(p => saveProjectToFirebase(p)));
     return results.every(r => r.success);
+};
+
+export const deleteProjectFromFirebase = async (projectId: string) => {
+    if (!db) return { success: false, error: "Database not initialized" };
+    try {
+        const docRef = doc(db, "projects", projectId);
+        await deleteDoc(docRef);
+        return { success: true };
+    } catch (e) {
+        console.error("Error deleting project from Firebase:", e);
+        return { success: false, error: e };
+    }
 };

@@ -1,12 +1,13 @@
 {
     "projectId": "C5040",
-    "client": "Unknown Client",
+    "client": "SIMSUN INNOTECH",
     "planning": {
         "value": 208350,
         "budget": 145845,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-16794"
     },
     "production": {
         "currentStage": "Engineering Design",
