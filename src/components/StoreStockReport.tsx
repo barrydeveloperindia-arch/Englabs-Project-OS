@@ -164,7 +164,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
     const [checkOutTxDetails, setCheckOutTxDetails] = useState<any>(null);
     const [checkoutPhoto, setCheckoutPhoto] = useState('');
     const [checkInSearch, setCheckInSearch] = useState('');
-    const [checkInLocation, setCheckInLocation] = useState('');
+    const [checkInLocation, setCheckInLocation] = useState('MAIN STORE');
+    const [checkOutLocation, setCheckOutLocation] = useState('MAIN STORE');
     const [showCheckInDropdown, setShowCheckInDropdown] = useState(false);
     const [checkOutSearch, setCheckOutSearch] = useState('');
     const [showCheckOutDropdown, setShowCheckOutDropdown] = useState(false);
@@ -670,18 +671,18 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
     );
 
     return (
-        <div className="flex-1 flex flex-col md:flex-row min-w-0 min-h-0 bg-[#F8FAFC] print:bg-white print:block relative">
+        <div className="flex-1 flex flex-col xl:flex-row min-w-0 min-h-0 bg-[#F8FAFC] print:bg-white print:block relative">
             
             {/* MOBILE SIDEBAR DRAWER OVERLAY */}
             {isMobileSidebarOpen && (
-                <div className="fixed inset-0 z-[110] bg-slate-900/60 backdrop-blur-sm md:hidden animate-in fade-in duration-200" onClick={() => setIsMobileSidebarOpen(false)} />
+                <div className="fixed inset-0 z-[110] bg-slate-900/60 backdrop-blur-sm xl:hidden animate-in fade-in duration-200" onClick={() => setIsMobileSidebarOpen(false)} />
             )}
 
             {/* MOBILE SIDEBAR DRAWER PANEL */}
-            <aside className={`fixed inset-y-0 left-0 z-[120] w-64 bg-slate-900 text-slate-100 flex flex-col shrink-0 border-r border-slate-800 transition-transform duration-300 transform md:hidden ${
+            <aside className={`fixed inset-y-0 left-0 z-[120] w-64 bg-slate-900 text-slate-100 flex flex-col shrink-0 border-r border-slate-800 transition-transform duration-300 transform xl:hidden pt-safe ${
                 isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'
             }`}>
-                <div className="absolute top-4 right-4 md:hidden">
+                <div className="absolute top-4 right-4 xl:hidden">
                     <button onClick={() => setIsMobileSidebarOpen(false)} className="p-1.5 hover:bg-slate-800 rounded-full text-slate-400">
                         <X className="w-5 h-5" />
                     </button>
@@ -690,21 +691,21 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
             </aside>
 
             {/* STATIC SUB-SIDEBAR (Desktop) */}
-            <aside className="hidden md:flex w-64 bg-slate-900 text-slate-100 flex-col shrink-0 border-r border-slate-800 print:hidden">
+            <aside className="hidden xl:flex w-64 bg-slate-900 text-slate-100 flex-col shrink-0 border-r border-slate-800 print:hidden pt-safe">
                 {renderSidebarContent()}
             </aside>
 
             {/* MAIN CONTENT AREA */}
             <div className="flex-1 flex flex-col min-w-0 min-h-0">
                 {/* TOP BAR / HEADER */}
-                <header className="h-auto md:h-20 bg-white border-b border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between px-4 md:px-8 py-4 md:py-0 shrink-0 gap-4 md:gap-0 print:hidden">
-                    <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 w-full md:w-auto">
+                <header className="h-auto xl:h-20 bg-white border-b border-slate-100 flex flex-col xl:flex-row items-start xl:items-center justify-between px-4 xl:px-8 py-4 xl:py-0 shrink-0 gap-4 xl:gap-0 print:hidden pt-safe">
+                    <div className="flex flex-col xl:flex-row items-start xl:items-center gap-4 xl:gap-6 w-full xl:w-auto">
                         <div className="flex items-center gap-3">
                             {/* Mobile Hamburger toggle button */}
                             <button 
                                 type="button"
                                 onClick={() => setIsMobileSidebarOpen(true)}
-                                className="p-2 hover:bg-slate-50 rounded-xl border border-slate-200 text-slate-600 md:hidden transition-all shadow-sm"
+                                className="p-2 hover:bg-slate-50 rounded-xl border border-slate-200 text-slate-600 xl:hidden transition-all shadow-sm shrink-0 mr-2"
                                 title="Open Sidebar Menu"
                             >
                                 <Menu className="w-4 h-4" />
@@ -723,10 +724,10 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                             </div>
                         </div>
                         
-                        <div className="hidden md:block h-6 w-px bg-slate-100"></div>
+                        <div className="hidden xl:block h-6 w-px bg-slate-100"></div>
                         
                         {/* Mobile Header Sub-Navigation (Horizontal Scroll) */}
-                        <nav className="flex gap-1 bg-slate-50 p-1 rounded-xl overflow-x-auto max-w-full no-scrollbar shrink-0 md:hidden border border-slate-150">
+                        <nav className="flex gap-1 bg-slate-50 p-1 rounded-xl overflow-x-auto max-w-full no-scrollbar shrink-0 xl:hidden border border-slate-150">
                             {[
                                 { id: 'DASHBOARD', label: 'Dashboard' },
                                 { id: 'CHECK_IN', label: 'Check In' },
@@ -752,10 +753,10 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                     </div>
                     
                     {/* Top Right Quick Actions */}
-                    <div className="flex items-center gap-2 w-full md:w-auto justify-between md:justify-end">
+                    <div className="flex items-center gap-2 w-full xl:w-auto justify-between xl:justify-end">
                         {/* Search Bar for Table Views */}
                         {(view === 'LIVE_REGISTER' || view === 'CURRENT_STOCK' || view === 'REPORTS') && (
-                            <div className="relative w-full md:w-44 flex-1 md:flex-none">
+                            <div className="relative w-full xl:w-44 flex-1 xl:flex-none">
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
                                 <input 
                                     type="text" 
@@ -798,7 +799,10 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                         <div className="max-w-6xl mx-auto space-y-6 animate-in fade-in duration-300 print:hidden">
                             {/* Summary Metrics Cards */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                                <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex items-center justify-between">
+                                <div 
+                                    onClick={() => { setView('CURRENT_STOCK'); setSelectedStockStatus('ALL'); }}
+                                    className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex items-center justify-between cursor-pointer hover:shadow-md hover:scale-[1.01] transition-all"
+                                >
                                     <div>
                                         <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Total Items</span>
                                         <h3 className="text-xl font-black text-slate-900">{currentStock.length} Items</h3>
@@ -806,7 +810,10 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                     <div className="p-3 bg-indigo-50 rounded-2xl text-indigo-600"><Package className="w-5 h-5" /></div>
                                 </div>
                                 
-                                <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex items-center justify-between">
+                                <div 
+                                    onClick={() => { setView('CURRENT_STOCK'); setSelectedStockStatus('ALL'); }}
+                                    className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex items-center justify-between cursor-pointer hover:shadow-md hover:scale-[1.01] transition-all"
+                                >
                                     <div>
                                         <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Current Stock Value</span>
                                         <h3 className="text-xl font-black text-slate-900">₹{statsTotalStockValue.toLocaleString('en-IN')}</h3>
@@ -814,7 +821,10 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                     <div className="p-3 bg-emerald-50 rounded-2xl text-emerald-600"><TrendingUp className="w-5 h-5" /></div>
                                 </div>
 
-                                <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex items-center justify-between">
+                                <div 
+                                    onClick={() => { setView('LIVE_REGISTER'); setLiveFilter('TODAY'); }}
+                                    className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex items-center justify-between cursor-pointer hover:shadow-md hover:scale-[1.01] transition-all"
+                                >
                                     <div>
                                         <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Today Check-In</span>
                                         <h3 className="text-xl font-black text-slate-900">{todayCheckInCount} Entries</h3>
@@ -823,7 +833,10 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                     <div className="p-3 bg-teal-50 rounded-2xl text-teal-600"><ArrowDownCircle className="w-5 h-5" /></div>
                                 </div>
 
-                                <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex items-center justify-between">
+                                <div 
+                                    onClick={() => { setView('LIVE_REGISTER'); setLiveFilter('TODAY'); }}
+                                    className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex items-center justify-between cursor-pointer hover:shadow-md hover:scale-[1.01] transition-all"
+                                >
                                     <div>
                                         <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Today Check-Out</span>
                                         <h3 className="text-xl font-black text-slate-900">{todayCheckOutCount} Entries</h3>
@@ -846,11 +859,17 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                             <div>
                                                 <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-wider">Today's Activity</h4>
                                                 <div className="grid grid-cols-2 gap-3 mt-1.5">
-                                                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                                                    <div 
+                                                        onClick={() => { setView('LIVE_REGISTER'); setLiveFilter('TODAY'); }}
+                                                        className="bg-slate-50 rounded-xl p-3 border border-slate-100 cursor-pointer hover:bg-slate-100 hover:border-slate-200 transition-all"
+                                                    >
                                                         <span className="text-[8px] font-black text-emerald-600 uppercase tracking-wider block">Check-In</span>
                                                         <span className="text-base font-black text-slate-800 block mt-0.5">{todayCheckInCount} Entries</span>
                                                     </div>
-                                                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                                                    <div 
+                                                        onClick={() => { setView('LIVE_REGISTER'); setLiveFilter('TODAY'); }}
+                                                        className="bg-slate-50 rounded-xl p-3 border border-slate-100 cursor-pointer hover:bg-slate-100 hover:border-slate-200 transition-all"
+                                                    >
                                                         <span className="text-[8px] font-black text-amber-600 uppercase tracking-wider block">Check-Out</span>
                                                         <span className="text-base font-black text-slate-800 block mt-0.5">{todayCheckOutCount} Entries</span>
                                                     </div>
@@ -866,11 +885,17 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                             </div>
 
                                             <div className="border-t border-slate-50 pt-3 grid grid-cols-2 gap-4">
-                                                <div>
+                                                <div 
+                                                    onClick={() => { setView('CURRENT_STOCK'); setSelectedStockStatus('ALL'); }}
+                                                    className="cursor-pointer p-1 rounded-lg hover:bg-slate-50 transition-all"
+                                                >
                                                     <span className="text-[8px] font-black text-slate-400 uppercase tracking-wider block">Total Store Items</span>
                                                     <span className="text-sm font-black text-slate-700">{currentStock.length} Items</span>
                                                 </div>
-                                                <div>
+                                                <div 
+                                                    onClick={() => { setView('CURRENT_STOCK'); setSelectedStockStatus('LOW'); }}
+                                                    className="cursor-pointer p-1 rounded-lg hover:bg-slate-50 transition-all"
+                                                >
                                                     <span className="text-[8px] font-black text-slate-400 uppercase tracking-wider block">Low Stock Alerts</span>
                                                     <span className="text-sm font-black text-rose-600">{statsLowStockAlertCount + statsOutOfStockAlertCount} Alerts</span>
                                                 </div>
@@ -1177,7 +1202,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                             checkInRemarks || 'Check-In Slip Entry',
                                             undefined,
                                             undefined,
-                                            checkInProject || 'GENERAL'
+                                            checkInProject || 'GENERAL',
+                                            checkInLocation || 'MAIN STORE'
                                         );
 
                                         if (res.success) {
@@ -1389,6 +1415,54 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                  );
                                              })}
                                          </select>
+                                         {/* Project PO Validation Block */}
+                                         {checkInProject && (
+                                             (() => {
+                                                 const proj = projects.find(p => p.projectId === checkInProject);
+                                                 if (proj) {
+                                                     const isConfirmed = !!proj.planning?.poConfirmed;
+                                                     return (
+                                                         <div className={`mt-2 p-3.5 rounded-2xl border text-xs ${
+                                                             isConfirmed 
+                                                                 ? 'bg-emerald-50/50 border-emerald-100 text-emerald-800' 
+                                                                 : 'bg-amber-50/50 border-amber-100 text-amber-850'
+                                                         }`}>
+                                                             <div className="flex justify-between items-center mb-1">
+                                                                 <span className="font-black uppercase tracking-wider text-[9px] text-slate-400">PO Number Validation</span>
+                                                                 <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${
+                                                                     isConfirmed 
+                                                                         ? 'bg-emerald-100 text-emerald-800 border border-emerald-250' 
+                                                                         : 'bg-amber-100 text-amber-800 border border-amber-250'
+                                                                 }`}>
+                                                                     {isConfirmed ? 'PO Confirmed' : 'PO Pending'}
+                                                                 </span>
+                                                             </div>
+                                                             <div className="font-bold flex items-center justify-between">
+                                                                 <span>PO Ref: <span className="font-black text-slate-800">{proj.planning?.poNumber || 'N/A (No PO entered)'}</span></span>
+                                                                 <span>Client: <span className="font-black text-slate-800">{proj.client}</span></span>
+                                                             </div>
+                                                         </div>
+                                                     );
+                                                 }
+                                                 return null;
+                                             })()
+                                         )}
+                                     </div>
+
+                                     {/* Store Location Selection */}
+                                     <div className="space-y-1.5">
+                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Store Number / Location</label>
+                                         <select
+                                             required
+                                             className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                             value={checkInLocation}
+                                             onChange={(e) => setCheckInLocation(e.target.value)}
+                                         >
+                                             <option value="MAIN STORE">MAIN STORE</option>
+                                             <option value="Store No. 1">Store No. 1</option>
+                                             <option value="Store No. 2">Store No. 2</option>
+                                             <option value="MDC PANCHKULA">MDC PANCHKULA</option>
+                                         </select>
                                      </div>
 
                                     {/* Received By */}
@@ -1528,7 +1602,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                             checkOutRemarks || 'Check-Out Slip Entry',
                                             undefined,
                                             checkoutPhoto || undefined,
-                                            checkOutProjectName
+                                            checkOutProjectName,
+                                            checkOutLocation || 'MAIN STORE'
                                         );
 
                                         if (res.success) {
@@ -1555,6 +1630,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                             setCheckOutProjectName('');
                                             setCheckOutRemarks('');
                                             setCheckoutPhoto('');
+                                            setCheckOutLocation('MAIN STORE');
                                         } else {
                                             alert("Failed to issue material: " + (res.error || 'Unknown error'));
                                         }
@@ -1697,6 +1773,54 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                      <option key={p} value={p}>{displayLabel}</option>
                                                  );
                                              })}
+                                         </select>
+                                         {/* Project PO Validation Block */}
+                                         {checkOutProjectName && (
+                                             (() => {
+                                                 const proj = projects.find(p => p.projectId === checkOutProjectName);
+                                                 if (proj) {
+                                                     const isConfirmed = !!proj.planning?.poConfirmed;
+                                                     return (
+                                                         <div className={`mt-2 p-3.5 rounded-2xl border text-xs ${
+                                                             isConfirmed 
+                                                                 ? 'bg-emerald-50/50 border-emerald-100 text-emerald-800' 
+                                                                 : 'bg-amber-50/50 border-amber-100 text-amber-850'
+                                                         }`}>
+                                                             <div className="flex justify-between items-center mb-1">
+                                                                 <span className="font-black uppercase tracking-wider text-[9px] text-slate-400">PO Number Validation</span>
+                                                                 <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${
+                                                                     isConfirmed 
+                                                                         ? 'bg-emerald-100 text-emerald-800 border border-emerald-250' 
+                                                                         : 'bg-amber-100 text-amber-800 border border-amber-250'
+                                                                 }`}>
+                                                                     {isConfirmed ? 'PO Confirmed' : 'PO Pending'}
+                                                                 </span>
+                                                             </div>
+                                                             <div className="font-bold flex items-center justify-between">
+                                                                 <span>PO Ref: <span className="font-black text-slate-800">{proj.planning?.poNumber || 'N/A (No PO entered)'}</span></span>
+                                                                 <span>Client: <span className="font-black text-slate-800">{proj.client}</span></span>
+                                                             </div>
+                                                         </div>
+                                                     );
+                                                 }
+                                                 return null;
+                                             })()
+                                         )}
+                                     </div>
+
+                                     {/* Store Location Selection */}
+                                     <div className="space-y-1.5">
+                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Store Number / Location</label>
+                                         <select
+                                             required
+                                             className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                             value={checkOutLocation}
+                                             onChange={(e) => setCheckOutLocation(e.target.value)}
+                                         >
+                                             <option value="MAIN STORE">MAIN STORE</option>
+                                             <option value="Store No. 1">Store No. 1</option>
+                                             <option value="Store No. 2">Store No. 2</option>
+                                             <option value="MDC PANCHKULA">MDC PANCHKULA</option>
                                          </select>
                                      </div>
 

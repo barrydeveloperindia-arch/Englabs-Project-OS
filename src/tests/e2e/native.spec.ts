@@ -30,17 +30,17 @@ test.describe('Englabs OS Native Android Tests', () => {
         console.log(`Connected to Android device: ${device.model()} (${device.serial()})`);
         
         // Force stop to ensure clean state
-        await device.shell('am force-stop com.englabs.os');
+        await device.shell('am force-stop com.englabs.projects');
         await new Promise(r => setTimeout(r, 1000));
         
         // Start the app
-        await device.shell('am start -n com.englabs.os/com.englabs.os.MainActivity');
+        await device.shell('am start -n com.englabs.projects/com.englabs.os.MainActivity');
         
         // Connect to WebView
         let webViewContext;
         for (let i = 0; i < 30; i++) {
             try {
-                webViewContext = await device.webView({ pkg: 'com.englabs.os' });
+                webViewContext = await device.webView({ pkg: 'com.englabs.projects' });
                 if (webViewContext) break;
             } catch (e) {
                 // Ignore and retry

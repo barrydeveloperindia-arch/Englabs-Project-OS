@@ -74,6 +74,12 @@
   padding-top: env(safe-area-inset-top, 0px);
 }
 
+@media (max-width: 1279px) {
+  .pt-safe {
+    padding-top: max(env(safe-area-inset-top, 0px), 28px);
+  }
+}
+
 @theme {
   --font-inter: "Inter", sans-serif;
   --font-outfit: "Outfit", sans-serif;

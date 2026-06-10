@@ -611,7 +611,7 @@ const App: React.FC = () => {
         <div className="flex h-screen w-screen bg-[#F8FAFC] overflow-hidden text-slate-900 font-sans print:h-auto print:w-auto print:overflow-visible print:bg-white">
             {/* SIDEBAR LEDGER */}
             <aside 
-                className="bg-[#0e4368] hidden md:flex flex-col shadow-2xl shrink-0 border-r border-slate-800 print:hidden"
+                className="bg-[#0e4368] hidden md:flex flex-col shadow-2xl shrink-0 border-r border-slate-800 print:hidden pt-safe"
                 style={{ width: '320px', minWidth: '320px', maxWidth: '320px', zIndex: 50 }}
             >
                 <div className="p-8">
@@ -789,7 +789,7 @@ const App: React.FC = () => {
             <div className="flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden pb-16 md:pb-0">
                 {currentView === 'PROJECTS' ? (
                     <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-[#F8FAFC]">
-                    <header className="h-16 md:h-20 bg-white border-b border-slate-100 flex items-center justify-between px-4 md:px-10 shrink-0">
+                    <header className="h-16 md:h-20 bg-white border-b border-slate-100 flex items-center justify-between px-4 md:px-10 shrink-0 pt-safe">
                         <div className="flex items-center gap-3 md:gap-6">
                             <div className="flex flex-col">
                                 <h1 className="text-sm md:text-lg font-black text-slate-900 leading-none">Mission Control</h1>
