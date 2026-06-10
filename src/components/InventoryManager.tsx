@@ -235,7 +235,7 @@ const InventoryManager: React.FC = () => {
                                         <tr key={item.itemCode} className="group hover:bg-slate-50/50 transition-all">
                                             <td className="py-6 px-4">
                                                 <p className="font-black text-slate-900 text-sm">{item.name}</p>
-                                                <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-widest">{item.itemCode}</p>
+                                                <p className="text-[10px] font-bold text-slate-400 mt-1 tracking-widest">{item.itemCode}</p>
                                             </td>
                                             <td className="py-6 px-4 font-black text-[11px] text-slate-500 uppercase tracking-widest">{item.category}</td>
                                             <td className="py-6 px-4 font-black text-sm text-emerald-500">+{item.totalInward}</td>

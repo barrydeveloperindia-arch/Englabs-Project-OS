@@ -194,6 +194,7 @@ const App: React.FC = () => {
     const [selectedProject, setSelectedProject] = useState<ProjectData | null>(staticProjects[0] || null);
     const [searchQuery, setSearchQuery] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [projectFilter, setProjectFilter] = useState<'ALL' | 'ACTIVE' | 'UPCOMING'>('ALL');
     const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
     const [inventoryItems, setInventoryItems] = useState<any[]>([]);
     const [recentCheckouts, setRecentCheckouts] = useState<any[]>([]);
@@ -409,10 +410,23 @@ const App: React.FC = () => {
         localStorage.setItem('englabs_gate_v2', JSON.stringify(gateEntries));
     }, [gateEntries]);
 
-    const filteredProjects = projects.filter(p => 
-        p.projectId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.client.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredProjects = projects.filter(p => {
+        const matchesSearch = p.projectId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            p.client.toLowerCase().includes(searchQuery.toLowerCase());
+        if (!matchesSearch) return false;
+
+        if (projectFilter === 'ACTIVE') {
+            // Active means PO is confirmed, and not all production stages are completed yet
+            const allCompleted = p.production.stages.every(s => s.status === 'Completed');
+            return p.planning.poConfirmed && !allCompleted;
+        }
+        if (projectFilter === 'UPCOMING') {
+            // Upcoming means PO is pending, or no production stages have started yet (all are Pending)
+            const noneStarted = p.production.stages.every(s => s.status === 'Pending');
+            return !p.planning.poConfirmed || noneStarted;
+        }
+        return true;
+    });
 
     const updateStage = (stageName: string, newStatus: ProjectStage['status']) => {
         if (!selectedProject) return;
@@ -531,8 +545,12 @@ const App: React.FC = () => {
                             </svg>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-sm sm:text-base font-black tracking-tighter text-white">ENGLABS STORE</span>
-                            <span className="text-[7px] sm:text-[8px] font-black text-slate-400 tracking-[0.3em] uppercase">Enterprise Stock OS</span>
+                            <span className="text-sm sm:text-base font-black tracking-tighter text-white">
+                                {import.meta.env.VITE_APP_MODE === 'STORE' ? 'ENGLABS STORE' : import.meta.env.VITE_APP_MODE === 'PORTER_SERVICE' ? 'PORTER SERVICE' : 'ENGLABS PROJECTS'}
+                            </span>
+                            <span className="text-[7px] sm:text-[8px] font-black text-slate-400 tracking-[0.3em] uppercase">
+                                {import.meta.env.VITE_APP_MODE === 'STORE' ? 'Enterprise Stock OS' : import.meta.env.VITE_APP_MODE === 'PORTER_SERVICE' ? 'Porter Logistics OS' : 'Enterprise Projects OS'}
+                            </span>
                         </div>
                     </div>
 
@@ -617,19 +635,21 @@ const App: React.FC = () => {
                 <div className="p-8">
                     <div className="flex items-center gap-4 mb-3">
                         <div className="relative group">
-                            <div className="absolute inset-0 bg-emerald-500/20 blur-xl group-hover:bg-emerald-500/40 transition-all rounded-full" />
-                            <div className="relative p-2.5 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl shadow-lg shadow-emerald-500/20">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-900">
-                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                                </svg>
+                            <div className="absolute inset-0 bg-emerald-500/20 blur-xl group-hover:bg-emerald-500/40 transition-all rounded-xl" />
+                            <div className="relative p-1 bg-white rounded-xl shadow-lg border border-slate-100 flex items-center justify-center w-12 h-12">
+                                <img src={logo} alt="ENGLABS" className="w-10 h-10 object-contain" />
                             </div>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-lg font-black text-white tracking-tighter leading-none">ENGLABS STORE</span>
+                            <span className="text-lg font-black text-white tracking-tighter leading-none">
+                                {import.meta.env.VITE_APP_MODE === 'STORE' ? 'ENGLABS STORE' : import.meta.env.VITE_APP_MODE === 'PORTER_SERVICE' ? 'PORTER SERVICE' : 'ENGLABS PROJECTS'}
+                            </span>
                             <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mt-1">PVT LTD</span>
                         </div>
                     </div>
-                    <p className="text-[9px] font-black text-emerald-500/80 tracking-[0.25em] uppercase pl-1">Enterprise Store OS</p>
+                    <p className="text-[9px] font-black text-emerald-500/80 tracking-[0.25em] uppercase pl-1">
+                        {import.meta.env.VITE_APP_MODE === 'STORE' ? 'Enterprise Store OS' : import.meta.env.VITE_APP_MODE === 'PORTER_SERVICE' ? 'Porter Logistics OS' : 'Enterprise Projects OS'}
+                    </p>
                     <div className="mt-4 pl-1">
                         {userRole === 'ADMIN' ? (
                             <span className="inline-flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-xl text-[9px] font-black text-emerald-400 uppercase tracking-widest">
@@ -742,6 +762,24 @@ const App: React.FC = () => {
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
+                </div>
+
+                {/* Projects Filter Tabs */}
+                <div className="px-6 mb-4 flex gap-1 bg-slate-900/60 p-1 rounded-xl border border-white/5">
+                    {(['ALL', 'ACTIVE', 'UPCOMING'] as const).map(f => (
+                        <button
+                            key={f}
+                            type="button"
+                            onClick={() => setProjectFilter(f)}
+                            className={`flex-1 py-2 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all select-none ${
+                                projectFilter === f
+                                ? 'bg-emerald-500 text-slate-950 font-black shadow-md'
+                                : 'text-slate-400 hover:text-white'
+                            }`}
+                        >
+                            {f}
+                        </button>
+                    ))}
                 </div>
 
                 <div className="flex-grow overflow-y-auto px-4 space-y-2 pb-8 dark-scrollbar">

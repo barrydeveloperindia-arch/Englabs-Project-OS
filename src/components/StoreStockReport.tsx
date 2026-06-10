@@ -17,6 +17,7 @@ import {
     ArrowDownRight,
     CheckCircle2,
     Clock,
+    ClipboardList,
     Printer,
     X,
     Package,
@@ -49,7 +50,13 @@ import {
     getEstimatedPrice,
     deleteTransaction,
     editTransaction,
-    updateInventoryItemDetails
+    updateInventoryItemDetails,
+    MaterialRequirement,
+    fetchMaterialRequirements,
+    addMaterialRequirement,
+    updateMaterialRequirementStatus,
+    deleteMaterialRequirement,
+    updateMaterialRequirement
 } from '../lib/inventory_service';
 import logo from '../assets/englabs_logo.png';
 import { STAFF_ROSTER } from '../lib/constants';
@@ -82,6 +89,8 @@ const MONTH_NAMES = [
     "July", "August", "September", "October", "November", "December"
 ];
 
+const STANDARD_UNITS = ['Nos', 'Pcs', 'Box', 'Packet', 'Ltr', 'Mtr', 'Mini', 'Max', 'Kg', 'Roll', 'Set', 'ml'];
+
 const StoreStockReport: React.FC<StoreStockReportProps> = ({ 
     userRole = 'ADMIN', 
     projects = [],
@@ -90,7 +99,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
     onAddProject
 }) => {
     // Navigation state matching folder structure: Dashboard, Check In, Check Out, Live Register, Current Stock, Reports, Settings
-    const [view, setView] = useState<'DASHBOARD' | 'CHECK_IN' | 'CHECK_OUT' | 'LIVE_REGISTER' | 'CURRENT_STOCK' | 'REPORTS' | 'SETTINGS'>('DASHBOARD');
+    const [view, setView] = useState<'DASHBOARD' | 'CHECK_IN' | 'CHECK_OUT' | 'LIVE_REGISTER' | 'CURRENT_STOCK' | 'REPORTS' | 'SETTINGS' | 'REQUIREMENTS'>('DASHBOARD');
     
     // Live Register Filter state
     const [liveFilter, setLiveFilter] = useState<'TODAY' | 'WEEK' | 'MONTH' | 'CUSTOM'>('MONTH');
@@ -142,7 +151,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
     // Check-in form states
     const [checkInItemCode, setCheckInItemCode] = useState('');
     const [checkInItemName, setCheckInItemName] = useState('');
-    const [checkInQty, setCheckInQty] = useState(1);
+    const [checkInQty, setCheckInQty] = useState<number>(1);
+    const [checkInUnitMode, setCheckInUnitMode] = useState<'L' | 'ML'>('L');
     const [checkInUnit, setCheckInUnit] = useState('Nos');
     const [checkInCategory, setCheckInCategory] = useState('General');
     const [checkInSupplier, setCheckInSupplier] = useState('');
@@ -155,7 +165,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
 
     // Check-out form states
     const [checkOutItemCode, setCheckOutItemCode] = useState('');
-    const [checkOutQty, setCheckOutQty] = useState(1);
+    const [checkOutQty, setCheckOutQty] = useState<number>(1);
+    const [checkOutUnitMode, setCheckOutUnitMode] = useState<'L' | 'ML'>('L');
     const [checkOutStaffName, setCheckOutStaffName] = useState('');
     const [checkOutProjectName, setCheckOutProjectName] = useState('');
     const [checkOutIssuedBy, setCheckOutIssuedBy] = useState('');
@@ -171,6 +182,20 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
     const [showCheckOutDropdown, setShowCheckOutDropdown] = useState(false);
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
     const [isAddProjectModalOpen, setIsAddProjectModalOpen] = useState(false);
+
+    // Requirements states
+    const [requirements, setRequirements] = useState<MaterialRequirement[]>([]);
+    const [reqMaterialCode, setReqMaterialCode] = useState('');
+    const [reqSearch, setReqSearch] = useState('');
+    const [showReqDropdown, setShowReqDropdown] = useState(false);
+    const [reqQty, setReqQty] = useState<number>(1);
+    const [reqUnit, setReqUnit] = useState('Nos');
+    const [reqProject, setReqProject] = useState('');
+    const [reqRequestedBy, setReqRequestedBy] = useState('');
+    const [reqRemarks, setReqRemarks] = useState('');
+    const [reqSuccess, setReqSuccess] = useState(false);
+    const [lastSubmittedReq, setLastSubmittedReq] = useState<any>(null);
+    const [editingRequirement, setEditingRequirement] = useState<MaterialRequirement | null>(null);
     const [rackSearchQuery, setRackSearchQuery] = useState('');
     const [rackFilterType, setRackFilterType] = useState<'ALL' | 'LOW_STOCK' | 'EMPTY'>('ALL');
     const [modalConfig, setModalConfig] = useState<{ type: 'ITEM' | 'DELETE' | 'EDIT_TX' | 'DELETE_TX', data: any } | null>(null);
@@ -218,6 +243,9 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
 
                 const monthlyData = await fetchMonthlyRegister(monthlyViewMonth);
                 setMonthlyTransactions(monthlyData);
+
+                const reqData = await fetchMaterialRequirements();
+                setRequirements(reqData);
             } catch (err) {
                 console.error("Error loading registry data:", err);
             } finally {
@@ -357,8 +385,29 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                 'Running Stock Balance': tx.balanceStockAfterIssue,
                 'Remarks': tx.remarks
             }));
+        } else if (view === 'REQUIREMENTS') {
+            sheetName = "Material Requirements";
+            const filtered = requirements.filter(req => {
+                return req.materialName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    req.materialCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    req.projectId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    req.requestedBy.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    req.remarks.toLowerCase().includes(searchQuery.toLowerCase());
+            });
+            dataList = filtered.map((req, idx) => ({
+                'Sr No.': idx + 1,
+                'Request Date': new Date(req.timestamp).toLocaleString(),
+                'Project ID': req.projectId,
+                'Material Code': req.materialCode,
+                'Material Name': req.materialName,
+                'Quantity': req.quantity,
+                'Unit': req.unit,
+                'Requested By': req.requestedBy,
+                'Status': req.status,
+                'Remarks': req.remarks
+            }));
         } else {
-            alert("Please select a Register or Stock tab to export.");
+            alert("Please select a Register, Stock, or Requirements tab to export.");
             return;
         }
 
@@ -386,20 +435,63 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
             year: 'numeric' 
         }).replace(/ /g, '-');
         
-        const stockItem = currentStock.find(i => i.name === tx.materialName || i.itemCode === tx.materialName);
-        const itemRack = tx.location || (stockItem ? stockItem.location : '');
-        const rackInfo = itemRack ? ` [Rack: ${itemRack}]` : "";
-
         let text = "";
-        if (tx.type === 'INWARD' || tx.type === 'IN') {
-            text = `STORE RECEIPT SLIP\n\nDate: ${dateStr}\nMaterial: ${tx.materialName}${rackInfo}\nQuantity: ${tx.quantity} ${tx.unit || 'Nos'}\nReceived From: ${tx.staffName}\nProject: ${tx.projectId || 'N/A'}\n\nCurrent Balance: ${tx.balanceStockAfterIssue} ${tx.unit || 'Nos'}\n\nENGLABS STORE`;
+        if (tx.status) {
+            // It's a Material Requirement Request!
+            text = `STORE REQUIREMENT REQUEST\n\nDate: ${dateStr}\nMaterial: ${tx.materialName}\nCode: ${tx.materialCode}\nQuantity: ${tx.quantity} ${tx.unit || 'Nos'}\nRequested By: ${tx.requestedBy}\nProject: ${tx.projectId}\nStatus: ${tx.status}\nRemarks: ${tx.remarks || 'None'}\n\nENGLABS STORE`;
         } else {
-            text = `STORE ISSUE SLIP\n\nDate: ${dateStr}\nMaterial: ${tx.materialName}${rackInfo}\nQuantity: ${tx.quantity} ${tx.unit || 'Nos'}\nIssued To: ${tx.staffName}\nProject: ${tx.projectId}\n\nCurrent Balance: ${tx.balanceStockAfterIssue} ${tx.unit || 'Nos'}\n\nENGLABS STORE`;
+            const stockItem = currentStock.find(i => i.name === tx.materialName || i.itemCode === tx.materialName);
+            const itemRack = tx.location || (stockItem ? stockItem.location : '');
+            const rackInfo = itemRack ? ` [Rack: ${itemRack}]` : "";
+
+            if (tx.type === 'INWARD' || tx.type === 'IN') {
+                text = `STORE RECEIPT SLIP\n\nDate: ${dateStr}\nMaterial: ${tx.materialName}${rackInfo}\nQuantity: ${tx.quantity} ${tx.unit || 'Nos'}\nReceived From: ${tx.staffName}\nProject: ${tx.projectId || 'N/A'}\n\nCurrent Balance: ${tx.balanceStockAfterIssue} ${tx.unit || 'Nos'}\n\nENGLABS STORE`;
+            } else {
+                text = `STORE ISSUE SLIP\n\nDate: ${dateStr}\nMaterial: ${tx.materialName}${rackInfo}\nQuantity: ${tx.quantity} ${tx.unit || 'Nos'}\nIssued To: ${tx.staffName}\nProject: ${tx.projectId}\n\nCurrent Balance: ${tx.balanceStockAfterIssue} ${tx.unit || 'Nos'}\n\nENGLABS STORE`;
+            }
         }
+
+        const shareTitle = tx.status ? 'STORE REQUIREMENT REQUEST' : (tx.type === 'INWARD' || tx.type === 'IN' ? 'STORE RECEIPT SLIP' : 'STORE ISSUE SLIP');
 
         if (navigator.share) {
             navigator.share({
-                title: tx.type === 'INWARD' || tx.type === 'IN' ? 'STORE RECEIPT SLIP' : 'STORE ISSUE SLIP',
+                title: shareTitle,
+                text: text
+            }).catch(err => {
+                console.error("Web share failed", err);
+                const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                window.open(url, '_blank');
+            });
+        } else {
+            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+    };
+
+    const handleShareAllWhatsApp = () => {
+        const pending = requirements.filter(r => r.status === 'PENDING');
+        if (pending.length === 0) {
+            alert("No pending requirements to share.");
+            return;
+        }
+
+        let text = "*PENDING MATERIAL REQUIREMENTS*\n----------------------------------\n";
+        pending.forEach((req, idx) => {
+            text += `${idx + 1}. *${req.materialName}*\n`;
+            text += `   Code: ${req.materialCode}\n`;
+            text += `   Qty: ${req.quantity} ${req.unit || 'Nos'}\n`;
+            text += `   Project: ${req.projectId}\n`;
+            text += `   Requested By: ${req.requestedBy}\n`;
+            if (req.remarks) {
+                text += `   Remarks: ${req.remarks}\n`;
+            }
+            text += `----------------------------------\n`;
+        });
+        text += "\nENGLABS STORE";
+
+        if (navigator.share) {
+            navigator.share({
+                title: 'PENDING MATERIAL REQUIREMENTS',
                 text: text
             }).catch(err => {
                 console.error("Web share failed", err);
@@ -641,6 +733,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                     { id: 'CHECK_OUT', label: 'Check Out', icon: <ArrowUpCircle className="w-4 h-4" /> },
                     { id: 'LIVE_REGISTER', label: 'Live Register', icon: <Clock className="w-4 h-4" /> },
                     { id: 'CURRENT_STOCK', label: 'Current Stock', icon: <Package className="w-4 h-4" /> },
+                    { id: 'REQUIREMENTS', label: 'Requirements', icon: <ClipboardList className="w-4 h-4" /> },
                     { id: 'REPORTS', label: 'Reports', icon: <FileText className="w-4 h-4" /> },
                     { id: 'SETTINGS', label: 'Settings', icon: <Settings className="w-4 h-4" /> },
                 ].map((item) => (
@@ -717,6 +810,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                     {view === 'CHECK_OUT' && 'Material Check-Out'}
                                     {view === 'LIVE_REGISTER' && 'Live Transaction Register'}
                                     {view === 'CURRENT_STOCK' && 'Current Stock Inventory'}
+                                    {view === 'REQUIREMENTS' && 'Material Requirements Tracking'}
                                     {view === 'REPORTS' && 'Monthly Audit Reports'}
                                     {view === 'SETTINGS' && 'System Settings'}
                                 </h1>
@@ -734,6 +828,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                 { id: 'CHECK_OUT', label: 'Check Out' },
                                 { id: 'LIVE_REGISTER', label: 'Live Register' },
                                 { id: 'CURRENT_STOCK', label: 'Stock' },
+                                { id: 'REQUIREMENTS', label: 'Requirements' },
                                 { id: 'REPORTS', label: 'Reports' },
                                 { id: 'SETTINGS', label: 'Settings' }
                             ].map(item => (
@@ -755,7 +850,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                     {/* Top Right Quick Actions */}
                     <div className="flex items-center gap-2 w-full xl:w-auto justify-between xl:justify-end">
                         {/* Search Bar for Table Views */}
-                        {(view === 'LIVE_REGISTER' || view === 'CURRENT_STOCK' || view === 'REPORTS') && (
+                        {(view === 'LIVE_REGISTER' || view === 'CURRENT_STOCK' || view === 'REPORTS' || view === 'REQUIREMENTS') && (
                             <div className="relative w-full xl:w-44 flex-1 xl:flex-none">
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
                                 <input 
@@ -769,7 +864,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                         )}
                         
                         <div className="flex gap-2">
-                            {(view === 'LIVE_REGISTER' || view === 'CURRENT_STOCK' || view === 'REPORTS') && (
+                            {(view === 'LIVE_REGISTER' || view === 'CURRENT_STOCK' || view === 'REPORTS' || view === 'REQUIREMENTS') && (
                                 <>
                                     <button onClick={handleExportExcel} className="p-2.5 bg-white text-slate-700 hover:bg-slate-50 rounded-xl transition-all border border-slate-100 shadow-sm" title="Export Excel">
                                         <Download className="w-4 h-4" />
@@ -918,7 +1013,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                 <div key={item.itemCode} className="py-3.5 flex justify-between items-center text-xs">
                                                     <div>
                                                         <span className="font-bold text-slate-900 block">{item.name}</span>
-                                                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{item.itemCode} • {item.category}</span>
+                                                        <span className="text-[9px] font-black text-slate-400 tracking-widest">{item.itemCode} • {item.category}</span>
                                                     </div>
                                                     <div className="text-right flex items-center gap-3">
                                                         <div>
@@ -993,9 +1088,9 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                         <div className="flex justify-between items-center border-b border-slate-100 pb-2 mb-3">
                                                             <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider ${
                                                                 hasOutOfStock 
-                                                                    ? 'bg-rose-50 text-rose-650 border border-rose-100' 
+                                                                    ? 'bg-rose-50 text-rose-700 border border-rose-100' 
                                                                     : hasLowStock 
-                                                                        ? 'bg-amber-50 text-amber-650 border border-amber-100' 
+                                                                        ? 'bg-amber-50 text-amber-700 border border-amber-100' 
                                                                         : 'bg-slate-100 text-slate-700'
                                                             }`}>
                                                                 📍 {rack.name}
@@ -1225,6 +1320,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                             setCheckInItemName('');
                                             setCheckInSearch('');
                                             setCheckInQty(1);
+                                            setCheckInUnitMode('L');
                                             setCheckInSupplier('');
                                             setCheckInProject('');
                                             setCheckInRemarks('');
@@ -1245,7 +1341,11 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                             <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Material Name</label>
                                             <button
                                                 type="button"
-                                                onClick={() => setIsNewItemMode(!isNewItemMode)}
+                                                onClick={() => {
+                                                    setIsNewItemMode(!isNewItemMode);
+                                                    setCheckInUnitMode('L');
+                                                    setCheckInQty(1);
+                                                }}
                                                 className="text-[9px] font-black uppercase text-indigo-600 hover:text-indigo-800"
                                             >
                                                 {isNewItemMode ? "Select Existing Item" : "＋ Register New Material"}
@@ -1270,12 +1370,15 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                         <select
                                                             className="w-full bg-white border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
                                                             value={checkInUnit}
-                                                            onChange={(e) => setCheckInUnit(e.target.value)}
+                                                            onChange={(e) => {
+                                                                setCheckInUnit(e.target.value);
+                                                                setCheckInUnitMode('L');
+                                                                setCheckInQty(1);
+                                                            }}
                                                         >
-                                                            <option value="Nos">Nos</option>
-                                                            <option value="Kg">Kg</option>
-                                                            <option value="Mtr">Mtr</option>
-                                                            <option value="Ltr">Ltr</option>
+                                                            {STANDARD_UNITS.map(u => (
+                                                                <option key={u} value={u}>{u}</option>
+                                                            ))}
                                                         </select>
                                                     </div>
                                                     <div>
@@ -1330,11 +1433,13 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                                              setCheckInItemCode(item.itemCode);
                                                                              setCheckInSearch(item.name);
                                                                              setShowCheckInDropdown(false);
+                                                                             setCheckInUnitMode('L');
+                                                                             setCheckInQty(1);
                                                                          }}
                                                                          className="w-full text-left px-4 py-2.5 text-xs font-bold hover:bg-slate-50 text-slate-700 transition-colors border-b border-slate-50 last:border-0"
                                                                      >
                                                                          <span className="block text-slate-900">{item.name}</span>
-                                                                         <span className="block text-[8px] text-slate-400 font-bold uppercase tracking-wider">{item.itemCode} • {item.unit}</span>
+                                                                         <span className="block text-[8px] text-slate-400 font-bold tracking-wider">{item.itemCode} • {item.unit}</span>
                                                                      </button>
                                                                  ))
                                                              }
@@ -1350,30 +1455,94 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
 
                                     {/* Quantity */}
                                     <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">
-                                            Quantity {!isNewItemMode && checkInItemCode && `(in ${currentStock.find(i => i.itemCode === checkInItemCode)?.unit || ''})`}
-                                            {isNewItemMode && `(in ${checkInUnit})`}
-                                        </label>
+                                        <div className="flex justify-between items-center">
+                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">
+                                                Quantity {!isNewItemMode && !checkInItemCode && <span className="text-[8px] font-normal text-slate-400 normal-case"> (select liquid material for ml/Ltr toggle)</span>}
+                                                {!isNewItemMode && checkInItemCode && `(in ${checkInUnitMode === 'ML' ? 'ml' : (currentStock.find(i => i.itemCode === checkInItemCode)?.unit || '')})`}
+                                                {isNewItemMode && `(in ${checkInUnitMode === 'ML' ? 'ml' : checkInUnit})`}
+                                            </label>
+                                            {(() => {
+                                                const selectedItem = checkInItemCode ? currentStock.find(i => i.itemCode === checkInItemCode) : null;
+                                                const isCheckInLtr = (isNewItemMode && checkInUnit.toLowerCase() === 'ltr') || (!isNewItemMode && selectedItem && selectedItem.unit && selectedItem.unit.toLowerCase() === 'ltr');
+                                                if (!isCheckInLtr) return null;
+                                                return (
+                                                    <div className="flex items-center gap-1.5 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                if (checkInUnitMode === 'ML') {
+                                                                    setCheckInUnitMode('L');
+                                                                    setCheckInQty(Math.round(checkInQty * 1000) / 1000 || 1);
+                                                                }
+                                                            }}
+                                                            className={`px-2 py-0.5 text-[9px] font-black rounded-md transition-all ${
+                                                                checkInUnitMode === 'L'
+                                                                    ? 'bg-emerald-600 text-white shadow-sm'
+                                                                    : 'text-slate-500 hover:text-slate-800'
+                                                            }`}
+                                                        >
+                                                            Ltr
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                if (checkInUnitMode === 'L') {
+                                                                    setCheckInUnitMode('ML');
+                                                                    setCheckInQty(Math.round(checkInQty * 1000) / 1000 || 1);
+                                                                }
+                                                            }}
+                                                            className={`px-2 py-0.5 text-[9px] font-black rounded-md transition-all ${
+                                                                checkInUnitMode === 'ML'
+                                                                    ? 'bg-emerald-600 text-white shadow-sm'
+                                                                    : 'text-slate-500 hover:text-slate-800'
+                                                            }`}
+                                                        >
+                                                            ml
+                                                        </button>
+                                                    </div>
+                                                );
+                                            })()}
+                                        </div>
                                         <div className="relative flex items-center">
                                             <input
                                                 type="number"
-                                                min="1"
+                                                min={checkInUnitMode === 'ML' ? 1 : 0.001}
+                                                step={checkInUnitMode === 'ML' ? 1 : 'any'}
                                                 required
                                                 className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 pl-3 pr-12 text-xs font-bold focus:border-indigo-500 outline-none"
-                                                value={checkInQty}
-                                                onChange={(e) => setCheckInQty(parseInt(e.target.value) || 0)}
+                                                value={checkInUnitMode === 'ML' ? (checkInQty ? Math.round(checkInQty * 1000) : '') : (checkInQty || '')}
+                                                onChange={(e) => {
+                                                    const val = parseFloat(e.target.value) || 0;
+                                                    setCheckInQty(checkInUnitMode === 'ML' ? val / 1000 : val);
+                                                }}
                                             />
                                             {!isNewItemMode && checkInItemCode && (
                                                 <span className="absolute right-3 text-slate-400 text-[10px] font-black uppercase pointer-events-none">
-                                                    {currentStock.find(i => i.itemCode === checkInItemCode)?.unit || ''}
+                                                    {checkInUnitMode === 'ML' ? 'ml' : (currentStock.find(i => i.itemCode === checkInItemCode)?.unit || '')}
                                                 </span>
                                             )}
                                             {isNewItemMode && (
                                                 <span className="absolute right-3 text-slate-400 text-[10px] font-black uppercase pointer-events-none">
-                                                    {checkInUnit}
+                                                    {checkInUnitMode === 'ML' ? 'ml' : checkInUnit}
                                                 </span>
                                             )}
                                         </div>
+                                        {(() => {
+                                            const selectedItem = checkInItemCode ? currentStock.find(i => i.itemCode === checkInItemCode) : null;
+                                            const isCheckInLtr = (isNewItemMode && checkInUnit.toLowerCase() === 'ltr') || (!isNewItemMode && selectedItem && selectedItem.unit && selectedItem.unit.toLowerCase() === 'ltr');
+                                            if (isCheckInLtr && checkInQty > 0) {
+                                                return (
+                                                    <div className="text-[10px] font-bold text-slate-400 mt-1">
+                                                        {checkInUnitMode === 'ML' ? (
+                                                            <span>Equivalent to <strong className="text-emerald-600">{checkInQty} Ltr</strong></span>
+                                                        ) : (
+                                                            <span>Equivalent to <strong className="text-emerald-600">{Math.round(checkInQty * 1000)} ml</strong></span>
+                                                        )}
+                                                    </div>
+                                                );
+                                            }
+                                            return null;
+                                        })()}
                                     </div>
 
                                     {/* Supplier */}
@@ -1626,6 +1795,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                             setCheckOutItemCode('');
                                             setCheckOutSearch('');
                                             setCheckOutQty(1);
+                                            setCheckOutUnitMode('L');
                                             setCheckOutStaffName('');
                                             setCheckOutProjectName('');
                                             setCheckOutRemarks('');
@@ -1679,6 +1849,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                                         setCheckOutItemCode(item.itemCode);
                                                                         setCheckOutSearch(item.name);
                                                                         setShowCheckOutDropdown(false);
+                                                                        setCheckOutUnitMode('L');
+                                                                        setCheckOutQty(1);
                                                                     }}
                                                                     className="w-full text-left px-4 py-2.5 text-xs font-bold hover:bg-slate-50 text-slate-700 transition-colors border-b border-slate-50 last:border-0"
                                                                 >
@@ -1688,7 +1860,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                                             {item.availableStock} {item.unit}
                                                                         </span>
                                                                     </div>
-                                                                    <span className="block text-[8px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">{item.itemCode}</span>
+                                                                    <span className="block text-[8px] text-slate-400 font-bold tracking-wider mt-0.5">{item.itemCode}</span>
                                                                 </button>
                                                             ))
                                                         }
@@ -1705,30 +1877,98 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                     <div className="space-y-1.5">
                                         <div className="flex justify-between items-center">
                                             <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                                                Quantity {checkOutItemCode && `(in ${currentStock.find(i => i.itemCode === checkOutItemCode)?.unit || ''})`}
+                                                Quantity {!checkOutItemCode && <span className="text-[8px] font-normal text-slate-400 normal-case"> (select liquid material for ml/Ltr toggle)</span>}
+                                                {checkOutItemCode && `(in ${checkOutUnitMode === 'ML' ? 'ml' : (currentStock.find(i => i.itemCode === checkOutItemCode)?.unit || '')})`}
                                             </label>
-                                            {checkOutItemCode && (
-                                                <span className="text-[9px] font-black text-indigo-600 uppercase bg-indigo-50 px-2 py-0.5 rounded-md">
-                                                    Max Available: {currentStock.find(i => i.itemCode === checkOutItemCode)?.availableStock || 0} {currentStock.find(i => i.itemCode === checkOutItemCode)?.unit || ''}
-                                                </span>
-                                            )}
+                                            <div className="flex items-center gap-3">
+                                                {(() => {
+                                                    const selectedItem = checkOutItemCode ? currentStock.find(i => i.itemCode === checkOutItemCode) : null;
+                                                    const isCheckOutLtr = selectedItem && selectedItem.unit && selectedItem.unit.toLowerCase() === 'ltr';
+                                                    if (!isCheckOutLtr) return null;
+                                                    return (
+                                                        <div className="flex items-center gap-1.5 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    if (checkOutUnitMode === 'ML') {
+                                                                        setCheckOutUnitMode('L');
+                                                                        setCheckOutQty(Math.round(checkOutQty * 1000) / 1000 || 1);
+                                                                    }
+                                                                }}
+                                                                className={`px-2 py-0.5 text-[9px] font-black rounded-md transition-all ${
+                                                                    checkOutUnitMode === 'L'
+                                                                        ? 'bg-amber-600 text-white shadow-sm'
+                                                                        : 'text-slate-500 hover:text-slate-800'
+                                                                }`}
+                                                            >
+                                                                Ltr
+                                                            </button>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    if (checkOutUnitMode === 'L') {
+                                                                        setCheckOutUnitMode('ML')
+                                                                        setCheckOutQty(Math.round(checkOutQty * 1000) / 1000 || 1);
+                                                                    }
+                                                                }}
+                                                                className={`px-2 py-0.5 text-[9px] font-black rounded-md transition-all ${
+                                                                    checkOutUnitMode === 'ML'
+                                                                        ? 'bg-amber-600 text-white shadow-sm'
+                                                                        : 'text-slate-500 hover:text-slate-800'
+                                                                }`}
+                                                            >
+                                                                ml
+                                                            </button>
+                                                        </div>
+                                                    );
+                                                })()}
+                                                {checkOutItemCode && (
+                                                    <span className="text-[9px] font-black text-indigo-600 uppercase bg-indigo-50 px-2 py-0.5 rounded-md">
+                                                        Max: {(() => {
+                                                            const item = currentStock.find(i => i.itemCode === checkOutItemCode);
+                                                            if (!item) return 0;
+                                                            return checkOutUnitMode === 'ML' ? Math.round(item.availableStock * 1000) : item.availableStock;
+                                                        })()} {checkOutUnitMode === 'ML' ? 'ml' : (currentStock.find(i => i.itemCode === checkOutItemCode)?.unit || '')}
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
                                         <div className="relative flex items-center">
                                             <input
                                                 type="number"
-                                                min="1"
-                                                max={checkOutItemCode ? currentStock.find(i => i.itemCode === checkOutItemCode)?.availableStock : undefined}
+                                                min={checkOutUnitMode === 'ML' ? 1 : 0.001}
+                                                max={checkOutItemCode ? (checkOutUnitMode === 'ML' ? (currentStock.find(i => i.itemCode === checkOutItemCode)?.availableStock || 0) * 1000 : currentStock.find(i => i.itemCode === checkOutItemCode)?.availableStock) : undefined}
+                                                step={checkOutUnitMode === 'ML' ? 1 : 'any'}
                                                 required
                                                 className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 pl-3 pr-12 text-xs font-bold focus:border-indigo-500 outline-none"
-                                                value={checkOutQty}
-                                                onChange={(e) => setCheckOutQty(parseInt(e.target.value) || 0)}
+                                                value={checkOutUnitMode === 'ML' ? (checkOutQty ? Math.round(checkOutQty * 1000) : '') : (checkOutQty || '')}
+                                                onChange={(e) => {
+                                                    const val = parseFloat(e.target.value) || 0;
+                                                    setCheckOutQty(checkOutUnitMode === 'ML' ? val / 1000 : val);
+                                                }}
                                             />
                                             {checkOutItemCode && (
                                                 <span className="absolute right-3 text-slate-400 text-[10px] font-black uppercase pointer-events-none">
-                                                    {currentStock.find(i => i.itemCode === checkOutItemCode)?.unit || ''}
+                                                    {checkOutUnitMode === 'ML' ? 'ml' : (currentStock.find(i => i.itemCode === checkOutItemCode)?.unit || '')}
                                                 </span>
                                             )}
                                         </div>
+                                        {(() => {
+                                            const selectedItem = checkOutItemCode ? currentStock.find(i => i.itemCode === checkOutItemCode) : null;
+                                            const isCheckOutLtr = selectedItem && selectedItem.unit && selectedItem.unit.toLowerCase() === 'ltr';
+                                            if (isCheckOutLtr && checkOutQty > 0) {
+                                                return (
+                                                    <div className="text-[10px] font-bold text-slate-400 mt-1">
+                                                        {checkOutUnitMode === 'ML' ? (
+                                                            <span>Equivalent to <strong className="text-amber-600">{checkOutQty} Ltr</strong></span>
+                                                        ) : (
+                                                            <span>Equivalent to <strong className="text-amber-600">{Math.round(checkOutQty * 1000)} ml</strong></span>
+                                                        )}
+                                                    </div>
+                                                );
+                                            }
+                                            return null;
+                                        })()}
                                     </div>
 
                                     {/* Issued To Staff */}
@@ -1926,7 +2166,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                     </div>
                                     
                                     {liveFilter === 'CUSTOM' && (
-                                        <div className="flex items-center gap-2 bg-slate-50 p-1 rounded-xl border border-slate-100 animate-in slide-in-from-left duration-250">
+                                        <div className="flex items-center gap-2 bg-slate-50 p-1 rounded-xl border border-slate-100 animate-in slide-in-from-left duration-300">
                                             <span className="text-[9px] font-black uppercase text-slate-400 pl-2">From:</span>
                                             <input 
                                                 type="date" 
@@ -2004,21 +2244,21 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                         <div className="flex items-center justify-center gap-1.5">
                                                             <button
                                                                 onClick={() => handleShareWhatsApp(tx)}
-                                                                className="inline-flex items-center justify-center p-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl transition-all border border-emerald-150"
+                                                                className="inline-flex items-center justify-center p-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl transition-all border border-emerald-100"
                                                                 title="Share slip on WhatsApp"
                                                             >
                                                                 <Share2 className="w-3.5 h-3.5" />
                                                             </button>
                                                             <button
                                                                 onClick={() => setModalConfig({ type: 'EDIT_TX', data: tx })}
-                                                                className="inline-flex items-center justify-center p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition-all border border-blue-150"
+                                                                className="inline-flex items-center justify-center p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition-all border border-blue-100"
                                                                 title="Edit Transaction"
                                                             >
                                                                 <Edit3 className="w-3.5 h-3.5" />
                                                             </button>
                                                             <button
                                                                 onClick={() => setModalConfig({ type: 'DELETE_TX', data: tx })}
-                                                                className="inline-flex items-center justify-center p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-all border border-red-150"
+                                                                className="inline-flex items-center justify-center p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-all border border-red-100"
                                                                 title="Delete Transaction"
                                                             >
                                                                 <Trash2 className="w-3.5 h-3.5" />
@@ -2051,7 +2291,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                         <select
                                             value={selectedStockCategory}
                                             onChange={(e) => setSelectedStockCategory(e.target.value)}
-                                            className="bg-slate-50 border border-slate-250 rounded-xl py-2 px-3 text-[11px] font-bold text-slate-700 focus:outline-none focus:border-indigo-500 transition-all min-w-[140px]"
+                                            className="bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-[11px] font-bold text-slate-700 focus:outline-none focus:border-indigo-500 transition-all min-w-[140px]"
                                         >
                                             <option value="ALL">All Categories</option>
                                             {Array.from(new Set(currentStock.map(i => i.category).filter(Boolean))).sort().map(cat => (
@@ -2066,7 +2306,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                         <select
                                             value={selectedStockRack}
                                             onChange={(e) => setSelectedStockRack(e.target.value)}
-                                            className="bg-slate-50 border border-slate-250 rounded-xl py-2 px-3 text-[11px] font-bold text-slate-700 focus:outline-none focus:border-indigo-500 transition-all min-w-[140px]"
+                                            className="bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-[11px] font-bold text-slate-700 focus:outline-none focus:border-indigo-500 transition-all min-w-[140px]"
                                         >
                                             <option value="ALL">All Racks</option>
                                             {Array.from(new Set(currentStock.map(i => normalizeRackLocation(i.location || 'MAIN STORE')).filter(Boolean))).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })).map(loc => (
@@ -2081,7 +2321,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                         <select
                                             value={selectedStockStatus}
                                             onChange={(e) => setSelectedStockStatus(e.target.value)}
-                                            className="bg-slate-50 border border-slate-250 rounded-xl py-2 px-3 text-[11px] font-bold text-slate-700 focus:outline-none focus:border-indigo-500 transition-all min-w-[140px]"
+                                            className="bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-[11px] font-bold text-slate-700 focus:outline-none focus:border-indigo-500 transition-all min-w-[140px]"
                                         >
                                             <option value="ALL">All Statuses</option>
                                             <option value="SECURE">Secure Stock</option>
@@ -2164,7 +2404,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                                 : 'hover:bg-slate-50/30'
                                                         }`}>
                                                             <td className="py-4 px-4 font-bold text-slate-500">{String(idx + 1).padStart(3, '0')}</td>
-                                                            <td className="py-4 px-4 font-bold text-slate-650">{item.itemCode}</td>
+                                                            <td className="py-4 px-4 font-bold text-slate-600">{item.itemCode}</td>
                                                             <td className="py-4 px-4 font-black">{item.name}</td>
                                                             <td className="py-4 px-4 font-bold text-slate-500 uppercase">{item.category}</td>
                                                             <td className="py-4 px-4 font-bold text-slate-700">{normalizeRackLocation(item.location || 'N/A')}</td>
@@ -2283,7 +2523,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                         <td className="py-4 px-4 text-slate-500 font-medium">{new Date(tx.timestamp).toLocaleString('en-IN')}</td>
                                                         <td className="py-4 px-4">
                                                             <span className="font-bold text-slate-900 block">{tx.materialName}</span>
-                                                            <span className="text-[9px] text-slate-400 font-black tracking-wider uppercase block">{tx.itemCode}</span>
+                                                            <span className="text-[9px] text-slate-400 font-black tracking-wider block">{tx.itemCode}</span>
                                                         </td>
                                                         <td className="py-4 px-4 text-center">
                                                             <span className={`inline-flex px-2 py-0.5 rounded-md text-[8px] font-black uppercase ${
@@ -2359,6 +2599,478 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                     ))}
                                 </div>
                             </div>
+                        </div>
+                    )}
+
+                    {/* 8. REQUIREMENTS VIEW */}
+                    {view === 'REQUIREMENTS' && (
+                        <div className="max-w-7xl mx-auto space-y-6 animate-in fade-in duration-300">
+                             {/* Top Panel: Form to Add Requirement */}
+                             <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 md:p-8">
+                                 <div className="flex items-center gap-3 mb-6 border-b border-slate-50 pb-4">
+                                     <div className="p-3 bg-indigo-50 rounded-2xl text-indigo-600">
+                                         <ClipboardList className="w-6 h-6" />
+                                     </div>
+                                     <div>
+                                         <h2 className="text-base font-black text-slate-900 leading-none">New Material Requirement Request</h2>
+                                         <span className="text-[10px] font-bold text-slate-400 block mt-1">Submit request for material allocations or project allocations</span>
+                                     </div>
+                                 </div>
+
+                                 {reqSuccess ? (
+                                     <div className="text-center py-6 space-y-4 animate-in fade-in duration-300">
+                                         <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                                             <CheckCircle2 className="w-8 h-8" />
+                                         </div>
+                                         <div>
+                                             <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider">Requirement Logged Successfully!</h3>
+                                             <p className="text-xs text-slate-400 font-bold mt-1">The request has been queued and is pending store approval.</p>
+                                         </div>
+                                         <div className="flex flex-col sm:flex-row justify-center gap-3">
+                                             <button
+                                                 type="button"
+                                                 onClick={() => {
+                                                     if (lastSubmittedReq) {
+                                                         handleShareWhatsApp(lastSubmittedReq);
+                                                     }
+                                                 }}
+                                                 className="px-6 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-black uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 border border-emerald-100 shadow-sm"
+                                             >
+                                                 📱 Share on WhatsApp
+                                             </button>
+                                             <button
+                                                 type="button"
+                                                 onClick={() => setReqSuccess(false)}
+                                                 className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-black uppercase tracking-wider rounded-xl transition-all font-bold border border-slate-200 shadow-sm"
+                                             >
+                                                 Create Another Request
+                                             </button>
+                                         </div>
+                                     </div>
+                                 ) : (
+                                     <form onSubmit={async (e) => {
+                                         e.preventDefault();
+                                         let materialName = reqSearch.trim();
+                                         let materialCode = reqMaterialCode;
+                                         let finalUnit = reqUnit;
+
+                                         const selectedItem = currentStock.find(i => i.itemCode === reqMaterialCode);
+                                         if (selectedItem) {
+                                             materialName = selectedItem.name;
+                                             materialCode = selectedItem.itemCode;
+                                             finalUnit = selectedItem.unit || reqUnit;
+                                         } else {
+                                             if (!materialName) {
+                                                 alert("Please enter a material name.");
+                                                 return;
+                                             }
+                                             // Fallback: If they typed a name that exactly matches one of the items in currentStock, use it
+                                             const exactMatch = currentStock.find(i => i.name.toLowerCase() === materialName.toLowerCase());
+                                             if (exactMatch) {
+                                                 materialName = exactMatch.name;
+                                                 materialCode = exactMatch.itemCode;
+                                                 finalUnit = exactMatch.unit || reqUnit;
+                                             } else {
+                                                 materialCode = 'NEW-REQ';
+                                             }
+                                         }
+
+                                         if (reqQty <= 0) {
+                                             alert("Please enter a valid quantity.");
+                                             return;
+                                         }
+                                         if (!reqProject) {
+                                             alert("Please select a Project ID.");
+                                             return;
+                                         }
+                                         if (!reqRequestedBy) {
+                                             alert("Please select requester name.");
+                                             return;
+                                         }
+                                         setIsLoading(true);
+                                         try {
+                                             const res = await addMaterialRequirement({
+                                                 projectId: reqProject,
+                                                 materialCode: materialCode,
+                                                 materialName: materialName,
+                                                 quantity: reqQty,
+                                                 unit: finalUnit,
+                                                 requestedBy: reqRequestedBy,
+                                                 remarks: reqRemarks
+                                             });
+                                             if (res.success) {
+                                                 setLastSubmittedReq({
+                                                     projectId: reqProject,
+                                                     materialCode: materialCode,
+                                                     materialName: materialName,
+                                                     quantity: reqQty,
+                                                     unit: finalUnit,
+                                                     requestedBy: reqRequestedBy,
+                                                     remarks: reqRemarks,
+                                                     status: 'PENDING',
+                                                     timestamp: Date.now()
+                                                 });
+                                                 setReqSuccess(true);
+                                                 // Reset form fields
+                                                 setReqMaterialCode('');
+                                                 setReqSearch('');
+                                                 setReqQty(1);
+                                                 setReqProject('');
+                                                 setReqRequestedBy('');
+                                                 setReqRemarks('');
+                                                 // Reload database/requirements
+                                                 setRefreshTrigger(p => p + 1);
+                                             } else {
+                                                 alert("Failed to submit request.");
+                                             }
+                                         } catch (err: any) {
+                                             alert("Error submitting request: " + err.message);
+                                         } finally {
+                                             setIsLoading(false);
+                                         }
+                                     }} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                         
+                                         {/* Left Column: Selector + Qty */}
+                                         <div className="space-y-4">
+                                             {/* Material Search Input */}
+                                             <div className="space-y-1.5">
+                                                 <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Material Name *</label>
+                                                 <div className="relative">
+                                                     <input
+                                                         type="text"
+                                                         placeholder="Search material in store stock..."
+                                                         className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                                         value={reqSearch}
+                                                         onChange={(e) => {
+                                                             setReqSearch(e.target.value);
+                                                             if (!e.target.value) {
+                                                                 setReqMaterialCode('');
+                                                             }
+                                                             setShowReqDropdown(true);
+                                                         }}
+                                                         onFocus={() => setShowReqDropdown(true)}
+                                                         required
+                                                     />
+                                                     {showReqDropdown && (
+                                                         <>
+                                                             <div className="fixed inset-0 z-10" onClick={() => setShowReqDropdown(false)} />
+                                                             <div className="absolute z-20 w-full max-h-60 overflow-y-auto bg-white border border-slate-200 rounded-xl mt-1 shadow-lg custom-scrollbar">
+                                                                 {currentStock
+                                                                     .filter(item => item.name.toLowerCase().includes(reqSearch.toLowerCase()) || item.itemCode.toLowerCase().includes(reqSearch.toLowerCase()))
+                                                                     .map(item => (
+                                                                         <button
+                                                                             type="button"
+                                                                             key={item.itemCode}
+                                                                             onClick={() => {
+                                                                                 setReqMaterialCode(item.itemCode);
+                                                                                 setReqSearch(item.name);
+                                                                                 setReqUnit(item.unit);
+                                                                                 setShowReqDropdown(false);
+                                                                             }}
+                                                                             className="w-full text-left px-4 py-2.5 text-xs font-bold hover:bg-slate-50 text-slate-700 transition-colors border-b border-slate-50 last:border-0"
+                                                                         >
+                                                                             <div className="flex justify-between items-center">
+                                                                                 <span className="text-slate-900 block">{item.name}</span>
+                                                                                 <span className="text-[9px] font-black text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md">
+                                                                                     Stock: {item.availableStock} {item.unit}
+                                                                                 </span>
+                                                                             </div>
+                                                                             <span className="block text-[8px] text-slate-400 font-bold tracking-wider mt-0.5">{item.itemCode}</span>
+                                                                         </button>
+                                                                     ))
+                                                                 }
+                                                                 {currentStock.filter(item => item.name.toLowerCase().includes(reqSearch.toLowerCase()) || item.itemCode.toLowerCase().includes(reqSearch.toLowerCase())).length === 0 && (
+                                                                     <div className="p-4 text-center text-slate-400 text-xs font-bold">No matching materials found</div>
+                                                                 )}
+                                                             </div>
+                                                         </>
+                                                     )}
+                                                 </div>
+                                             </div>
+
+                                             {/* Quantity & Unit Grid */}
+                                             <div className="grid grid-cols-2 gap-4">
+                                                 {/* Quantity */}
+                                                 <div className="space-y-1.5">
+                                                     <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Requested Quantity *</label>
+                                                     <input
+                                                         type="number"
+                                                         min={0.001}
+                                                         step="any"
+                                                         required
+                                                         placeholder="1"
+                                                         className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                                         value={reqQty || ''}
+                                                         onChange={(e) => setReqQty(parseFloat(e.target.value) || 0)}
+                                                     />
+                                                 </div>
+                                                 {/* Unit */}
+                                                 <div className="space-y-1.5">
+                                                     <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Unit *</label>
+                                                     <select
+                                                         value={STANDARD_UNITS.includes(reqUnit) ? reqUnit : "Other"}
+                                                         onChange={(e) => {
+                                                             const val = e.target.value;
+                                                             if (val === 'Other') {
+                                                                 setReqUnit('');
+                                                             } else {
+                                                                 setReqUnit(val);
+                                                             }
+                                                         }}
+                                                         className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none text-slate-900"
+                                                     >
+                                                         {STANDARD_UNITS.map(u => (
+                                                             <option key={u} value={u}>{u}</option>
+                                                         ))}
+                                                         <option value="Other">+ Add Custom Unit (Other)</option>
+                                                     </select>
+                                                 </div>
+                                             </div>
+                                             {/* Custom Unit Input */}
+                                             {(!STANDARD_UNITS.includes(reqUnit) || reqUnit === '') && (
+                                                 <div className="space-y-1.5 animate-in slide-in-from-top-1 duration-200">
+                                                     <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Custom Unit Name *</label>
+                                                     <input 
+                                                         type="text"
+                                                         required
+                                                         placeholder="e.g. Bag, Bucket, etc."
+                                                         value={reqUnit}
+                                                         onChange={(e) => setReqUnit(e.target.value)}
+                                                         className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                                     />
+                                                 </div>
+                                             )}
+                                         </div>
+
+                                         {/* Right Column: Project, Staff, Remarks */}
+                                         <div className="space-y-4">
+                                             <div className="grid grid-cols-2 gap-4">
+                                                 {/* Project ID */}
+                                                 <div className="space-y-1.5">
+                                                     <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Project ID *</label>
+                                                     <select
+                                                         required
+                                                         className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                                         value={reqProject}
+                                                         onChange={(e) => setReqProject(e.target.value)}
+                                                     >
+                                                         <option value="">Select Project...</option>
+                                                         {projectList.map(p => {
+                                                             const proj = projects.find(proj => proj.projectId === p);
+                                                             const displayLabel = proj && proj.client ? `${p} - ${proj.client}` : p;
+                                                             return (
+                                                                 <option key={p} value={p}>{displayLabel}</option>
+                                                             );
+                                                         })}
+                                                     </select>
+                                                 </div>
+
+                                                 {/* Requested By (Staff) */}
+                                                 <div className="space-y-1.5">
+                                                     <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Requested By *</label>
+                                                     <select
+                                                         required
+                                                         className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                                         value={reqRequestedBy}
+                                                         onChange={(e) => setReqRequestedBy(e.target.value)}
+                                                     >
+                                                         <option value="">Select Staff...</option>
+                                                         {localStaffList.map(staff => (
+                                                             <option key={staff} value={staff}>{staff}</option>
+                                                         ))}
+                                                     </select>
+                                                 </div>
+                                             </div>
+
+                                             {/* Remarks */}
+                                             <div className="space-y-1.5">
+                                                 <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Remarks</label>
+                                                 <textarea
+                                                     rows={2}
+                                                     placeholder="Need/urgency/purpose details..."
+                                                     className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-3 text-xs font-bold focus:border-indigo-500 outline-none resize-none"
+                                                     value={reqRemarks}
+                                                     onChange={(e) => setReqRemarks(e.target.value)}
+                                                 />
+                                             </div>
+                                         </div>
+
+                                         <div className="md:col-span-2 flex justify-end pt-2">
+                                             <button
+                                                 type="submit"
+                                                 disabled={isLoading}
+                                                 className="w-full md:w-auto px-8 py-3.5 bg-indigo-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-md shadow-indigo-600/15 flex items-center justify-center gap-2"
+                                             >
+                                                 {isLoading ? <RefreshCcw className="w-4 h-4 animate-spin" /> : "Submit Requirement"}
+                                             </button>
+                                         </div>
+                                     </form>
+                                 )}
+                             </div>
+
+                             {/* Bottom Panel: List/Table of Requirements */}
+                             <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 overflow-hidden">
+                                 <div className="flex justify-between items-center mb-4">
+                                     <h3 className="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                                         <ClipboardList className="w-4 h-4 text-indigo-600" /> Pending & Historical Requirements ({requirements.length})
+                                     </h3>
+                                     <button
+                                         type="button"
+                                         onClick={handleShareAllWhatsApp}
+                                         className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-sm border border-emerald-500/20"
+                                         title="Share All Pending Requirements on WhatsApp"
+                                     >
+                                         <Share2 className="w-3.5 h-3.5" />
+                                         Share All Pending
+                                     </button>
+                                 </div>
+                                 
+                                 <div className="overflow-x-auto">
+                                     <table className="w-full text-left border-collapse text-xs">
+                                         <thead>
+                                             <tr className="text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 bg-slate-50/50">
+                                                 <th className="py-4 px-4">Request Date</th>
+                                                 <th className="py-4 px-4">Project</th>
+                                                 <th className="py-4 px-4">Material</th>
+                                                 <th className="py-4 px-4 text-center">Qty Required</th>
+                                                 <th className="py-4 px-4">Requested By</th>
+                                                 <th className="py-4 px-4">Remarks</th>
+                                                 <th className="py-4 px-4 text-center">Status</th>
+                                                 <th className="py-4 px-4 text-center">Actions</th>
+                                             </tr>
+                                         </thead>
+                                         <tbody className="divide-y divide-slate-50">
+                                             {requirements
+                                                 .filter(req => {
+                                                     const q = searchQuery.toLowerCase();
+                                                     return req.materialName.toLowerCase().includes(q) ||
+                                                         req.materialCode.toLowerCase().includes(q) ||
+                                                         req.projectId.toLowerCase().includes(q) ||
+                                                         req.requestedBy.toLowerCase().includes(q) ||
+                                                         req.remarks.toLowerCase().includes(q) ||
+                                                         req.status.toLowerCase().includes(q);
+                                                 })
+                                                 .map(req => {
+                                                     const statusColors = {
+                                                         PENDING: 'bg-amber-50 text-amber-700 border-amber-100',
+                                                         APPROVED: 'bg-indigo-50 text-indigo-700 border-indigo-100',
+                                                         DISPATCHED: 'bg-emerald-50 text-emerald-700 border-emerald-100',
+                                                         REJECTED: 'bg-rose-50 text-rose-700 border-rose-100'
+                                                     };
+                                                     
+                                                     return (
+                                                         <tr key={req.id} className="hover:bg-slate-50/30 transition-colors">
+                                                             <td className="py-4 px-4 text-slate-500 font-medium">
+                                                                 {new Date(req.timestamp).toLocaleString('en-IN', {
+                                                                     day: '2-digit', month: '2-digit', year: 'numeric',
+                                                                     hour: '2-digit', minute: '2-digit'
+                                                                 })}
+                                                             </td>
+                                                             <td className="py-4 px-4 font-bold text-slate-700 uppercase">{req.projectId}</td>
+                                                             <td className="py-4 px-4">
+                                                                 <span className="font-bold text-slate-900 block">{req.materialName}</span>
+                                                                 <span className="text-[9px] text-slate-400 font-black tracking-wider uppercase block">{req.materialCode}</span>
+                                                             </td>
+                                                             <td className="py-4 px-4 text-center font-black text-slate-800 bg-slate-50/30">{req.quantity} {req.unit}</td>
+                                                             <td className="py-4 px-4 font-bold text-slate-700">{req.requestedBy}</td>
+                                                             <td className="py-4 px-4 text-slate-400 italic max-w-[200px] truncate" title={req.remarks}>{req.remarks || '-'}</td>
+                                                 <td className="py-4 px-4 text-center">
+                                                                 <span className={`inline-flex px-2.5 py-1 rounded-lg text-[9px] font-black uppercase border ${statusColors[req.status]}`}>
+                                                                     {req.status}
+                                                                 </span>
+                                                             </td>
+                                                             <td className="py-4 px-4 text-center">
+                                                                 <div className="flex items-center justify-center gap-1.5">
+                                                                     <button
+                                                                         onClick={() => handleShareWhatsApp(req)}
+                                                                         className="p-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-lg border border-emerald-100"
+                                                                         title="Share on WhatsApp"
+                                                                     >
+                                                                         <Share2 className="w-3.5 h-3.5" />
+                                                                     </button>
+                                                                     <button
+                                                                         onClick={() => setEditingRequirement(req)}
+                                                                         className="p-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg border border-indigo-100"
+                                                                         title="Edit Requirement"
+                                                                     >
+                                                                         <Edit3 className="w-3.5 h-3.5" />
+                                                                     </button>
+                                                                     {userRole === 'ADMIN' && req.status === 'PENDING' && (
+                                                                         <>
+                                                                             <button
+                                                                                 onClick={async () => {
+                                                                                     if (confirm(`Approve allocation of ${req.quantity} ${req.unit} for ${req.projectId}?`)) {
+                                                                                         setIsLoading(true);
+                                                                                         await updateMaterialRequirementStatus(req.id, 'APPROVED');
+                                                                                         setRefreshTrigger(p => p + 1);
+                                                                                         setIsLoading(false);
+                                                                                     }
+                                                                                 }}
+                                                                                 className="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg border border-indigo-100 text-[9px] font-black uppercase tracking-wider"
+                                                                             >
+                                                                                 Approve
+                                                                             </button>
+                                                                             <button
+                                                                                 onClick={async () => {
+                                                                                     if (confirm(`Reject request for ${req.projectId}?`)) {
+                                                                                         setIsLoading(true);
+                                                                                         await updateMaterialRequirementStatus(req.id, 'REJECTED');
+                                                                                         setRefreshTrigger(p => p + 1);
+                                                                                         setIsLoading(false);
+                                                                                     }
+                                                                                 }}
+                                                                                 className="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg border border-rose-100 text-[9px] font-black uppercase tracking-wider"
+                                                                             >
+                                                                                 Reject
+                                                                             </button>
+                                                                         </>
+                                                                     )}
+                                                                     {userRole === 'ADMIN' && req.status === 'APPROVED' && (
+                                                                         <button
+                                                                             onClick={async () => {
+                                                                                 if (confirm(`Mark as dispatched (material issued) for project ${req.projectId}?`)) {
+                                                                                     setIsLoading(true);
+                                                                                     await updateMaterialRequirementStatus(req.id, 'DISPATCHED');
+                                                                                     setRefreshTrigger(p => p + 1);
+                                                                                     setIsLoading(false);
+                                                                                 }
+                                                                             }}
+                                                                             className="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg border border-emerald-100 text-[9px] font-black uppercase tracking-wider"
+                                                                         >
+                                                                             Dispatch
+                                                                         </button>
+                                                                     )}
+                                                                     {/* Only Admin can delete requirement logs */}
+                                                                     {userRole === 'ADMIN' && (
+                                                                         <button
+                                                                             onClick={async () => {
+                                                                                 if (confirm(`Permanently delete this requirement record?`)) {
+                                                                                     setIsLoading(true);
+                                                                                     await deleteMaterialRequirement(req.id);
+                                                                                     setRefreshTrigger(p => p + 1);
+                                                                                     setIsLoading(false);
+                                                                                 }
+                                                                             }}
+                                                                             className="p-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg border border-red-100"
+                                                                             title="Delete Request"
+                                                                         >
+                                                                             <Trash2 className="w-3.5 h-3.5" />
+                                                                         </button>
+                                                                     )}
+                                                                 </div>
+                                                             </td>
+                                                         </tr>
+                                                     );
+                                                 })}
+                                             {requirements.length === 0 && (
+                                                 <tr>
+                                                     <td colSpan={8} className="py-12 text-center text-slate-400 font-bold">No material requirements recorded.</td>
+                                                 </tr>
+                                             )}
+                                         </tbody>
+                                     </table>
+                                 </div>
+                             </div>
                         </div>
                     )}
 
@@ -2901,7 +3613,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                             className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
                                         >
                                             <option value="">Choose Unit</option>
-                                            {['Nos', 'Kg', 'Meter', 'Liter', 'Packet', 'Box', 'Ton', 'Roll'].map(u => (
+                                            {STANDARD_UNITS.map(u => (
                                                 <option key={u} value={u}>{u}</option>
                                             ))}
                                             <option value="NEW">+ Add New Unit</option>
@@ -3002,9 +3714,167 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                     </div>
                 </div>
             )}
+            {/* EDIT REQUIREMENT MODAL */}
+            {editingRequirement && (
+                <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-[110] flex items-center justify-center p-4 sm:p-6 print:hidden animate-in fade-in duration-200">
+                    <div className="relative w-full max-w-md bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-slate-100 animate-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
+                        <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 shrink-0">
+                            <div>
+                                <h3 className="text-sm font-black text-slate-900 tracking-tight">Edit Requirement</h3>
+                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">ID: {editingRequirement.id}</p>
+                            </div>
+                            <button onClick={() => setEditingRequirement(null)} className="p-1.5 hover:bg-white rounded-full transition-colors text-slate-400 hover:text-slate-900 shadow-sm border border-transparent hover:border-slate-100">
+                                <X className="w-4 h-4" />
+                            </button>
+                        </div>
+
+                        <form onSubmit={async (e) => {
+                            e.preventDefault();
+                            setIsLoading(true);
+                            try {
+                                const res = await updateMaterialRequirement(editingRequirement);
+                                if (res.success) {
+                                    setEditingRequirement(null);
+                                    setRefreshTrigger(p => p + 1);
+                                } else {
+                                    alert("Failed to update requirement.");
+                                }
+                            } catch (err: any) {
+                                alert("Error updating requirement: " + err.message);
+                            } finally {
+                                setIsLoading(false);
+                            }
+                        }} className="overflow-y-auto custom-scrollbar flex-1 flex flex-col">
+                            <div className="p-6 space-y-4 flex-1">
+                                {/* Material Name */}
+                                <div className="space-y-1.5">
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Material Name *</label>
+                                    <input 
+                                        type="text" 
+                                        required
+                                        value={editingRequirement.materialName}
+                                        onChange={(e) => setEditingRequirement({ ...editingRequirement, materialName: e.target.value })}
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                    />
+                                </div>
+
+                                {/* Project ID & Requested By */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Project ID *</label>
+                                        <select 
+                                            required
+                                            value={editingRequirement.projectId}
+                                            onChange={(e) => setEditingRequirement({ ...editingRequirement, projectId: e.target.value })}
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                        >
+                                            {projectList.map(p => {
+                                                const proj = projects.find(proj => proj.projectId === p);
+                                                const displayLabel = proj && proj.client ? `${p} - ${proj.client}` : p;
+                                                return (
+                                                    <option key={p} value={p}>{displayLabel}</option>
+                                                );
+                                            })}
+                                        </select>
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Requested By *</label>
+                                        <select 
+                                            required
+                                            value={editingRequirement.requestedBy}
+                                            onChange={(e) => setEditingRequirement({ ...editingRequirement, requestedBy: e.target.value })}
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                        >
+                                            {localStaffList.map(staff => (
+                                                <option key={staff} value={staff}>{staff}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {/* Quantity & Unit */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Quantity *</label>
+                                        <input 
+                                            type="number" 
+                                            required
+                                            min={0.001}
+                                            step="any"
+                                            value={editingRequirement.quantity}
+                                            onChange={(e) => setEditingRequirement({ ...editingRequirement, quantity: parseFloat(e.target.value) || 0 })}
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                        />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Unit *</label>
+                                        <select 
+                                            value={STANDARD_UNITS.includes(editingRequirement.unit) ? editingRequirement.unit : "Other"}
+                                            onChange={(e) => {
+                                                const val = e.target.value;
+                                                if (val === 'Other') {
+                                                    setEditingRequirement({ ...editingRequirement, unit: '' });
+                                                } else {
+                                                    setEditingRequirement({ ...editingRequirement, unit: val });
+                                                }
+                                            }}
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                        >
+                                            {STANDARD_UNITS.map(u => (
+                                                <option key={u} value={u}>{u}</option>
+                                            ))}
+                                            <option value="Other">+ Add Custom Unit (Other)</option>
+                                        </select>
+                                        {(!STANDARD_UNITS.includes(editingRequirement.unit) || editingRequirement.unit === '') && (
+                                            <input 
+                                                type="text"
+                                                required
+                                                placeholder="Enter custom unit name..."
+                                                value={editingRequirement.unit}
+                                                onChange={(e) => setEditingRequirement({ ...editingRequirement, unit: e.target.value })}
+                                                className="mt-2 w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Remarks */}
+                                <div className="space-y-1.5">
+                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Remarks</label>
+                                    <textarea 
+                                        rows={2}
+                                        value={editingRequirement.remarks || ''}
+                                        onChange={(e) => setEditingRequirement({ ...editingRequirement, remarks: e.target.value })}
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs font-bold text-slate-950 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all resize-none"
+                                        placeholder="Add context..."
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="p-6 border-t border-slate-100 bg-slate-50 shrink-0 flex gap-3">
+                                <button 
+                                    type="button" 
+                                    onClick={() => setEditingRequirement(null)}
+                                    className="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-black rounded-xl transition-all text-[9px] uppercase tracking-widest text-center"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit"
+                                    disabled={isLoading}
+                                    className="flex-1 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg text-[9px] uppercase tracking-widest disabled:opacity-50"
+                                >
+                                    {isLoading ? 'Saving...' : 'Save Changes'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
 
         </div>
     );
 };
 
 export default StoreStockReport;
+

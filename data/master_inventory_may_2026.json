@@ -6,7 +6,7 @@
     "items": [
       {
         "name": "Chemilac Black Paint",
-        "itemCode": "PAI-001",
+        "itemCode": "Eng-001",
         "category": "Paints",
         "currentStock": 20,
         "unit": "LTR",
@@ -18,7 +18,7 @@
       },
       {
         "name": "Chemilac Thinner",
-        "itemCode": "THI-002",
+        "itemCode": "Eng-002",
         "category": "Chemicals",
         "currentStock": 7,
         "unit": "LTR",
@@ -30,7 +30,7 @@
       },
       {
         "name": "Hardener",
-        "itemCode": "HAR-002",
+        "itemCode": "Eng-003",
         "category": "Chemicals",
         "currentStock": 2,
         "unit": "LTR",
@@ -42,7 +42,7 @@
       },
       {
         "name": "SBL Grey Primer",
-        "itemCode": "PRI-003",
+        "itemCode": "Eng-004",
         "category": "Paints",
         "currentStock": 8,
         "unit": "LTR",
@@ -54,7 +54,7 @@
       },
       {
         "name": "SBL Black Gloss",
-        "itemCode": "GLO-004",
+        "itemCode": "Eng-005",
         "category": "Paints",
         "currentStock": 8,
         "unit": "Pcs",
@@ -66,7 +66,7 @@
       },
       {
         "name": "SBL Black Matt",
-        "itemCode": "MAT-005",
+        "itemCode": "Eng-006",
         "category": "Paints",
         "currentStock": 0,
         "unit": "Pcs",
@@ -78,7 +78,7 @@
       },
       {
         "name": "SBL P.P. Primer",
-        "itemCode": "PRI-006",
+        "itemCode": "Eng-007",
         "category": "Paints",
         "currentStock": 2,
         "unit": "LTR",
@@ -90,7 +90,7 @@
       },
       {
         "name": "SBL Glass Coat Clear Matt",
-        "itemCode": "GLA-007",
+        "itemCode": "Eng-008",
         "category": "Paints",
         "currentStock": 1,
         "unit": "LTR",
@@ -102,7 +102,7 @@
       },
       {
         "name": "Seves Army Green Matt",
-        "itemCode": "PAI-008",
+        "itemCode": "Eng-009",
         "category": "Paints",
         "currentStock": 12,
         "unit": "Pcs",
@@ -114,7 +114,7 @@
       },
       {
         "name": "Silver Matt",
-        "itemCode": "MAT-009",
+        "itemCode": "Eng-010",
         "category": "Paints",
         "currentStock": 8,
         "unit": "Pcs",
@@ -126,7 +126,7 @@
       },
       {
         "name": "Super Clear",
-        "itemCode": "CLE-010",
+        "itemCode": "Eng-011",
         "category": "Paints",
         "currentStock": 4,
         "unit": "LTR",
@@ -138,7 +138,7 @@
       },
       {
         "name": "H.C. Robotic Grey Paint",
-        "itemCode": "PAI-011",
+        "itemCode": "Eng-012",
         "category": "Paints",
         "currentStock": 0,
         "unit": "LTR",
@@ -150,7 +150,7 @@
       },
       {
         "name": "Pearl White",
-        "itemCode": "PAI-012",
+        "itemCode": "Eng-013",
         "category": "Paints",
         "currentStock": 8,
         "unit": "LTR",
@@ -162,7 +162,7 @@
       },
       {
         "name": "White Gloss",
-        "itemCode": "GLO-013",
+        "itemCode": "Eng-014",
         "category": "Paints",
         "currentStock": 4,
         "unit": "LTR",
@@ -174,7 +174,7 @@
       },
       {
         "name": "Hardener (Secondary)",
-        "itemCode": "HAR-014",
+        "itemCode": "Eng-015",
         "category": "Chemicals",
         "currentStock": 3,
         "unit": "LTR",
@@ -186,7 +186,7 @@
       },
       {
         "name": "Fevicol Adhesive",
-        "itemCode": "ADH-015",
+        "itemCode": "Eng-016",
         "category": "General",
         "currentStock": 0,
         "unit": "Kg",
@@ -198,7 +198,7 @@
       },
       {
         "name": "Liquid Silicone",
-        "itemCode": "SIL-016",
+        "itemCode": "Eng-017",
         "category": "Chemicals",
         "currentStock": 1,
         "unit": "Kg",
@@ -210,7 +210,7 @@
       },
       {
         "name": "Duco Clear Matt",
-        "itemCode": "MAT-017",
+        "itemCode": "Eng-018",
         "category": "Paints",
         "currentStock": 3,
         "unit": "LTR",
@@ -222,7 +222,7 @@
       },
       {
         "name": "Spray Can Orange",
-        "itemCode": "SPR-018",
+        "itemCode": "Eng-019",
         "category": "General",
         "currentStock": 8,
         "unit": "Pcs",
@@ -234,7 +234,7 @@
       },
       {
         "name": "White (Misc)",
-        "itemCode": "MIS-019",
+        "itemCode": "Eng-020",
         "category": "General",
         "currentStock": 0,
         "unit": "Pcs",
@@ -246,7 +246,7 @@
       },
       {
         "name": "Spray Can Lacquer",
-        "itemCode": "SPR-020",
+        "itemCode": "Eng-021",
         "category": "General",
         "currentStock": 2,
         "unit": "Pcs",
@@ -258,7 +258,7 @@
       },
       {
         "name": "Hikott Chemical",
-        "itemCode": "CHE-021",
+        "itemCode": "Eng-022",
         "category": "Chemicals",
         "currentStock": 7,
         "unit": "LTR",
@@ -270,7 +270,7 @@
       },
       {
         "name": "Rit Black Dye",
-        "itemCode": "DYE-022",
+        "itemCode": "Eng-023",
         "category": "Chemicals",
         "currentStock": 6,
         "unit": "Kg",
@@ -282,7 +282,7 @@
       },
       {
         "name": "NC Putty Grey",
-        "itemCode": "PUT-023",
+        "itemCode": "Eng-024",
         "category": "Chemicals",
         "currentStock": 10,
         "unit": "Kg",
@@ -294,7 +294,7 @@
       },
       {
         "name": "Etch Primer",
-        "itemCode": "PRI-024",
+        "itemCode": "Eng-025",
         "category": "Paints",
         "currentStock": 2,
         "unit": "LTR",
@@ -306,7 +306,7 @@
       },
       {
         "name": "NC Thinner",
-        "itemCode": "THI-025",
+        "itemCode": "Eng-026",
         "category": "Chemicals",
         "currentStock": 17,
         "unit": "LTR",
@@ -318,7 +318,7 @@
       },
       {
         "name": "JK Bond Paper",
-        "itemCode": "PAP-101",
+        "itemCode": "Eng-027",
         "category": "Stationery",
         "currentStock": 10,
         "unit": "Pcs",
@@ -330,7 +330,7 @@
       },
       {
         "name": "Cobra File",
-        "itemCode": "FIL-102",
+        "itemCode": "Eng-028",
         "category": "Stationery",
         "currentStock": 3,
         "unit": "Pcs",
@@ -342,7 +342,7 @@
       },
       {
         "name": "Clear Bag file",
-        "itemCode": "BAG-103",
+        "itemCode": "Eng-029",
         "category": "Stationery",
         "currentStock": 11,
         "unit": "Pcs",
@@ -354,7 +354,7 @@
       },
       {
         "name": "A4 Envelope",
-        "itemCode": "ENV-104",
+        "itemCode": "Eng-030",
         "category": "Stationery",
         "currentStock": 3,
         "unit": "Pcs",
@@ -366,7 +366,7 @@
       },
       {
         "name": "A4 Paper Envelope",
-        "itemCode": "ENV-105",
+        "itemCode": "Eng-031",
         "category": "Stationery",
         "currentStock": 10,
         "unit": "Pcs",
@@ -378,7 +378,7 @@
       },
       {
         "name": "A4 P file Leaf",
-        "itemCode": "LEA-106",
+        "itemCode": "Eng-032",
         "category": "Stationery",
         "currentStock": 4,
         "unit": "Pcs",
@@ -390,7 +390,7 @@
       },
       {
         "name": "Lamination Sheet",
-        "itemCode": "LAM-107",
+        "itemCode": "Eng-033",
         "category": "Stationery",
         "currentStock": 7,
         "unit": "Pcs",
@@ -402,7 +402,7 @@
       },
       {
         "name": "L. Clear Folder",
-        "itemCode": "FOL-108",
+        "itemCode": "Eng-034",
         "category": "Stationery",
         "currentStock": 12,
         "unit": "Pcs",
@@ -414,7 +414,7 @@
       },
       {
         "name": "A4 Coloured Sheet",
-        "itemCode": "COL-109",
+        "itemCode": "Eng-035",
         "category": "Stationery",
         "currentStock": 2,
         "unit": "Pack",
@@ -426,7 +426,7 @@
       },
       {
         "name": "Clip Board",
-        "itemCode": "BOA-110",
+        "itemCode": "Eng-036",
         "category": "Stationery",
         "currentStock": 4,
         "unit": "Pcs",
@@ -438,7 +438,7 @@
       },
       {
         "name": "Attendance Register",
-        "itemCode": "REG-111",
+        "itemCode": "Eng-037",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Pcs",
@@ -450,7 +450,7 @@
       },
       {
         "name": "Half Day Book",
-        "itemCode": "REG-112",
+        "itemCode": "Eng-038",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Pcs",
@@ -462,7 +462,7 @@
       },
       {
         "name": "Gift Wraping Sheet",
-        "itemCode": "SHE-113",
+        "itemCode": "Eng-039",
         "category": "Stationery",
         "currentStock": 8,
         "unit": "Pcs",
@@ -474,7 +474,7 @@
       },
       {
         "name": "Batter Paper",
-        "itemCode": "SHE-114",
+        "itemCode": "Eng-040",
         "category": "Stationery",
         "currentStock": 5,
         "unit": "Pcs",
@@ -486,7 +486,7 @@
       },
       {
         "name": "Gift Bag",
-        "itemCode": "BAG-115",
+        "itemCode": "Eng-041",
         "category": "Stationery",
         "currentStock": 5,
         "unit": "Pcs",
@@ -498,7 +498,7 @@
       },
       {
         "name": "Chitti",
-        "itemCode": "MIS-116",
+        "itemCode": "Eng-042",
         "category": "Stationery",
         "currentStock": 6,
         "unit": "Pcs",
@@ -510,7 +510,7 @@
       },
       {
         "name": "Surgical Blade Stand",
-        "itemCode": "STA-117",
+        "itemCode": "Eng-043",
         "category": "General",
         "currentStock": 0,
         "unit": "Pcs",
@@ -522,7 +522,7 @@
       },
       {
         "name": "AA Cell",
-        "itemCode": "CEL-118",
+        "itemCode": "Eng-044",
         "category": "General",
         "currentStock": 3,
         "unit": "Pcs",
@@ -534,7 +534,7 @@
       },
       {
         "name": "AAA Cell",
-        "itemCode": "CEL-119",
+        "itemCode": "Eng-045",
         "category": "General",
         "currentStock": 0,
         "unit": "Pcs",
@@ -546,7 +546,7 @@
       },
       {
         "name": "Big Size Battery",
-        "itemCode": "CEL-120",
+        "itemCode": "Eng-046",
         "category": "General",
         "currentStock": 7,
         "unit": "Pcs",
@@ -558,7 +558,7 @@
       },
       {
         "name": "CR 2032 Cell",
-        "itemCode": "CEL-121",
+        "itemCode": "Eng-047",
         "category": "General",
         "currentStock": 50,
         "unit": "Pcs",
@@ -570,7 +570,7 @@
       },
       {
         "name": "GP Cell-1",
-        "itemCode": "CEL-122",
+        "itemCode": "Eng-048",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -582,7 +582,7 @@
       },
       {
         "name": "Sharpeners",
-        "itemCode": "SHA-123",
+        "itemCode": "Eng-049",
         "category": "Stationery",
         "currentStock": 9,
         "unit": "Pcs",
@@ -594,7 +594,7 @@
       },
       {
         "name": "Eraser",
-        "itemCode": "ERA-124",
+        "itemCode": "Eng-050",
         "category": "Stationery",
         "currentStock": 19,
         "unit": "Pcs",
@@ -606,7 +606,7 @@
       },
       {
         "name": "Pencil",
-        "itemCode": "PEN-125",
+        "itemCode": "Eng-051",
         "category": "Stationery",
         "currentStock": 7,
         "unit": "Pcs",
@@ -618,7 +618,7 @@
       },
       {
         "name": "Sticki Notes (Flag)",
-        "itemCode": "NOT-126",
+        "itemCode": "Eng-052",
         "category": "Stationery",
         "currentStock": 27,
         "unit": "Pack",
@@ -630,7 +630,7 @@
       },
       {
         "name": "Binder Clips",
-        "itemCode": "CLI-127",
+        "itemCode": "Eng-053",
         "category": "Stationery",
         "currentStock": 30,
         "unit": "Pcs",
@@ -642,7 +642,7 @@
       },
       {
         "name": "Big Cutter Blade",
-        "itemCode": "BLA-128",
+        "itemCode": "Eng-054",
         "category": "General",
         "currentStock": 10,
         "unit": "Pcs",
@@ -654,7 +654,7 @@
       },
       {
         "name": "Surgical Blade",
-        "itemCode": "BLA-129",
+        "itemCode": "Eng-055",
         "category": "General",
         "currentStock": 30,
         "unit": "Pcs",
@@ -666,7 +666,7 @@
       },
       {
         "name": "White Board Marker",
-        "itemCode": "MAR-130",
+        "itemCode": "Eng-056",
         "category": "Stationery",
         "currentStock": 7,
         "unit": "Pcs",
@@ -678,7 +678,7 @@
       },
       {
         "name": "Permanent Marker",
-        "itemCode": "MAR-131",
+        "itemCode": "Eng-057",
         "category": "Stationery",
         "currentStock": 13,
         "unit": "Pcs",
@@ -690,7 +690,7 @@
       },
       {
         "name": "White Board Duster",
-        "itemCode": "DUS-132",
+        "itemCode": "Eng-058",
         "category": "Stationery",
         "currentStock": 4,
         "unit": "Pcs",
@@ -702,7 +702,7 @@
       },
       {
         "name": "Stepdown Pin Big",
-        "itemCode": "PIN-133",
+        "itemCode": "Eng-059",
         "category": "Stationery",
         "currentStock": 18,
         "unit": "Pcs",
@@ -714,7 +714,7 @@
       },
       {
         "name": "Stepdown Pin Small",
-        "itemCode": "PIN-134",
+        "itemCode": "Eng-060",
         "category": "Stationery",
         "currentStock": 19,
         "unit": "Pcs",
@@ -726,7 +726,7 @@
       },
       {
         "name": "Tooth Pic",
-        "itemCode": "MIS-135",
+        "itemCode": "Eng-061",
         "category": "General",
         "currentStock": 1,
         "unit": "Box",
@@ -738,7 +738,7 @@
       },
       {
         "name": "Ink Pad",
-        "itemCode": "PAD-136",
+        "itemCode": "Eng-062",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Pcs",
@@ -750,7 +750,7 @@
       },
       {
         "name": "Blue Ink",
-        "itemCode": "INK-137",
+        "itemCode": "Eng-063",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Box",
@@ -762,7 +762,7 @@
       },
       {
         "name": "Inkjet Ink",
-        "itemCode": "INK-138",
+        "itemCode": "Eng-064",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Pcs",
@@ -774,7 +774,7 @@
       },
       {
         "name": "Punching Machine",
-        "itemCode": "PUN-139",
+        "itemCode": "Eng-065",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Pcs",
@@ -786,7 +786,7 @@
       },
       {
         "name": "Markote",
-        "itemCode": "MIS-140",
+        "itemCode": "Eng-066",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -798,7 +798,7 @@
       },
       {
         "name": "Clear Silicone",
-        "itemCode": "SIL-141",
+        "itemCode": "Eng-067",
         "category": "Chemicals",
         "currentStock": 1,
         "unit": "Pcs",
@@ -810,7 +810,7 @@
       },
       {
         "name": "Araldite",
-        "itemCode": "ADH-142",
+        "itemCode": "Eng-068",
         "category": "Chemicals",
         "currentStock": 2,
         "unit": "Pcs",
@@ -822,7 +822,7 @@
       },
       {
         "name": "Fevitite",
-        "itemCode": "ADH-143",
+        "itemCode": "Eng-069",
         "category": "Chemicals",
         "currentStock": 3,
         "unit": "Pcs",
@@ -834,7 +834,7 @@
       },
       {
         "name": "Plastic Reban",
-        "itemCode": "MIS-144",
+        "itemCode": "Eng-070",
         "category": "General",
         "currentStock": 5,
         "unit": "Pcs",
@@ -846,7 +846,7 @@
       },
       {
         "name": "Board Marker Ink",
-        "itemCode": "INK-145",
+        "itemCode": "Eng-071",
         "category": "Stationery",
         "currentStock": 8,
         "unit": "Pcs",
@@ -858,7 +858,7 @@
       },
       {
         "name": "Transparent Tape",
-        "itemCode": "TAP-146",
+        "itemCode": "Eng-072",
         "category": "Stationery",
         "currentStock": 134,
         "unit": "Pcs",
@@ -870,7 +870,7 @@
       },
       {
         "name": "Dubbal Tape",
-        "itemCode": "TAP-147",
+        "itemCode": "Eng-073",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Pcs",
@@ -882,7 +882,7 @@
       },
       {
         "name": "Masking Tape",
-        "itemCode": "TAP-148",
+        "itemCode": "Eng-074",
         "category": "Stationery",
         "currentStock": 135,
         "unit": "Pcs",
@@ -894,7 +894,7 @@
       },
       {
         "name": "Pen",
-        "itemCode": "PEN-149",
+        "itemCode": "Eng-075",
         "category": "Stationery",
         "currentStock": 70,
         "unit": "Pcs",
@@ -906,7 +906,7 @@
       },
       {
         "name": "3m Tape",
-        "itemCode": "TAP-150",
+        "itemCode": "Eng-076",
         "category": "Stationery",
         "currentStock": 0,
         "unit": "Pcs",
@@ -918,7 +918,7 @@
       },
       {
         "name": "Labal Stiker Roll",
-        "itemCode": "ROL-151",
+        "itemCode": "Eng-077",
         "category": "Stationery",
         "currentStock": 19,
         "unit": "Pcs",
@@ -930,7 +930,7 @@
       },
       {
         "name": "Note Pad",
-        "itemCode": "NOT-152",
+        "itemCode": "Eng-078",
         "category": "Stationery",
         "currentStock": 8,
         "unit": "Pcs",
@@ -942,7 +942,7 @@
       },
       {
         "name": "Fevikwik",
-        "itemCode": "ADH-153",
+        "itemCode": "Eng-079",
         "category": "Chemicals",
         "currentStock": 4,
         "unit": "Pcs",
@@ -954,7 +954,7 @@
       },
       {
         "name": "White Envelopes",
-        "itemCode": "ENV-154",
+        "itemCode": "Eng-080",
         "category": "Stationery",
         "currentStock": 18,
         "unit": "Pack",
@@ -966,7 +966,7 @@
       },
       {
         "name": "Weigh Machine",
-        "itemCode": "MAC-155",
+        "itemCode": "Eng-081",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -978,7 +978,7 @@
       },
       {
         "name": "Painting Brush",
-        "itemCode": "BRU-156",
+        "itemCode": "Eng-082",
         "category": "General",
         "currentStock": 2,
         "unit": "Pcs",
@@ -990,7 +990,7 @@
       },
       {
         "name": "Correction Tape",
-        "itemCode": "TAP-157",
+        "itemCode": "Eng-083",
         "category": "Stationery",
         "currentStock": 3,
         "unit": "Pcs",
@@ -1002,7 +1002,7 @@
       },
       {
         "name": "Standard Lac",
-        "itemCode": "MIS-158",
+        "itemCode": "Eng-084",
         "category": "General",
         "currentStock": 1,
         "unit": "Box",
@@ -1014,7 +1014,7 @@
       },
       {
         "name": "Black Matt Spray",
-        "itemCode": "SPR-159",
+        "itemCode": "Eng-085",
         "category": "General",
         "currentStock": 8,
         "unit": "Can",
@@ -1026,7 +1026,7 @@
       },
       {
         "name": "Sanding Paper 100",
-        "itemCode": "SAN-301",
+        "itemCode": "Eng-086",
         "category": "General",
         "currentStock": 90,
         "unit": "Pcs",
@@ -1038,7 +1038,7 @@
       },
       {
         "name": "Sanding Paper 220",
-        "itemCode": "SAN-302",
+        "itemCode": "Eng-087",
         "category": "General",
         "currentStock": 185,
         "unit": "Pcs",
@@ -1050,7 +1050,7 @@
       },
       {
         "name": "Sanding Paper 320",
-        "itemCode": "SAN-303",
+        "itemCode": "Eng-088",
         "category": "General",
         "currentStock": 130,
         "unit": "Pcs",
@@ -1062,7 +1062,7 @@
       },
       {
         "name": "Sanding Paper 600",
-        "itemCode": "SAN-304",
+        "itemCode": "Eng-089",
         "category": "General",
         "currentStock": 190,
         "unit": "Pcs",
@@ -1074,7 +1074,7 @@
       },
       {
         "name": "Sanding Paper 2000",
-        "itemCode": "SAN-305",
+        "itemCode": "Eng-090",
         "category": "General",
         "currentStock": 140,
         "unit": "Pcs",
@@ -1086,7 +1086,7 @@
       },
       {
         "name": "Visiting Card (Bharatsir)",
-        "itemCode": "CAR-306",
+        "itemCode": "Eng-091",
         "category": "Stationery",
         "currentStock": 0,
         "unit": "Box",
@@ -1098,7 +1098,7 @@
       },
       {
         "name": "Zip Lock tie",
-        "itemCode": "MIS-307",
+        "itemCode": "Eng-092",
         "category": "General",
         "currentStock": 0,
         "unit": "Pack",
@@ -1110,7 +1110,7 @@
       },
       {
         "name": "Englabs Key Ring",
-        "itemCode": "KEY-308",
+        "itemCode": "Eng-093",
         "category": "General",
         "currentStock": 0,
         "unit": "Pcs",
@@ -1122,7 +1122,7 @@
       },
       {
         "name": "Plastic Gloves",
-        "itemCode": "GLO-309",
+        "itemCode": "Eng-094",
         "category": "General",
         "currentStock": 5,
         "unit": "Pack",
@@ -1134,7 +1134,7 @@
       },
       {
         "name": "Glue Stick",
-        "itemCode": "ADH-310",
+        "itemCode": "Eng-095",
         "category": "Stationery",
         "currentStock": 16,
         "unit": "Pcs",
@@ -1146,7 +1146,7 @@
       },
       {
         "name": "Rubber Band",
-        "itemCode": "MIS-311",
+        "itemCode": "Eng-096",
         "category": "General",
         "currentStock": 7,
         "unit": "Pack",
@@ -1158,7 +1158,7 @@
       },
       {
         "name": "Cable Tester",
-        "itemCode": "MAC-312",
+        "itemCode": "Eng-097",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -1170,7 +1170,7 @@
       },
       {
         "name": "Thermometer",
-        "itemCode": "MAC-313",
+        "itemCode": "Eng-098",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -1182,7 +1182,7 @@
       },
       {
         "name": "Dhoti",
-        "itemCode": "MIS-314",
+        "itemCode": "Eng-099",
         "category": "General",
         "currentStock": 0,
         "unit": "Pcs",
@@ -1194,7 +1194,7 @@
       },
       {
         "name": "Light Adapter",
-        "itemCode": "ELE-315",
+        "itemCode": "Eng-100",
         "category": "General",
         "currentStock": 0,
         "unit": "Pcs",
@@ -1206,7 +1206,7 @@
       },
       {
         "name": "Silicone Grease",
-        "itemCode": "SIL-316",
+        "itemCode": "Eng-101",
         "category": "Chemicals",
         "currentStock": 4,
         "unit": "Pcs",
@@ -1218,7 +1218,7 @@
       },
       {
         "name": "Mitti Diya",
-        "itemCode": "MIS-317",
+        "itemCode": "Eng-102",
         "category": "General",
         "currentStock": 1,
         "unit": "Box",
@@ -1230,7 +1230,7 @@
       },
       {
         "name": "A3 Sheet",
-        "itemCode": "COL-318",
+        "itemCode": "Eng-103",
         "category": "Stationery",
         "currentStock": 20,
         "unit": "Pcs",
@@ -1242,7 +1242,7 @@
       },
       {
         "name": "Curtain Rod",
-        "itemCode": "MIS-319",
+        "itemCode": "Eng-104",
         "category": "General",
         "currentStock": 1,
         "unit": "Box",
@@ -1254,7 +1254,7 @@
       },
       {
         "name": "Paint Wall",
-        "itemCode": "PAI-320",
+        "itemCode": "Eng-105",
         "category": "Paints",
         "currentStock": 20,
         "unit": "Pcs",
@@ -1266,7 +1266,7 @@
       },
       {
         "name": "A4 Paper Rim",
-        "itemCode": "PAP-321",
+        "itemCode": "Eng-106",
         "category": "Stationery",
         "currentStock": 6,
         "unit": "Pcs",
@@ -1278,7 +1278,7 @@
       },
       {
         "name": "Decoration Item",
-        "itemCode": "MIS-322",
+        "itemCode": "Eng-107",
         "category": "General",
         "currentStock": 1,
         "unit": "Box",
@@ -1290,7 +1290,7 @@
       },
       {
         "name": "Bad Blok ID Card",
-        "itemCode": "CAR-323",
+        "itemCode": "Eng-108",
         "category": "General",
         "currentStock": 1,
         "unit": "Box",
@@ -1302,7 +1302,7 @@
       },
       {
         "name": "Keyboard",
-        "itemCode": "IT-401",
+        "itemCode": "Eng-109",
         "category": "General",
         "currentStock": 2,
         "unit": "Pcs",
@@ -1314,7 +1314,7 @@
       },
       {
         "name": "Camera",
-        "itemCode": "IT-402",
+        "itemCode": "Eng-110",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -1326,7 +1326,7 @@
       },
       {
         "name": "Visiting Card Holder",
-        "itemCode": "STA-403",
+        "itemCode": "Eng-111",
         "category": "Stationery",
         "currentStock": 2,
         "unit": "Pcs",
@@ -1338,7 +1338,7 @@
       },
       {
         "name": "Spray Paint Gun",
-        "itemCode": "TOO-404",
+        "itemCode": "Eng-112",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -1350,7 +1350,7 @@
       },
       {
         "name": "Hanger",
-        "itemCode": "MIS-405",
+        "itemCode": "Eng-113",
         "category": "General",
         "currentStock": 35,
         "unit": "Pcs",
@@ -1362,7 +1362,7 @@
       },
       {
         "name": "Mouse (Rack 4)",
-        "itemCode": "IT-406",
+        "itemCode": "Eng-114",
         "category": "General",
         "currentStock": 8,
         "unit": "Pcs",
@@ -1374,7 +1374,7 @@
       },
       {
         "name": "Laptop Cooling Pad",
-        "itemCode": "IT-407",
+        "itemCode": "Eng-115",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -1386,7 +1386,7 @@
       },
       {
         "name": "Visiting Card Box",
-        "itemCode": "CAR-408",
+        "itemCode": "Eng-116",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Box",
@@ -1398,7 +1398,7 @@
       },
       {
         "name": "Flour (Industrial)",
-        "itemCode": "MIS-409",
+        "itemCode": "Eng-117",
         "category": "General",
         "currentStock": 50,
         "unit": "Pcs",
@@ -1410,7 +1410,7 @@
       },
       {
         "name": "Goggles for Paint",
-        "itemCode": "PPE-410",
+        "itemCode": "Eng-118",
         "category": "General",
         "currentStock": 3,
         "unit": "Pcs",
@@ -1422,7 +1422,7 @@
       },
       {
         "name": "Air Filter machine",
-        "itemCode": "MAC-411",
+        "itemCode": "Eng-119",
         "category": "General",
         "currentStock": 2,
         "unit": "Pcs",
@@ -1434,7 +1434,7 @@
       },
       {
         "name": "Goggles for marking",
-        "itemCode": "PPE-412",
+        "itemCode": "Eng-120",
         "category": "General",
         "currentStock": 4,
         "unit": "Box",
@@ -1446,7 +1446,7 @@
       },
       {
         "name": "Paint Part",
-        "itemCode": "PAI-413",
+        "itemCode": "Eng-121",
         "category": "Paints",
         "currentStock": 5,
         "unit": "Box",
@@ -1458,7 +1458,7 @@
       },
       {
         "name": "Room Freshener",
-        "itemCode": "MIS-501",
+        "itemCode": "Eng-122",
         "category": "General",
         "currentStock": 12,
         "unit": "Pcs",
@@ -1470,7 +1470,7 @@
       },
       {
         "name": "Tissu Roll",
-        "itemCode": "MIS-502",
+        "itemCode": "Eng-123",
         "category": "General",
         "currentStock": 0,
         "unit": "Pcs",
@@ -1482,7 +1482,7 @@
       },
       {
         "name": "Urinal Matt",
-        "itemCode": "MIS-503",
+        "itemCode": "Eng-124",
         "category": "General",
         "currentStock": 10,
         "unit": "Pcs",
@@ -1494,7 +1494,7 @@
       },
       {
         "name": "Garbage bag Small",
-        "itemCode": "MIS-504",
+        "itemCode": "Eng-125",
         "category": "General",
         "currentStock": 12,
         "unit": "Pcs",
@@ -1506,7 +1506,7 @@
       },
       {
         "name": "Coffee Mug",
-        "itemCode": "MIS-505",
+        "itemCode": "Eng-126",
         "category": "General",
         "currentStock": 4,
         "unit": "Pcs",
@@ -1518,7 +1518,7 @@
       },
       {
         "name": "All Out Reffel",
-        "itemCode": "MIS-506",
+        "itemCode": "Eng-127",
         "category": "General",
         "currentStock": 10,
         "unit": "Pcs",
@@ -1530,7 +1530,7 @@
       },
       {
         "name": "Duster (Rack 5)",
-        "itemCode": "MIS-507",
+        "itemCode": "Eng-128",
         "category": "General",
         "currentStock": 10,
         "unit": "Pcs",
@@ -1542,7 +1542,7 @@
       },
       {
         "name": "Scotch Brite",
-        "itemCode": "MIS-508",
+        "itemCode": "Eng-129",
         "category": "General",
         "currentStock": 0,
         "unit": "Pcs",
@@ -1554,7 +1554,7 @@
       },
       {
         "name": "Baking Powder",
-        "itemCode": "MIS-509",
+        "itemCode": "Eng-130",
         "category": "General",
         "currentStock": 0,
         "unit": "Pcs",
@@ -1566,7 +1566,7 @@
       },
       {
         "name": "Naphthalene",
-        "itemCode": "MIS-510",
+        "itemCode": "Eng-131",
         "category": "General",
         "currentStock": 1,
         "unit": "Pack",
@@ -1578,7 +1578,7 @@
       },
       {
         "name": "Mouse (Rack 5)",
-        "itemCode": "IT-511",
+        "itemCode": "Eng-132",
         "category": "General",
         "currentStock": 9,
         "unit": "Pcs",
@@ -1590,7 +1590,7 @@
       },
       {
         "name": "Lint Free Cloth",
-        "itemCode": "PPE-601",
+        "itemCode": "Eng-133",
         "category": "General",
         "currentStock": 16,
         "unit": "Pack",
@@ -1602,7 +1602,7 @@
       },
       {
         "name": "Masks",
-        "itemCode": "PPE-602",
+        "itemCode": "Eng-134",
         "category": "General",
         "currentStock": 8,
         "unit": "Pack",
@@ -1614,7 +1614,7 @@
       },
       {
         "name": "Cap",
-        "itemCode": "PPE-603",
+        "itemCode": "Eng-135",
         "category": "General",
         "currentStock": 6,
         "unit": "Pack",
@@ -1626,7 +1626,7 @@
       },
       {
         "name": "Gloves (Industrial)",
-        "itemCode": "PPE-604",
+        "itemCode": "Eng-136",
         "category": "General",
         "currentStock": 3,
         "unit": "Box",
@@ -1638,7 +1638,7 @@
       },
       {
         "name": "Apron",
-        "itemCode": "PPE-605",
+        "itemCode": "Eng-137",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -1650,7 +1650,7 @@
       },
       {
         "name": "Hand Wash",
-        "itemCode": "CHE-606",
+        "itemCode": "Eng-138",
         "category": "Chemicals",
         "currentStock": 5,
         "unit": "LTR",
@@ -1662,7 +1662,7 @@
       },
       {
         "name": "Colin",
-        "itemCode": "CHE-607",
+        "itemCode": "Eng-139",
         "category": "Chemicals",
         "currentStock": 5,
         "unit": "Pcs",
@@ -1674,7 +1674,7 @@
       },
       {
         "name": "Floor Cleaner",
-        "itemCode": "CHE-608",
+        "itemCode": "Eng-140",
         "category": "Chemicals",
         "currentStock": 0,
         "unit": "LTR",
@@ -1686,7 +1686,7 @@
       },
       {
         "name": "Wish Wash",
-        "itemCode": "CHE-609",
+        "itemCode": "Eng-141",
         "category": "Chemicals",
         "currentStock": 5,
         "unit": "LTR",
@@ -1698,7 +1698,7 @@
       },
       {
         "name": "Surf",
-        "itemCode": "CHE-610",
+        "itemCode": "Eng-142",
         "category": "Chemicals",
         "currentStock": 0,
         "unit": "Kg",
@@ -1710,7 +1710,7 @@
       },
       {
         "name": "Pocha",
-        "itemCode": "MIS-611",
+        "itemCode": "Eng-143",
         "category": "General",
         "currentStock": 11,
         "unit": "Pcs",
@@ -1722,7 +1722,7 @@
       },
       {
         "name": "Toilet Brush",
-        "itemCode": "MIS-612",
+        "itemCode": "Eng-144",
         "category": "General",
         "currentStock": 2,
         "unit": "Pcs",
@@ -1741,7 +1741,7 @@
     "items": [
       {
         "name": "Chemilac Black Paint",
-        "itemCode": "PAI-001",
+        "itemCode": "Eng-001",
         "category": "Paints",
         "currentStock": 20,
         "unit": "LTR",
@@ -1753,7 +1753,7 @@
       },
       {
         "name": "Chemilac Thinner",
-        "itemCode": "THI-002",
+        "itemCode": "Eng-002",
         "category": "Chemicals",
         "currentStock": 10,
         "unit": "LTR",
@@ -1765,7 +1765,7 @@
       },
       {
         "name": "Hardener",
-        "itemCode": "HAR-002",
+        "itemCode": "Eng-003",
         "category": "Chemicals",
         "currentStock": 2,
         "unit": "LTR",
@@ -1777,7 +1777,7 @@
       },
       {
         "name": "SBL Grey Primer",
-        "itemCode": "PRI-003",
+        "itemCode": "Eng-004",
         "category": "Paints",
         "currentStock": 12,
         "unit": "LTR",
@@ -1789,7 +1789,7 @@
       },
       {
         "name": "SBL Black Gloss",
-        "itemCode": "GLO-004",
+        "itemCode": "Eng-005",
         "category": "Paints",
         "currentStock": 8,
         "unit": "Pcs",
@@ -1801,7 +1801,7 @@
       },
       {
         "name": "SBL Black Matt",
-        "itemCode": "MAT-005",
+        "itemCode": "Eng-006",
         "category": "Paints",
         "currentStock": 4,
         "unit": "Pcs",
@@ -1813,7 +1813,7 @@
       },
       {
         "name": "SBL P.P. Primer",
-        "itemCode": "PRI-006",
+        "itemCode": "Eng-007",
         "category": "Paints",
         "currentStock": 3,
         "unit": "LTR",
@@ -1825,7 +1825,7 @@
       },
       {
         "name": "SBL Glass Coat Clear Matt",
-        "itemCode": "GLA-007",
+        "itemCode": "Eng-008",
         "category": "Paints",
         "currentStock": 1,
         "unit": "LTR",
@@ -1837,7 +1837,7 @@
       },
       {
         "name": "Seves Army Green Matt",
-        "itemCode": "PAI-008",
+        "itemCode": "Eng-009",
         "category": "Paints",
         "currentStock": 0,
         "unit": "Pcs",
@@ -1849,7 +1849,7 @@
       },
       {
         "name": "Silver Matt",
-        "itemCode": "MAT-009",
+        "itemCode": "Eng-010",
         "category": "Paints",
         "currentStock": 12,
         "unit": "Pcs",
@@ -1861,7 +1861,7 @@
       },
       {
         "name": "Super Clear",
-        "itemCode": "CLE-010",
+        "itemCode": "Eng-011",
         "category": "Paints",
         "currentStock": 4,
         "unit": "LTR",
@@ -1873,7 +1873,7 @@
       },
       {
         "name": "H.C. Robotic Grey Paint",
-        "itemCode": "PAI-011",
+        "itemCode": "Eng-012",
         "category": "Paints",
         "currentStock": 4,
         "unit": "LTR",
@@ -1885,7 +1885,7 @@
       },
       {
         "name": "Pearl White",
-        "itemCode": "PAI-012",
+        "itemCode": "Eng-013",
         "category": "Paints",
         "currentStock": 8,
         "unit": "LTR",
@@ -1897,7 +1897,7 @@
       },
       {
         "name": "White Gloss",
-        "itemCode": "GLO-013",
+        "itemCode": "Eng-014",
         "category": "Paints",
         "currentStock": 4,
         "unit": "LTR",
@@ -1909,7 +1909,7 @@
       },
       {
         "name": "Hardener (Secondary)",
-        "itemCode": "HAR-014",
+        "itemCode": "Eng-015",
         "category": "Chemicals",
         "currentStock": 1,
         "unit": "LTR",
@@ -1921,7 +1921,7 @@
       },
       {
         "name": "Fevicol Adhesive",
-        "itemCode": "ADH-015",
+        "itemCode": "Eng-016",
         "category": "General",
         "currentStock": 1,
         "unit": "Kg",
@@ -1933,7 +1933,7 @@
       },
       {
         "name": "Liquid Silicone",
-        "itemCode": "SIL-016",
+        "itemCode": "Eng-017",
         "category": "Chemicals",
         "currentStock": 1,
         "unit": "Kg",
@@ -1945,7 +1945,7 @@
       },
       {
         "name": "Duco Clear Matt",
-        "itemCode": "MAT-017",
+        "itemCode": "Eng-018",
         "category": "Paints",
         "currentStock": 1,
         "unit": "LTR",
@@ -1957,7 +1957,7 @@
       },
       {
         "name": "Spray Can Orange",
-        "itemCode": "SPR-018",
+        "itemCode": "Eng-019",
         "category": "General",
         "currentStock": 8,
         "unit": "Pcs",
@@ -1969,7 +1969,7 @@
       },
       {
         "name": "White (Misc)",
-        "itemCode": "MIS-019",
+        "itemCode": "Eng-020",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -1981,7 +1981,7 @@
       },
       {
         "name": "Spray Can Lacquer",
-        "itemCode": "SPR-020",
+        "itemCode": "Eng-021",
         "category": "General",
         "currentStock": 2,
         "unit": "Pcs",
@@ -1993,7 +1993,7 @@
       },
       {
         "name": "Hikott Chemical",
-        "itemCode": "CHE-021",
+        "itemCode": "Eng-022",
         "category": "Chemicals",
         "currentStock": 7,
         "unit": "LTR",
@@ -2005,7 +2005,7 @@
       },
       {
         "name": "Rit Black Dye",
-        "itemCode": "DYE-022",
+        "itemCode": "Eng-023",
         "category": "Chemicals",
         "currentStock": 6,
         "unit": "Kg",
@@ -2017,7 +2017,7 @@
       },
       {
         "name": "NC Putty Grey",
-        "itemCode": "PUT-023",
+        "itemCode": "Eng-024",
         "category": "Chemicals",
         "currentStock": 10,
         "unit": "Kg",
@@ -2029,7 +2029,7 @@
       },
       {
         "name": "Etch Primer",
-        "itemCode": "PRI-024",
+        "itemCode": "Eng-025",
         "category": "Paints",
         "currentStock": 1,
         "unit": "LTR",
@@ -2041,7 +2041,7 @@
       },
       {
         "name": "NC Thinner",
-        "itemCode": "THI-025",
+        "itemCode": "Eng-026",
         "category": "Chemicals",
         "currentStock": 24,
         "unit": "LTR",
@@ -2053,7 +2053,7 @@
       },
       {
         "name": "JK Bond Paper",
-        "itemCode": "PAP-101",
+        "itemCode": "Eng-027",
         "category": "Stationery",
         "currentStock": 10,
         "unit": "Pcs",
@@ -2065,7 +2065,7 @@
       },
       {
         "name": "Cobra File",
-        "itemCode": "FIL-102",
+        "itemCode": "Eng-028",
         "category": "Stationery",
         "currentStock": 7,
         "unit": "Pcs",
@@ -2077,7 +2077,7 @@
       },
       {
         "name": "Clear Bag file",
-        "itemCode": "BAG-103",
+        "itemCode": "Eng-029",
         "category": "Stationery",
         "currentStock": 11,
         "unit": "Pcs",
@@ -2089,7 +2089,7 @@
       },
       {
         "name": "A4 Envelope",
-        "itemCode": "ENV-104",
+        "itemCode": "Eng-030",
         "category": "Stationery",
         "currentStock": 3,
         "unit": "Pcs",
@@ -2101,7 +2101,7 @@
       },
       {
         "name": "A4 Paper Envelope",
-        "itemCode": "ENV-105",
+        "itemCode": "Eng-031",
         "category": "Stationery",
         "currentStock": 10,
         "unit": "Pcs",
@@ -2113,7 +2113,7 @@
       },
       {
         "name": "A4 P file Leaf",
-        "itemCode": "LEA-106",
+        "itemCode": "Eng-032",
         "category": "Stationery",
         "currentStock": 4,
         "unit": "Pcs",
@@ -2125,7 +2125,7 @@
       },
       {
         "name": "Lamination Sheet",
-        "itemCode": "LAM-107",
+        "itemCode": "Eng-033",
         "category": "Stationery",
         "currentStock": 7,
         "unit": "Pcs",
@@ -2137,7 +2137,7 @@
       },
       {
         "name": "L. Clear Folder",
-        "itemCode": "FOL-108",
+        "itemCode": "Eng-034",
         "category": "Stationery",
         "currentStock": 12,
         "unit": "Pcs",
@@ -2149,7 +2149,7 @@
       },
       {
         "name": "A4 Coloured Sheet",
-        "itemCode": "COL-109",
+        "itemCode": "Eng-035",
         "category": "Stationery",
         "currentStock": 2,
         "unit": "Pack",
@@ -2161,7 +2161,7 @@
       },
       {
         "name": "Clip Board",
-        "itemCode": "BOA-110",
+        "itemCode": "Eng-036",
         "category": "Stationery",
         "currentStock": 4,
         "unit": "Pcs",
@@ -2173,7 +2173,7 @@
       },
       {
         "name": "Attendance Register",
-        "itemCode": "REG-111",
+        "itemCode": "Eng-037",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Pcs",
@@ -2185,7 +2185,7 @@
       },
       {
         "name": "Half Day Book",
-        "itemCode": "REG-112",
+        "itemCode": "Eng-038",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Pcs",
@@ -2197,7 +2197,7 @@
       },
       {
         "name": "Gift Wraping Sheet",
-        "itemCode": "SHE-113",
+        "itemCode": "Eng-039",
         "category": "Stationery",
         "currentStock": 8,
         "unit": "Pcs",
@@ -2209,7 +2209,7 @@
       },
       {
         "name": "Batter Paper",
-        "itemCode": "SHE-114",
+        "itemCode": "Eng-040",
         "category": "Stationery",
         "currentStock": 5,
         "unit": "Pcs",
@@ -2221,7 +2221,7 @@
       },
       {
         "name": "Gift Bag",
-        "itemCode": "BAG-115",
+        "itemCode": "Eng-041",
         "category": "Stationery",
         "currentStock": 5,
         "unit": "Pcs",
@@ -2233,7 +2233,7 @@
       },
       {
         "name": "Chitti",
-        "itemCode": "MIS-116",
+        "itemCode": "Eng-042",
         "category": "Stationery",
         "currentStock": 6,
         "unit": "Pcs",
@@ -2245,7 +2245,7 @@
       },
       {
         "name": "Surgical Blade Stand",
-        "itemCode": "STA-117",
+        "itemCode": "Eng-043",
         "category": "General",
         "currentStock": 0,
         "unit": "Pcs",
@@ -2257,7 +2257,7 @@
       },
       {
         "name": "AA Cell",
-        "itemCode": "CEL-118",
+        "itemCode": "Eng-044",
         "category": "General",
         "currentStock": 8,
         "unit": "Pcs",
@@ -2269,7 +2269,7 @@
       },
       {
         "name": "AAA Cell",
-        "itemCode": "CEL-119",
+        "itemCode": "Eng-045",
         "category": "General",
         "currentStock": 2,
         "unit": "Pcs",
@@ -2281,7 +2281,7 @@
       },
       {
         "name": "Big Size Battery",
-        "itemCode": "CEL-120",
+        "itemCode": "Eng-046",
         "category": "General",
         "currentStock": 7,
         "unit": "Pcs",
@@ -2293,7 +2293,7 @@
       },
       {
         "name": "CR 2032 Cell",
-        "itemCode": "CEL-121",
+        "itemCode": "Eng-047",
         "category": "General",
         "currentStock": 50,
         "unit": "Pcs",
@@ -2305,7 +2305,7 @@
       },
       {
         "name": "GP Cell-1",
-        "itemCode": "CEL-122",
+        "itemCode": "Eng-048",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -2317,7 +2317,7 @@
       },
       {
         "name": "Sharpeners",
-        "itemCode": "SHA-123",
+        "itemCode": "Eng-049",
         "category": "Stationery",
         "currentStock": 9,
         "unit": "Pcs",
@@ -2329,7 +2329,7 @@
       },
       {
         "name": "Eraser",
-        "itemCode": "ERA-124",
+        "itemCode": "Eng-050",
         "category": "Stationery",
         "currentStock": 19,
         "unit": "Pcs",
@@ -2341,7 +2341,7 @@
       },
       {
         "name": "Pencil",
-        "itemCode": "PEN-125",
+        "itemCode": "Eng-051",
         "category": "Stationery",
         "currentStock": 7,
         "unit": "Pcs",
@@ -2353,7 +2353,7 @@
       },
       {
         "name": "Sticki Notes (Flag)",
-        "itemCode": "NOT-126",
+        "itemCode": "Eng-052",
         "category": "Stationery",
         "currentStock": 27,
         "unit": "Pack",
@@ -2365,7 +2365,7 @@
       },
       {
         "name": "Binder Clips",
-        "itemCode": "CLI-127",
+        "itemCode": "Eng-053",
         "category": "Stationery",
         "currentStock": 30,
         "unit": "Pcs",
@@ -2377,7 +2377,7 @@
       },
       {
         "name": "Big Cutter Blade",
-        "itemCode": "BLA-128",
+        "itemCode": "Eng-054",
         "category": "General",
         "currentStock": 15,
         "unit": "Pcs",
@@ -2389,7 +2389,7 @@
       },
       {
         "name": "Surgical Blade",
-        "itemCode": "BLA-129",
+        "itemCode": "Eng-055",
         "category": "General",
         "currentStock": 35,
         "unit": "Pcs",
@@ -2401,7 +2401,7 @@
       },
       {
         "name": "White Board Marker",
-        "itemCode": "MAR-130",
+        "itemCode": "Eng-056",
         "category": "Stationery",
         "currentStock": 7,
         "unit": "Pcs",
@@ -2413,7 +2413,7 @@
       },
       {
         "name": "Permanent Marker",
-        "itemCode": "MAR-131",
+        "itemCode": "Eng-057",
         "category": "Stationery",
         "currentStock": 13,
         "unit": "Pcs",
@@ -2425,7 +2425,7 @@
       },
       {
         "name": "White Board Duster",
-        "itemCode": "DUS-132",
+        "itemCode": "Eng-058",
         "category": "Stationery",
         "currentStock": 4,
         "unit": "Pcs",
@@ -2437,7 +2437,7 @@
       },
       {
         "name": "Stepdown Pin Big",
-        "itemCode": "PIN-133",
+        "itemCode": "Eng-059",
         "category": "Stationery",
         "currentStock": 18,
         "unit": "Pcs",
@@ -2449,7 +2449,7 @@
       },
       {
         "name": "Stepdown Pin Small",
-        "itemCode": "PIN-134",
+        "itemCode": "Eng-060",
         "category": "Stationery",
         "currentStock": 19,
         "unit": "Pcs",
@@ -2461,7 +2461,7 @@
       },
       {
         "name": "Tooth Pic",
-        "itemCode": "MIS-135",
+        "itemCode": "Eng-061",
         "category": "General",
         "currentStock": 1,
         "unit": "Box",
@@ -2473,7 +2473,7 @@
       },
       {
         "name": "Ink Pad",
-        "itemCode": "PAD-136",
+        "itemCode": "Eng-062",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Pcs",
@@ -2485,7 +2485,7 @@
       },
       {
         "name": "Blue Ink",
-        "itemCode": "INK-137",
+        "itemCode": "Eng-063",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Box",
@@ -2497,7 +2497,7 @@
       },
       {
         "name": "Inkjet Ink",
-        "itemCode": "INK-138",
+        "itemCode": "Eng-064",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Pcs",
@@ -2509,7 +2509,7 @@
       },
       {
         "name": "Punching Machine",
-        "itemCode": "PUN-139",
+        "itemCode": "Eng-065",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Pcs",
@@ -2521,7 +2521,7 @@
       },
       {
         "name": "Markote",
-        "itemCode": "MIS-140",
+        "itemCode": "Eng-066",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -2533,7 +2533,7 @@
       },
       {
         "name": "Clear Silicone",
-        "itemCode": "SIL-141",
+        "itemCode": "Eng-067",
         "category": "Chemicals",
         "currentStock": 1,
         "unit": "Pcs",
@@ -2545,7 +2545,7 @@
       },
       {
         "name": "Araldite",
-        "itemCode": "ADH-142",
+        "itemCode": "Eng-068",
         "category": "Chemicals",
         "currentStock": 2,
         "unit": "Pcs",
@@ -2557,7 +2557,7 @@
       },
       {
         "name": "Fevitite",
-        "itemCode": "ADH-143",
+        "itemCode": "Eng-069",
         "category": "Chemicals",
         "currentStock": 3,
         "unit": "Pcs",
@@ -2569,7 +2569,7 @@
       },
       {
         "name": "Plastic Reban",
-        "itemCode": "MIS-144",
+        "itemCode": "Eng-070",
         "category": "General",
         "currentStock": 5,
         "unit": "Pcs",
@@ -2581,7 +2581,7 @@
       },
       {
         "name": "Board Marker Ink",
-        "itemCode": "INK-145",
+        "itemCode": "Eng-071",
         "category": "Stationery",
         "currentStock": 8,
         "unit": "Pcs",
@@ -2593,7 +2593,7 @@
       },
       {
         "name": "Transparent Tape",
-        "itemCode": "TAP-146",
+        "itemCode": "Eng-072",
         "category": "Stationery",
         "currentStock": 147,
         "unit": "Pcs",
@@ -2605,7 +2605,7 @@
       },
       {
         "name": "Dubbal Tape",
-        "itemCode": "TAP-147",
+        "itemCode": "Eng-073",
         "category": "Stationery",
         "currentStock": 4,
         "unit": "Pcs",
@@ -2617,7 +2617,7 @@
       },
       {
         "name": "Masking Tape",
-        "itemCode": "TAP-148",
+        "itemCode": "Eng-074",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Pcs",
@@ -2629,7 +2629,7 @@
       },
       {
         "name": "Pen",
-        "itemCode": "PEN-149",
+        "itemCode": "Eng-075",
         "category": "Stationery",
         "currentStock": 80,
         "unit": "Pcs",
@@ -2641,7 +2641,7 @@
       },
       {
         "name": "3m Tape",
-        "itemCode": "TAP-150",
+        "itemCode": "Eng-076",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Pcs",
@@ -2653,7 +2653,7 @@
       },
       {
         "name": "Labal Stiker Roll",
-        "itemCode": "ROL-151",
+        "itemCode": "Eng-077",
         "category": "Stationery",
         "currentStock": 19,
         "unit": "Pcs",
@@ -2665,7 +2665,7 @@
       },
       {
         "name": "Note Pad",
-        "itemCode": "NOT-152",
+        "itemCode": "Eng-078",
         "category": "Stationery",
         "currentStock": 12,
         "unit": "Pcs",
@@ -2677,7 +2677,7 @@
       },
       {
         "name": "Fevikwik",
-        "itemCode": "ADH-153",
+        "itemCode": "Eng-079",
         "category": "Chemicals",
         "currentStock": 4,
         "unit": "Pcs",
@@ -2689,7 +2689,7 @@
       },
       {
         "name": "White Envelopes",
-        "itemCode": "ENV-154",
+        "itemCode": "Eng-080",
         "category": "Stationery",
         "currentStock": 18,
         "unit": "Pack",
@@ -2701,7 +2701,7 @@
       },
       {
         "name": "Weigh Machine",
-        "itemCode": "MAC-155",
+        "itemCode": "Eng-081",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -2713,7 +2713,7 @@
       },
       {
         "name": "Painting Brush",
-        "itemCode": "BRU-156",
+        "itemCode": "Eng-082",
         "category": "General",
         "currentStock": 2,
         "unit": "Pcs",
@@ -2725,7 +2725,7 @@
       },
       {
         "name": "Correction Tape",
-        "itemCode": "TAP-157",
+        "itemCode": "Eng-083",
         "category": "Stationery",
         "currentStock": 3,
         "unit": "Pcs",
@@ -2737,7 +2737,7 @@
       },
       {
         "name": "Standard Lac",
-        "itemCode": "MIS-158",
+        "itemCode": "Eng-084",
         "category": "General",
         "currentStock": 1,
         "unit": "Box",
@@ -2749,7 +2749,7 @@
       },
       {
         "name": "Black Matt Spray",
-        "itemCode": "SPR-159",
+        "itemCode": "Eng-085",
         "category": "General",
         "currentStock": 8,
         "unit": "Can",
@@ -2761,7 +2761,7 @@
       },
       {
         "name": "Sanding Paper 100",
-        "itemCode": "SAN-301",
+        "itemCode": "Eng-086",
         "category": "General",
         "currentStock": 100,
         "unit": "Pcs",
@@ -2773,7 +2773,7 @@
       },
       {
         "name": "Sanding Paper 220",
-        "itemCode": "SAN-302",
+        "itemCode": "Eng-087",
         "category": "General",
         "currentStock": 195,
         "unit": "Pcs",
@@ -2785,7 +2785,7 @@
       },
       {
         "name": "Sanding Paper 320",
-        "itemCode": "SAN-303",
+        "itemCode": "Eng-088",
         "category": "General",
         "currentStock": 150,
         "unit": "Pcs",
@@ -2797,7 +2797,7 @@
       },
       {
         "name": "Sanding Paper 600",
-        "itemCode": "SAN-304",
+        "itemCode": "Eng-089",
         "category": "General",
         "currentStock": 200,
         "unit": "Pcs",
@@ -2809,7 +2809,7 @@
       },
       {
         "name": "Sanding Paper 2000",
-        "itemCode": "SAN-305",
+        "itemCode": "Eng-090",
         "category": "General",
         "currentStock": 195,
         "unit": "Pcs",
@@ -2821,7 +2821,7 @@
       },
       {
         "name": "Visiting Card (Bharatsir)",
-        "itemCode": "CAR-306",
+        "itemCode": "Eng-091",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Box",
@@ -2833,7 +2833,7 @@
       },
       {
         "name": "Zip Lock tie",
-        "itemCode": "MIS-307",
+        "itemCode": "Eng-092",
         "category": "General",
         "currentStock": 1,
         "unit": "Pack",
@@ -2845,7 +2845,7 @@
       },
       {
         "name": "Englabs Key Ring",
-        "itemCode": "KEY-308",
+        "itemCode": "Eng-093",
         "category": "General",
         "currentStock": 15,
         "unit": "Pcs",
@@ -2857,7 +2857,7 @@
       },
       {
         "name": "Plastic Gloves",
-        "itemCode": "GLO-309",
+        "itemCode": "Eng-094",
         "category": "General",
         "currentStock": 5,
         "unit": "Pack",
@@ -2869,7 +2869,7 @@
       },
       {
         "name": "Glue Stick",
-        "itemCode": "ADH-310",
+        "itemCode": "Eng-095",
         "category": "Stationery",
         "currentStock": 17,
         "unit": "Pcs",
@@ -2881,7 +2881,7 @@
       },
       {
         "name": "Rubber Band",
-        "itemCode": "MIS-311",
+        "itemCode": "Eng-096",
         "category": "General",
         "currentStock": 7,
         "unit": "Pack",
@@ -2893,7 +2893,7 @@
       },
       {
         "name": "Cable Tester",
-        "itemCode": "MAC-312",
+        "itemCode": "Eng-097",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -2905,7 +2905,7 @@
       },
       {
         "name": "Thermometer",
-        "itemCode": "MAC-313",
+        "itemCode": "Eng-098",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -2917,7 +2917,7 @@
       },
       {
         "name": "Dhoti",
-        "itemCode": "MIS-314",
+        "itemCode": "Eng-099",
         "category": "General",
         "currentStock": 5,
         "unit": "Pcs",
@@ -2929,7 +2929,7 @@
       },
       {
         "name": "Light Adapter",
-        "itemCode": "ELE-315",
+        "itemCode": "Eng-100",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -2941,7 +2941,7 @@
       },
       {
         "name": "Silicone Grease",
-        "itemCode": "SIL-316",
+        "itemCode": "Eng-101",
         "category": "Chemicals",
         "currentStock": 4,
         "unit": "Pcs",
@@ -2953,7 +2953,7 @@
       },
       {
         "name": "Mitti Diya",
-        "itemCode": "MIS-317",
+        "itemCode": "Eng-102",
         "category": "General",
         "currentStock": 1,
         "unit": "Box",
@@ -2965,7 +2965,7 @@
       },
       {
         "name": "A3 Sheet",
-        "itemCode": "COL-318",
+        "itemCode": "Eng-103",
         "category": "Stationery",
         "currentStock": 20,
         "unit": "Pcs",
@@ -2977,7 +2977,7 @@
       },
       {
         "name": "Curtain Rod",
-        "itemCode": "MIS-319",
+        "itemCode": "Eng-104",
         "category": "General",
         "currentStock": 1,
         "unit": "Box",
@@ -2989,7 +2989,7 @@
       },
       {
         "name": "Paint Wall",
-        "itemCode": "PAI-320",
+        "itemCode": "Eng-105",
         "category": "Paints",
         "currentStock": 20,
         "unit": "Pcs",
@@ -3001,7 +3001,7 @@
       },
       {
         "name": "A4 Paper Rim",
-        "itemCode": "PAP-321",
+        "itemCode": "Eng-106",
         "category": "Stationery",
         "currentStock": 7,
         "unit": "Pcs",
@@ -3013,7 +3013,7 @@
       },
       {
         "name": "Decoration Item",
-        "itemCode": "MIS-322",
+        "itemCode": "Eng-107",
         "category": "General",
         "currentStock": 1,
         "unit": "Box",
@@ -3025,7 +3025,7 @@
       },
       {
         "name": "Bad Blok ID Card",
-        "itemCode": "CAR-323",
+        "itemCode": "Eng-108",
         "category": "General",
         "currentStock": 1,
         "unit": "Box",
@@ -3037,7 +3037,7 @@
       },
       {
         "name": "Keyboard",
-        "itemCode": "IT-401",
+        "itemCode": "Eng-109",
         "category": "General",
         "currentStock": 2,
         "unit": "Pcs",
@@ -3049,7 +3049,7 @@
       },
       {
         "name": "Camera",
-        "itemCode": "IT-402",
+        "itemCode": "Eng-110",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -3061,7 +3061,7 @@
       },
       {
         "name": "Visiting Card Holder",
-        "itemCode": "STA-403",
+        "itemCode": "Eng-111",
         "category": "Stationery",
         "currentStock": 2,
         "unit": "Pcs",
@@ -3073,7 +3073,7 @@
       },
       {
         "name": "Spray Paint Gun",
-        "itemCode": "TOO-404",
+        "itemCode": "Eng-112",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -3085,7 +3085,7 @@
       },
       {
         "name": "Hanger",
-        "itemCode": "MIS-405",
+        "itemCode": "Eng-113",
         "category": "General",
         "currentStock": 35,
         "unit": "Pcs",
@@ -3097,7 +3097,7 @@
       },
       {
         "name": "Mouse (Rack 4)",
-        "itemCode": "IT-406",
+        "itemCode": "Eng-114",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -3109,7 +3109,7 @@
       },
       {
         "name": "Laptop Cooling Pad",
-        "itemCode": "IT-407",
+        "itemCode": "Eng-115",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -3121,7 +3121,7 @@
       },
       {
         "name": "Visiting Card Box",
-        "itemCode": "CAR-408",
+        "itemCode": "Eng-116",
         "category": "Stationery",
         "currentStock": 1,
         "unit": "Box",
@@ -3133,7 +3133,7 @@
       },
       {
         "name": "Flour (Industrial)",
-        "itemCode": "MIS-409",
+        "itemCode": "Eng-117",
         "category": "General",
         "currentStock": 50,
         "unit": "Pcs",
@@ -3145,7 +3145,7 @@
       },
       {
         "name": "Goggles for Paint",
-        "itemCode": "PPE-410",
+        "itemCode": "Eng-118",
         "category": "General",
         "currentStock": 3,
         "unit": "Pcs",
@@ -3157,7 +3157,7 @@
       },
       {
         "name": "Air Filter machine",
-        "itemCode": "MAC-411",
+        "itemCode": "Eng-119",
         "category": "General",
         "currentStock": 2,
         "unit": "Pcs",
@@ -3169,7 +3169,7 @@
       },
       {
         "name": "Goggles for marking",
-        "itemCode": "PPE-412",
+        "itemCode": "Eng-120",
         "category": "General",
         "currentStock": 4,
         "unit": "Box",
@@ -3181,7 +3181,7 @@
       },
       {
         "name": "Paint Part",
-        "itemCode": "PAI-413",
+        "itemCode": "Eng-121",
         "category": "Paints",
         "currentStock": 5,
         "unit": "Box",
@@ -3193,7 +3193,7 @@
       },
       {
         "name": "Room Freshener",
-        "itemCode": "MIS-501",
+        "itemCode": "Eng-122",
         "category": "General",
         "currentStock": 13,
         "unit": "Pcs",
@@ -3205,7 +3205,7 @@
       },
       {
         "name": "Tissu Roll",
-        "itemCode": "MIS-502",
+        "itemCode": "Eng-123",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -3217,7 +3217,7 @@
       },
       {
         "name": "Urinal Matt",
-        "itemCode": "MIS-503",
+        "itemCode": "Eng-124",
         "category": "General",
         "currentStock": 10,
         "unit": "Pcs",
@@ -3229,7 +3229,7 @@
       },
       {
         "name": "Garbage bag Small",
-        "itemCode": "MIS-504",
+        "itemCode": "Eng-125",
         "category": "General",
         "currentStock": 13,
         "unit": "Pcs",
@@ -3241,7 +3241,7 @@
       },
       {
         "name": "Coffee Mug",
-        "itemCode": "MIS-505",
+        "itemCode": "Eng-126",
         "category": "General",
         "currentStock": 4,
         "unit": "Pcs",
@@ -3253,7 +3253,7 @@
       },
       {
         "name": "All Out Reffel",
-        "itemCode": "MIS-506",
+        "itemCode": "Eng-127",
         "category": "General",
         "currentStock": 12,
         "unit": "Pcs",
@@ -3265,7 +3265,7 @@
       },
       {
         "name": "Duster (Rack 5)",
-        "itemCode": "MIS-507",
+        "itemCode": "Eng-128",
         "category": "General",
         "currentStock": 12,
         "unit": "Pcs",
@@ -3277,7 +3277,7 @@
       },
       {
         "name": "Scotch Brite",
-        "itemCode": "MIS-508",
+        "itemCode": "Eng-129",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -3289,7 +3289,7 @@
       },
       {
         "name": "Baking Powder",
-        "itemCode": "MIS-509",
+        "itemCode": "Eng-130",
         "category": "General",
         "currentStock": 3,
         "unit": "Pcs",
@@ -3301,7 +3301,7 @@
       },
       {
         "name": "Naphthalene",
-        "itemCode": "MIS-510",
+        "itemCode": "Eng-131",
         "category": "General",
         "currentStock": 1,
         "unit": "Pack",
@@ -3313,7 +3313,7 @@
       },
       {
         "name": "Mouse (Rack 5)",
-        "itemCode": "IT-511",
+        "itemCode": "Eng-132",
         "category": "General",
         "currentStock": 9,
         "unit": "Pcs",
@@ -3325,7 +3325,7 @@
       },
       {
         "name": "Lint Free Cloth",
-        "itemCode": "PPE-601",
+        "itemCode": "Eng-133",
         "category": "General",
         "currentStock": 16,
         "unit": "Pack",
@@ -3337,7 +3337,7 @@
       },
       {
         "name": "Masks",
-        "itemCode": "PPE-602",
+        "itemCode": "Eng-134",
         "category": "General",
         "currentStock": 8,
         "unit": "Pack",
@@ -3349,7 +3349,7 @@
       },
       {
         "name": "Cap",
-        "itemCode": "PPE-603",
+        "itemCode": "Eng-135",
         "category": "General",
         "currentStock": 6,
         "unit": "Pack",
@@ -3361,7 +3361,7 @@
       },
       {
         "name": "Gloves (Industrial)",
-        "itemCode": "PPE-604",
+        "itemCode": "Eng-136",
         "category": "General",
         "currentStock": 4,
         "unit": "Box",
@@ -3373,7 +3373,7 @@
       },
       {
         "name": "Apron",
-        "itemCode": "PPE-605",
+        "itemCode": "Eng-137",
         "category": "General",
         "currentStock": 1,
         "unit": "Pcs",
@@ -3385,7 +3385,7 @@
       },
       {
         "name": "Hand Wash",
-        "itemCode": "CHE-606",
+        "itemCode": "Eng-138",
         "category": "Chemicals",
         "currentStock": 6,
         "unit": "LTR",
@@ -3397,7 +3397,7 @@
       },
       {
         "name": "Colin",
-        "itemCode": "CHE-607",
+        "itemCode": "Eng-139",
         "category": "Chemicals",
         "currentStock": 5,
         "unit": "Pcs",
@@ -3409,7 +3409,7 @@
       },
       {
         "name": "Floor Cleaner",
-        "itemCode": "CHE-608",
+        "itemCode": "Eng-140",
         "category": "Chemicals",
         "currentStock": 5,
         "unit": "LTR",
@@ -3421,7 +3421,7 @@
       },
       {
         "name": "Wish Wash",
-        "itemCode": "CHE-609",
+        "itemCode": "Eng-141",
         "category": "Chemicals",
         "currentStock": 5,
         "unit": "LTR",
@@ -3433,7 +3433,7 @@
       },
       {
         "name": "Surf",
-        "itemCode": "CHE-610",
+        "itemCode": "Eng-142",
         "category": "Chemicals",
         "currentStock": 1,
         "unit": "Kg",
@@ -3445,7 +3445,7 @@
       },
       {
         "name": "Pocha",
-        "itemCode": "MIS-611",
+        "itemCode": "Eng-143",
         "category": "General",
         "currentStock": 12,
         "unit": "Pcs",
@@ -3457,7 +3457,7 @@
       },
       {
         "name": "Toilet Brush",
-        "itemCode": "MIS-612",
+        "itemCode": "Eng-144",
         "category": "General",
         "currentStock": 2,
         "unit": "Pcs",

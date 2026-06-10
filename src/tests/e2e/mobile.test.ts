@@ -231,7 +231,7 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
     await comboboxInput.fill('a');
 
     // Find the first suggestion button dynamically (immune to inventory depletion)
-    const firstSuggestion = page.locator('div.relative:has(input[placeholder="Type to search material..."]) div.absolute button').first();
+    const firstSuggestion = page.locator('div.relative:has(> input[placeholder="Type to search material..."]) div.absolute button').first();
     await expect(firstSuggestion).toBeVisible({ timeout: 15000 });
     
     // Get the name of the suggestion to assert value
@@ -248,11 +248,12 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
     await expect(quantityInput).toBeVisible({ timeout: 15000 });
     await quantityInput.fill('2');
 
-    // Select operator/staff/project
+    // Select operator/staff/project/issuer
     const selects = page.locator('select');
     await selects.nth(0).selectOption({ index: 1 });
     await selects.nth(1).selectOption({ index: 1 });
     await selects.nth(2).selectOption({ index: 1 });
+    await selects.nth(3).selectOption({ index: 1 });
 
     // Submit check-out
     const confirmBtn = page.getByRole('button', { name: 'Issue Material' });

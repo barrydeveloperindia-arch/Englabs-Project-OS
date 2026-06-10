@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "firebase/firestore";
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, disableNetwork } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -23,7 +23,8 @@ if (firebaseConfig.apiKey) {
     
     if (isTest) {
         db = initializeFirestore(app, {});
-        console.log("Firestore initialized with in-memory cache for test environment.");
+        disableNetwork(db).catch(err => console.error("Failed to disable Firestore network:", err));
+        console.log("Firestore initialized with in-memory cache for test environment. Network disabled.");
     } else {
         db = initializeFirestore(app, {
             localCache: persistentLocalCache({
