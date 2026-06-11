@@ -69,20 +69,20 @@ vi.mock('lucide-react', () => ({
 }));
 
 // 🛡️ SERVICE MOCKS: Decouple UI from backend logic
-vi.mock('../lib/database_service', () => ({
+vi.mock('@services/database_service', () => ({
     fetchGateEntries: vi.fn(() => Promise.resolve([])),
     saveGateEntry: vi.fn(() => Promise.resolve({ success: true })),
     syncLocalToFirebase: vi.fn(() => Promise.resolve(true)),
     syncAllProjectsToFirebase: vi.fn(() => Promise.resolve(true))
 }));
 
-vi.mock('../lib/inventory_service', () => ({
+vi.mock('@domain/inventory_service', () => ({
     processInventoryUpdate: vi.fn(() => Promise.resolve([{ success: true }])),
     fetchInventoryMaster: vi.fn(() => Promise.resolve([])),
     fetchStockMovement: vi.fn(() => Promise.resolve([]))
 }));
 
-vi.mock('../lib/system_guard', () => ({
+vi.mock('@domain/system_guard', () => ({
     logAction: vi.fn(),
     AuditLog: vi.fn()
 }));

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import logo from './assets/englabs_logo.png';
+import logo from '@/assets/englabs_logo.png';
 import { 
     Layout, 
     Layers, 
@@ -30,29 +30,29 @@ import {
     ArrowDownRight,
     Lock
 } from 'lucide-react';
-import NewProjectModal from './components/NewProjectModal';
-import GateRegister from './components/GateRegister';
-import Showroom from './components/Showroom';
-import FoodRegister from './components/FoodRegister';
-import SystemGuardDashboard from './components/SystemGuardDashboard';
-import BillingDashboard from './components/BillingDashboard';
-import DigitalEvidence from './components/DigitalEvidence';
-import GateDisplayScreen from './components/GateDisplayScreen';
-import InventoryManager from './components/InventoryManager';
-import Sky5Terminal from './components/Sky5Terminal';
-import StoreStockReport from './components/StoreStockReport';
-import { STAFF_ROSTER } from './lib/constants';
-import AddStaffModal from './components/AddStaffModal';
-import PorterRegister from './components/PorterRegister';
-import HandoverDashboard from './components/HandoverDashboard';
-import ProjectLookupDashboard from './components/ProjectLookupDashboard';
-import { ProjectBudgets } from './components/ProjectBudgets';
-import { ProjectData, STAGES, ProjectStage } from './lib/project';
-import { logAction, AuditLog } from './lib/system_guard';
-import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry } from './lib/database_service';
-import { processInventoryUpdate, fetchInventoryMaster, fetchStockMovement, recordManualTransaction } from './lib/inventory_service';
-import forensicRegistry from '../data/forensic_gate_registry.json';
-import porterForensic from '../data/porter_missions_forensic.json';
+import NewProjectModal from '@common/NewProjectModal';
+import GateRegister from '@features/logistics/GateRegister';
+import Showroom from '@features/system/Showroom';
+import FoodRegister from '@features/food/FoodRegister';
+import SystemGuardDashboard from '@features/system/SystemGuardDashboard';
+import BillingDashboard from '@features/project/BillingDashboard';
+import DigitalEvidence from '@features/system/DigitalEvidence';
+import GateDisplayScreen from '@features/logistics/GateDisplayScreen';
+import InventoryManager from '@features/inventory/InventoryManager';
+import Sky5Terminal from '@features/system/Sky5Terminal';
+import StoreStockReport from '@features/inventory/StoreStockReport';
+import { STAFF_ROSTER } from '@config/constants';
+import AddStaffModal from '@common/AddStaffModal';
+import PorterRegister from '@features/porter/PorterRegister';
+import HandoverDashboard from '@features/project/HandoverDashboard';
+import ProjectLookupDashboard from '@features/project/ProjectLookupDashboard';
+import { ProjectBudgets } from '@features/project/ProjectBudgets';
+import { ProjectData, STAGES, ProjectStage } from '@domain/project';
+import { logAction, AuditLog } from '@domain/system_guard';
+import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry } from '@services/database_service';
+import { processInventoryUpdate, fetchInventoryMaster, fetchStockMovement, recordManualTransaction } from '@domain/inventory_service';
+import forensicRegistry from '@data/forensic_gate_registry.json';
+import porterForensic from '@data/porter_missions_forensic.json';
 
 const staticProjects: ProjectData[] = [];
 const projectFiles = import.meta.glob('../data/*.json', { eager: true });
@@ -229,8 +229,13 @@ const App: React.FC = () => {
     const [porterTrips, setPorterTrips] = useState<any[]>(() => {
         try {
             const saved = localStorage.getItem('englabs_porter_v1');
-            const forensic = porterForensic as any[];
+            const deletedSaved = localStorage.getItem('englabs_porter_deleted_ids');
+            const deletedIds = deletedSaved ? JSON.parse(deletedSaved) : [];
+            const deletedSet = new Set(deletedIds);
+
+            const forensic = (porterForensic as any[]).filter((t: any) => !deletedSet.has(t.id));
             let trips = saved && saved !== 'undefined' ? JSON.parse(saved) : [];
+            trips = trips.filter((t: any) => !deletedSet.has(t.id) && !(t.id === 'PTR-2026-0022' && t.grossAmount > 1000));
             
             const forensicMap = new Map(forensic.map(f => [f.id, f]));
             const userTrips = trips.filter((t: any) => !forensicMap.has(t.id));
@@ -277,10 +282,18 @@ const App: React.FC = () => {
     // REACTIVE FORENSIC SYNC: Ensures disk-based updates (like new JSON entries) are merged into state
     useEffect(() => {
         setPorterTrips(prev => {
-            const forensic = porterForensic as any[];
+            const deletedSaved = localStorage.getItem('englabs_porter_deleted_ids');
+            const deletedIds = deletedSaved ? JSON.parse(deletedSaved) : [];
+            const deletedSet = new Set(deletedIds);
+
+            const forensic = (porterForensic as any[]).filter((t: any) => !deletedSet.has(t.id));
             const entryMap = new Map();
-            prev.forEach(e => entryMap.set(e.id, e));
+            prev.filter((t: any) => !deletedSet.has(t.id)).forEach(e => entryMap.set(e.id, e));
             forensic.forEach(e => entryMap.set(e.id, e)); // Forensic takes priority for matched IDs
+            const old22 = Array.from(entryMap.values()).find((t: any) => t.id === 'PTR-2026-0022' && t.grossAmount > 1000);
+            if (old22) {
+                entryMap.delete('PTR-2026-0022');
+            }
             return Array.from(entryMap.values()).sort((a: any, b: any) => 
                 new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
             );
@@ -409,6 +422,34 @@ const App: React.FC = () => {
     useEffect(() => {
         localStorage.setItem('englabs_gate_v2', JSON.stringify(gateEntries));
     }, [gateEntries]);
+
+    useEffect(() => {
+        localStorage.setItem('englabs_porter_v1', JSON.stringify(porterTrips));
+    }, [porterTrips]);
+
+    // One-time startup cleanup of old, invalid PTR-2026-0022 (₹5,400) from localStorage
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem('englabs_porter_v1');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                const filtered = parsed.filter((t: any) => !(t.id === 'PTR-2026-0022' && t.grossAmount > 1000));
+                if (parsed.length !== filtered.length) {
+                    localStorage.setItem('englabs_porter_v1', JSON.stringify(filtered));
+                }
+            }
+            const backup = localStorage.getItem('englabs_porter_backup_vault');
+            if (backup) {
+                const parsed = JSON.parse(backup);
+                const filtered = parsed.filter((t: any) => !(t.id === 'PTR-2026-0022' && t.grossAmount > 1000));
+                if (parsed.length !== filtered.length) {
+                    localStorage.setItem('englabs_porter_backup_vault', JSON.stringify(filtered));
+                }
+            }
+        } catch (e) {
+            console.error("Cleanup of old invalid PTR-2026-0022 failed:", e);
+        }
+    }, []);
 
     const filteredProjects = projects.filter(p => {
         const matchesSearch = p.projectId.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -1180,7 +1221,19 @@ const App: React.FC = () => {
                     trips={porterTrips}
                     onNewTrip={(trip) => setPorterTrips(prev => [trip, ...prev])}
                     onUpdateTrip={(updated) => setPorterTrips(prev => prev.map(t => t.id === updated.id ? updated : t))}
-                    onDeleteTrip={(id) => setPorterTrips(prev => prev.filter(t => t.id !== id))}
+                    onDeleteTrip={(id) => {
+                        setPorterTrips(prev => prev.filter(t => t.id !== id));
+                        try {
+                            const deletedSaved = localStorage.getItem('englabs_porter_deleted_ids');
+                            const deletedIds = deletedSaved ? JSON.parse(deletedSaved) : [];
+                            if (!deletedIds.includes(id)) {
+                                deletedIds.push(id);
+                                localStorage.setItem('englabs_porter_deleted_ids', JSON.stringify(deletedIds));
+                            }
+                        } catch (e) {
+                            console.error("Failed to save deleted ID:", e);
+                        }
+                    }}
                 />
             ) : (
                 <DigitalEvidence onAutoRegister={handleNewGateEntry} />

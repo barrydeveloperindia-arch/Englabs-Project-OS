@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import React from 'react';
-import GateDisplayScreen from '../components/GateDisplayScreen';
-import { GateEntry } from '../lib/gate_system';
+import GateDisplayScreen from '@features/logistics/GateDisplayScreen';
+import { GateEntry } from '@domain/gate_system';
 
 // Mock Lucide icons
 vi.mock('lucide-react', () => ({
@@ -26,11 +26,11 @@ vi.mock('lucide-react', () => ({
 }));
 
 // Mock services
-vi.mock('../lib/database_service', () => ({
+vi.mock('@services/database_service', () => ({
     fetchGateEntries: vi.fn(() => Promise.resolve([]))
 }));
 
-vi.mock('../lib/inventory_service', () => ({
+vi.mock('@domain/inventory_service', () => ({
     fetchInventoryMaster: vi.fn(() => Promise.resolve([]))
 }));
 

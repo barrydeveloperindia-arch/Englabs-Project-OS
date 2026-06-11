@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculatePorterAmount, generatePorterId } from '../lib/porter_system';
+import { calculatePorterAmount, generatePorterId } from '@domain/porter_system';
 
 describe('Porter System Logic', () => {
     it('should correctly calculate trip amount including bike charges and advances', () => {

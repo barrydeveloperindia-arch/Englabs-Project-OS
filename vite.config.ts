@@ -4,6 +4,11 @@ import react from '@vitejs/plugin-react'
 import { exec } from 'child_process'
 import fs from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
 
 // Helper to run python script
 function runPythonScript(args: string[]): Promise<any> {
@@ -117,6 +122,19 @@ export default defineConfig({
     tailwindcss(),
     apiPlugin()
   ],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@components': path.resolve(__dirname, './src/components'),
+      '@common': path.resolve(__dirname, './src/components/common'),
+      '@features': path.resolve(__dirname, './src/components/features'),
+      '@lib': path.resolve(__dirname, './src/lib'),
+      '@services': path.resolve(__dirname, './src/lib/services'),
+      '@domain': path.resolve(__dirname, './src/lib/domain'),
+      '@config': path.resolve(__dirname, './src/lib/config'),
+      '@data': path.resolve(__dirname, './data'),
+    }
+  },
   server: {
     port: 3000,
     strictPort: true,
