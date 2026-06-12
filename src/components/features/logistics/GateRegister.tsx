@@ -481,9 +481,9 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
                                         <EntryTable 
                                             entries={entries.filter(e => 
                                                 (view === 'INWARD_LIST' ? e.type === 'INWARD' : e.type === 'OUTWARD') &&
-                                                (e.materialName.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                                e.partyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                                e.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                                ((e.materialName || '').toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                                (e.partyName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                                (e.id || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
                                                 (e.employeeName && e.employeeName.toLowerCase().includes(searchQuery.toLowerCase())) ||
                                                 (e.supervisorName && e.supervisorName.toLowerCase().includes(searchQuery.toLowerCase())) ||
                                                 (e.vehicleNumber && e.vehicleNumber.toLowerCase().includes(searchQuery.toLowerCase())))

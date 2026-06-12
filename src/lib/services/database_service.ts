@@ -73,3 +73,15 @@ export const deleteProjectFromFirebase = async (projectId: string) => {
         return { success: false, error: e };
     }
 };
+
+export const deleteGateEntryFromFirebase = async (entryId: string) => {
+    if (!db) return { success: false, error: "Database not initialized" };
+    try {
+        const docRef = doc(db, COLLECTION_NAME, entryId);
+        await deleteDoc(docRef);
+        return { success: true };
+    } catch (e) {
+        console.error("Error deleting gate entry from Firebase:", e);
+        return { success: false, error: e };
+    }
+};

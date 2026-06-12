@@ -41,6 +41,7 @@ import GateDisplayScreen from '@features/logistics/GateDisplayScreen';
 import InventoryManager from '@features/inventory/InventoryManager';
 import Sky5Terminal from '@features/system/Sky5Terminal';
 import StoreStockReport from '@features/inventory/StoreStockReport';
+import StoreGuardianDashboard from '@features/inventory/StoreGuardianDashboard';
 import { STAFF_ROSTER } from '@config/constants';
 import AddStaffModal from '@common/AddStaffModal';
 import PorterRegister from '@features/porter/PorterRegister';
@@ -49,7 +50,7 @@ import ProjectLookupDashboard from '@features/project/ProjectLookupDashboard';
 import { ProjectBudgets } from '@features/project/ProjectBudgets';
 import { ProjectData, STAGES, ProjectStage } from '@domain/project';
 import { logAction, AuditLog } from '@domain/system_guard';
-import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry } from '@services/database_service';
+import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry, deleteGateEntryFromFirebase } from '@services/database_service';
 import { processInventoryUpdate, fetchInventoryMaster, fetchStockMovement, recordManualTransaction } from '@domain/inventory_service';
 import forensicRegistry from '@data/forensic_gate_registry.json';
 import porterForensic from '@data/porter_missions_forensic.json';
@@ -108,7 +109,7 @@ interface SidebarButtonProps {
     color?: 'emerald' | 'amber';
 }
 
-type View = 'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'BILLING' | 'EVIDENCE' | 'INVENTORY' | 'SKY5_TERMINAL' | 'STOCK_REPORT' | 'PORTER_SERVICE' | 'GATE_DISPLAY' | 'PROJECT_LOOKUP' | 'PROJECT_BUDGETS';
+type View = 'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'BILLING' | 'EVIDENCE' | 'INVENTORY' | 'SKY5_TERMINAL' | 'STOCK_REPORT' | 'PORTER_SERVICE' | 'GATE_DISPLAY' | 'PROJECT_LOOKUP' | 'PROJECT_BUDGETS' | 'STORE_GUARDIAN';
 
 const SidebarButton: React.FC<SidebarButtonProps> = ({ active, onClick, icon, label, color = 'emerald' }) => {
     const activeClass = color === 'emerald' 
@@ -514,8 +515,9 @@ const App: React.FC = () => {
         ]);
     };
 
-    const handleDeleteGateEntry = (id: string) => {
+    const handleDeleteGateEntry = async (id: string) => {
         setGateEntries(prev => prev.filter(e => e.id !== id));
+        await deleteGateEntryFromFirebase(id);
     };
 
     const handleCheckoutSubmit = async (e: React.FormEvent) => {
@@ -755,6 +757,13 @@ const App: React.FC = () => {
                                 onClick={() => setCurrentView('STOCK_REPORT')} 
                                 icon={<FileText className="w-4.5 h-4.5" />} 
                                 label="STORE STOCK REPORT" 
+                            />
+                            <SidebarButton 
+                                active={currentView === 'STORE_GUARDIAN'} 
+                                onClick={() => setCurrentView('STORE_GUARDIAN')} 
+                                icon={<Shield className="w-4.5 h-4.5 text-indigo-400" />} 
+                                label="STORE GUARDIAN" 
+                                color="emerald"
                             />
                             <SidebarButton 
                                 active={currentView === 'BILLING'} 
@@ -1216,6 +1225,8 @@ const App: React.FC = () => {
                     onAddStaff={handleAddStaff}
                     onAddProject={(newProj) => setProjects(prev => [...prev, newProj])}
                 />
+            ) : currentView === 'STORE_GUARDIAN' ? (
+                <StoreGuardianDashboard />
             ) : currentView === 'PORTER_SERVICE' ? (
                 <PorterRegister 
                     trips={porterTrips}

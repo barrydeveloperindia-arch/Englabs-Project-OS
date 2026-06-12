@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
+import { storeGuardian } from '@domain/store_guardian';
 import { 
     FileText, 
     Download, 
@@ -83,6 +86,7 @@ interface StoreStockReportProps {
     staffList?: string[];
     onAddStaff?: (name: string) => void;
     onAddProject?: (newProj: any) => void;
+    externalRefreshTrigger?: number;
 }
 
 const MONTH_NAMES = [
@@ -97,7 +101,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
     projects = [],
     staffList: propStaffList,
     onAddStaff,
-    onAddProject
+    onAddProject,
+    externalRefreshTrigger = 0
 }) => {
     // Navigation state matching folder structure: Dashboard, Check In, Check Out, Live Register, Current Stock, Reports, Settings
     const [view, setView] = useState<'DASHBOARD' | 'CHECK_IN' | 'CHECK_OUT' | 'LIVE_REGISTER' | 'CURRENT_STOCK' | 'REPORTS' | 'SETTINGS' | 'REQUIREMENTS'>('DASHBOARD');
@@ -157,6 +162,13 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
     // Loading and reload triggers
     const [isLoading, setIsLoading] = useState(false);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+    // Sync external refresh triggers (like App.tsx checkouts) to our internal refresh
+    useEffect(() => {
+        if (externalRefreshTrigger > 0) {
+            setRefreshTrigger(p => p + 1);
+        }
+    }, [externalRefreshTrigger]);
 
     // Check-in form states
     const [checkInItemCode, setCheckInItemCode] = useState('');
@@ -274,6 +286,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                 setRequirements(reqData);
             } catch (err) {
                 console.error("Error loading registry data:", err);
+                storeGuardian.logError('DATA_FETCH', 'Registry load failed', 'StoreStockReport Init', String(userRole));
             } finally {
                 setIsLoading(false);
             }
@@ -353,9 +366,9 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
         } else if (view === 'CURRENT_STOCK') {
             sheetName = "Current Stock";
             const filtered = currentStock.filter(item => {
-                const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    item.itemCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    item.category.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesSearch = (item.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    (item.itemCode || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    (item.category || '').toLowerCase().includes(searchQuery.toLowerCase());
                 if (!matchesSearch) return false;
 
                 if (selectedStockCategory !== 'ALL' && item.category !== selectedStockCategory) return false;
@@ -392,9 +405,9 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
         } else if (view === 'REPORTS') {
             sheetName = `${monthlyViewMonth} Register`;
             const filtered = monthlyTransactions.filter(tx => {
-                return tx.materialName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    tx.itemCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    tx.staffName.toLowerCase().includes(searchQuery.toLowerCase());
+                return (tx.materialName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    (tx.itemCode || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    (tx.staffName || '').toLowerCase().includes(searchQuery.toLowerCase());
             });
             dataList = filtered.map((tx, idx) => ({
                 'Sr No.': idx + 1,
@@ -414,11 +427,11 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
         } else if (view === 'REQUIREMENTS') {
             sheetName = "Material Requirements";
             const filtered = requirements.filter(req => {
-                return req.materialName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    req.materialCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    req.projectId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    req.requestedBy.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    req.remarks.toLowerCase().includes(searchQuery.toLowerCase());
+                return (req.materialName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    (req.materialCode || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    (req.projectId || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    (req.requestedBy || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    (req.remarks || '').toLowerCase().includes(searchQuery.toLowerCase());
             });
             dataList = filtered.map((req, idx) => ({
                 'Sr No.': idx + 1,
@@ -532,9 +545,9 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
 
     const handleShareStockWhatsApp = () => {
         const filtered = currentStock.filter(item => {
-            const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                item.itemCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                item.category.toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesSearch = (item.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (item.itemCode || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (item.category || '').toLowerCase().includes(searchQuery.toLowerCase());
             if (!matchesSearch) return false;
 
             if (selectedStockCategory !== 'ALL' && item.category !== selectedStockCategory) return false;
@@ -605,9 +618,9 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
 
     const handleShareMonthlyRegisterWhatsApp = () => {
         const filtered = monthlyTransactions.filter(tx => {
-            const matchesSearch = tx.materialName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                tx.itemCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                tx.staffName.toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesSearch = (tx.materialName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (tx.itemCode || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (tx.staffName || '').toLowerCase().includes(searchQuery.toLowerCase());
             if (!matchesSearch) return false;
 
             if (monthlyTypeFilter !== 'ALL' && tx.type !== monthlyTypeFilter) return false;
@@ -792,9 +805,9 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
     // Live Register Filter Query helper
     const getFilteredTransactions = (txs: MasterRegisterEntry[]) => {
         return txs.filter(tx => {
-            const matchesSearch = tx.materialName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                tx.itemCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                tx.staffName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            const matchesSearch = (tx.materialName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (tx.itemCode || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (tx.staffName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
                 (tx.projectId && tx.projectId.toLowerCase().includes(searchQuery.toLowerCase()));
                 
             if (!matchesSearch) return false;
@@ -854,6 +867,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
             }, 50);
         } catch (err) {
             console.error("Camera access error:", err);
+            storeGuardian.logError('CAMERA_ERROR', 'Access failed', 'StoreStockReport Webcam', String(userRole));
             alert("Could not access camera. Please check camera permissions.");
         }
     };
@@ -988,7 +1002,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                         <div className="hidden xl:block h-6 w-px bg-slate-100"></div>
                         
                         {/* Mobile Header Sub-Navigation (Horizontal Scroll) */}
-                        <nav className="flex gap-1 bg-slate-50 p-1 rounded-xl overflow-x-auto max-w-full no-scrollbar shrink-0 xl:hidden border border-slate-150">
+                        <nav className="flex gap-1 bg-slate-50 p-1 rounded-xl overflow-x-auto max-w-full no-scrollbar shrink-0 xl:hidden border border-slate-150 relative z-20 pointer-events-auto">
                             {[
                                 { id: 'DASHBOARD', label: 'Dashboard' },
                                 { id: 'CHECK_IN', label: 'Check In' },
@@ -1001,8 +1015,9 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                             ].map(item => (
                                 <button
                                     key={item.id}
+                                    type="button"
                                     onClick={() => { setView(item.id as any); setCheckInSuccess(false); setCheckOutSuccess(false); }}
-                                    className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
+                                    className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest whitespace-nowrap transition-all relative z-10 cursor-pointer ${
                                         view === item.id 
                                             ? 'bg-[#0e4368] text-white shadow-sm' 
                                             : 'text-slate-500 hover:text-slate-800'
@@ -1497,6 +1512,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                             alert("Failed to save transaction: " + (res.error || 'Unknown error'));
                                         }
                                     } catch (err: any) {
+                                        console.error(err);
+                                        storeGuardian.logError('CHECK_IN', err.message || 'Check-in failed', 'StoreStockReport CheckIn', String(userRole));
                                         alert("Error checking in material: " + err.message);
                                     } finally {
                                         setIsLoading(false);
@@ -1571,7 +1588,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                  <input
                                                      type="text"
                                                      placeholder="Type to search material..."
-                                                     className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                                     className="w-full relative z-20 bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
                                                      value={checkInSearch}
                                                      onChange={(e) => {
                                                          setCheckInSearch(e.target.value);
@@ -1585,7 +1602,6 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                  <input 
                                                      type="hidden" 
                                                      value={checkInItemCode} 
-                                                     required 
                                                  />
                                                  {showCheckInDropdown && (
                                                      <>
@@ -1974,6 +1990,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                             alert("Failed to issue material: " + (res.error || 'Unknown error'));
                                         }
                                     } catch (err: any) {
+                                        console.error(err);
+                                        storeGuardian.logError('CHECK_OUT', err.message || 'Check-out failed', 'StoreStockReport Checkout', String(userRole));
                                         alert("Error issuing material: " + err.message);
                                     } finally {
                                         setIsLoading(false);
@@ -1982,12 +2000,12 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                     
                                     {/* Material Selector */}
                                     <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Select Material</label>
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Select Material</label>
                                         <div className="relative">
                                             <input
                                                 type="text"
                                                 placeholder="Type to search material..."
-                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                                className="w-full relative z-20 bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
                                                 value={checkOutSearch}
                                                 onChange={(e) => {
                                                     setCheckOutSearch(e.target.value);
@@ -2001,7 +2019,6 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                             <input 
                                                 type="hidden" 
                                                 value={checkOutItemCode} 
-                                                required 
                                             />
                                             {showCheckOutDropdown && (
                                                 <>
@@ -2142,7 +2159,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
 
                                     {/* Issued To Staff */}
                                     <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Issued To (Staff Name)</label>
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Issued To (Staff Name)</label>
                                         <select
                                             required
                                             className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
@@ -2159,7 +2176,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                      {/* Project ID */}
                                      <div className="space-y-1.5">
                                          <div className="flex justify-between items-center">
-                                             <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Project ID</label>
+                                             <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Project ID</label>
                                              <button
                                                  type="button"
                                                  onClick={() => setIsAddProjectModalOpen(true)}
@@ -2219,7 +2236,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
 
                                      {/* Store Location Selection */}
                                      <div className="space-y-1.5">
-                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Store Number / Location</label>
+                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Store Number / Location</label>
                                          <select
                                              required
                                              className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
@@ -2235,7 +2252,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
 
                                     {/* Issued By */}
                                     <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Issued By (Store Keeper)</label>
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Issued By (Store Keeper)</label>
                                         <select
                                             required
                                             className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
@@ -2251,7 +2268,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
 
                                     {/* Remarks */}
                                     <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Remarks</label>
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Remarks</label>
                                         <textarea
                                             rows={2}
                                             placeholder="Issue slip notes or audit observations..."
@@ -2263,7 +2280,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
 
                                     {/* Optional Camera Capture */}
                                     <div className="space-y-2 pt-2">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Digital Evidence (Optional)</label>
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Digital Evidence (Optional)</label>
                                         {checkoutPhoto ? (
                                             <div className="relative inline-block rounded-xl overflow-hidden border border-slate-200">
                                                 <img src={checkoutPhoto} alt="Snapshot Preview" className="w-40 h-auto" />
@@ -2638,9 +2655,9 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                             {currentStock
                                                 .filter(item => {
                                                     // Search query filter
-                                                    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                                        item.itemCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                                        item.category.toLowerCase().includes(searchQuery.toLowerCase());
+                                                    const matchesSearch = (item.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                                        (item.itemCode || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                                        (item.category || '').toLowerCase().includes(searchQuery.toLowerCase());
                                                     if (!matchesSearch) return false;
 
                                                     // Category filter
@@ -2856,9 +2873,9 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                     </h3>
                                     <span className="text-[9px] font-bold text-slate-400 uppercase">
                                         Total: {monthlyTransactions.filter(tx => {
-                                            const matchesSearch = tx.materialName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                                tx.itemCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                                tx.staffName.toLowerCase().includes(searchQuery.toLowerCase());
+                                            const matchesSearch = (tx.materialName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                                (tx.itemCode || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                                (tx.staffName || '').toLowerCase().includes(searchQuery.toLowerCase());
                                             if (!matchesSearch) return false;
                                             if (monthlyTypeFilter !== 'ALL' && tx.type !== monthlyTypeFilter) return false;
                                             if (monthlyCategoryFilter !== 'ALL' && tx.category !== monthlyCategoryFilter) return false;
@@ -2889,9 +2906,9 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                         <tbody className="divide-y divide-slate-50">
                                             {monthlyTransactions
                                                 .filter(tx => {
-                                                    const matchesSearch = tx.materialName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                                        tx.itemCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                                        tx.staffName.toLowerCase().includes(searchQuery.toLowerCase());
+                                                    const matchesSearch = (tx.materialName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                                        (tx.itemCode || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                                        (tx.staffName || '').toLowerCase().includes(searchQuery.toLowerCase());
                                                     if (!matchesSearch) return false;
                                                     if (monthlyTypeFilter !== 'ALL' && tx.type !== monthlyTypeFilter) return false;
                                                     if (monthlyCategoryFilter !== 'ALL' && tx.category !== monthlyCategoryFilter) return false;
@@ -2932,9 +2949,9 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                     </tr>
                                                 ))}
                                             {monthlyTransactions.filter(tx => {
-                                                const matchesSearch = tx.materialName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                                    tx.itemCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                                    tx.staffName.toLowerCase().includes(searchQuery.toLowerCase());
+                                                const matchesSearch = (tx.materialName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                                    (tx.itemCode || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                                    (tx.staffName || '').toLowerCase().includes(searchQuery.toLowerCase());
                                                 if (!matchesSearch) return false;
                                                 if (monthlyTypeFilter !== 'ALL' && tx.type !== monthlyTypeFilter) return false;
                                                 if (monthlyCategoryFilter !== 'ALL' && tx.category !== monthlyCategoryFilter) return false;
@@ -3130,6 +3147,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                  alert("Failed to submit request.");
                                              }
                                          } catch (err: any) {
+                                             console.error(err);
+                                             storeGuardian.logError('REQUIREMENT_SUBMIT', err.message || 'Submission failed', 'StoreStockReport Requirements', String(userRole));
                                              alert("Error submitting request: " + err.message);
                                          } finally {
                                              setIsLoading(false);
@@ -3822,6 +3841,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                 setRefreshTrigger(prev => prev + 1);
                                                 setModalConfig(null);
                                             } catch (err: any) {
+                                                console.error(err);
+                                                storeGuardian.logError('DELETE_ITEM', err.message || 'Delete failed', 'StoreStockReport DeleteItem', String(userRole));
                                                 alert(`Failed to delete: ${err.message || err}`);
                                             } finally {
                                                 setIsLoading(false);
@@ -3870,6 +3891,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                         setRefreshTrigger(prev => prev + 1);
                                         setModalConfig(null);
                                     } catch (err: any) {
+                                        console.error(err);
+                                        storeGuardian.logError('UPDATE_ITEM', err.message || 'Update failed', 'StoreStockReport UpdateItem', String(userRole));
                                         alert(`Failed to update details: ${err.message || err}`);
                                     } finally {
                                         setIsLoading(false);
@@ -4044,17 +4067,22 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
 
                             <button 
                                 onClick={async () => {
-                                    const qtyInput = document.getElementById('edit-tx-qty') as HTMLInputElement;
-                                    const staffSelect = document.getElementById('edit-tx-staff') as HTMLSelectElement;
-                                    const projectSelect = document.getElementById('edit-tx-project') as HTMLSelectElement;
-                                    const remarksInput = document.getElementById('edit-tx-remarks') as HTMLInputElement;
-
-                                    const newQty = parseInt(qtyInput.value);
-                                    if (isNaN(newQty) || newQty < 1) {
-                                        alert("Please enter a valid quantity.");
-                                        return;
-                                    }
                                     try {
+                                        const qtyInput = document.getElementById('edit-tx-qty') as HTMLInputElement;
+                                        const staffSelect = document.getElementById('edit-tx-staff') as HTMLSelectElement;
+                                        const projectSelect = document.getElementById('edit-tx-project') as HTMLSelectElement;
+                                        const remarksInput = document.getElementById('edit-tx-remarks') as HTMLInputElement;
+
+                                        if (!qtyInput || !staffSelect || !projectSelect || !remarksInput) {
+                                            throw new Error(`Missing elements: qty=${!!qtyInput}, staff=${!!staffSelect}, proj=${!!projectSelect}, rem=${!!remarksInput}`);
+                                        }
+
+                                        const newQty = parseInt(qtyInput.value);
+                                        if (isNaN(newQty) || newQty < 1) {
+                                            alert("Please enter a valid quantity.");
+                                            return;
+                                        }
+
                                         setIsLoading(true);
                                         const res = await editTransaction(
                                             modalConfig.data,

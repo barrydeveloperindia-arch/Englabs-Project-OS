@@ -6,7 +6,15 @@
     "materialName": "Cello Tape 1\"x35 mtr",
     "quantity": 144,
     "items": [
-      { "id": 1, "name": "Cello Tape 1\"x35 mtr", "hsnCode": "39191000", "quantity": 144, "unit": "PCS", "rate": 14.00, "amount": 2016.00 }
+      {
+        "id": 1,
+        "name": "Cello Tape 1\"x35 mtr",
+        "hsnCode": "39191000",
+        "quantity": 144,
+        "unit": "PCS",
+        "rate": 14,
+        "amount": 2016
+      }
     ],
     "partyName": "JAIN SONS",
     "invoiceNumber": "1529",
@@ -85,12 +93,60 @@
     "materialName": "Stationery: White Board Markers, Registers, Cutters...",
     "quantity": 34,
     "items": [
-      { "id": 1, "name": "White Board Marker", "hsnCode": "96082000", "quantity": 10, "unit": "PCS", "rate": 20.00, "amount": 200.00 },
-      { "id": 2, "name": "Ohp Marker 969", "hsnCode": "96082000", "quantity": 5, "unit": "PCS", "rate": 15.00, "amount": 75.00 },
-      { "id": 3, "name": "Cutter 1/2", "hsnCode": "821410", "quantity": 10, "unit": "PCS", "rate": 10.00, "amount": 100.00 },
-      { "id": 4, "name": "Pencil", "hsnCode": "96091000", "quantity": 1, "unit": "PKT", "rate": 42.38, "amount": 42.38 },
-      { "id": 5, "name": "Register 5Q O/B", "hsnCode": "48201010", "quantity": 5, "unit": "PCS", "rate": 60.00, "amount": 300.00 },
-      { "id": 6, "name": "Register 6Q LB", "hsnCode": "48201010", "quantity": 3, "unit": "PCS", "rate": 400.00, "amount": 1200.00 }
+      {
+        "id": 1,
+        "name": "White Board Marker",
+        "hsnCode": "96082000",
+        "quantity": 10,
+        "unit": "PCS",
+        "rate": 20,
+        "amount": 200
+      },
+      {
+        "id": 2,
+        "name": "Ohp Marker 969",
+        "hsnCode": "96082000",
+        "quantity": 5,
+        "unit": "PCS",
+        "rate": 15,
+        "amount": 75
+      },
+      {
+        "id": 3,
+        "name": "Cutter 1/2",
+        "hsnCode": "821410",
+        "quantity": 10,
+        "unit": "PCS",
+        "rate": 10,
+        "amount": 100
+      },
+      {
+        "id": 4,
+        "name": "Pencil",
+        "hsnCode": "96091000",
+        "quantity": 1,
+        "unit": "PKT",
+        "rate": 42.38,
+        "amount": 42.38
+      },
+      {
+        "id": 5,
+        "name": "Register 5Q O/B",
+        "hsnCode": "48201010",
+        "quantity": 5,
+        "unit": "PCS",
+        "rate": 60,
+        "amount": 300
+      },
+      {
+        "id": 6,
+        "name": "Register 6Q LB",
+        "hsnCode": "48201010",
+        "quantity": 3,
+        "unit": "PCS",
+        "rate": 400,
+        "amount": 1200
+      }
     ],
     "partyName": "JAIN SONS",
     "invoiceNumber": "1337",
@@ -116,18 +172,114 @@
     "materialName": "Bulk: COLIN, Harpic, Dishwasher, Floor Cleener...",
     "quantity": 106,
     "items": [
-      { "id": 1, "name": "COLIN", "hsnCode": "", "quantity": 5, "unit": "Liter", "rate": 50, "amount": 250 },
-      { "id": 2, "name": "Harpic", "hsnCode": "", "quantity": 5, "unit": "Liter", "rate": 55, "amount": 275 },
-      { "id": 3, "name": "Dishwasher", "hsnCode": "", "quantity": 5, "unit": "Liter", "rate": 80, "amount": 400 },
-      { "id": 4, "name": "Floor Cleener (Fernal)", "hsnCode": "", "quantity": 5, "unit": "Liter", "rate": 38, "amount": 190 },
-      { "id": 5, "name": "Handwash", "hsnCode": "", "quantity": 5, "unit": "Liter", "rate": 68, "amount": 340 },
-      { "id": 6, "name": "Room Freshner 270 ml", "hsnCode": "", "quantity": 12, "unit": "Nos", "rate": 140, "amount": 1680 },
-      { "id": 7, "name": "Flour Duster", "hsnCode": "", "quantity": 1, "unit": "Nos", "rate": 280, "amount": 280 },
-      { "id": 8, "name": "Kitchen Duster", "hsnCode": "", "quantity": 12, "unit": "Nos", "rate": 60, "amount": 720 },
-      { "id": 9, "name": "Toilet brush", "hsnCode": "", "quantity": 2, "unit": "Nos", "rate": 60, "amount": 120 },
-      { "id": 10, "name": "Mortin", "hsnCode": "", "quantity": 12, "unit": "Nos", "rate": 90, "amount": 1080 },
-      { "id": 11, "name": "Garbaj bag small", "hsnCode": "", "quantity": 12, "unit": "Nos", "rate": 70, "amount": 840 },
-      { "id": 12, "name": "Garbaj Bag Large kg", "hsnCode": "", "quantity": 30, "unit": "Kg", "rate": 130, "amount": 3900 }
+      {
+        "id": 1,
+        "name": "COLIN",
+        "hsnCode": "",
+        "quantity": 5,
+        "unit": "Liter",
+        "rate": 50,
+        "amount": 250
+      },
+      {
+        "id": 2,
+        "name": "Harpic",
+        "hsnCode": "",
+        "quantity": 5,
+        "unit": "Liter",
+        "rate": 55,
+        "amount": 275
+      },
+      {
+        "id": 3,
+        "name": "Dishwasher",
+        "hsnCode": "",
+        "quantity": 5,
+        "unit": "Liter",
+        "rate": 80,
+        "amount": 400
+      },
+      {
+        "id": 4,
+        "name": "Floor Cleener (Fernal)",
+        "hsnCode": "",
+        "quantity": 5,
+        "unit": "Liter",
+        "rate": 38,
+        "amount": 190
+      },
+      {
+        "id": 5,
+        "name": "Handwash",
+        "hsnCode": "",
+        "quantity": 5,
+        "unit": "Liter",
+        "rate": 68,
+        "amount": 340
+      },
+      {
+        "id": 6,
+        "name": "Room Freshner 270 ml",
+        "hsnCode": "",
+        "quantity": 12,
+        "unit": "Nos",
+        "rate": 140,
+        "amount": 1680
+      },
+      {
+        "id": 7,
+        "name": "Flour Duster",
+        "hsnCode": "",
+        "quantity": 1,
+        "unit": "Nos",
+        "rate": 280,
+        "amount": 280
+      },
+      {
+        "id": 8,
+        "name": "Kitchen Duster",
+        "hsnCode": "",
+        "quantity": 12,
+        "unit": "Nos",
+        "rate": 60,
+        "amount": 720
+      },
+      {
+        "id": 9,
+        "name": "Toilet brush",
+        "hsnCode": "",
+        "quantity": 2,
+        "unit": "Nos",
+        "rate": 60,
+        "amount": 120
+      },
+      {
+        "id": 10,
+        "name": "Mortin",
+        "hsnCode": "",
+        "quantity": 12,
+        "unit": "Nos",
+        "rate": 90,
+        "amount": 1080
+      },
+      {
+        "id": 11,
+        "name": "Garbaj bag small",
+        "hsnCode": "",
+        "quantity": 12,
+        "unit": "Nos",
+        "rate": 70,
+        "amount": 840
+      },
+      {
+        "id": 12,
+        "name": "Garbaj Bag Large kg",
+        "hsnCode": "",
+        "quantity": 30,
+        "unit": "Kg",
+        "rate": 130,
+        "amount": 3900
+      }
     ],
     "partyName": "Mr. Parmod Behl",
     "invoiceNumber": "SLIP-2026-05-11",
@@ -193,6 +345,141 @@
     "employeeName": "SAM",
     "supervisorName": "Gaurav Panchal",
     "remarks": "GOOD CONDITION / SEALED",
+    "isLocked": true,
+    "status": "VERIFIED",
+    "version": 1
+  },
+  {
+    "id": "OUT-005",
+    "timestamp": "2026-06-12T05:02:00.000Z",
+    "type": "OUTWARD",
+    "materialName": "Electrical Maintenance Items",
+    "quantity": 40,
+    "items": [
+      {
+        "id": 1,
+        "name": "18W LED Rod",
+        "quantity": 1,
+        "unit": "Nos",
+        "rate": 0,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "name": "Bulb",
+        "quantity": 2,
+        "unit": "Nos",
+        "rate": 0,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "name": "LED - 22W",
+        "quantity": 2,
+        "unit": "Nos",
+        "rate": 0,
+        "amount": 0
+      },
+      {
+        "id": 4,
+        "name": "Fan Sheet Small",
+        "quantity": 4,
+        "unit": "Nos",
+        "rate": 0,
+        "amount": 0
+      },
+      {
+        "id": 5,
+        "name": "Fan Sheet Big",
+        "quantity": 4,
+        "unit": "Nos",
+        "rate": 0,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "name": "MCB",
+        "quantity": 4,
+        "unit": "Nos",
+        "rate": 0,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "name": "Nose Plier",
+        "quantity": 1,
+        "unit": "Nos",
+        "rate": 0,
+        "amount": 0
+      },
+      {
+        "id": 8,
+        "name": "Screw Driver",
+        "quantity": 2,
+        "unit": "Nos",
+        "rate": 0,
+        "amount": 0
+      },
+      {
+        "id": 9,
+        "name": "Wire Casing",
+        "quantity": 20,
+        "unit": "Feet",
+        "rate": 0,
+        "amount": 0
+      }
+    ],
+    "unit": "MIXED",
+    "partyName": "INTERNAL",
+    "vehicleNumber": "HAND-CARRY",
+    "fromLocation": "ENGLABS STORE",
+    "toLocation": "MAINTENANCE",
+    "driverName": "STAFF",
+    "employeeName": "SAM",
+    "supervisorName": "Gaurav Panchal",
+    "invoiceNumber": "N/A",
+    "amount": 0,
+    "paidAmount": 0,
+    "remainingAmount": 0,
+    "paymentStatus": "N/A",
+    "paymentMode": "N/A",
+    "remarks": "ELECTRICAL MAINTENANCE ITEMS CHECKOUT (11/6/26 - 12/6/26)",
+    "gatePassNumber": "GP-004",
+    "isLocked": true,
+    "status": "VERIFIED",
+    "version": 1
+  },
+  {
+    "id": "IN-1530",
+    "timestamp": "2026-06-11T10:00:00Z",
+    "type": "INWARD",
+    "materialName": "SBL PU Matt Black 2548(4 Ltr)",
+    "quantity": 20,
+    "items": [
+      {
+        "id": 1,
+        "name": "SBL PU Matt Black 2548(4 Ltr) [Batch: U325081366]",
+        "hsnCode": "32082090",
+        "quantity": 20,
+        "unit": "Ltr",
+        "rate": 557,
+        "amount": 11140
+      }
+    ],
+    "partyName": "Ridhaan Engineers",
+    "invoiceNumber": "GST/2627/408",
+    "vehicleNumber": "Direct Vehicle",
+    "fromLocation": "Panchkula, Haryana",
+    "toLocation": "M.D.C Panchkula",
+    "amount": 11140,
+    "billType": "GST",
+    "paidAmount": 0,
+    "remainingAmount": 13145,
+    "paymentStatus": "UNPAID",
+    "paymentMode": "CREDIT",
+    "employeeName": "Arjun Tiwari",
+    "supervisorName": "Gaurav Panchal",
+    "remarks": "INWARD PAINT RECEIVED",
     "isLocked": true,
     "status": "VERIFIED",
     "version": 1

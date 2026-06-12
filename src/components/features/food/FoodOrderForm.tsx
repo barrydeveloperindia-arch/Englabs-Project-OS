@@ -63,6 +63,7 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
             rate: 0,
             discount: 0,
             discountType: 'Flat',
+            gstPercent: 0,
             quantity: 1,
             unit: 'Nos',
             mealType: 'Lunch',
@@ -83,8 +84,12 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
             calculatedAmount = Math.max(0, subtotal - discount);
         }
         
+        if (formData.gstPercent) {
+            calculatedAmount = calculatedAmount * (1 + formData.gstPercent / 100);
+        }
+        
         setFormData(prev => ({ ...prev, amount: Math.round(calculatedAmount) }));
-    }, [formData.rate, formData.quantity, formData.discount, formData.discountType]);
+    }, [formData.rate, formData.quantity, formData.discount, formData.discountType, formData.gstPercent]);
 
     const [previewUrl, setPreviewUrl] = useState<string>(initialData?.attachmentUrl || '');
 
@@ -462,7 +467,25 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Food Items (Brief)</label>
+                                    <div className="flex justify-between items-center">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 shrink-0 mr-2">Food Items</label>
+                                        <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-1">
+                                            {['Lemon Water', 'Veg Thali', 'Dal Makhani', 'Biryani', 'Paneer Butter Masala', 'Tea', 'Coffee'].map(item => (
+                                                <button 
+                                                    key={item}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const current = formData.items || '';
+                                                        const prefix = current ? current + ', ' : '';
+                                                        setFormData({...formData, items: prefix + item});
+                                                    }}
+                                                    className="shrink-0 text-[8px] font-black bg-emerald-50 border border-emerald-100 text-emerald-600 px-2 py-1 rounded-md hover:bg-emerald-100 transition-colors"
+                                                >
+                                                    + {item}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
                                     <textarea 
                                         required
                                         className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all h-24 resize-none"
@@ -535,6 +558,25 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
                                                 {formData.discountType === 'Percentage' ? `-${formData.discount}%` : `-₹${(formData.discount || 0).toLocaleString('en-IN')}`}
                                             </span>
                                         </div>
+                                        <div className="flex flex-col text-center">
+                                            <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">
+                                                GST {formData.gstPercent ? `(${formData.gstPercent}%)` : '(+)'}
+                                            </span>
+                                            <span className="text-sm font-black text-amber-500 tracking-widest">
+                                                {formData.gstPercent ? `₹${(
+                                                    (() => {
+                                                        const rate = formData.rate || 0;
+                                                        const qty = formData.quantity || 1;
+                                                        const disc = formData.discount || 0;
+                                                        const sub = rate * qty;
+                                                        const discounted = formData.discountType === 'Percentage' 
+                                                            ? Math.max(0, sub * (1 - disc / 100))
+                                                            : Math.max(0, sub - disc);
+                                                        return (discounted * formData.gstPercent / 100).toFixed(2);
+                                                    })()
+                                                )}` : '₹0'}
+                                            </span>
+                                        </div>
                                         <div className="flex flex-col text-right">
                                             <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest mb-1">Net Payable</span>
                                             <div className="flex items-center gap-2 justify-end">
@@ -545,36 +587,37 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
                                     </div>
 
                                     <div className="grid grid-cols-12 gap-4">
-                                        <div className="col-span-3 space-y-2">
+                                        <div className="col-span-4 space-y-2">
                                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Unit Rate (₹)</label>
                                             <input 
                                                 type="number" 
+                                                required
                                                 className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
                                                 placeholder="0.00"
                                                 value={formData.rate || ''}
                                                 onChange={e => setFormData({...formData, rate: parseFloat(e.target.value) || 0})}
                                             />
                                         </div>
-                                        <div className="col-span-3 space-y-2">
+                                        <div className="col-span-4 space-y-2">
                                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Discount Mode</label>
-                                            <div className="flex bg-slate-50 p-1 rounded-xl border border-slate-100 h-[46px]">
+                                            <div className="flex bg-slate-50 border border-slate-100 rounded-xl p-1 relative h-[46px]">
                                                 <button
                                                     type="button"
-                                                    onClick={() => setFormData({...formData, discountType: 'Flat'})}
-                                                    className={`flex-1 rounded-lg text-[9px] font-black transition-all ${
+                                                    onClick={() => setFormData({...formData, discountType: 'Flat', discount: 0})}
+                                                    className={`flex-1 rounded-lg text-[9px] font-black tracking-widest transition-all ${
                                                         formData.discountType === 'Flat' 
-                                                        ? 'bg-white text-slate-900 shadow-sm' 
+                                                        ? 'bg-white text-emerald-600 shadow-sm' 
                                                         : 'text-slate-400 hover:text-slate-600'
                                                     }`}
                                                 >
-                                                    ₹ CASH
+                                                    ₹ FLAT
                                                 </button>
                                                 <button
                                                     type="button"
-                                                    onClick={() => setFormData({...formData, discountType: 'Percentage'})}
-                                                    className={`flex-1 rounded-lg text-[9px] font-black transition-all ${
+                                                    onClick={() => setFormData({...formData, discountType: 'Percentage', discount: 0})}
+                                                    className={`flex-1 rounded-lg text-[9px] font-black tracking-widest transition-all ${
                                                         formData.discountType === 'Percentage' 
-                                                        ? 'bg-white text-slate-900 shadow-sm' 
+                                                        ? 'bg-white text-emerald-600 shadow-sm' 
                                                         : 'text-slate-400 hover:text-slate-600'
                                                     }`}
                                                 >
@@ -582,7 +625,7 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
                                                 </button>
                                             </div>
                                         </div>
-                                        <div className="col-span-3 space-y-2">
+                                        <div className="col-span-4 space-y-2">
                                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
                                                 {formData.discountType === 'Percentage' ? 'Quick Off (%)' : 'Discount (₹)'}
                                             </label>
@@ -606,11 +649,53 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
                                                 />
                                             )}
                                         </div>
-                                        <div className="col-span-3 space-y-2">
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 text-emerald-500">Final Payable (₹)</label>
-                                            <div className="w-full h-[46px] bg-emerald-50 border border-emerald-100 rounded-xl px-2 flex items-center justify-center text-sm font-black text-emerald-600">
-                                                ₹{(formData.amount || 0).toLocaleString('en-IN')}
+                                    </div>
+
+                                    {/* TAX & GST MATRIX */}
+                                    <div className="grid grid-cols-12 gap-4 pt-2 pb-2">
+                                        <div className="col-span-4 space-y-2">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Taxable Amount</label>
+                                            <div className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 text-sm font-bold text-slate-900 h-[46px] flex items-center">
+                                                ₹{(
+                                                    (() => {
+                                                        const rate = formData.rate || 0;
+                                                        const qty = formData.quantity || 1;
+                                                        const disc = formData.discount || 0;
+                                                        const sub = rate * qty;
+                                                        return formData.discountType === 'Percentage' 
+                                                            ? Math.max(0, sub * (1 - disc / 100))
+                                                            : Math.max(0, sub - disc);
+                                                    })()
+                                                ).toLocaleString('en-IN', { maximumFractionDigits: 2 })}
                                             </div>
+                                        </div>
+                                        <div className="col-span-4 space-y-2">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">CGST (%)</label>
+                                            <input 
+                                                type="number" 
+                                                step="0.01"
+                                                className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-amber-500"
+                                                placeholder="0.0"
+                                                value={formData.gstPercent ? formData.gstPercent / 2 : ''}
+                                                onChange={e => {
+                                                    const val = parseFloat(e.target.value) || 0;
+                                                    setFormData({...formData, gstPercent: val * 2});
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="col-span-4 space-y-2">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">SGST (%)</label>
+                                            <input 
+                                                type="number" 
+                                                step="0.01"
+                                                className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-amber-500"
+                                                placeholder="0.0"
+                                                value={formData.gstPercent ? formData.gstPercent / 2 : ''}
+                                                onChange={e => {
+                                                    const val = parseFloat(e.target.value) || 0;
+                                                    setFormData({...formData, gstPercent: val * 2});
+                                                }}
+                                            />
                                         </div>
                                     </div>
 
@@ -698,6 +783,18 @@ const FoodOrderForm: React.FC<Props> = ({ onClose, onSubmit, orderCount, initial
                                         <input type="checkbox" className="sr-only peer" checked={formData.hasBill} onChange={e => setFormData({...formData, hasBill: e.target.checked})} />
                                         <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
                                     </label>
+                                </div>
+                                
+                                {/* PROFESSIONAL FINAL PAYABLE WORKFLOW */}
+                                <div className="mt-6 p-5 bg-emerald-500 rounded-2xl flex items-center justify-between shadow-xl shadow-emerald-500/20 animate-in slide-in-from-bottom-4 duration-500">
+                                    <div>
+                                        <p className="text-[10px] font-black text-emerald-950 uppercase tracking-widest">Final Settlement</p>
+                                        <p className="text-xs font-bold text-emerald-900 mt-0.5">Total Amount to be Recorded</p>
+                                    </div>
+                                    <div className="text-3xl font-black text-slate-900 bg-white px-6 py-2 rounded-xl shadow-sm border border-emerald-100 flex items-center gap-2">
+                                        <span className="text-xl text-slate-400">₹</span>
+                                        {(formData.amount || 0).toLocaleString('en-IN')}
+                                    </div>
                                 </div>
                             </div>
                         </div>

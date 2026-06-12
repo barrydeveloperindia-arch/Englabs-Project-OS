@@ -64,6 +64,28 @@ const deleteFoodOrderFromFirebase = async (entryId: string) => {
 
 const MOCK_ORDERS: FoodOrder[] = [
     {
+        entryId: "FOOD-004",
+        timestamp: "2026-06-11T00:28:00",
+        employeeName: "Varun",
+        department: "Workshop",
+        platform: "Sky-5",
+        mealType: "Dinner",
+        vendorName: "Sky-5 Hotel",
+        items: "Lemon Water",
+        quantity: 4,
+        unit: "Nos",
+        orderType: "Individual",
+        purpose: "Staff Refreshment",
+        projectCode: "GENERAL",
+        justification: "Beverages",
+        amount: 80,
+        paymentMode: "Cash",
+        paidBy: "Company",
+        hasBill: true,
+        status: "Pending",
+        trackingStatus: 'Delivered'
+    },
+    {
         entryId: "FOOD-003",
         timestamp: "2026-06-02T17:11:00",
         employeeName: "Arjun Tiwari, Ram, Rajindar, Thakur",
@@ -354,14 +376,26 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
             ? (subtotal * (order.discount || 0) / 100)
             : (order.discount || 0);
             
+        const taxableAmount = Math.max(0, subtotal - discountAmount);
+        const cgstPercent = (order.gstPercent || 0) / 2;
+        const sgstPercent = (order.gstPercent || 0) / 2;
+        const cgstAmount = taxableAmount * (cgstPercent / 100);
+        const sgstAmount = taxableAmount * (sgstPercent / 100);
+
         const rebateText = discountAmount > 0 
             ? `*REBATE:* -₹${discountAmount.toFixed(2)} ${order.discountType === 'Percentage' ? `(${order.discount}%)` : ''}\n`
+            : '';
+            
+        const gstText = order.gstPercent && order.gstPercent > 0
+            ? `*TAXABLE AMT:* ₹${taxableAmount.toFixed(2)}\n` +
+              `*CGST (${cgstPercent}%):* ₹${cgstAmount.toFixed(2)}\n` +
+              `*SGST (${sgstPercent}%):* ₹${sgstAmount.toFixed(2)}\n`
             : '';
 
         const statusEmoji = order.status === 'Approved' ? '✅' : order.status === 'Rejected' ? '❌' : '⏳';
 
         const text = encodeURIComponent(
-            `*📄 ENGLABS INDUSTRIAL OS - AUDIT RECEIPT*\n` +
+            `*📄 ENGLABS FOOD ORDER - AUDIT RECEIPT*\n` +
             `================================\n` +
             `*ORDER ID:* ${order.entryId}\n` +
             `*PROJECT ID:* ${order.projectCode || 'N/A'}\n` +
@@ -377,6 +411,7 @@ const FoodRegister: React.FC<Props> = ({ onLog }) => {
             `--------------------------------\n` +
             `*SUBTOTAL:* ₹${subtotal.toFixed(2)}\n` +
             rebateText +
+            gstText +
             `*NET TOTAL:* ₹${order.amount.toFixed(2)}\n` +
             `--------------------------------\n` +
             `*PAYMENT:* ${order.paymentMode} (${order.paidBy})\n` +
