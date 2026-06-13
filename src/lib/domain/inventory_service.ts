@@ -34,7 +34,10 @@ async function getDocsWithTimeout(q: any, timeoutMs = 1500): Promise<any> {
     } catch (err) {
         console.warn("Network query failed or timed out, trying local cache...", err);
         try {
-            const cacheSnap = await getDocsFromCache(q);
+            const cacheSnap = await Promise.race([
+                getDocsFromCache(q),
+                new Promise<any>((_, reject) => setTimeout(() => reject(new Error("Cache read timeout")), 1500))
+            ]);
             return cacheSnap;
         } catch (cacheErr) {
             console.error("Cache read also failed:", cacheErr);
@@ -52,7 +55,10 @@ async function getDocWithTimeout(docRef: any, timeoutMs = 1500): Promise<any> {
     } catch (err) {
         console.warn("Network doc read failed or timed out, trying local cache...", err);
         try {
-            const cacheSnap = await getDocFromCache(docRef);
+            const cacheSnap = await Promise.race([
+                getDocFromCache(docRef),
+                new Promise<any>((_, reject) => setTimeout(() => reject(new Error("Cache read timeout")), 1500))
+            ]);
             return cacheSnap;
         } catch (cacheErr) {
             console.error("Cache read also failed:", cacheErr);
@@ -208,7 +214,10 @@ export async function seedStoreStockReport() {
                 lastUpdated: new Date().toISOString()
             });
         }
-        await batch.commit();
+        await Promise.race([
+            batch.commit(),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("Batch commit timeout")), 3000))
+        ]);
         isSeeded = true;
         console.log("Seeding complete!");
     } catch (err) {
@@ -352,7 +361,7 @@ function saveLocalStockFallback(
                     id: `LOCAL_MASTER_TX_${Date.now()}`,
                     timestamp,
                     projectId: projectId || 'GENERAL',
-                    materialName: name || itemCode.replace(/_/g, ' '),
+                    materialName: name || (itemCode || '').replace(/_/g, ' '),
                     itemCode,
                     category: category || 'GENERAL',
                     quantity: qty,
@@ -373,7 +382,7 @@ function saveLocalStockFallback(
                 const prevLocalItem = localCurrentStock[itemCode];
                 const localItem: CurrentStockItem = {
                     itemCode,
-                    name: name || prevLocalItem?.name || itemCode.replace(/_/g, ' '),
+                    name: name || prevLocalItem?.name || (itemCode || '').replace(/_/g, ' '),
                     category: category || prevLocalItem?.category || 'GENERAL',
                     openingStock: prevLocalItem ? prevLocalItem.openingStock : currentStock,
                     totalInward: prevLocalItem ? (type === 'INWARD' ? prevLocalItem.totalInward + qty : prevLocalItem.totalInward) : (type === 'INWARD' ? qty : 0),
@@ -424,8 +433,9 @@ async function updateStock(
     try {
         await seedStoreStockReport(); // Ensure collections are seeded
 
-        const result = await runTransaction(db, async (transaction) => {
-            const lockDocRef = doc(db, "inventory_sync_locks", `${refId}_${itemCode}`);
+        const result = await Promise.race([
+            runTransaction(db, async (transaction) => {
+                const lockDocRef = doc(db, "inventory_sync_locks", `${refId}_${itemCode}`);
             const legacyDocRef = doc(db, STOCK_COLLECTION, itemCode);
             const currentStockRef = doc(db, "current_stock", itemCode);
             const catalogRef = doc(db, "material_catalog", itemCode);
@@ -587,7 +597,9 @@ async function updateStock(
             transaction.set(logRef, cleanUndefined(stockTx));
 
             return { success: true, itemCode };
-        });
+        }),
+        new Promise<any>((_, reject) => setTimeout(() => reject(new Error("Firestore transaction timeout")), 3000))
+        ]);
 
         // Clear local overrides on success
         try {
@@ -763,7 +775,10 @@ async function updateStock(
             };
             batch.set(logRef, cleanUndefined(stockTx));
 
-            await batch.commit();
+            await Promise.race([
+                batch.commit(),
+                new Promise((_, reject) => setTimeout(() => reject(new Error("Batch commit timeout")), 3000))
+            ]);
             console.log("Offline batch update succeeded locally!");
 
             // Run local storage fallback just in case
@@ -1529,7 +1544,10 @@ export async function deleteTransaction(tx: MasterRegisterEntry): Promise<{ succ
             batch.set(legacyDocRef, cleanUndefined(legacyItem));
         }
 
-        await batch.commit();
+        await Promise.race([
+            batch.commit(),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("Batch commit timeout")), 3000))
+        ]);
         return { success: true };
     } catch (err: any) {
         console.error("Delete transaction error:", err);
@@ -1724,7 +1742,10 @@ export async function editTransaction(
             }));
         });
 
-        await batch.commit();
+        await Promise.race([
+            batch.commit(),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("Batch commit timeout")), 3000))
+        ]);
         return { success: true };
     } catch (err: any) {
         console.error("Edit transaction error:", err);
@@ -1991,7 +2012,10 @@ export async function migrateJune11Transactions() {
                     }
                 }
                 if (count > 0) {
-                    await batch.commit();
+                    await Promise.race([
+                        batch.commit(),
+                        new Promise((_, reject) => setTimeout(() => reject(new Error("Batch commit timeout")), 3000))
+                    ]);
                     console.log(`Successfully migrated ${count} Firestore master_register entries to Arjun Tiwari`);
                 }
             }
@@ -2016,7 +2040,10 @@ export async function migrateJune11Transactions() {
                     }
                 }
                 if (count > 0) {
-                    await batch.commit();
+                    await Promise.race([
+                        batch.commit(),
+                        new Promise((_, reject) => setTimeout(() => reject(new Error("Batch commit timeout")), 3000))
+                    ]);
                     console.log(`Successfully migrated ${count} Firestore June monthly_registers entries to Arjun Tiwari`);
                 }
             }

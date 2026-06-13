@@ -36,8 +36,9 @@ import Showroom from '@features/system/Showroom';
 import FoodRegister from '@features/food/FoodRegister';
 import SystemGuardDashboard from '@features/system/SystemGuardDashboard';
 import BillingDashboard from '@features/project/BillingDashboard';
+import { ManagementDashboard } from '@features/accounting/ManagementDashboard';
+import { ERPBetaDashboard } from '@features/erp/ERPBetaDashboard';
 import DigitalEvidence from '@features/system/DigitalEvidence';
-import GateDisplayScreen from '@features/logistics/GateDisplayScreen';
 import InventoryManager from '@features/inventory/InventoryManager';
 import Sky5Terminal from '@features/system/Sky5Terminal';
 import StoreStockReport from '@features/inventory/StoreStockReport';
@@ -109,7 +110,7 @@ interface SidebarButtonProps {
     color?: 'emerald' | 'amber';
 }
 
-type View = 'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'BILLING' | 'EVIDENCE' | 'INVENTORY' | 'SKY5_TERMINAL' | 'STOCK_REPORT' | 'PORTER_SERVICE' | 'GATE_DISPLAY' | 'PROJECT_LOOKUP' | 'PROJECT_BUDGETS' | 'STORE_GUARDIAN';
+type View = 'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'BILLING' | 'EVIDENCE' | 'INVENTORY' | 'SKY5_TERMINAL' | 'STOCK_REPORT' | 'PORTER_SERVICE' | 'PROJECT_LOOKUP' | 'PROJECT_BUDGETS' | 'STORE_GUARDIAN' | 'MANAGEMENT_DASHBOARD' | 'ERP_BETA_DASHBOARD' | 'GATE_DISPLAY';
 
 const SidebarButton: React.FC<SidebarButtonProps> = ({ active, onClick, icon, label, color = 'emerald' }) => {
     const activeClass = color === 'emerald' 
@@ -453,17 +454,16 @@ const App: React.FC = () => {
     }, []);
 
     const filteredProjects = projects.filter(p => {
-        const matchesSearch = p.projectId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            p.client.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesSearch = (p.client || '').toLowerCase().includes(searchQuery.toLowerCase()) || 
+            p.projectId.toLowerCase().includes(searchQuery.toLowerCase());
+            
         if (!matchesSearch) return false;
 
         if (projectFilter === 'ACTIVE') {
-            // Active means PO is confirmed, and not all production stages are completed yet
             const allCompleted = p.production.stages.every(s => s.status === 'Completed');
             return p.planning.poConfirmed && !allCompleted;
         }
         if (projectFilter === 'UPCOMING') {
-            // Upcoming means PO is pending, or no production stages have started yet (all are Pending)
             const noneStarted = p.production.stages.every(s => s.status === 'Pending');
             return !p.planning.poConfirmed || noneStarted;
         }
@@ -709,75 +709,99 @@ const App: React.FC = () => {
                 <div className="px-6 mb-8 flex flex-col gap-2.5 overflow-y-auto max-h-[55vh] dark-scrollbar shrink-0">
                     {userRole === 'ADMIN' ? (
                         <>
-                            <SidebarButton 
-                                active={currentView === 'PROJECTS'} 
-                                onClick={() => setCurrentView('PROJECTS')} 
-                                icon={<Layers className="w-4.5 h-4.5" />} 
-                                label="PROJECTS" 
-                            />
-                            <SidebarButton 
-                                active={currentView === 'PROJECT_LOOKUP'} 
-                                onClick={() => setCurrentView('PROJECT_LOOKUP')} 
-                                icon={<Search className="w-4.5 h-4.5" />} 
-                                label="PROJECT LOOKUP & MAPPING" 
-                            />
-                            <SidebarButton 
-                                active={currentView === 'PROJECT_BUDGETS'} 
-                                onClick={() => setCurrentView('PROJECT_BUDGETS')} 
-                                icon={<DollarSign className="w-4.5 h-4.5" />} 
-                                label="PROJECT BUDGETS" 
-                            />
-                            <SidebarButton 
-                                active={currentView === 'GATE_REGISTER'} 
-                                onClick={() => setCurrentView('GATE_REGISTER')} 
-                                icon={<Shield className="w-4.5 h-4.5" />} 
-                                label="LOGISTICS COMMAND" 
-                            />
-                            <SidebarButton 
-                                active={currentView === 'GATE_DISPLAY'} 
-                                onClick={() => setCurrentView('GATE_DISPLAY')} 
-                                icon={<Activity className="w-4.5 h-4.5" />} 
-                                label="GATE DISPLAY HUD" 
-                                color="emerald"
-                            />
-                            <SidebarButton 
-                                active={currentView === 'FOOD_REGISTER'} 
-                                onClick={() => setCurrentView('FOOD_REGISTER')} 
-                                icon={<Utensils className="w-4.5 h-4.5" />} 
-                                label="PANTRY CONTROL" 
-                            />
-                            <SidebarButton 
-                                active={currentView === 'INVENTORY'} 
-                                onClick={() => setCurrentView('INVENTORY')} 
-                                icon={<Box className="w-4.5 h-4.5" />} 
-                                label="INVENTORY MASTER" 
-                            />
-                            <SidebarButton 
-                                active={currentView === 'STOCK_REPORT'} 
-                                onClick={() => setCurrentView('STOCK_REPORT')} 
-                                icon={<FileText className="w-4.5 h-4.5" />} 
-                                label="STORE STOCK REPORT" 
-                            />
-                            <SidebarButton 
-                                active={currentView === 'STORE_GUARDIAN'} 
-                                onClick={() => setCurrentView('STORE_GUARDIAN')} 
-                                icon={<Shield className="w-4.5 h-4.5 text-indigo-400" />} 
-                                label="STORE GUARDIAN" 
-                                color="emerald"
-                            />
-                            <SidebarButton 
-                                active={currentView === 'BILLING'} 
-                                onClick={() => setCurrentView('BILLING')} 
-                                icon={<CreditCard className="w-4.5 h-4.5" />} 
-                                label="FINANCE COMMAND" 
-                            />
-                            <SidebarButton 
-                                active={currentView === 'PORTER_SERVICE'} 
-                                onClick={() => setCurrentView('PORTER_SERVICE')} 
-                                icon={<Truck className="w-4.5 h-4.5" />} 
-                                label="PORTER SERVICE" 
-                                color="emerald"
-                            />
+                            <div>
+                                <p className="px-5 text-[9px] font-black text-slate-600 uppercase tracking-[0.25em] mb-4 mt-2">Project Management</p>
+                                <SidebarButton 
+                                    active={currentView === 'PROJECTS'} 
+                                    onClick={() => setCurrentView('PROJECTS')} 
+                                    icon={<Layers className="w-4.5 h-4.5" />} 
+                                    label="PROJECTS" 
+                                />
+                                <SidebarButton 
+                                    active={currentView === 'PROJECT_LOOKUP'} 
+                                    onClick={() => setCurrentView('PROJECT_LOOKUP')} 
+                                    icon={<Search className="w-4.5 h-4.5" />} 
+                                    label="PROJECT LOOKUP & MAPPING" 
+                                />
+                                <SidebarButton 
+                                    active={currentView === 'PROJECT_BUDGETS'} 
+                                    onClick={() => setCurrentView('PROJECT_BUDGETS')} 
+                                    icon={<DollarSign className="w-4.5 h-4.5" />} 
+                                    label="PROJECT BUDGETS" 
+                                />
+                            </div>
+
+                            <div className="mt-6 pt-6 border-t border-white/5">
+                                <p className="px-5 text-[9px] font-black text-slate-600 uppercase tracking-[0.25em] mb-4">Logistics & Storage</p>
+                                <SidebarButton 
+                                    active={currentView === 'GATE_REGISTER'} 
+                                    onClick={() => setCurrentView('GATE_REGISTER')} 
+                                    icon={<Shield className="w-4.5 h-4.5" />} 
+                                    label="LOGISTICS COMMAND" 
+                                />
+                                <SidebarButton 
+                                    active={currentView === 'FOOD_REGISTER'} 
+                                    onClick={() => setCurrentView('FOOD_REGISTER')} 
+                                    icon={<Utensils className="w-4.5 h-4.5" />} 
+                                    label="PANTRY CONTROL" 
+                                />
+                                <SidebarButton 
+                                    active={currentView === 'INVENTORY'} 
+                                    onClick={() => setCurrentView('INVENTORY')} 
+                                    icon={<Box className="w-4.5 h-4.5" />} 
+                                    label="INVENTORY MASTER" 
+                                />
+                                <SidebarButton 
+                                    active={currentView === 'STOCK_REPORT'} 
+                                    onClick={() => setCurrentView('STOCK_REPORT')} 
+                                    icon={<FileText className="w-4.5 h-4.5" />} 
+                                    label="STORE STOCK REPORT" 
+                                />
+                                <SidebarButton 
+                                    active={currentView === 'STORE_GUARDIAN'} 
+                                    onClick={() => setCurrentView('STORE_GUARDIAN')} 
+                                    icon={<Shield className="w-4.5 h-4.5 text-indigo-400" />} 
+                                    label="STORE GUARDIAN" 
+                                    color="emerald"
+                                />
+                                <SidebarButton 
+                                    active={currentView === 'PORTER_SERVICE'} 
+                                    onClick={() => setCurrentView('PORTER_SERVICE')} 
+                                    icon={<Truck className="w-4.5 h-4.5" />} 
+                                    label="PORTER SERVICE" 
+                                    color="emerald"
+                                />
+                            </div>
+
+                            <div className="mt-6 pt-6 border-t border-white/5">
+                                <p className="px-5 text-[9px] font-black text-slate-600 uppercase tracking-[0.25em] mb-4">Finance & Accounting</p>
+                                <SidebarButton 
+                                    active={currentView === 'BILLING'} 
+                                    onClick={() => setCurrentView('BILLING')} 
+                                    icon={<CreditCard className="w-4.5 h-4.5" />} 
+                                    label="FINANCE COMMAND" 
+                                />
+                                <SidebarButton 
+                                    active={currentView === 'MANAGEMENT_DASHBOARD'} 
+                                    onClick={() => setCurrentView('MANAGEMENT_DASHBOARD')} 
+                                    icon={<TrendingUp className="w-4.5 h-4.5 text-emerald-400" />} 
+                                    label="AI ACCOUNTING" 
+                                    color="emerald"
+                                />
+                            </div>
+                            <div className="mt-8 pt-8 border-t border-white/5">
+                                <p className="px-5 text-[9px] font-black text-emerald-400 uppercase tracking-[0.25em] mb-5 flex items-center gap-2">
+                                    <Activity className="w-3 h-3" />
+                                    Next-Gen ERP (Beta)
+                                </p>
+                                <SidebarButton 
+                                    active={currentView === 'ERP_BETA_DASHBOARD'} 
+                                    onClick={() => setCurrentView('ERP_BETA_DASHBOARD')} 
+                                    icon={<Activity />} 
+                                    label="ERP COMMAND CENTER" 
+                                />
+                            </div>
+
                             <div className="mt-8 pt-8 border-t border-white/5">
                                 <p className="px-5 text-[9px] font-black text-slate-600 uppercase tracking-[0.25em] mb-5">Vendor Channels</p>
                                 <SidebarButton 
@@ -1004,7 +1028,7 @@ const App: React.FC = () => {
                                                          {recentCheckouts.filter(tx => new Date(tx.timestamp).toDateString() === new Date().toDateString()).map((tx) => (
                                                              <tr key={tx.id} className="group hover:bg-slate-50/50 transition-colors">
                                                                  <td className="py-4 pr-4">
-                                                                     <p className="font-black text-slate-900">{tx.itemId.replace(/_/g, ' ')}</p>
+                                                                    <p className="font-black text-slate-900">{(tx.itemId || '').replace(/_/g, ' ')}</p>
                                                                      <p className="text-[8px] font-bold text-slate-400 mt-0.5 tracking-wider uppercase">{tx.itemId}</p>
                                                                  </td>
                                                                  <td className="py-4 px-4 text-center">
@@ -1124,7 +1148,7 @@ const App: React.FC = () => {
                                                                     <ArrowDownRight className="w-3.5 h-3.5 text-amber-400" />
                                                                 </div>
                                                                 <div className="min-w-0">
-                                                                    <p className="text-[11px] font-black text-white truncate">{tx.itemId.replace(/_/g, ' ')}</p>
+                                                                    <p className="text-[11px] font-black text-white truncate">{(tx.itemId || '').replace(/_/g, ' ')}</p>
                                                                     <p className="text-[8px] font-bold text-slate-500 uppercase tracking-wider truncate">By: {tx.partyName}</p>
                                                                 </div>
                                                             </div>
@@ -1207,12 +1231,14 @@ const App: React.FC = () => {
                     onLog={(log) => setAuditLogs(prev => [log, ...prev])} 
                     onFullSync={handleFullSync}
                 />
-            ) : currentView === 'GATE_DISPLAY' ? (
-                <GateDisplayScreen entries={gateEntries} />
             ) : currentView === 'FOOD_REGISTER' ? (
                 <FoodRegister onLog={(log) => setAuditLogs(prev => [log, ...prev])} />
             ) : currentView === 'BILLING' ? (
                 <BillingDashboard />
+            ) : currentView === 'MANAGEMENT_DASHBOARD' ? (
+                <ManagementDashboard />
+            ) : currentView === 'ERP_BETA_DASHBOARD' ? (
+                <ERPBetaDashboard />
             ) : currentView === 'SKY5_TERMINAL' ? (
                 <Sky5Terminal />
             ) : currentView === 'INVENTORY' ? (
@@ -1391,3 +1417,5 @@ const App: React.FC = () => {
 };
 
 export default App;
+
+// force reload for inventory fix

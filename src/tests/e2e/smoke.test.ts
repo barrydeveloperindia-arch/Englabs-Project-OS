@@ -18,7 +18,7 @@ test.describe('Englabs Projects OS - Core Workflow', () => {
   });
 
   test('Dashboard loads and shows core projects', async ({ page }) => {
-    await expect(page).toHaveTitle(/ENGLABS PORTER SERVICE/);
+    await expect(page).toHaveTitle(/Englabs India Pvt. Ltd/);
     await expect(page.getByText('Mission Control', { exact: false })).toBeVisible({ timeout: 15000 });
     
     // Check for some project cards

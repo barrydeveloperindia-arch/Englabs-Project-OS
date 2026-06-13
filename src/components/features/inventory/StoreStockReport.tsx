@@ -1608,7 +1608,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                          <div className="fixed inset-0 z-10" onClick={() => setShowCheckInDropdown(false)} />
                                                          <div className="absolute z-20 w-full max-h-60 overflow-y-auto bg-white border border-slate-200 rounded-xl mt-1 shadow-lg custom-scrollbar">
                                                              {currentStock
-                                                                 .filter(item => item.name.toLowerCase().includes(checkInSearch.toLowerCase()) || item.itemCode.toLowerCase().includes(checkInSearch.toLowerCase()))
+                                                                 .filter(item => (item.name || '').toLowerCase().includes(checkInSearch.toLowerCase()) || (item.itemCode || '').toLowerCase().includes(checkInSearch.toLowerCase()))
                                                                  .map(item => (
                                                                      <button
                                                                          type="button"
@@ -1627,7 +1627,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                                      </button>
                                                                  ))
                                                              }
-                                                             {currentStock.filter(item => item.name.toLowerCase().includes(checkInSearch.toLowerCase()) || item.itemCode.toLowerCase().includes(checkInSearch.toLowerCase())).length === 0 && (
+                                                             {currentStock.filter(item => (item.name || '').toLowerCase().includes(checkInSearch.toLowerCase()) || (item.itemCode || '').toLowerCase().includes(checkInSearch.toLowerCase())).length === 0 && (
                                                                  <div className="p-4 text-center text-slate-400 text-xs font-bold">No matching materials found</div>
                                                              )}
                                                          </div>
@@ -2026,7 +2026,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                     <div className="absolute z-20 w-full max-h-60 overflow-y-auto bg-white border border-slate-200 rounded-xl mt-1 shadow-lg custom-scrollbar">
                                                         {currentStock
                                                             .filter(item => item.availableStock > 0)
-                                                            .filter(item => item.name.toLowerCase().includes(checkOutSearch.toLowerCase()) || item.itemCode.toLowerCase().includes(checkOutSearch.toLowerCase()))
+                                                            .filter(item => (item.name || '').toLowerCase().includes(checkOutSearch.toLowerCase()) || (item.itemCode || '').toLowerCase().includes(checkOutSearch.toLowerCase()))
                                                             .map(item => (
                                                                 <button
                                                                     type="button"
@@ -2050,7 +2050,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                                 </button>
                                                             ))
                                                         }
-                                                        {currentStock.filter(item => item.availableStock > 0).filter(item => item.name.toLowerCase().includes(checkOutSearch.toLowerCase()) || item.itemCode.toLowerCase().includes(checkOutSearch.toLowerCase())).length === 0 && (
+                                                        {currentStock.filter(item => item.availableStock > 0).filter(item => (item.name || '').toLowerCase().includes(checkOutSearch.toLowerCase()) || (item.itemCode || '').toLowerCase().includes(checkOutSearch.toLowerCase())).length === 0 && (
                                                             <div className="p-4 text-center text-slate-400 text-xs font-bold">No available matching materials</div>
                                                         )}
                                                     </div>
@@ -2295,20 +2295,55 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                         ) : webcamTarget === 'CHECKOUT' ? (
                                             <div className="space-y-2">
                                                 <video ref={videoRef} autoPlay playsInline className="w-full max-w-sm rounded-xl border border-slate-300 bg-black" />
-                                                <div className="flex gap-2">
+                                                <div className="flex flex-wrap gap-2">
                                                     <button type="button" onClick={capturePhoto} className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-bold">Take Snapshot</button>
                                                     <button type="button" onClick={stopWebcam} className="px-4 py-2 bg-slate-200 text-slate-600 rounded-lg text-xs font-bold">Cancel</button>
+                                                    <label className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-lg text-xs font-bold cursor-pointer transition-colors ml-auto">
+                                                        <Upload className="w-3.5 h-3.5" /> Upload File
+                                                        <input 
+                                                            type="file" 
+                                                            accept="image/*" 
+                                                            className="hidden" 
+                                                            onChange={(e) => {
+                                                                const file = e.target.files?.[0];
+                                                                if (file) {
+                                                                    stopWebcam();
+                                                                    const reader = new FileReader();
+                                                                    reader.onloadend = () => setCheckoutPhoto(reader.result as string);
+                                                                    reader.readAsDataURL(file);
+                                                                }
+                                                            }} 
+                                                        />
+                                                    </label>
                                                 </div>
                                                 <canvas ref={canvasRef} className="hidden" />
                                             </div>
                                         ) : (
-                                            <button
-                                                type="button"
-                                                onClick={() => startWebcam('CHECKOUT')}
-                                                className="flex items-center gap-2 px-4 py-2 border border-dashed border-slate-300 text-slate-500 hover:text-slate-800 rounded-xl text-xs font-bold"
-                                            >
-                                                <Camera className="w-4 h-4" /> Capture Photo
-                                            </button>
+                                            <div className="flex flex-wrap items-center gap-3">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => startWebcam('CHECKOUT')}
+                                                    className="flex items-center gap-2 px-4 py-2 border border-dashed border-slate-300 text-slate-500 hover:text-slate-800 hover:border-slate-400 rounded-xl text-xs font-bold transition-colors"
+                                                >
+                                                    <Camera className="w-4 h-4" /> Capture Photo
+                                                </button>
+                                                <label className="flex items-center gap-2 px-4 py-2 border border-dashed border-indigo-300 text-indigo-600 hover:bg-indigo-50 hover:border-indigo-400 rounded-xl text-xs font-bold cursor-pointer transition-colors">
+                                                    <Upload className="w-4 h-4" /> Upload Photo
+                                                    <input 
+                                                        type="file" 
+                                                        accept="image/*" 
+                                                        className="hidden" 
+                                                        onChange={(e) => {
+                                                            const file = e.target.files?.[0];
+                                                            if (file) {
+                                                                const reader = new FileReader();
+                                                                reader.onloadend = () => setCheckoutPhoto(reader.result as string);
+                                                                reader.readAsDataURL(file);
+                                                            }
+                                                        }} 
+                                                    />
+                                                </label>
+                                            </div>
                                         )}
                                     </div>
 

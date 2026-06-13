@@ -57,7 +57,7 @@ const InventoryManager: React.FC = () => {
             ...logs.map(log => [
                 new Date(log.timestamp).toLocaleString().replace(/,/g, ''),
                 log.type,
-                `"${log.itemId.replace(/_/g, ' ')}"`,
+                `"${(log.itemId || '').replace(/_/g, ' ')}"`,
                 `"${log.partyName}"`,
                 log.previousStock,
                 log.newStock,
@@ -87,9 +87,9 @@ const InventoryManager: React.FC = () => {
         
         let text = "";
         if (log.type === 'INWARD') {
-            text = `STORE RECEIPT SLIP\n\nDate: ${dateStr}\nMaterial: ${log.itemId.replace(/_/g, ' ')}\nQuantity: ${log.quantity}\nReceived From: ${log.partyName}\n\nCurrent Balance: ${log.newStock}\n\nENGLABS STORE`;
+            text = `STORE RECEIPT SLIP\n\nDate: ${dateStr}\nMaterial: ${(log.itemId || '').replace(/_/g, ' ')}\nQuantity: ${log.quantity}\nReceived From: ${log.partyName}\n\nCurrent Balance: ${log.newStock}\n\nENGLABS STORE`;
         } else {
-            text = `STORE ISSUE SLIP\n\nDate: ${dateStr}\nMaterial: ${log.itemId.replace(/_/g, ' ')}\nQuantity: ${log.quantity}\nIssued To: ${log.partyName}\nProject: ${log.projectId || 'N/A'}\n\nCurrent Balance: ${log.newStock}\n\nENGLABS STORE`;
+            text = `STORE ISSUE SLIP\n\nDate: ${dateStr}\nMaterial: ${(log.itemId || '').replace(/_/g, ' ')}\nQuantity: ${log.quantity}\nIssued To: ${log.partyName}\nProject: ${log.projectId || 'N/A'}\n\nCurrent Balance: ${log.newStock}\n\nENGLABS STORE`;
         }
         
         const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
@@ -104,8 +104,8 @@ const InventoryManager: React.FC = () => {
     };
 
     const filteredStock = stock.filter(s => 
-        s.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-        s.itemCode.toLowerCase().includes(searchQuery.toLowerCase())
+        (s.name || '').toLowerCase().includes(searchQuery.toLowerCase()) || 
+        (s.itemCode || '').toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const lowStock = stock.filter(s => s.currentStock <= s.minThreshold);
@@ -180,7 +180,7 @@ const InventoryManager: React.FC = () => {
                                                         {log.type === 'INWARD' ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
                                                     </div>
                                                     <div>
-                                                        <p className="font-black text-slate-900 text-sm">{log.itemId.replace(/_/g, ' ')}</p>
+                                                        <p className="font-black text-slate-900 text-sm">{(log.itemId || '').replace(/_/g, ' ')}</p>
                                                         <p className="text-[10px] font-bold text-slate-400 uppercase">{log.partyName} • {log.invoiceNumber}</p>
                                                     </div>
                                                 </div>
@@ -313,7 +313,7 @@ const InventoryManager: React.FC = () => {
                                                     {log.type}
                                                 </span>
                                             </td>
-                                            <td className="py-6 px-4 font-black text-slate-900 text-sm">{log.itemId.replace(/_/g, ' ')}</td>
+                                            <td className="py-6 px-4 font-black text-slate-900 text-sm">{(log.itemId || '').replace(/_/g, ' ')}</td>
                                             <td className="py-6 px-4 font-black text-[11px] text-slate-500 uppercase tracking-widest">{log.partyName}</td>
                                             <td className="py-6 px-4">
                                                 <div className="flex items-center gap-3">
