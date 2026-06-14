@@ -1,5 +1,5 @@
 import { collection, doc, setDoc, getDocs, query, orderBy, limit } from "firebase/firestore";
-import { db } from "@config/firebase";
+import { db } from "@services/firebase";
 import { ProjectRecord, ExpenseLedgerEntry } from "@domain/accounting_schema";
 
 const PROJECTS_COLLECTION = "accounting_projects";

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ProjectRecord, ExpenseLedgerEntry } from '@domain/accounting_schema';
 import { collection, getDocs, query, where, doc, getDoc } from 'firebase/firestore';
-import { db } from '@config/firebase';
+import { db } from '@services/firebase';
 import { FileText, Tag, Truck, Users, PenTool, AlertTriangle } from 'lucide-react';
 
 const PROJECTS_COLLECTION = "accounting_projects";

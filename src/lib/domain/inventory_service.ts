@@ -1,5 +1,5 @@
 import { GateEntry, InventoryItem, StockTransaction } from '@domain/gate_system';
-import { db } from '@config/firebase';
+import { db } from '@services/firebase';
 import { 
     doc, 
     getDoc, 
@@ -61,8 +61,12 @@ async function getDocWithTimeout(docRef: any, timeoutMs = 1500): Promise<any> {
             ]);
             return cacheSnap;
         } catch (cacheErr) {
-            console.error("Cache read also failed:", cacheErr);
-            throw err;
+            console.warn("Cache read also failed:", cacheErr);
+            return {
+                exists: () => false,
+                data: () => undefined,
+                id: docRef.id
+            } as any;
         }
     }
 }

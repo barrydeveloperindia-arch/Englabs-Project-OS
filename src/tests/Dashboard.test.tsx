@@ -1,10 +1,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import App from '../App';
+import App from '@/App';
 import React from 'react';
 
 // 🛡️ ICON MOCKS: Common icons used in the dashboard
-vi.mock('lucide-react', () => ({
+vi.mock('lucide-react', async (importOriginal) => {
+  const actual = (await importOriginal()) as any;
+  return {
+    ...actual,
     Search: () => <div data-testid="icon-search" />,
     Plus: () => <div data-testid="icon-plus" />,
     Activity: () => <div data-testid="icon-activity" />,
@@ -24,6 +27,7 @@ vi.mock('lucide-react', () => ({
     Save: () => <div data-testid="icon-save" />,
     Layers: () => <div data-testid="icon-layers" />,
     Layout: () => <div data-testid="icon-layout" />,
+    LayoutDashboard: () => <div data-testid="icon-layout-dashboard" />,
     Settings: () => <div data-testid="icon-settings" />,
     Bell: () => <div data-testid="icon-bell" />,
     ExternalLink: () => <div data-testid="icon-link" />,
@@ -65,8 +69,15 @@ vi.mock('lucide-react', () => ({
     RefreshCcw: () => <div data-testid="icon-refresh" />,
     ChevronLeft: () => <div data-testid="icon-chevron-left" />,
     HelpCircle: () => <div data-testid="icon-help" />,
-    UserCheck: () => <div data-testid="icon-user-check" />
-}));
+    UserCheck: () => <div data-testid="icon-user-check" />,
+    Building2: () => <div data-testid="icon-building2" />,
+    Hammer: () => <div data-testid="icon-hammer" />,
+    PackageSearch: () => <div data-testid="icon-package-search" />,
+    ShoppingCart: () => <div data-testid="icon-shopping-cart" />,
+    HardHat: () => <div data-testid="icon-hard-hat" />,
+    PenTool: () => <div data-testid="icon-pen-tool" />
+  };
+});
 
 // 🛡️ SERVICE MOCKS: Decouple UI from backend logic
 vi.mock('@services/database_service', () => ({
@@ -119,7 +130,7 @@ describe('Antigravity Dashboard UI', () => {
         try {
             const initBtn = await screen.findByText('Initialize Workday', {}, { timeout: 1000 });
             if (initBtn) fireEvent.click(initBtn);
-        } catch(e) {}
+        } catch (e) {}
         expect(await screen.findByText('Mission Control')).toBeDefined();
     });
 
@@ -128,11 +139,9 @@ describe('Antigravity Dashboard UI', () => {
         try {
             const initBtn = await screen.findByText('Initialize Workday', {}, { timeout: 1000 });
             if (initBtn) fireEvent.click(initBtn);
-        } catch(e) {}
-        // Wait for the project to load (appears in sidebar and hero)
+        } catch (e) {}
         const elements = await screen.findAllByText('THROTTLE AEROSPACE');
         expect(elements.length).toBeGreaterThan(0);
-        
         const idElements = await screen.findAllByText('C2718');
         expect(idElements.length).toBeGreaterThan(0);
     });
@@ -142,7 +151,7 @@ describe('Antigravity Dashboard UI', () => {
         try {
             const initBtn = await screen.findByText('Initialize Workday', {}, { timeout: 1000 });
             if (initBtn) fireEvent.click(initBtn);
-        } catch(e) {}
+        } catch (e) {}
         const newProjectBtn = await screen.findByText('NEW MISSION');
         fireEvent.click(newProjectBtn);
         expect(await screen.findByText('Initialize Mission')).toBeDefined();
@@ -153,21 +162,12 @@ describe('Antigravity Dashboard UI', () => {
         try {
             const initBtn = await screen.findByText('Initialize Workday', {}, { timeout: 1000 });
             if (initBtn) fireEvent.click(initBtn);
-        } catch(e) {}
+        } catch (e) {}
         const searchInput = await screen.findByPlaceholderText('Search Projects...');
-        
-        // Search for non-existent project
         fireEvent.change(searchInput, { target: { value: 'XYZ' } });
-        
-        // It should still be in the Hero Card (active project), 
-        // but should NOT be in the sidebar anymore.
-        // We can check if the sidebar list has only the active project or is empty if we filter hard.
-        // Let's just check that only 1 remains (the Hero Card one) instead of 2.
         expect(screen.getAllByText('THROTTLE AEROSPACE').length).toBe(1);
-        
-        // Search for existing project
         fireEvent.change(searchInput, { target: { value: 'C2718' } });
         const elements = await screen.findAllByText('THROTTLE AEROSPACE');
-        expect(elements.length).toBeGreaterThan(1); // One in hero, one in sidebar
+        expect(elements.length).toBeGreaterThan(1);
     });
 });

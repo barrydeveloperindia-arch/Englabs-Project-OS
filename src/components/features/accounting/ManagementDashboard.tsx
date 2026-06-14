@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { ProjectRecord } from '@domain/accounting_schema';
 import { collection, getDocs, query, doc, setDoc, deleteDoc } from 'firebase/firestore';
-import { db } from '@config/firebase';
+import { db } from '@services/firebase';
 import { AlertCircle, TrendingUp, TrendingDown, DollarSign, Briefcase, RefreshCw, Calendar } from 'lucide-react';
-import masterDb from '../../../../data/master_projects_db.json';
+import masterDb from '@data/master_projects_db.json';
 const PROJECTS_COLLECTION = "accounting_projects";
 
 export const ManagementDashboard: React.FC = () => {

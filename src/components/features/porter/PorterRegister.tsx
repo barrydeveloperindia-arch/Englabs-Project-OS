@@ -37,6 +37,8 @@ import PorterEntryForm from '@features/porter/PorterEntryForm';
 import { PorterTrip, PorterPaymentStatus, DeliveryStatus } from '@domain/porter_system';
 import { PorterProtectionAgent } from '@domain/porter_protection';
 import { logAction } from '@domain/system_guard';
+import { db } from '@services/firebase';
+import { collection, doc, setDoc } from 'firebase/firestore';
 import logo from '@/assets/englabs_logo.png';
 
 interface Props {
@@ -60,6 +62,39 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedProof, setSelectedProof] = useState<string | null>(null);
     const [isHealed, setIsHealed] = useState(false);
+    const [isMigrating, setIsMigrating] = useState(false);
+
+    const handleCloudMigration = async () => {
+        const saved = localStorage.getItem('englabs_porter_v1');
+        if (!saved) {
+            alert('No local porter data found to migrate.');
+            return;
+        }
+        
+        setIsMigrating(true);
+        try {
+            const tripsToMigrate: PorterTrip[] = JSON.parse(saved);
+            let count = 0;
+            
+            for (const trip of tripsToMigrate) {
+                // Use trip.id as the document ID to prevent duplicates if clicked twice
+                const docRef = doc(collection(db, 'porter_ledger'), trip.id);
+                await setDoc(docRef, {
+                    ...trip,
+                    timestamp: trip.timestamp || new Date().toISOString(),
+                    migratedAt: new Date().toISOString()
+                }, { merge: true });
+                count++;
+            }
+            
+            alert(`✅ Success! Migrated ${count} Porter Missions to the Cloud Database (porter_ledger).`);
+        } catch (error) {
+            console.error("Migration failed:", error);
+            alert("Failed to migrate data. Check console for details.");
+        } finally {
+            setIsMigrating(false);
+        }
+    };
 
     // Grouping by Monday-Sunday weeks
     const getStartOfWeek = (dateStr: string): string => {
@@ -468,6 +503,14 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                             Reports
                         </button>
                     </div>
+                    <button 
+                        onClick={handleCloudMigration}
+                        disabled={isMigrating}
+                        className="bg-amber-100 text-amber-700 hover:bg-amber-200 font-black px-6 py-3.5 rounded-xl flex items-center gap-2 text-[10px] uppercase tracking-widest transition-all shadow-sm"
+                    >
+                        <Package className={`w-4 h-4 ${isMigrating ? 'animate-spin' : ''}`} /> 
+                        {isMigrating ? 'SYNCING...' : 'SYNC TO CLOUD'}
+                    </button>
                     <button 
                         onClick={() => setIsFormOpen(true)}
                         className="bg-[#0e4368] text-emerald-500 hover:bg-slate-800 font-black px-6 py-3.5 rounded-xl flex items-center gap-2 text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-slate-900/10"

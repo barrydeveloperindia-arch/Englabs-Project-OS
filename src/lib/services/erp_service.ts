@@ -1,6 +1,6 @@
 import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, writeBatch, where, orderBy, Timestamp } from 'firebase/firestore';
-import { db } from '../config/firebase';
-import { ERPProjectData, ERPLedgerEntry, ERPProjectStatus, ERPExpenseCategory, ERPLedgerSummary } from '../domain/erp_types';
+import { db } from '@config/firebase';
+import { ERPProjectData, ERPLedgerEntry, ERPProjectStatus, ERPExpenseCategory, ERPLedgerSummary } from '@domain/erp_types';
 
 export class ERPService {
     static PROJECTS_COLLECTION = 'erp_projects';

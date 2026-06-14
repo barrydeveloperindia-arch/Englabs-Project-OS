@@ -1,7 +1,7 @@
 import * as XLSX from 'xlsx';
 import { ProjectRecord, ExpenseLedgerEntry } from '@domain/accounting_schema';
 import { collection, getDocs, query } from 'firebase/firestore';
-import { db } from '@config/firebase';
+import { db } from "@services/firebase";
 
 const PROJECTS_COLLECTION = "accounting_projects";
 const LEDGER_COLLECTION = "accounting_ledger";

@@ -6,7 +6,7 @@
  * Push Pub/Sub events from Gmail API or Outlook Webhooks.
  */
 
-import { IngestedFile } from "./onedrive_service";
+import { IngestedFile } from '@services/ingestion/onedrive_service';
 
 export interface IngestedEmail {
     id: string;

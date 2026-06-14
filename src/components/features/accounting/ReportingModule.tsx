@@ -4,7 +4,7 @@ import * as XLSX from 'xlsx';
 import { Download, FileText, FileSpreadsheet } from 'lucide-react';
 import { ProjectRecord } from '@domain/accounting_schema';
 import { collection, getDocs, query, where, Timestamp } from 'firebase/firestore';
-import { db } from '@config/firebase';
+import { db } from '@services/firebase';
 
 const PROJECTS_COLLECTION = "accounting_projects";
 

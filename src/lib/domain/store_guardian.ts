@@ -1,4 +1,4 @@
-import { db } from '@config/firebase';
+import { db } from '@services/firebase';
 import { collection, addDoc, getDocs, doc, updateDoc, query, where, orderBy, setDoc, getDoc } from 'firebase/firestore';
 
 export type ErrorType = 'VALIDATION' | 'SYNC' | 'DATABASE' | 'BUSINESS_LOGIC' | 'EXPORT' | 'UI' | 'DATA_FETCH' | 'CAMERA_ERROR' | 'CHECK_IN' | 'CHECK_OUT' | 'REQUIREMENT_SUBMIT' | 'DELETE_ITEM' | 'UPDATE_ITEM';

@@ -37,7 +37,7 @@ import FoodRegister from '@features/food/FoodRegister';
 import SystemGuardDashboard from '@features/system/SystemGuardDashboard';
 import BillingDashboard from '@features/project/BillingDashboard';
 import { ManagementDashboard } from '@features/accounting/ManagementDashboard';
-import { ERPBetaDashboard } from '@features/erp/ERPBetaDashboard';
+import { ERPBetaLayout } from '@features/erp/ERPBetaLayout';
 import DigitalEvidence from '@features/system/DigitalEvidence';
 import InventoryManager from '@features/inventory/InventoryManager';
 import Sky5Terminal from '@features/system/Sky5Terminal';
@@ -668,6 +668,10 @@ const App: React.FC = () => {
         return <HandoverDashboard onAcknowledge={handleAcknowledgeHandover} />;
     }
 
+    if (currentView === 'ERP_BETA_DASHBOARD') {
+        return <ERPBetaLayout onExit={() => setCurrentView('PROJECTS')} />;
+    }
+
     return (
         <div className="flex h-screen w-screen bg-[#F8FAFC] overflow-hidden text-slate-900 font-sans print:h-auto print:w-auto print:overflow-visible print:bg-white">
             {/* SIDEBAR LEDGER */}
@@ -795,7 +799,7 @@ const App: React.FC = () => {
                                     Next-Gen ERP (Beta)
                                 </p>
                                 <SidebarButton 
-                                    active={currentView === 'ERP_BETA_DASHBOARD'} 
+                                    active={currentView as string === 'ERP_BETA_DASHBOARD'} 
                                     onClick={() => setCurrentView('ERP_BETA_DASHBOARD')} 
                                     icon={<Activity />} 
                                     label="ERP COMMAND CENTER" 
@@ -1237,8 +1241,6 @@ const App: React.FC = () => {
                 <BillingDashboard />
             ) : currentView === 'MANAGEMENT_DASHBOARD' ? (
                 <ManagementDashboard />
-            ) : currentView === 'ERP_BETA_DASHBOARD' ? (
-                <ERPBetaDashboard />
             ) : currentView === 'SKY5_TERMINAL' ? (
                 <Sky5Terminal />
             ) : currentView === 'INVENTORY' ? (

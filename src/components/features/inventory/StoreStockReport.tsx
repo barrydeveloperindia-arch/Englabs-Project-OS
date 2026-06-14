@@ -94,7 +94,7 @@ const MONTH_NAMES = [
     "July", "August", "September", "October", "November", "December"
 ];
 
-const STANDARD_UNITS = ['Nos', 'Pcs', 'Box', 'Packet', 'Ltr', 'Mtr', 'Mini', 'Max', 'Kg', 'Roll', 'Set', 'ml'];
+const STANDARD_UNITS = ['Nos', 'Pcs', 'Box', 'Packet', 'Ltr', 'Mtr', 'Mini', 'Max', 'Kg', 'Roll', 'Set', 'ml', 'Balti'];
 
 const StoreStockReport: React.FC<StoreStockReportProps> = ({ 
     userRole = 'ADMIN', 
@@ -1431,6 +1431,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                             ) : (
                                 <form onSubmit={async (e) => {
                                     e.preventDefault();
+                                    if (isLoading) return;
                                     setIsLoading(true);
                                     try {
                                         let finalItemName = "";
@@ -1932,6 +1933,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                             ) : (
                                 <form onSubmit={async (e) => {
                                     e.preventDefault();
+                                    if (isLoading) return;
                                     const selectedItem = currentStock.find(i => i.itemCode === checkOutItemCode);
                                     if (!selectedItem) {
                                         alert("Please select a valid material.");

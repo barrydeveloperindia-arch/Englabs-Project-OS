@@ -3,8 +3,8 @@
  * Note: To run this standalone, it must be executed in a Node environment.
  * E.g., `node -r dotenv/config src/lib/services/daemon/sync_daemon.ts`
  */
-import { fetchRecentOneDriveFiles } from '../ingestion/onedrive_service';
-import { fetchRecentEmails } from '../ingestion/email_service';
+import { fetchRecentOneDriveFiles } from '@services/ingestion/onedrive_service';
+import { fetchRecentEmails } from '@services/ingestion/email_service';
 
 // Mock config for SharePoint target
 const SHAREPOINT_TENANT = "exartfabriek-my.sharepoint.com";

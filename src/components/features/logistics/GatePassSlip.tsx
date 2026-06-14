@@ -22,8 +22,8 @@ const GatePassSlip: React.FC<Props> = ({ entry, onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="bg-white w-full max-w-[450px] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-300 print:shadow-none print:w-full print:max-w-none">
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center p-4 sm:p-6 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
+            <div className="bg-white w-full max-w-[450px] max-h-[95vh] sm:max-h-[90vh] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-300 print:shadow-none print:w-full print:max-w-none print:h-auto print:max-h-none print:overflow-visible">
                 
                 {/* SLIP HEADER */}
                 <div className="bg-[#0e4368] p-8 text-white flex justify-between items-center print:bg-white print:text-slate-900 print:border-b-2 print:border-slate-900">
@@ -40,7 +40,7 @@ const GatePassSlip: React.FC<Props> = ({ entry, onClose }) => {
                 </div>
 
                 {/* THE SLIP CONTENT */}
-                <div id="gate-pass-print-area" className="p-10 flex-1 relative overflow-hidden">
+                <div id="gate-pass-print-area" className="p-8 sm:p-10 flex-1 relative overflow-y-auto overflow-x-hidden print:overflow-visible print:p-0">
                     {/* Background Watermark */}
                     <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none rotate-[-30deg]">
                         <h1 className="text-[120px] font-black">ENGLABS</h1>

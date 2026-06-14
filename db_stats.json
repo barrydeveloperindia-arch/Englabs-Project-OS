@@ -1,0 +1,194 @@
+{
+  "projects_master": {
+    "count": 43,
+    "samples": [
+      {
+        "clientName": "Unknown",
+        "modifiedBy": "SYSTEM_MIGRATION",
+        "budgetAmount": 0,
+        "id": "C4465",
+        "poAmount": 0,
+        "status": "ACTIVE",
+        "projectName": "SOMAFUSION WELLNESS LLP Project",
+        "createdAt": "2026-01-01T10:00:00Z",
+        "createdBy": "SYSTEM_MIGRATION",
+        "notes": "Migrated from legacy JSON database",
+        "modifiedAt": "2026-06-14T06:25:51.632Z",
+        "costTotals": {
+          "miscellaneousCost": 0,
+          "materialCost": 0,
+          "labourCost": 0,
+          "vendorCost": 0,
+          "siteCost": 0
+        },
+        "projectId": "C4465"
+      },
+      {
+        "costTotals": {
+          "labourCost": 0,
+          "materialCost": 0,
+          "miscellaneousCost": 0,
+          "vendorCost": 0,
+          "siteCost": 0
+        },
+        "notes": "Migrated from legacy JSON database",
+        "modifiedAt": "2026-06-14T06:25:51.632Z",
+        "projectId": "C4851",
+        "createdBy": "SYSTEM_MIGRATION",
+        "projectName": "ENERTICS Project",
+        "createdAt": "2026-02-02T10:00:00Z",
+        "status": "ACTIVE",
+        "poAmount": 0,
+        "budgetAmount": 0,
+        "modifiedBy": "SYSTEM_MIGRATION",
+        "id": "C4851",
+        "clientName": "Unknown"
+      }
+    ]
+  },
+  "inventory_ledger": {
+    "count": 0,
+    "samples": []
+  },
+  "vendor_ledger": {
+    "count": 0,
+    "samples": []
+  },
+  "finance_ledger": {
+    "count": 0,
+    "samples": []
+  },
+  "porter_ledger": {
+    "count": 0,
+    "samples": []
+  },
+  "food_ledger": {
+    "count": 0,
+    "samples": []
+  },
+  "projects": {
+    "count": 98,
+    "samples": [
+      {
+        "planning": {
+          "budget": 320000,
+          "startDate": "2026-05-01",
+          "deliveryTerms": "ToPay",
+          "value": 450000,
+          "poConfirmed": true
+        },
+        "client": "Standard Engineering Ltd",
+        "metrics": {
+          "totalComponents": 32,
+          "workforce": [
+            "Gaurav Panchal",
+            "Paras",
+            "Parth"
+          ],
+          "materialConsumption": "150kg MS Sheet, 20kg Rods"
+        },
+        "syncedAt": "2026-05-14T06:49:07.878Z",
+        "production": {
+          "stages": [
+            {
+              "completedAt": "2026-05-02",
+              "lead": "Gaurav Panchal",
+              "status": "Completed",
+              "timeTaken": "14h",
+              "name": "Engineering Design"
+            },
+            {
+              "completedAt": "2026-05-03",
+              "lead": "Paras",
+              "name": "Machine Processing",
+              "timeTaken": "28h",
+              "status": "Completed"
+            },
+            {
+              "name": "Workshop Fabrication",
+              "timeTaken": "6h",
+              "status": "In Progress",
+              "lead": "Parth"
+            },
+            {
+              "status": "Pending",
+              "name": "Sanding"
+            },
+            {
+              "name": "Painting",
+              "status": "Pending"
+            },
+            {
+              "status": "Pending",
+              "name": "Drying"
+            },
+            {
+              "status": "Pending",
+              "name": "Finishing"
+            },
+            {
+              "status": "Pending",
+              "name": "Final Packaging"
+            }
+          ],
+          "currentStage": "Workshop Fabrication"
+        },
+        "projectId": "C001"
+      },
+      {
+        "projectId": "C002",
+        "client": "TBD",
+        "metrics": {
+          "workforce": [],
+          "materialConsumption": "",
+          "totalComponents": 0
+        },
+        "planning": {
+          "budget": 0,
+          "startDate": "2026-05-03",
+          "deliveryTerms": "ToPay",
+          "value": 0,
+          "poConfirmed": false
+        },
+        "syncedAt": "2026-05-14T06:49:07.878Z",
+        "production": {
+          "stages": [
+            {
+              "name": "Engineering Design",
+              "status": "Pending"
+            },
+            {
+              "status": "Pending",
+              "name": "Machine Processing"
+            },
+            {
+              "status": "Pending",
+              "name": "Workshop Fabrication"
+            },
+            {
+              "name": "Sanding",
+              "status": "Pending"
+            },
+            {
+              "name": "Painting",
+              "status": "Pending"
+            },
+            {
+              "status": "Pending",
+              "name": "Drying"
+            },
+            {
+              "status": "Pending",
+              "name": "Finishing"
+            },
+            {
+              "status": "Pending",
+              "name": "Final Packaging"
+            }
+          ],
+          "currentStage": "Engineering Design"
+        }
+      }
+    ]
+  }
+}

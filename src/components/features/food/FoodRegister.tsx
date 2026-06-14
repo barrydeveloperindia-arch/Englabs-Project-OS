@@ -28,7 +28,7 @@ import FoodReceiptSlip from '@features/food/FoodReceiptSlip';
 import { AuditLog } from '@domain/system_guard';
 import { Trash2 } from 'lucide-react';
 import thaliImage from '@/assets/indian_thali_plate.png';
-import { db } from '@config/firebase';
+import { db } from '@services/firebase';
 import { collection, getDocs, doc, setDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
 
 

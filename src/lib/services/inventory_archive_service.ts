@@ -1,4 +1,4 @@
-import { db } from '@config/firebase';
+import { db } from "@services/firebase";
 import { collection, doc, setDoc, getDocs, query, orderBy } from 'firebase/firestore';
 
 export interface ArchivedItem {

@@ -12,7 +12,7 @@ vi.mock('firebase/firestore', () => ({
     orderBy: vi.fn()
 }));
 
-vi.mock('@config/firebase', () => ({
+vi.mock('@services/firebase', () => ({
     db: {} // dummy database object
 }));
 

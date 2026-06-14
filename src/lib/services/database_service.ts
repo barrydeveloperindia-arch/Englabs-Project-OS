@@ -1,5 +1,5 @@
 import { collection, addDoc, getDocs, query, orderBy, doc, setDoc, deleteDoc } from "firebase/firestore";
-import { db } from "@config/firebase";
+import { db } from "@services/firebase";
 import { GateEntry } from "@domain/gate_system";
 
 const COLLECTION_NAME = "gate_entries";
