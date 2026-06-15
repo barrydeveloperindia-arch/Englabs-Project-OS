@@ -45,6 +45,7 @@
     "autoprefixer": "^10.5.0",
     "jsdom": "^23.0.1",
     "postcss": "^8.5.13",
+    "puppeteer-core": "^25.1.0",
     "tailwindcss": "^4.2.4",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",

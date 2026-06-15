@@ -1443,8 +1443,17 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                 alert("Please enter a valid material name.");
                                                 return;
                                             }
-                                            finalItemName = checkInItemName.trim();
-                                            finalItemCode = checkInItemName.toUpperCase().trim().replace(/\s+/g, '_');
+                                            // Generate next ENG-XXXX code
+                                            const engItems = currentStock.filter(i => i.itemCode && (i.itemCode.toUpperCase().startsWith('ENG')));
+                                            let maxEng = 0;
+                                            engItems.forEach(i => {
+                                                const match = i.itemCode.match(/ENG-?(\d+)/i);
+                                                if (match) {
+                                                    const num = parseInt(match[1], 10);
+                                                    if (num > maxEng) maxEng = num;
+                                                }
+                                            });
+                                            finalItemCode = `ENG-${String(maxEng + 1).padStart(4, '0')}`;
                                             finalUnit = checkInUnit;
 
                                             // Write catalog item
@@ -2643,6 +2652,52 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                         className="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-6 py-3.5 rounded-xl flex items-center gap-2 text-[10px] uppercase tracking-widest transition-all shadow-md active:scale-95 cursor-pointer justify-center"
                                     >
                                         <ArrowDownCircle className="w-4 h-4" /> Check In
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            const runMigration = async () => {
+                                                const badItems = currentStock.filter(i => i.itemCode && !i.itemCode.toUpperCase().startsWith('ENG'));
+                                                if (badItems.length === 0) {
+                                                    alert("All material codes are already in ENG format!");
+                                                    return;
+                                                }
+                                                
+                                                if (!window.confirm(`Found ${badItems.length} items with invalid codes. Migrate them to ENG-XXXX format now?`)) return;
+
+                                                let maxEng = 0;
+                                                currentStock.forEach(i => {
+                                                    const match = i.itemCode?.match(/ENG-?(\d+)/i);
+                                                    if (match) {
+                                                        const num = parseInt(match[1], 10);
+                                                        if (num > maxEng) maxEng = num;
+                                                    }
+                                                });
+
+                                                let count = 0;
+                                                for (const oldItem of badItems) {
+                                                    maxEng++;
+                                                    const newCode = `ENG-${String(maxEng).padStart(4, '0')}`;
+                                                    const newItem = { ...oldItem, itemCode: newCode, currentStock: oldItem.availableStock || 0 } as any;
+                                                    if (newItem.id) delete newItem.id;
+                                                    
+                                                    try {
+                                                        await addInventoryItem(newItem);
+                                                        await deleteInventoryItem(oldItem.itemCode);
+                                                        count++;
+                                                    } catch (e: any) {
+                                                        console.error(e);
+                                                        alert(`Error migrating ${oldItem.itemCode}: ${e.message}`);
+                                                    }
+                                                }
+                                                alert(`Successfully migrated ${count} items to ENG-XXXX format!`);
+                                                window.location.reload();
+                                            };
+                                            runMigration();
+                                        }}
+                                        className="bg-red-600/10 hover:bg-red-600/20 text-red-500 font-black px-6 py-3.5 rounded-xl flex items-center gap-2 text-[10px] uppercase tracking-widest transition-all shadow-md active:scale-95 cursor-pointer justify-center"
+                                    >
+                                        <AlertTriangle className="w-4 h-4" /> Fix Material Codes
                                     </button>
                                     <button
                                         type="button"
@@ -4360,6 +4415,54 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                             </div>
 
                             <div className="p-6 border-t border-slate-100 bg-slate-50 shrink-0 flex gap-3">
+                                {/* STOCK TABS */}
+                                <div className="flex flex-wrap gap-3">
+                                    <button
+                                        onClick={() => {
+                                            const runMigration = async () => {
+                                                const badItems = currentStock.filter(i => i.itemCode && !i.itemCode.toUpperCase().startsWith('ENG'));
+                                                if (badItems.length === 0) {
+                                                    alert("All material codes are already in ENG format!");
+                                                    return;
+                                                }
+                                                
+                                                if (!window.confirm(`Found ${badItems.length} items with invalid codes. Migrate them to ENG-XXXX format now?`)) return;
+
+                                                let maxEng = 0;
+                                                currentStock.forEach(i => {
+                                                    const match = i.itemCode?.match(/ENG-?(\d+)/i);
+                                                    if (match) {
+                                                        const num = parseInt(match[1], 10);
+                                                        if (num > maxEng) maxEng = num;
+                                                    }
+                                                });
+
+                                                let count = 0;
+                                                for (const oldItem of badItems) {
+                                                    maxEng++;
+                                                    const newCode = `ENG-${String(maxEng).padStart(4, '0')}`;
+                                                    const newItem = { ...oldItem, itemCode: newCode, currentStock: oldItem.availableStock || 0 } as any;
+                                                    if (newItem.id) delete newItem.id;
+                                                    
+                                                    try {
+                                                        await addInventoryItem(newItem);
+                                                        await deleteInventoryItem(oldItem.itemCode);
+                                                        count++;
+                                                    } catch (e) {
+                                                        console.error(e);
+                                                    }
+                                                }
+                                                alert(`Successfully migrated ${count} items to ENG-XXXX format!`);
+                                                window.location.reload();
+                                            };
+                                            runMigration();
+                                        }}
+                                        className="px-6 py-2 rounded-xl bg-red-600/10 text-red-500 font-semibold text-sm tracking-widest hover:bg-red-600/20 transition-all flex items-center gap-2"
+                                    >
+                                        <AlertTriangle className="w-4 h-4" />
+                                        FIX MATERIAL CODES
+                                    </button>
+                                </div>
                                 <button 
                                     type="button" 
                                     onClick={() => setIsCreateMaterialModalOpen(false)}

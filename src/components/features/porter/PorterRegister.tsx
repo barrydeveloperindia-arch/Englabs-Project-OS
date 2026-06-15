@@ -811,7 +811,7 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                         </div>
 
                         {/* TABLE */}
-                        <div className="bg-white rounded-[3rem] border border-slate-100 shadow-xl overflow-hidden">
+                        <div className="hidden md:block bg-white rounded-[3rem] border border-slate-100 shadow-xl overflow-hidden">
                             <div className="overflow-x-auto no-scrollbar">
                                 <table className="w-full text-left">
                                     <thead>
@@ -909,6 +909,88 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+
+                        {/* MOBILE CARDS VIEW */}
+                        <div className="md:hidden flex flex-col gap-4 pb-20">
+                            {filteredTrips.map(trip => (
+                                <div key={trip.id} className="bg-white rounded-[2rem] border border-slate-100 shadow-[0_10px_40px_rgba(0,0,0,0.03)] p-5 relative overflow-hidden">
+                                    {/* Type Indicator Bar */}
+                                    <div className={`absolute top-0 left-0 bottom-0 w-1.5 ${trip.deliveryStatus === 'DELIVERED' ? 'bg-emerald-400' : 'bg-blue-400'}`}></div>
+                                    
+                                    <div className="flex justify-between items-start mb-4 pl-2">
+                                        <div className="flex gap-3">
+                                            <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center shrink-0">
+                                                <Package className="w-5 h-5 text-slate-400" />
+                                            </div>
+                                            <div>
+                                                <p className="font-black text-slate-900 text-sm tracking-tight">{trip.customerName}</p>
+                                                <p className="text-[9px] font-black text-slate-400 uppercase mt-1">{trip.id} • {trip.date}</p>
+                                            </div>
+                                        </div>
+                                        <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${trip.deliveryStatus === 'DELIVERED' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'}`}>
+                                            {trip.deliveryStatus.replace('_', ' ')}
+                                        </span>
+                                    </div>
+
+                                    <div className="space-y-3 pl-2">
+                                        <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                                            <div className="flex justify-between items-center mb-1">
+                                                <p className="font-black text-slate-900 text-xs leading-tight">{trip.porterName}</p>
+                                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{trip.vehicleNumber}</p>
+                                            </div>
+                                            <div className="flex items-center gap-1 text-slate-500 mt-2">
+                                                <MapPin className="w-3 h-3 text-emerald-500" />
+                                                <p className="text-[10px] font-bold truncate max-w-[200px]">{trip.toLocation}</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex flex-col gap-1">
+                                                <span className="text-[10px] font-black text-slate-400 uppercase">Gross: ₹{trip.grossAmount.toLocaleString()}</span>
+                                                <p className={`font-black text-sm ${trip.remainingBalance < 0 ? 'text-rose-500' : 'text-emerald-500'}`}>
+                                                    {trip.remainingBalance < 0 ? `Overpaid: ₹${Math.abs(trip.remainingBalance).toLocaleString()}` : `Bal: ₹${trip.remainingBalance.toLocaleString()}`}
+                                                </p>
+                                            </div>
+                                            <div className="flex flex-col gap-1 items-end">
+                                                <span className="text-sm font-black text-slate-900">{trip.distanceKm} KM</span>
+                                                <span className="text-[10px] font-black text-slate-400 uppercase">Rate: ₹{trip.ratePerKm}/KM</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex justify-between items-center pt-1">
+                                            <button onClick={() => setViewingInvoice(trip)} className="text-[9px] font-black text-blue-500 uppercase hover:underline">
+                                                View Invoice
+                                            </button>
+                                            <button onClick={() => setViewingTimeline(trip)} className="flex items-center gap-1.5 text-[9px] font-black text-slate-400 hover:text-slate-600 uppercase">
+                                                <ClipboardList className="w-3 h-3" /> View Timeline
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Actions */}
+                                    <div className="mt-5 pt-4 border-t border-slate-100 pl-2">
+                                        <div className="flex items-center justify-between gap-2 mb-3">
+                                            <div className="flex flex-1 items-center bg-slate-50 p-1 rounded-xl gap-1">
+                                                <button onClick={() => handleStatusUpdate(trip, 'PICKUP')} className="flex-1 p-2 text-slate-400 hover:text-blue-500 flex justify-center"><Map className="w-4 h-4" /></button>
+                                                <button onClick={() => handleStatusUpdate(trip, 'TRANSIT')} className="flex-1 p-2 text-slate-400 hover:text-amber-500 flex justify-center"><Navigation2 className="w-4 h-4" /></button>
+                                                <button onClick={() => handleStatusUpdate(trip, 'DELIVERED')} className="flex-1 p-2 text-slate-400 hover:text-emerald-500 flex justify-center"><CheckCircle className="w-4 h-4" /></button>
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-3 gap-2">
+                                            <button onClick={() => shareOnWhatsApp(trip)} className="flex items-center justify-center p-3 bg-emerald-50 text-emerald-600 rounded-xl">
+                                                <MessageSquare className="w-4 h-4" />
+                                            </button>
+                                            <button onClick={() => setEditingTrip(trip)} className="flex items-center justify-center p-3 bg-slate-50 text-slate-500 hover:text-emerald-600 rounded-xl">
+                                                <Edit2 className="w-4 h-4" />
+                                            </button>
+                                            <button onClick={() => setShowDeleteModal(trip)} className="flex items-center justify-center p-3 bg-slate-50 text-slate-500 hover:text-red-600 rounded-xl">
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 )}

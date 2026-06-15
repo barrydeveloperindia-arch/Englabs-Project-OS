@@ -810,7 +810,14 @@ export async function fetchCurrentStock(): Promise<CurrentStockItem[]> {
         if (snap.empty) {
             return getLocalStockFallback();
         }
-        const items = snap.docs.map((d: any) => d.data() as CurrentStockItem);
+        const items = snap.docs.map((d: any) => {
+            const data = d.data();
+            return {
+                ...data,
+                itemCode: data.itemCode || d.id,
+                id: d.id
+            } as CurrentStockItem;
+        });
         if (typeof window !== 'undefined' && window.localStorage) {
             const localCurrentStockMap: Record<string, CurrentStockItem> = {};
             items.forEach((item: CurrentStockItem) => {
@@ -1343,6 +1350,9 @@ function updateLocalDetailsFallback(
 
 
 export async function deleteInventoryItem(itemCode: string) {
+    if (!itemCode) {
+        throw new Error("Item code is undefined or empty. Cannot delete.");
+    }
     if (!db || isTest) {
         if (typeof window !== 'undefined' && window.localStorage) {
             const localCurrentStockSaved = window.localStorage.getItem('local_current_stock');

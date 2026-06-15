@@ -584,143 +584,242 @@ const StatCard = ({ icon, label, value, subValue, color, onClick }: any) => {
 
 export default GateRegister;
 
-const EntryTable = ({ entries, onEdit, onDelete, onPrint, onInvoice, onShare }: any) => (
-    <table className="w-full text-left border-collapse">
-        <thead>
-            <tr className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-50">
-                <th className="pb-6 px-4">Entry ID</th>
-                <th className="pb-6 px-4">Type</th>
-                <th className="pb-6 px-4">Material</th>
-                <th className="pb-6 px-4">Party / Vehicle</th>
-                <th className="pb-6 px-4">Payment</th>
-                <th className="pb-6 px-4 text-right">Gate Pass</th>
-            </tr>
-        </thead>
-        <tbody className="divide-y divide-slate-50">
-            {entries.length === 0 ? (
-                <tr>
-                    <td colSpan={6} className="py-20 text-center">
+const EntryTable = ({ entries, onEdit, onDelete, onPrint, onInvoice, onShare }: any) => {
+    return (
+        <>
+            {/* DESKTOP TABLE VIEW */}
+            <div className="hidden md:block">
+                <table className="w-full text-left border-collapse">
+                    <thead>
+                        <tr className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-50">
+                            <th className="pb-6 px-4">Entry ID</th>
+                            <th className="pb-6 px-4">Type</th>
+                            <th className="pb-6 px-4">Material</th>
+                            <th className="pb-6 px-4">Party / Vehicle</th>
+                            <th className="pb-6 px-4">Payment</th>
+                            <th className="pb-6 px-4 text-right">Gate Pass</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-50">
+                        {entries.length === 0 ? (
+                            <tr>
+                                <td colSpan={6} className="py-20 text-center">
+                                    <div className="flex flex-col items-center gap-4 text-slate-300">
+                                        <ClipboardList className="w-16 h-16 opacity-20" />
+                                        <p className="font-black text-lg uppercase tracking-widest">No matching records found</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        ) : (
+                            entries.map((entry: any) => (
+                                <tr key={entry.id} className="group hover:bg-slate-50/50 transition-all">
+                                    <td className="py-6 px-4">
+                                        <div className="flex items-center gap-3">
+                                            {entry.photoUrl ? (
+                                                <div className="w-10 h-10 rounded-lg overflow-hidden border border-slate-100 shrink-0">
+                                                    <img src={entry.photoUrl} className="w-full h-full object-cover" alt="Material" />
+                                                </div>
+                                            ) : (
+                                                <div className="w-10 h-10 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                                                    <ImageIcon className="w-4 h-4 text-slate-300" />
+                                                </div>
+                                            )}
+                                            <div>
+                                                <span className="font-black text-slate-900">{entry.id}</span>
+                                                <p className="text-[9px] font-bold text-slate-400 mt-1">{entry.timestamp}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="py-6 px-4">
+                                        <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${entry.type === 'INWARD' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'}`}>
+                                            {entry.type}
+                                        </span>
+                                    </td>
+                                    <td className="py-6 px-4">
+                                        <p className="font-bold text-slate-900 text-sm leading-tight">{entry.materialName}</p>
+                                        <div className="flex items-center gap-2 mt-1">
+                                            <span className="text-[10px] font-bold text-slate-400">{entry.quantity} {entry.unit}</span>
+                                            {entry.type === 'INWARD' && entry.items?.[0]?.hsnCode && (
+                                                <span className="text-[8px] font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded tracking-tighter">HSN: {entry.items[0].hsnCode}</span>
+                                            )}
+                                        </div>
+                                    </td>
+                                    <td className="py-6 px-4">
+                                        <div className="flex items-center gap-2">
+                                            <p className="font-bold text-slate-900 text-sm leading-tight">{entry.partyName}</p>
+                                            {entry.invoicePhotoUrl && <FileText className="w-3 h-3 text-emerald-500" />}
+                                        </div>
+                                        <p className="text-[10px] font-black text-emerald-500 uppercase mt-1 tracking-widest">{entry.vehicleNumber}</p>
+                                    </td>
+                                    <td className="py-6 px-4">
+                                        <div className="flex flex-col gap-1">
+                                            <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest w-fit ${
+                                                entry.paymentStatus === 'PAID' ? 'bg-emerald-500 text-white' : 
+                                                entry.paymentStatus === 'PARTIAL' ? 'bg-orange-500 text-white' : 'bg-red-500 text-white'
+                                            }`}>
+                                                {entry.paymentStatus || 'UNPAID'}
+                                            </span>
+                                            {(() => {
+                                                const roundedTotal = Math.round((entry.amount || 0) * (entry.billType !== 'WITHOUT_GST' ? 1.18 : 1));
+                                                const remaining = entry.remainingAmount ?? (roundedTotal - (entry.paidAmount || 0));
+                                                return (
+                                                    <>
+                                                        <p className="text-[10px] font-black text-slate-900 mt-1">
+                                                            {entry.type === 'INWARD' ? 'Inv (Gross): ' : 'Dlv (Gross): '} ₹{roundedTotal.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                                        </p>
+                                                        <div className="flex flex-col">
+                                                            <p className="text-[9px] font-bold text-slate-600">
+                                                                {entry.type === 'INWARD' ? 'Paid: ' : 'Recd: '} ₹{(entry.paidAmount || 0).toLocaleString()}
+                                                            </p>
+                                                            <p className="text-[9px] font-bold text-slate-400">
+                                                                {entry.type === 'INWARD' ? 'Rem: ' : 'Bal: '} ₹{remaining.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                                            </p>
+                                                        </div>
+                                                    </>
+                                                );
+                                            })()}
+                                        </div>
+                                    </td>
+                                    <td className="py-6 px-4 text-right">
+                                        <div className="flex justify-end gap-2">
+                                            <button 
+                                                onClick={() => onInvoice(entry)}
+                                                className="p-3 bg-slate-50 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all border border-transparent hover:border-blue-100"
+                                                title="Generate Professional Invoice"
+                                            >
+                                                <FileText className="w-5 h-5" />
+                                            </button>
+                                            <button 
+                                                onClick={() => onPrint(entry)}
+                                                className="p-3 bg-slate-50 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all border border-transparent hover:border-emerald-100"
+                                                title="View Receipt Slip"
+                                            >
+                                                <Printer className="w-5 h-5" />
+                                            </button>
+                                            <button 
+                                                onClick={() => onShare(entry)}
+                                                className="p-3 bg-slate-50 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all border border-transparent hover:border-emerald-100"
+                                                title="Share Slip on WhatsApp"
+                                            >
+                                                <MessageSquare className="w-5 h-5" />
+                                            </button>
+                                            <button 
+                                                onClick={() => onEdit(entry)}
+                                                className="p-3 bg-slate-50 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all border border-transparent hover:border-emerald-100"
+                                                title="Edit Entry"
+                                            >
+                                                <Edit2 className="w-5 h-5" />
+                                            </button>
+                                            <button 
+                                                onClick={() => onDelete(entry)}
+                                                className="p-3 bg-slate-50 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all border border-transparent hover:border-red-100"
+                                                title="Admin Delete (Requires Authorization)"
+                                            >
+                                                <Trash2 className="w-5 h-5" />
+                                            </button>
+                                            {entry.gatePassNumber && (
+                                                <span className="font-black text-slate-900 text-xs self-center ml-2">{entry.gatePassNumber}</span>
+                                            )}
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* MOBILE CARDS VIEW */}
+            <div className="md:hidden flex flex-col gap-4 pb-20">
+                {entries.length === 0 ? (
+                    <div className="py-20 text-center">
                         <div className="flex flex-col items-center gap-4 text-slate-300">
                             <ClipboardList className="w-16 h-16 opacity-20" />
                             <p className="font-black text-lg uppercase tracking-widest">No matching records found</p>
                         </div>
-                    </td>
-                </tr>
-            ) : (
-                entries.map((entry: any) => (
-                    <tr key={entry.id} className="group hover:bg-slate-50/50 transition-all">
-                        <td className="py-6 px-4">
-                            <div className="flex items-center gap-3">
-                                {entry.photoUrl ? (
-                                    <div className="w-10 h-10 rounded-lg overflow-hidden border border-slate-100 shrink-0">
-                                        <img src={entry.photoUrl} className="w-full h-full object-cover" alt="Material" />
+                    </div>
+                ) : (
+                    entries.map((entry: any) => {
+                        const roundedTotal = Math.round((entry.amount || 0) * (entry.billType !== 'WITHOUT_GST' ? 1.18 : 1));
+                        const remaining = entry.remainingAmount ?? (roundedTotal - (entry.paidAmount || 0));
+                        return (
+                            <div key={entry.id} className="bg-white rounded-[2rem] border border-slate-100 shadow-[0_10px_40px_rgba(0,0,0,0.03)] p-5 relative overflow-hidden">
+                                {/* Type Indicator Bar */}
+                                <div className={`absolute top-0 left-0 bottom-0 w-1.5 ${entry.type === 'INWARD' ? 'bg-emerald-400' : 'bg-blue-400'}`}></div>
+                                
+                                <div className="flex justify-between items-start mb-4 pl-2">
+                                    <div className="flex gap-3">
+                                        {entry.photoUrl ? (
+                                            <div className="w-12 h-12 rounded-xl overflow-hidden border border-slate-100 shrink-0">
+                                                <img src={entry.photoUrl} className="w-full h-full object-cover" alt="Material" />
+                                            </div>
+                                        ) : (
+                                            <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                                                <ImageIcon className="w-5 h-5 text-slate-300" />
+                                            </div>
+                                        )}
+                                        <div>
+                                            <span className="font-black text-slate-900">{entry.id}</span>
+                                            <p className="text-[9px] font-bold text-slate-400 mt-1">{entry.timestamp}</p>
+                                        </div>
                                     </div>
-                                ) : (
-                                    <div className="w-10 h-10 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
-                                        <ImageIcon className="w-4 h-4 text-slate-300" />
+                                    <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${entry.type === 'INWARD' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'}`}>
+                                        {entry.type}
+                                    </span>
+                                </div>
+
+                                <div className="space-y-3 pl-2">
+                                    <div>
+                                        <p className="font-bold text-slate-900 text-sm leading-tight">{entry.materialName}</p>
+                                        <span className="text-[10px] font-bold text-slate-400">{entry.quantity} {entry.unit}</span>
                                     </div>
-                                )}
-                                <div>
-                                    <span className="font-black text-slate-900">{entry.id}</span>
-                                    <p className="text-[9px] font-bold text-slate-400 mt-1">{entry.timestamp}</p>
+                                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <p className="font-black text-slate-900 text-xs leading-tight">{entry.partyName}</p>
+                                            {entry.invoicePhotoUrl && <FileText className="w-3 h-3 text-emerald-500" />}
+                                        </div>
+                                        <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">{entry.vehicleNumber}</p>
+                                    </div>
+                                    
+                                    <div className="flex items-center justify-between pt-2">
+                                        <div className="flex flex-col gap-1">
+                                            <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest w-fit ${
+                                                entry.paymentStatus === 'PAID' ? 'bg-emerald-500 text-white' : 
+                                                entry.paymentStatus === 'PARTIAL' ? 'bg-orange-500 text-white' : 'bg-red-500 text-white'
+                                            }`}>
+                                                {entry.paymentStatus || 'UNPAID'}
+                                            </span>
+                                            <p className="text-[10px] font-black text-slate-900 mt-1">₹{roundedTotal.toLocaleString('en-IN')}</p>
+                                        </div>
+                                        {entry.gatePassNumber && (
+                                            <span className="font-black text-slate-900 text-[10px] bg-slate-100 px-2 py-1 rounded">{entry.gatePassNumber}</span>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Actions */}
+                                <div className="grid grid-cols-5 gap-2 mt-5 pt-4 border-t border-slate-100 pl-2">
+                                    <button onClick={() => onInvoice(entry)} className="flex items-center justify-center p-3 bg-slate-50 text-slate-500 hover:text-blue-600 rounded-xl">
+                                        <FileText className="w-4 h-4" />
+                                    </button>
+                                    <button onClick={() => onPrint(entry)} className="flex items-center justify-center p-3 bg-slate-50 text-slate-500 hover:text-emerald-600 rounded-xl">
+                                        <Printer className="w-4 h-4" />
+                                    </button>
+                                    <button onClick={() => onShare(entry)} className="flex items-center justify-center p-3 bg-slate-50 text-slate-500 hover:text-emerald-600 rounded-xl">
+                                        <MessageSquare className="w-4 h-4" />
+                                    </button>
+                                    <button onClick={() => onEdit(entry)} className="flex items-center justify-center p-3 bg-slate-50 text-slate-500 hover:text-emerald-600 rounded-xl">
+                                        <Edit2 className="w-4 h-4" />
+                                    </button>
+                                    <button onClick={() => onDelete(entry)} className="flex items-center justify-center p-3 bg-slate-50 text-slate-500 hover:text-red-600 rounded-xl">
+                                        <Trash2 className="w-4 h-4" />
+                                    </button>
                                 </div>
                             </div>
-                        </td>
-                        <td className="py-6 px-4">
-                            <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${entry.type === 'INWARD' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'}`}>
-                                {entry.type}
-                            </span>
-                        </td>
-                        <td className="py-6 px-4">
-                            <p className="font-bold text-slate-900 text-sm leading-tight">{entry.materialName}</p>
-                            <div className="flex items-center gap-2 mt-1">
-                                <span className="text-[10px] font-bold text-slate-400">{entry.quantity} {entry.unit}</span>
-                                {entry.type === 'INWARD' && entry.items?.[0]?.hsnCode && (
-                                    <span className="text-[8px] font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded tracking-tighter">HSN: {entry.items[0].hsnCode}</span>
-                                )}
-                            </div>
-                        </td>
-                        <td className="py-6 px-4">
-                            <div className="flex items-center gap-2">
-                                <p className="font-bold text-slate-900 text-sm leading-tight">{entry.partyName}</p>
-                                {entry.invoicePhotoUrl && <FileText className="w-3 h-3 text-emerald-500" />}
-                            </div>
-                            <p className="text-[10px] font-black text-emerald-500 uppercase mt-1 tracking-widest">{entry.vehicleNumber}</p>
-                        </td>
-                        <td className="py-6 px-4">
-                            <div className="flex flex-col gap-1">
-                                <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest w-fit ${
-                                    entry.paymentStatus === 'PAID' ? 'bg-emerald-500 text-white' : 
-                                    entry.paymentStatus === 'PARTIAL' ? 'bg-orange-500 text-white' : 'bg-red-500 text-white'
-                                }`}>
-                                    {entry.paymentStatus || 'UNPAID'}
-                                </span>
-                                {(() => {
-                                    const roundedTotal = Math.round((entry.amount || 0) * (entry.billType !== 'WITHOUT_GST' ? 1.18 : 1));
-                                    const remaining = entry.remainingAmount ?? (roundedTotal - (entry.paidAmount || 0));
-                                    return (
-                                        <>
-                                            <p className="text-[10px] font-black text-slate-900 mt-1">
-                                                {entry.type === 'INWARD' ? 'Inv (Gross): ' : 'Dlv (Gross): '} ₹{roundedTotal.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
-                                            </p>
-                                            <div className="flex flex-col">
-                                                <p className="text-[9px] font-bold text-slate-600">
-                                                    {entry.type === 'INWARD' ? 'Paid: ' : 'Recd: '} ₹{(entry.paidAmount || 0).toLocaleString()}
-                                                </p>
-                                                <p className="text-[9px] font-bold text-slate-400">
-                                                    {entry.type === 'INWARD' ? 'Rem: ' : 'Bal: '} ₹{remaining.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
-                                                </p>
-                                            </div>
-                                        </>
-                                    );
-                                })()}
-                            </div>
-                        </td>
-                        <td className="py-6 px-4 text-right">
-                            <div className="flex justify-end gap-2">
-                                <button 
-                                    onClick={() => onInvoice(entry)}
-                                    className="p-3 bg-slate-50 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all border border-transparent hover:border-blue-100"
-                                    title="Generate Professional Invoice"
-                                >
-                                    <FileText className="w-5 h-5" />
-                                </button>
-                                <button 
-                                    onClick={() => onPrint(entry)}
-                                    className="p-3 bg-slate-50 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all border border-transparent hover:border-emerald-100"
-                                    title="View Receipt Slip"
-                                >
-                                    <Printer className="w-5 h-5" />
-                                </button>
-                                <button 
-                                    onClick={() => onShare(entry)}
-                                    className="p-3 bg-slate-50 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all border border-transparent hover:border-emerald-100"
-                                    title="Share Slip on WhatsApp"
-                                >
-                                    <MessageSquare className="w-5 h-5" />
-                                </button>
-                                <button 
-                                    onClick={() => onEdit(entry)}
-                                    className="p-3 bg-slate-50 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all border border-transparent hover:border-emerald-100"
-                                    title="Edit Entry"
-                                >
-                                    <Edit2 className="w-5 h-5" />
-                                </button>
-                                <button 
-                                    onClick={() => onDelete(entry)}
-                                    className="p-3 bg-slate-50 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all border border-transparent hover:border-red-100"
-                                    title="Admin Delete (Requires Authorization)"
-                                >
-                                    <Trash2 className="w-5 h-5" />
-                                </button>
-                                {entry.gatePassNumber && (
-                                    <span className="font-black text-slate-900 text-xs self-center ml-2">{entry.gatePassNumber}</span>
-                                )}
-                            </div>
-                        </td>
-                    </tr>
-                ))
-            )}
-        </tbody>
-    </table>
-);
+                        );
+                    })
+                )}
+            </div>
+        </>
+    );
+};

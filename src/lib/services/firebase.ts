@@ -16,6 +16,12 @@ const firebaseConfig = {
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const db = getFirestore(app);
-const auth = getAuth(app);
+
+let auth: any;
+try {
+  auth = getAuth(app);
+} catch (e: any) {
+  console.warn("Auth initialization bypassed:", e.message);
+}
 
 export { app, db, auth };
