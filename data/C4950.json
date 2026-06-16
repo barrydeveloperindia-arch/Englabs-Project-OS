@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED",
+        "vendorLocation": "Faridabad",
+        "dispatchBudget": 0,
+        "totalCost": 81611.76,
+        "profitLoss": -375,
+        "deliveryFeeMode": "Included--> to pay basis",
+        "poNumber": "P2100-EL12-PO-16839"
     }
 }

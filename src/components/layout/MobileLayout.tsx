@@ -12,7 +12,10 @@ import {
     CreditCard,
     ChefHat,
     Search,
-    DollarSign
+    DollarSign,
+    Users,
+    Truck,
+    CheckCircle2
 } from 'lucide-react';
 
 interface MobileTabButtonProps {
@@ -82,16 +85,16 @@ export const MobileLayout: React.FC<MobileLayoutProps> = ({
                 {userRole === 'ADMIN' ? (
                     <>
                         <MobileTabButton 
-                            active={currentView === 'HOME'} 
-                            onClick={() => setCurrentView('HOME')} 
+                            active={currentView === 'ERP_BETA_DASHBOARD'} 
+                            onClick={() => setCurrentView('ERP_BETA_DASHBOARD')} 
                             icon={<Activity className="w-5 h-5" />} 
-                            label="Home" 
+                            label="Dashboard" 
                         />
                         <MobileTabButton 
-                            active={currentView === 'PROJECTS'} 
-                            onClick={() => setCurrentView('PROJECTS')} 
-                            icon={<Layers className="w-5 h-5" />} 
-                            label="Projects" 
+                            active={currentView === 'ATTENDANCE'} 
+                            onClick={() => setCurrentView('ATTENDANCE')} 
+                            icon={<Users className="w-5 h-5" />} 
+                            label="HR" 
                         />
                         
                         {/* FAB CENTER BUTTON */}
@@ -105,10 +108,10 @@ export const MobileLayout: React.FC<MobileLayoutProps> = ({
                         </div>
 
                         <MobileTabButton 
-                            active={currentView === 'GATE_REGISTER' || currentView === 'INVENTORY'} 
-                            onClick={() => setCurrentView('GATE_REGISTER')} 
-                            icon={<Box className="w-5 h-5" />} 
-                            label="Logistics" 
+                            active={currentView === 'PROJECTS'} 
+                            onClick={() => setCurrentView('PROJECTS')} 
+                            icon={<Layers className="w-5 h-5" />} 
+                            label="Projects" 
                         />
                         <button 
                             type="button"
@@ -128,7 +131,7 @@ export const MobileLayout: React.FC<MobileLayoutProps> = ({
                             active={currentView === 'STOCK_REPORT'} 
                             onClick={() => setCurrentView('STOCK_REPORT')} 
                             icon={<FileText className="w-5 h-5" />} 
-                            label="Report" 
+                            label="Store" 
                         />
                         <button 
                             type="button"
@@ -165,42 +168,40 @@ export const MobileLayout: React.FC<MobileLayoutProps> = ({
                         </div>
                         <div className="grid grid-cols-3 gap-4 py-2">
                             <MobileGridButton 
-                                onClick={() => { setCurrentView('FOOD_REGISTER'); setIsMobileMenuOpen(false); }} 
-                                icon={<Utensils className="w-6 h-6" />} 
-                                label="Pantry" 
-                                active={currentView === 'FOOD_REGISTER'}
-                            />
-                            <MobileGridButton 
                                 onClick={() => { setCurrentView('BILLING'); setIsMobileMenuOpen(false); }} 
-                                icon={<CreditCard className="w-6 h-6" />} 
-                                label="Finance" 
+                                icon={<DollarSign className="w-6 h-6" />} 
+                                label="Accounts" 
                                 active={currentView === 'BILLING'}
                             />
                             <MobileGridButton 
-                                onClick={() => { setCurrentView('SKY5_TERMINAL'); setIsMobileMenuOpen(false); }} 
-                                icon={<ChefHat className="w-6 h-6" />} 
-                                label="Sky-5 Kitchen" 
-                                active={currentView === 'SKY5_TERMINAL'}
-                                color="amber"
+                                onClick={() => { setCurrentView('INVENTORY'); setIsMobileMenuOpen(false); }} 
+                                icon={<Box className="w-6 h-6" />} 
+                                label="Reports" 
+                                active={currentView === 'INVENTORY'}
                             />
                             <MobileGridButton 
-                                onClick={() => { setCurrentView('GATE_DISPLAY'); setIsMobileMenuOpen(false); }} 
-                                icon={<Activity className="w-6 h-6" />} 
-                                label="Gate HUD" 
-                                active={currentView === 'GATE_DISPLAY'}
-                                color="emerald"
+                                onClick={() => { setCurrentView('PORTER_SERVICE'); setIsMobileMenuOpen(false); }} 
+                                icon={<Truck className="w-6 h-6" />} 
+                                label="Porter" 
+                                active={currentView === 'PORTER_SERVICE'}
                             />
                             <MobileGridButton 
-                                onClick={() => { setCurrentView('PROJECT_LOOKUP'); setIsMobileMenuOpen(false); }} 
-                                icon={<Search className="w-6 h-6" />} 
-                                label="Mapping" 
-                                active={currentView === 'PROJECT_LOOKUP'}
+                                onClick={() => { setCurrentView('STOCK_REPORT'); setIsMobileMenuOpen(false); }} 
+                                icon={<FileText className="w-6 h-6" />} 
+                                label="Store" 
+                                active={currentView === 'STOCK_REPORT'}
                             />
                             <MobileGridButton 
-                                onClick={() => { setCurrentView('PROJECT_BUDGETS'); setIsMobileMenuOpen(false); }} 
-                                icon={<DollarSign className="w-6 h-6" />} 
-                                label="Budgets" 
-                                active={currentView === 'PROJECT_BUDGETS'}
+                                onClick={() => { setCurrentView('FOOD_REGISTER'); setIsMobileMenuOpen(false); }} 
+                                icon={<Utensils className="w-6 h-6" />} 
+                                label="Food" 
+                                active={currentView === 'FOOD_REGISTER'}
+                            />
+                            <MobileGridButton 
+                                onClick={() => { setCurrentView('SETTINGS'); setIsMobileMenuOpen(false); }} 
+                                icon={<CheckCircle2 className="w-6 h-6" />} 
+                                label="Settings" 
+                                active={currentView === 'SETTINGS'}
                             />
                         </div>
                     </div>

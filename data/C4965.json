@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "CHAMBER OF INDUSTRIAL AND COMMERCIAL UNDERTAKINGS",
+        "vendorLocation": "Ludhiana",
+        "dispatchBudget": null,
+        "totalCost": 8000,
+        "profitLoss": null,
+        "deliveryFeeMode": "To pay basis",
+        "poNumber": "P2100-EL12-PO-16772"
     }
 }

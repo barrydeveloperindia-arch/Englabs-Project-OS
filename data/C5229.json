@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "Adroitec",
+        "vendorLocation": "Noida",
+        "dispatchBudget": null,
+        "totalCost": null,
+        "profitLoss": null,
+        "deliveryFeeMode": null,
+        "poNumber": "P2100-EL12-PO-61000"
     }
 }

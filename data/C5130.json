@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "SK Techno",
+        "vendorLocation": "Faridabad",
+        "dispatchBudget": 0,
+        "totalCost": null,
+        "profitLoss": -161,
+        "deliveryFeeMode": "included",
+        "poNumber": "P2100-EL12-PO-40085"
     }
 }

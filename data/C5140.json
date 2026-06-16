@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "ADROITEC INFORMATION SYSTEMS PVT LTD",
+        "vendorLocation": "Noida",
+        "dispatchBudget": null,
+        "totalCost": 43335,
+        "profitLoss": null,
+        "deliveryFeeMode": "To pay basis",
+        "poNumber": "P2100-EL12-PO-16862"
     }
 }

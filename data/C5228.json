@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "Talekar",
+        "vendorLocation": "Pune",
+        "dispatchBudget": null,
+        "totalCost": null,
+        "profitLoss": null,
+        "deliveryFeeMode": null,
+        "poNumber": "P2100-EL12-PO-74320"
     }
 }

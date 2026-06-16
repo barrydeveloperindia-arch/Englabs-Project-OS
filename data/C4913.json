@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "Rapid Proto Tech India Private Limited",
+        "vendorLocation": "Coimbatore",
+        "dispatchBudget": null,
+        "totalCost": 38640,
+        "profitLoss": null,
+        "deliveryFeeMode": "To pay basis",
+        "poNumber": "P2100-EL12-PO-16743"
     }
 }

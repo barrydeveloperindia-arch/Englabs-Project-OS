@@ -7,6 +7,15 @@ export interface ProjectStage {
     timeTaken?: string;
     completedAt?: string;
 }
+export interface FinancialData {
+    vendorName?: string | null;
+    vendorLocation?: string | null;
+    dispatchBudget?: number | null;
+    totalCost?: number | null;
+    profitLoss?: number | null;
+    deliveryFeeMode?: string | null;
+    poNumber?: string | null;
+}
 
 export interface ProjectData {
     projectId: string;
@@ -28,6 +37,7 @@ export interface ProjectData {
         materialConsumption: string;
         workforce: string[];
     };
+    financials?: FinancialData;
 }
 
 export const STAGES = [

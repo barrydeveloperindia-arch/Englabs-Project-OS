@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "SK Techno",
+        "vendorLocation": "Faridabad",
+        "dispatchBudget": null,
+        "totalCost": null,
+        "profitLoss": null,
+        "deliveryFeeMode": null,
+        "poNumber": "Missing"
     }
 }

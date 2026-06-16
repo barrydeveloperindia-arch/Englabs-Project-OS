@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "Labat Asia",
+        "vendorLocation": "Hoshiarpur",
+        "dispatchBudget": 0,
+        "totalCost": null,
+        "profitLoss": -705,
+        "deliveryFeeMode": null,
+        "poNumber": "P2100-EL12-PO-70870"
     }
 }

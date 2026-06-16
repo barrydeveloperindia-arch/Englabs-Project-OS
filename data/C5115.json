@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "Plastipack",
+        "vendorLocation": "Faridabad",
+        "dispatchBudget": 0,
+        "totalCost": null,
+        "profitLoss": -2607,
+        "deliveryFeeMode": "included",
+        "poNumber": "P2100-EL-12-PO-16878"
     }
 }

@@ -103,132 +103,60 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
             <div className="px-6 flex flex-col gap-2.5 overflow-y-auto dark-scrollbar shrink-0 max-h-[65vh] mb-8">
                 {userRole === 'ADMIN' ? (
                     <>
-                        <div>
-                            <p className="px-5 text-[9px] font-black text-slate-600 uppercase tracking-[0.25em] mb-4 mt-2">1. Command Center</p>
+                        <div className="mt-2 space-y-1">
                             <SidebarButton 
                                 active={currentView === 'ERP_BETA_DASHBOARD'} 
                                 onClick={() => setCurrentView('ERP_BETA_DASHBOARD')} 
                                 icon={<Activity className="w-4.5 h-4.5" />} 
-                                label="LIVE DASHBOARD" 
+                                label="DASHBOARD" 
                             />
                             <SidebarButton 
-                                active={currentView === 'MASTER_TASK_REGISTER'} 
-                                onClick={() => setCurrentView('MASTER_TASK_REGISTER')} 
-                                icon={<CheckCircle2 className="w-4.5 h-4.5" />} 
-                                label="MASTER TASK REGISTER" 
-                            />
-                        </div>
-
-                        <div className="mt-6 pt-6 border-t border-white/5">
-                            <p className="px-5 text-[9px] font-black text-slate-600 uppercase tracking-[0.25em] mb-4">2. Engineering & Projects</p>
-                            <SidebarButton 
-                                active={currentView === 'PROJECTS'} 
-                                onClick={() => setCurrentView('PROJECTS')} 
-                                icon={<Layers className="w-4.5 h-4.5" />} 
-                                label="PROJECT MASTER" 
+                                active={currentView === 'ATTENDANCE'} 
+                                onClick={() => setCurrentView('ATTENDANCE')} 
+                                icon={<Users className="w-4.5 h-4.5" />} 
+                                label="HR TEAM MANAGEMENT" 
                             />
                             <SidebarButton 
-                                active={currentView === 'PROJECT_LOOKUP'} 
-                                onClick={() => setCurrentView('PROJECT_LOOKUP')} 
-                                icon={<Search className="w-4.5 h-4.5" />} 
-                                label="LIFECYCLE MAPPING" 
-                            />
-                            <SidebarButton 
-                                active={currentView === 'PROJECT_BUDGETS'} 
-                                onClick={() => setCurrentView('PROJECT_BUDGETS')} 
+                                active={currentView === 'BILLING'} 
+                                onClick={() => setCurrentView('BILLING')} 
                                 icon={<DollarSign className="w-4.5 h-4.5" />} 
-                                label="BUDGET & COSTING" 
+                                label="ACCOUNTS" 
                             />
-                        </div>
-
-                        <div className="mt-6 pt-6 border-t border-white/5">
-                            <p className="px-5 text-[9px] font-black text-slate-600 uppercase tracking-[0.25em] mb-4">3. Inventory & Supply Chain</p>
+                            <SidebarButton 
+                                active={currentView === 'PROJECTS' || currentView === 'PROJECT_MANAGEMENT_DASHBOARD'} 
+                                onClick={() => setCurrentView('PROJECT_MANAGEMENT_DASHBOARD')} 
+                                icon={<Layers className="w-4.5 h-4.5" />} 
+                                label="PROJECTS" 
+                            />
                             <SidebarButton 
                                 active={currentView === 'INVENTORY'} 
                                 onClick={() => setCurrentView('INVENTORY')} 
                                 icon={<Box className="w-4.5 h-4.5" />} 
-                                label="INVENTORY MASTER" 
+                                label="REPORTS" 
+                            />
+                            <SidebarButton 
+                                active={currentView === 'PORTER_SERVICE'} 
+                                onClick={() => setCurrentView('PORTER_SERVICE')} 
+                                icon={<Truck className="w-4.5 h-4.5" />} 
+                                label="PORTER SERVICE" 
                             />
                             <SidebarButton 
                                 active={currentView === 'STOCK_REPORT'} 
                                 onClick={() => setCurrentView('STOCK_REPORT')} 
                                 icon={<FileText className="w-4.5 h-4.5" />} 
-                                label="STOCK ANALYTICS REPORT" 
-                            />
-                            <SidebarButton 
-                                active={currentView === 'STORE_GUARDIAN'} 
-                                onClick={() => setCurrentView('STORE_GUARDIAN')} 
-                                icon={<Shield className="w-4.5 h-4.5 text-indigo-400" />} 
-                                label="STORE GUARDIAN" 
-                                color="emerald"
-                            />
-                        </div>
-
-                        <div className="mt-6 pt-6 border-t border-white/5">
-                            <p className="px-5 text-[9px] font-black text-slate-600 uppercase tracking-[0.25em] mb-4">4. Logistics & Fleet</p>
-                            <SidebarButton 
-                                active={currentView === 'GATE_REGISTER'} 
-                                onClick={() => setCurrentView('GATE_REGISTER')} 
-                                icon={<Truck className="w-4.5 h-4.5" />} 
-                                label="GATE COMMAND" 
-                            />
-                            <SidebarButton 
-                                active={currentView === 'PORTER_SERVICE'} 
-                                onClick={() => setCurrentView('PORTER_SERVICE')} 
-                                icon={<MapPin className="w-4.5 h-4.5 text-emerald-400" />} 
-                                label="PORTER LOGISTICS" 
-                                color="emerald"
-                            />
-                        </div>
-
-                        <div className="mt-6 pt-6 border-t border-white/5">
-                            <p className="px-5 text-[9px] font-black text-slate-600 uppercase tracking-[0.25em] mb-4">5. Human Capital (HR)</p>
-                            <SidebarButton 
-                                active={currentView === 'ATTENDANCE'} 
-                                onClick={() => alert("Attendance Module Integration Pending")} 
-                                icon={<Users className="w-4.5 h-4.5" />} 
-                                label="ATTENDANCE & ROSTERS" 
+                                label="STORE" 
                             />
                             <SidebarButton 
                                 active={currentView === 'FOOD_REGISTER'} 
                                 onClick={() => setCurrentView('FOOD_REGISTER')} 
                                 icon={<Utensils className="w-4.5 h-4.5" />} 
-                                label="PANTRY CONTROL" 
+                                label="FOOD" 
                             />
                             <SidebarButton 
-                                active={currentView === 'PAYROLL'} 
-                                onClick={() => alert("Payroll Module Integration Pending")} 
-                                icon={<CreditCard className="w-4.5 h-4.5" />} 
-                                label="PAYROLL & ADVANCES" 
-                            />
-                        </div>
-
-                        <div className="mt-6 pt-6 border-t border-white/5">
-                            <p className="px-5 text-[9px] font-black text-slate-600 uppercase tracking-[0.25em] mb-4">6. Finance & Ledger</p>
-                            <SidebarButton 
-                                active={currentView === 'BILLING'} 
-                                onClick={() => setCurrentView('BILLING')} 
-                                icon={<DollarSign className="w-4.5 h-4.5 text-emerald-400" />} 
-                                label="ACCOUNTS & INVOICING" 
-                                color="emerald"
-                            />
-                            <SidebarButton 
-                                active={currentView === 'MANAGEMENT_DASHBOARD'} 
-                                onClick={() => setCurrentView('MANAGEMENT_DASHBOARD')} 
-                                icon={<TrendingUp className="w-4.5 h-4.5 text-emerald-400" />} 
-                                label="AI ACCOUNTING" 
-                                color="emerald"
-                            />
-                        </div>
-
-                        <div className="mt-8 pt-8 border-t border-white/5">
-                            <p className="px-5 text-[9px] font-black text-slate-600 uppercase tracking-[0.25em] mb-5">Vendor Channels</p>
-                            <SidebarButton 
-                                active={currentView === 'SKY5_TERMINAL'} 
-                                onClick={() => setCurrentView('SKY5_TERMINAL')} 
-                                icon={<ChefHat className="w-4.5 h-4.5 text-amber-400" />} 
-                                label="SKY-5 KITCHEN" 
-                                color="amber"
+                                active={currentView === 'SETTINGS'} 
+                                onClick={() => setCurrentView('SETTINGS')} 
+                                icon={<CheckCircle2 className="w-4.5 h-4.5" />} 
+                                label="SETTINGS" 
                             />
                         </div>
                     </>

@@ -63,5 +63,14 @@
             "Parth",
             "Sandeep"
         ]
+    },
+    "financials": {
+        "vendorName": "ADROITEC INFORMATION SYSTEMS PVT LTD",
+        "vendorLocation": "Noida",
+        "dispatchBudget": null,
+        "totalCost": 7910,
+        "profitLoss": null,
+        "deliveryFeeMode": "To pay basis",
+        "poNumber": "P2100-EL12-PO-16870"
     }
 }

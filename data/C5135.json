@@ -63,5 +63,14 @@
             "Parth",
             "Sandeep"
         ]
+    },
+    "financials": {
+        "vendorName": "CADQUA 3D LLP",
+        "vendorLocation": "49/94 SITE IV, GHAZIABAD, Uttar Pradesh, India -, 201010",
+        "dispatchBudget": 0,
+        "totalCost": 12089,
+        "profitLoss": -130,
+        "deliveryFeeMode": "included",
+        "poNumber": "P2100-EL12-PO-16859"
     }
 }

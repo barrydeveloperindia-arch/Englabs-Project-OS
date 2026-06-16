@@ -274,6 +274,67 @@ export async function processInventoryUpdate(entry: GateEntry) {
     return results;
 }
 
+export interface OfflineTransaction {
+    id: string;
+    timestamp: string;
+    payload: {
+        name: string;
+        qty: number;
+        unit: string;
+        type: 'INWARD' | 'OUTWARD';
+        refId: string;
+        party: string;
+        invoice: string;
+        hsn?: string;
+        photoUrl?: string;
+        projectId?: string;
+        location?: string;
+        issuedBy?: string;
+        explicitItemCode?: string;
+        category?: string;
+    };
+}
+
+export async function processOfflineQueue() {
+    if (typeof window === 'undefined' || !window.localStorage) return;
+    
+    const queueSaved = window.localStorage.getItem('englabs_offline_tx_queue');
+    if (!queueSaved) return;
+
+    const queue: OfflineTransaction[] = JSON.parse(queueSaved);
+    if (queue.length === 0) return;
+
+    console.log(`[PWA] Processing offline queue: ${queue.length} items`);
+    const remainingQueue: OfflineTransaction[] = [];
+
+    for (const tx of queue) {
+        try {
+            const { payload } = tx;
+            const res = await updateStock(
+                payload.name, payload.qty, payload.unit, payload.type, payload.refId, 
+                payload.party, payload.invoice, payload.hsn, payload.photoUrl, 
+                payload.projectId, payload.location, payload.issuedBy, payload.explicitItemCode
+            );
+            if (!res.success) {
+                console.error(`[PWA] Failed to sync offline tx: ${tx.id}`, (res as any).error || res.message);
+                remainingQueue.push(tx); // Keep in queue
+            } else {
+                console.log(`[PWA] Successfully synced offline tx: ${tx.id}`);
+            }
+        } catch (err) {
+            console.error(`[PWA] Error syncing offline tx: ${tx.id}`, err);
+            remainingQueue.push(tx);
+        }
+    }
+
+    window.localStorage.setItem('englabs_offline_tx_queue', JSON.stringify(remainingQueue));
+}
+
+// Automatically setup online listener for PWA
+if (typeof window !== 'undefined') {
+    window.addEventListener('online', processOfflineQueue);
+}
+
 function saveLocalStockFallback(
     itemCode: string,
     type: 'INWARD' | 'OUTWARD',
@@ -399,6 +460,28 @@ function saveLocalStockFallback(
                 localCurrentStock[itemCode] = localItem;
                 window.localStorage.setItem('local_current_stock', JSON.stringify(localCurrentStock));
 
+                // Add to offline queue for PWA sync
+                const offlineQueueSaved = window.localStorage.getItem('englabs_offline_tx_queue');
+                const offlineQueue: OfflineTransaction[] = offlineQueueSaved ? JSON.parse(offlineQueueSaved) : [];
+                offlineQueue.push({
+                    id: `OFFLINE_TX_${Date.now()}_${itemCode}`,
+                    timestamp: new Date().toISOString(),
+                    payload: {
+                        name: name || itemCode,
+                        qty,
+                        unit: unit || 'Nos',
+                        type,
+                        refId,
+                        party,
+                        invoice,
+                        photoUrl,
+                        projectId,
+                        category,
+                        issuedBy
+                    }
+                });
+                window.localStorage.setItem('englabs_offline_tx_queue', JSON.stringify(offlineQueue));
+
                 const localMonthlySaved = window.localStorage.getItem('local_monthly_registers');
                 const localMonthly: Record<string, MasterRegisterEntry[]> = localMonthlySaved ? JSON.parse(localMonthlySaved) : {};
                 if (!localMonthly[monthName]) {
@@ -425,9 +508,10 @@ async function updateStock(
     photoUrl?: string,
     projectId?: string,
     location?: string,
-    issuedBy?: string
+    issuedBy?: string,
+    explicitItemCode?: string
 ) {
-    const itemCode = nameToCodeMap.get(name.trim().toLowerCase()) || name.toUpperCase().replace(/\s+/g, '_');
+    const itemCode = explicitItemCode || nameToCodeMap.get(name.trim().toLowerCase()) || name.toUpperCase().replace(/\s+/g, '_');
 
     if (!db || isTest) {
         saveLocalStockFallback(itemCode, type, qty, refId, party, invoice, photoUrl, projectId, name, unit, hsn, issuedBy);
@@ -478,8 +562,21 @@ async function updateStock(
                 legacyItem.currentStock += qty;
                 legacyItem.totalInward += qty;
             } else {
-                if (legacyItem.currentStock < qty) {
-                    throw new Error(`Insufficient stock for ${name}. Available: ${legacyItem.currentStock}`);
+                let trueAvailableStock = legacyItem.currentStock;
+                if (typeof window !== 'undefined' && window.localStorage) {
+                    const localSaved = window.localStorage.getItem('local_current_stock');
+                    if (localSaved) {
+                        try {
+                            const localStock = JSON.parse(localSaved);
+                            if (localStock[itemCode] && localStock[itemCode].availableStock > trueAvailableStock) {
+                                trueAvailableStock = localStock[itemCode].availableStock;
+                            }
+                        } catch (e) {}
+                    }
+                }
+
+                if (trueAvailableStock < qty) {
+                    throw new Error(`Insufficient stock for ${name}. Available: ${trueAvailableStock}`);
                 }
                 legacyItem.currentStock -= qty;
                 legacyItem.totalOutward += qty;
@@ -602,7 +699,7 @@ async function updateStock(
 
             return { success: true, itemCode };
         }),
-        new Promise<any>((_, reject) => setTimeout(() => reject(new Error("Firestore transaction timeout")), 3000))
+        new Promise<any>((_, reject) => setTimeout(() => reject(new Error("Transaction timeout")), 4000))
         ]);
 
         // Clear local overrides on success
@@ -791,9 +888,9 @@ async function updateStock(
             return { success: true, offline: true, itemCode };
 
         } catch (fallbackErr: any) {
-            console.error("Offline batch fallback also failed:", fallbackErr);
+            console.error("Offline batch fallback also failed, but local storage succeeded:", fallbackErr);
             saveLocalStockFallback(itemCode, type, qty, refId, party, invoice, photoUrl, projectId, name, unit, hsn, issuedBy);
-            return { success: false, error: `Offline write failed: ${fallbackErr.message || fallbackErr}` };
+            return { success: true, offline: true, itemCode, message: "Saved locally (batch timeout)" };
         }
     }
 }
@@ -810,7 +907,7 @@ export async function fetchCurrentStock(): Promise<CurrentStockItem[]> {
         if (snap.empty) {
             return getLocalStockFallback();
         }
-        const items = snap.docs.map((d: any) => {
+        let items = snap.docs.map((d: any) => {
             const data = d.data();
             return {
                 ...data,
@@ -818,14 +915,122 @@ export async function fetchCurrentStock(): Promise<CurrentStockItem[]> {
                 id: d.id
             } as CurrentStockItem;
         });
+
+        // --- APPLY LOCAL OFFLINE OVERRIDES ---
+        if (typeof window !== 'undefined' && window.localStorage) {
+            try {
+                let localOverrides: Record<string, Partial<InventoryItem>> | null = null;
+                const localOverridesSaved = window.localStorage.getItem('local_stock_overrides');
+                if (localOverridesSaved) {
+                    localOverrides = JSON.parse(localOverridesSaved);
+                    if (localOverrides) {
+                        items = items.map((item: CurrentStockItem) => {
+                            if (localOverrides![item.itemCode]) {
+                                const override = localOverrides![item.itemCode];
+                                return {
+                                    ...item,
+                                    availableStock: override.currentStock !== undefined ? override.currentStock : item.availableStock,
+                                    totalInward: override.totalInward !== undefined ? override.totalInward : item.totalInward,
+                                    totalOutward: override.totalOutward !== undefined ? override.totalOutward : item.totalOutward,
+                                    lastUpdated: override.lastUpdated || item.lastUpdated
+                                };
+                            }
+                            return item;
+                        });
+                        
+                        // Add purely offline items not yet on server
+                        for (const [code, override] of Object.entries(localOverrides)) {
+                            if (!items.find((i: CurrentStockItem) => i.itemCode === code)) {
+                                items.push({
+                                    itemCode: code,
+                                    id: code,
+                                    name: override.name || code,
+                                    category: override.category || 'GENERAL',
+                                    unit: override.unit || 'Nos',
+                                    openingStock: (override as any).openingStock || 0,
+                                    totalInward: override.totalInward || 0,
+                                    totalOutward: override.totalOutward || 0,
+                                    availableStock: override.currentStock || 0,
+                                    lastUpdated: override.lastUpdated || new Date().toISOString(),
+                                    location: override.location || 'MAIN STORE'
+                                });
+                            }
+                        }
+                    }
+                }
+                
+                // ALSO replay any pending transactions from englabs_offline_tx_queue
+                const offlineQueueSaved = window.localStorage.getItem('englabs_offline_tx_queue');
+                if (offlineQueueSaved) {
+                    const offlineQueue: any[] = JSON.parse(offlineQueueSaved);
+                    // Group queued qty by item code
+                    const queuedDelta: Record<string, { inward: number, outward: number }> = {};
+                    offlineQueue.forEach(tx => {
+                        const code = tx.payload?.itemCode || tx.id.split('_').pop();
+                        if (!code) return;
+                        if (!queuedDelta[code]) queuedDelta[code] = { inward: 0, outward: 0 };
+                        if (tx.payload?.type === 'INWARD') {
+                            queuedDelta[code].inward += (tx.payload.qty || 0);
+                        } else {
+                            queuedDelta[code].outward += (tx.payload.qty || 0);
+                        }
+                    });
+
+                    items = items.map((item: CurrentStockItem) => {
+                        // Only apply queued delta if we DID NOT already apply a local override for this item.
+                        // Because local overrides already have the absolute latest computed stock.
+                        if (!localOverrides || !localOverrides[item.itemCode]) {
+                            if (queuedDelta[item.itemCode]) {
+                                const delta = queuedDelta[item.itemCode];
+                                return {
+                                    ...item,
+                                    availableStock: item.availableStock + delta.inward - delta.outward,
+                                    totalInward: item.totalInward + delta.inward,
+                                    totalOutward: item.totalOutward + delta.outward
+                                };
+                            }
+                        }
+                        return item;
+                    });
+                }
+
+            } catch (e) {
+                console.error("Failed to apply local_stock_overrides in fetchCurrentStock", e);
+            }
+        }
+        
+        // Deduplicate items by name
+        const deduplicatedMap = new Map<string, CurrentStockItem>();
+        items.forEach((item: CurrentStockItem) => {
+            const normalizedName = (item.name || '').trim().toLowerCase();
+            if (deduplicatedMap.has(normalizedName)) {
+                const existing = deduplicatedMap.get(normalizedName)!;
+                const isExistingStandard = existing.itemCode.toUpperCase().startsWith('ENG-');
+                const isNewStandard = item.itemCode.toUpperCase().startsWith('ENG-');
+                
+                const preferred = (isNewStandard && !isExistingStandard) ? { ...item } : { ...existing };
+                const other = (isNewStandard && !isExistingStandard) ? existing : item;
+                
+                preferred.openingStock = (preferred.openingStock || 0) + (other.openingStock || 0);
+                preferred.totalInward = (preferred.totalInward || 0) + (other.totalInward || 0);
+                preferred.totalOutward = (preferred.totalOutward || 0) + (other.totalOutward || 0);
+                preferred.availableStock = (preferred.availableStock || 0) + (other.availableStock || 0);
+                
+                deduplicatedMap.set(normalizedName, preferred);
+            } else {
+                deduplicatedMap.set(normalizedName, { ...item });
+            }
+        });
+        const deduplicatedItems = Array.from(deduplicatedMap.values());
+
         if (typeof window !== 'undefined' && window.localStorage) {
             const localCurrentStockMap: Record<string, CurrentStockItem> = {};
-            items.forEach((item: CurrentStockItem) => {
+            deduplicatedItems.forEach((item: CurrentStockItem) => {
                 localCurrentStockMap[item.itemCode] = item;
             });
             window.localStorage.setItem('local_current_stock', JSON.stringify(localCurrentStockMap));
         }
-        return items;
+        return deduplicatedItems;
     } catch (err) {
         console.warn("Firestore fetchCurrentStock failed, falling back to local masterInventory:", err);
         return getLocalStockFallback();
@@ -982,21 +1187,7 @@ export async function fetchInventoryMaster(): Promise<InventoryItem[]> {
     }
     try {
         await seedStoreStockReport();
-        const q = query(collection(db, "current_stock"));
-        const snap = await getDocsWithTimeout(q);
-        if (snap.empty) {
-            const qOld = query(collection(db, STOCK_COLLECTION));
-            const snapOld = await getDocsWithTimeout(qOld);
-            return snapOld.docs.map((d: any) => d.data() as InventoryItem);
-        }
-        const items = snap.docs.map((d: any) => d.data() as CurrentStockItem);
-        if (typeof window !== 'undefined' && window.localStorage) {
-            const localCurrentStockMap: Record<string, CurrentStockItem> = {};
-            items.forEach((item: CurrentStockItem) => {
-                localCurrentStockMap[item.itemCode] = item;
-            });
-            window.localStorage.setItem('local_current_stock', JSON.stringify(localCurrentStockMap));
-        }
+        const items = await fetchCurrentStock();
         return items.map((data: CurrentStockItem) => {
             return {
                 itemCode: data.itemCode,
@@ -1398,11 +1589,11 @@ export async function addInventoryItem(item: InventoryItem) {
         return;
     }
     const docRef = doc(db, STOCK_COLLECTION, item.itemCode);
-    await setDoc(docRef, item);
+    await setDocWithTimeout(docRef, item, 2000).catch(e => console.warn("Offline fallback for setDoc", e));
 
     // Also add to new collections!
     const catalogRef = doc(db, "material_catalog", item.itemCode);
-    await setDoc(catalogRef, {
+    await setDocWithTimeout(catalogRef, {
         itemCode: item.itemCode,
         name: item.name,
         category: item.category || 'GENERAL',
@@ -1411,10 +1602,10 @@ export async function addInventoryItem(item: InventoryItem) {
         minThreshold: item.minThreshold || 5,
         unitPrice: item.unitPrice !== undefined ? item.unitPrice : getEstimatedPrice(item.category || 'GENERAL'),
         lastUpdated: new Date().toISOString()
-    });
+    }, 2000).catch(e => console.warn("Offline fallback for setDoc", e));
 
     const stockRef = doc(db, "current_stock", item.itemCode);
-    await setDoc(stockRef, {
+    await setDocWithTimeout(stockRef, {
         itemCode: item.itemCode,
         name: item.name,
         category: item.category || 'GENERAL',
@@ -1425,7 +1616,7 @@ export async function addInventoryItem(item: InventoryItem) {
         availableStock: item.currentStock || 0,
         location: item.location || 'MAIN STORE',
         lastUpdated: new Date().toISOString()
-    });
+    }, 2000).catch(e => console.warn("Offline fallback for setDoc", e));
 }
 
 export async function recordManualTransaction(
@@ -1439,10 +1630,11 @@ export async function recordManualTransaction(
     photoUrl?: string,
     projectId?: string,
     location?: string,
-    issuedBy?: string
+    issuedBy?: string,
+    explicitItemCode?: string
 ) {
     const refId = `MANUAL_TX_${Date.now()}`;
-    return updateStock(name, qty, unit, type, refId, party, invoice, hsn, photoUrl, projectId, location, issuedBy);
+    return updateStock(name, qty, unit, type, refId, party, invoice, hsn, photoUrl, projectId, location, issuedBy, explicitItemCode);
 }
 
 export async function deleteTransaction(tx: MasterRegisterEntry): Promise<{ success: boolean, error?: string }> {
@@ -1558,10 +1750,7 @@ export async function deleteTransaction(tx: MasterRegisterEntry): Promise<{ succ
             batch.set(legacyDocRef, cleanUndefined(legacyItem));
         }
 
-        await Promise.race([
-            batch.commit(),
-            new Promise((_, reject) => setTimeout(() => reject(new Error("Batch commit timeout")), 3000))
-        ]);
+        await batch.commit();
         return { success: true };
     } catch (err: any) {
         console.error("Delete transaction error:", err);

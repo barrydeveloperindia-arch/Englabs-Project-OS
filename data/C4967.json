@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "PLASTIPACK INDUSTRIES",
+        "vendorLocation": "Faridabad",
+        "dispatchBudget": 0,
+        "totalCost": 25872,
+        "profitLoss": -1319,
+        "deliveryFeeMode": "To pay basis",
+        "poNumber": "P2100-EL12-PO-74457"
     }
 }

@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "Ankit Industrial",
+        "vendorLocation": "Faridabad",
+        "dispatchBudget": 0,
+        "totalCost": null,
+        "profitLoss": -280,
+        "deliveryFeeMode": null,
+        "poNumber": "Missing"
     }
 }

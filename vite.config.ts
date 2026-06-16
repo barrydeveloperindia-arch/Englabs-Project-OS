@@ -127,7 +127,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
       '@components': path.resolve(__dirname, './src/components'),
       '@common': path.resolve(__dirname, './src/components/common'),
-      '@features': path.resolve(__dirname, './src/components/features'),
+      '@features': path.resolve(__dirname, './src/features'),
       '@lib': path.resolve(__dirname, './src/lib'),
       '@services': path.resolve(__dirname, './src/lib/services'),
       '@domain': path.resolve(__dirname, './src/lib/domain'),

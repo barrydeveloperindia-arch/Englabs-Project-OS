@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "Aebocode",
+        "vendorLocation": "Panchkula",
+        "dispatchBudget": 0,
+        "totalCost": null,
+        "profitLoss": -230,
+        "deliveryFeeMode": "To pay basis",
+        "poNumber": "P2100-EL12-PO-87452"
     }
 }

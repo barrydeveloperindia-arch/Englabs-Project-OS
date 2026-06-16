@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "Cadqua",
+        "vendorLocation": "Ghaziabad",
+        "dispatchBudget": 0,
+        "totalCost": null,
+        "profitLoss": -390,
+        "deliveryFeeMode": "included",
+        "poNumber": "P2100-EL12-PO-74536"
     }
 }

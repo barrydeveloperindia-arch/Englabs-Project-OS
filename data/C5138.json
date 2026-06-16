@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "Excel",
+        "vendorLocation": "Faridabad",
+        "dispatchBudget": 0,
+        "totalCost": null,
+        "profitLoss": -167,
+        "deliveryFeeMode": "Charged Separately in invoice",
+        "poNumber": "P2100-EL12-PO-56766"
     }
 }

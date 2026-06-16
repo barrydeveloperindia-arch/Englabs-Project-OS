@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "Talekar Group Of Company",
+        "vendorLocation": "Pune",
+        "dispatchBudget": null,
+        "totalCost": 152300,
+        "profitLoss": null,
+        "deliveryFeeMode": "To pay basis",
+        "poNumber": "P2100-EL12-PO-16750"
     }
 }

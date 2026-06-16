@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "Talekar Group Of Company",
+        "vendorLocation": "GAT no 1419, Shiv Shankar Housing Society 1,, Mhetre wasti, Chikhali, Pimpri Chinchwad, Pune",
+        "dispatchBudget": 23000,
+        "totalCost": 1091040,
+        "profitLoss": 22700,
+        "deliveryFeeMode": "included",
+        "poNumber": "P2100-EL12-PO-16803"
     }
 }

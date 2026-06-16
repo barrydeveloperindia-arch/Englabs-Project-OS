@@ -32,25 +32,27 @@ import {
     MapPin
 } from 'lucide-react';
 import NewProjectModal from '@common/NewProjectModal';
-import GateRegister from '@features/logistics/GateRegister';
-import Showroom from '@features/system/Showroom';
+import GateRegister from '@features/porter/GateRegister';
+import Showroom from '@features/dashboard/Showroom';
 import FoodRegister from '@features/food/FoodRegister';
-import SystemGuardDashboard from '@features/system/SystemGuardDashboard';
-import BillingDashboard from '@features/project/BillingDashboard';
-import { ManagementDashboard } from '@features/accounting/ManagementDashboard';
-import { ERPBetaLayout } from '@features/erp/ERPBetaLayout';
-import DigitalEvidence from '@features/system/DigitalEvidence';
-import InventoryManager from '@features/inventory/InventoryManager';
-import Sky5Terminal from '@features/system/Sky5Terminal';
-import StoreStockReport from '@features/inventory/StoreStockReport';
-import StoreGuardianDashboard from '@features/inventory/StoreGuardianDashboard';
-import MobileDashboard from '@features/system/MobileDashboard';
+import SystemGuardDashboard from '@features/dashboard/SystemGuardDashboard';
+import BillingDashboard from '@features/projects/BillingDashboard';
+import { ManagementDashboard } from '@features/accounts/ManagementDashboard';
+import { RequireRole } from './components/auth/RequireRole';
+import DigitalEvidence from '@features/dashboard/DigitalEvidence';
+import InventoryManager from '@features/store/InventoryManager';
+import Sky5Terminal from '@features/dashboard/Sky5Terminal';
+import StoreStockReport from '@features/reports/StoreStockReport';
+import StoreGuardianDashboard from '@features/store/StoreGuardianDashboard';
+import MobileDashboard from '@features/dashboard/MobileDashboard';
+import HRDashboard from '@features/hr/HRDashboard';
+import { PayrollTerminal } from '@features/hr/PayrollTerminal';
 import { STAFF_ROSTER } from '@config/constants';
 import AddStaffModal from '@common/AddStaffModal';
 import PorterRegister from '@features/porter/PorterRegister';
-import HandoverDashboard from '@features/project/HandoverDashboard';
-import ProjectLookupDashboard from '@features/project/ProjectLookupDashboard';
-import { ProjectBudgets } from '@features/project/ProjectBudgets';
+import HandoverDashboard from '@features/projects/HandoverDashboard';
+import ProjectLookupDashboard from '@features/projects/ProjectLookupDashboard';
+import { ProjectBudgets } from '@features/projects/ProjectBudgets';
 import { ProjectData, STAGES, ProjectStage } from '@domain/project';
 import { logAction, AuditLog } from '@domain/system_guard';
 import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry, deleteGateEntryFromFirebase } from '@services/database_service';
@@ -59,8 +61,9 @@ import forensicRegistry from '@data/forensic_gate_registry.json';
 import porterForensic from '@data/porter_missions_forensic.json';
 import { DesktopSidebar } from '@components/layout/DesktopSidebar';
 import { MobileLayout } from '@components/layout/MobileLayout';
-import { ProjectListGrid } from '@features/project/ProjectListGrid';
-import { ProjectDashboard } from '@features/project/ProjectDashboard';
+import { ProjectListGrid } from '@features/projects/ProjectListGrid';
+import { ProjectDashboard } from '@features/projects/ProjectDashboard';
+import { ProjectManagementDashboard } from '@features/projects/ProjectManagementDashboard';
 
 
 const staticProjects: ProjectData[] = [];
@@ -117,7 +120,7 @@ interface SidebarButtonProps {
     color?: 'emerald' | 'amber';
 }
 
-type View = 'HOME' | 'PROJECTS' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'BILLING' | 'EVIDENCE' | 'INVENTORY' | 'SKY5_TERMINAL' | 'STOCK_REPORT' | 'PORTER_SERVICE' | 'PROJECT_LOOKUP' | 'PROJECT_BUDGETS' | 'STORE_GUARDIAN' | 'MANAGEMENT_DASHBOARD' | 'ERP_BETA_DASHBOARD' | 'GATE_DISPLAY' | 'MASTER_TASK_REGISTER' | 'ATTENDANCE' | 'PAYROLL';
+type View = 'HOME' | 'PROJECTS' | 'PROJECT_MANAGEMENT_DASHBOARD' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'BILLING' | 'EVIDENCE' | 'INVENTORY' | 'SKY5_TERMINAL' | 'STOCK_REPORT' | 'PORTER_SERVICE' | 'PROJECT_LOOKUP' | 'PROJECT_BUDGETS' | 'STORE_GUARDIAN' | 'MANAGEMENT_DASHBOARD' | 'SETTINGS' | 'GATE_DISPLAY' | 'MASTER_TASK_REGISTER' | 'ATTENDANCE' | 'PAYROLL';
 
 const SidebarButton: React.FC<SidebarButtonProps> = ({ active, onClick, icon, label, color = 'emerald' }) => {
     const activeClass = color === 'emerald' 
@@ -244,6 +247,13 @@ const App: React.FC = () => {
 
             const forensic = (porterForensic as any[]).filter((t: any) => !deletedSet.has(t.id));
             let trips = saved && saved !== 'undefined' ? JSON.parse(saved) : [];
+            trips = trips.map((t: any) => {
+                if ((t.id === 'PTR-2026-0020' && t.advanceAmount === 1000) || 
+                    (t.id === 'PTR-2026-0021' && t.advanceAmount === 4000)) {
+                    return { ...t, advanceAmount: 0, remainingBalance: t.grossAmount };
+                }
+                return t;
+            });
             trips = trips.filter((t: any) => !deletedSet.has(t.id) && !(t.id === 'PTR-2026-0022' && t.grossAmount > 1000));
             
             const forensicMap = new Map(forensic.map(f => [f.id, f]));
@@ -288,6 +298,8 @@ const App: React.FC = () => {
         }
     });
 
+    // Cleanup complete. Removed.
+
     // REACTIVE FORENSIC SYNC: Ensures disk-based updates (like new JSON entries) are merged into state
     useEffect(() => {
         setPorterTrips(prev => {
@@ -328,7 +340,7 @@ const App: React.FC = () => {
     const [currentView, setCurrentView] = useState<View>(() => {
         const role = localStorage.getItem('englabs_user_role');
         const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-        return role === 'STAFF' ? 'STOCK_REPORT' : (isMobile ? 'HOME' : 'PROJECTS');
+        return role === 'STAFF' ? 'STOCK_REPORT' : (isMobile ? 'HOME' : 'PROJECT_MANAGEMENT_DASHBOARD');
     });
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -437,27 +449,29 @@ const App: React.FC = () => {
         localStorage.setItem('englabs_porter_v1', JSON.stringify(porterTrips));
     }, [porterTrips]);
 
-    // One-time startup cleanup of old, invalid PTR-2026-0022 (₹5,400) from localStorage
+    // One-time startup cleanup of old, invalid PTR-2026-0022 (₹5,400) and wrong advances from localStorage
     useEffect(() => {
         try {
-            const saved = localStorage.getItem('englabs_porter_v1');
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                const filtered = parsed.filter((t: any) => !(t.id === 'PTR-2026-0022' && t.grossAmount > 1000));
-                if (parsed.length !== filtered.length) {
-                    localStorage.setItem('englabs_porter_v1', JSON.stringify(filtered));
+            setPorterTrips(prev => {
+                let changed = false;
+                const updated = prev.map(t => {
+                    if ((t.id === 'PTR-2026-0020' && t.advanceAmount !== 0) || 
+                        (t.id === 'PTR-2026-0021' && t.advanceAmount !== 0)) {
+                        changed = true;
+                        return { ...t, advanceAmount: 0, remainingBalance: t.grossAmount };
+                    }
+                    return t;
+                }).filter((t: any) => !(t.id === 'PTR-2026-0022' && t.grossAmount > 1000));
+                
+                if (changed || updated.length !== prev.length) {
+                    localStorage.setItem('englabs_porter_v1', JSON.stringify(updated));
+                    localStorage.setItem('englabs_porter_backup_vault', JSON.stringify(updated));
+                    return updated;
                 }
-            }
-            const backup = localStorage.getItem('englabs_porter_backup_vault');
-            if (backup) {
-                const parsed = JSON.parse(backup);
-                const filtered = parsed.filter((t: any) => !(t.id === 'PTR-2026-0022' && t.grossAmount > 1000));
-                if (parsed.length !== filtered.length) {
-                    localStorage.setItem('englabs_porter_backup_vault', JSON.stringify(filtered));
-                }
-            }
+                return prev;
+            });
         } catch (e) {
-            console.error("Cleanup of old invalid PTR-2026-0022 failed:", e);
+            console.error("Cleanup of old invalid records failed:", e);
         }
     }, []);
 
@@ -558,9 +572,10 @@ const App: React.FC = () => {
                 'OUTWARD',
                 checkoutStaffName.trim(),
                 "HOMEPAGE_CHECKOUT",
+                selectedProject?.projectId,
                 undefined,
                 undefined,
-                selectedProject?.projectId
+                selectedItem.itemCode
             ) as any;
 
             if (res.success) {
@@ -676,9 +691,7 @@ const App: React.FC = () => {
         return <HandoverDashboard onAcknowledge={handleAcknowledgeHandover} />;
     }
 
-    if (currentView === 'ERP_BETA_DASHBOARD') {
-        return <ERPBetaLayout onExit={() => setCurrentView('PROJECTS')} />;
-    }
+
 
     return (
         <div className="flex h-screen w-screen bg-[#F8FAFC] overflow-hidden text-slate-900 font-sans print:h-auto print:w-auto print:overflow-visible print:bg-white">
@@ -692,7 +705,12 @@ const App: React.FC = () => {
             />
 
             <div className="flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden pb-16 md:pb-0">
-                {currentView === 'PROJECTS' ? (
+                {currentView === 'PROJECT_MANAGEMENT_DASHBOARD' ? (
+                    <ProjectManagementDashboard 
+                        projects={projects}
+                        onSelectProject={() => setCurrentView('PROJECTS')}
+                    />
+                ) : currentView === 'PROJECTS' ? (
                     !selectedProject ? (
                         <ProjectListGrid 
                             projects={projects}
@@ -757,10 +775,22 @@ const App: React.FC = () => {
                     />
                 ) : currentView === 'FOOD_REGISTER' ? (
                     <FoodRegister onLog={(log) => setAuditLogs(prev => [log, ...prev])} />
+                ) : currentView === 'ATTENDANCE' ? (
+                    <RequireRole role="ADMIN">
+                        <HRDashboard />
+                    </RequireRole>
+                ) : currentView === 'PAYROLL' ? (
+                    <RequireRole role="ADMIN">
+                        <PayrollTerminal />
+                    </RequireRole>
                 ) : currentView === 'BILLING' ? (
-                    <BillingDashboard />
+                    <RequireRole role="ADMIN">
+                        <BillingDashboard />
+                    </RequireRole>
                 ) : currentView === 'MANAGEMENT_DASHBOARD' ? (
-                    <ManagementDashboard />
+                    <RequireRole role="ADMIN">
+                        <ManagementDashboard />
+                    </RequireRole>
                 ) : currentView === 'SKY5_TERMINAL' ? (
                     <Sky5Terminal />
                 ) : currentView === 'INVENTORY' ? (
@@ -794,6 +824,14 @@ const App: React.FC = () => {
                             }
                         }}
                     />
+                ) : currentView === 'SETTINGS' ? (
+                    <div className="flex-1 flex flex-col items-center justify-center bg-slate-50 border border-slate-200 rounded-3xl m-6 shadow-sm">
+                        <div className="bg-emerald-500/10 p-6 rounded-full mb-6">
+                            <Settings className="w-12 h-12 text-emerald-500" />
+                        </div>
+                        <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase mb-2">System Settings</h2>
+                        <p className="text-slate-500 font-medium max-w-md text-center">Global configuration and administrative preferences are managed here.</p>
+                    </div>
                 ) : currentView === 'HOME' ? (
                     <div className="md:hidden h-full">
                         <MobileDashboard 

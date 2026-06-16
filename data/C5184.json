@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "SG Engineering Works",
+        "vendorLocation": "Hoshiarpur",
+        "dispatchBudget": 0,
+        "totalCost": null,
+        "profitLoss": -184,
+        "deliveryFeeMode": "To pay basis",
+        "poNumber": "P2100-EL-12-PO-16890"
     }
 }

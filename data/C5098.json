@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "M/s. Amuse",
+        "vendorLocation": "Survey No 139/A, Plot 3 & 4, Oragadam, Panruti, Sriperumbudur Tk",
+        "dispatchBudget": 1700,
+        "totalCost": 32047.8,
+        "profitLoss": 1440,
+        "deliveryFeeMode": "Charged Separately in invoice",
+        "poNumber": "P2100-EL12-PO-16843"
     }
 }

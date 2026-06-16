@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "CADQUA 3D LLP",
+        "vendorLocation": "49/94 SITE IV, GHAZIABAD, Uttar Pradesh, India -, 201010",
+        "dispatchBudget": 0,
+        "totalCost": 16000,
+        "profitLoss": -550,
+        "deliveryFeeMode": null,
+        "poNumber": "P2100-EL12-PO-62000"
     }
 }

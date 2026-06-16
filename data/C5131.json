@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED",
+        "vendorLocation": "D - 58, 1st floor, Okhla Industrial Area Phase - 1",
+        "dispatchBudget": 1500,
+        "totalCost": 37775.62,
+        "profitLoss": 1150,
+        "deliveryFeeMode": "included",
+        "poNumber": "P2100-EL12-PO-16857"
     }
 }

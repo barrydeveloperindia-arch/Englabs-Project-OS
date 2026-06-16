@@ -52,5 +52,14 @@
         "workforce": [
             "TBD"
         ]
+    },
+    "financials": {
+        "vendorName": "PLASTIPACK INDUSTRIES",
+        "vendorLocation": "Plot No. 5, New Dif Industrial Area, Faridabad",
+        "dispatchBudget": 0,
+        "totalCost": 31104,
+        "profitLoss": -704,
+        "deliveryFeeMode": "included",
+        "poNumber": "P2100-EL12-PO-16848"
     }
 }
