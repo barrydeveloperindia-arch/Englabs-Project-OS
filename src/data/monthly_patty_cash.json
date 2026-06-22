@@ -1,20 +1,20 @@
 {
     "Jan_2026": [
         {
-            "date": "2026-01-01 00:00:00",
+            "date": "2026-01-01",
             "details": "Last Month Balance",
-            "cr": 0.0,
+            "cr": 818.0,
             "dr": 0.0,
-            "balance": 0.0,
+            "balance": 818.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-02 00:00:00",
+            "date": "2026-01-02",
             "details": "Porter Frome Excel to Neyracle Health C4850",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 400.0,
+            "balance": 418.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -22,17 +22,17 @@
             "date": null,
             "details": "Porter Powder Coating pickup from CMS C4878",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 110.0,
+            "balance": 308.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-03 00:00:00",
+            "date": "2026-01-03",
             "details": "Porter From C4880 MSL PACIFIC LABS TO Englabs ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 139.0,
+            "balance": 169.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -40,26 +40,26 @@
             "date": null,
             "details": "Porter From C4880 Englabs to Aebocode",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 82.0,
+            "balance": 87.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-05 00:00:00",
+            "date": "2026-01-05",
             "details": "Notary From Arjun ji",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 1620.0,
+            "dr": 50.0,
+            "balance": 1657.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-06 00:00:00",
+            "date": "2026-01-06",
             "details": "Milk bill From 22 Dec2025 to 6th Jan 2026 (Vender Details : \u2026....................................)",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1350.0,
+            "balance": 307.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -67,17 +67,17 @@
             "date": null,
             "details": "Milk & Ginger bill Only Sunday by Arjun (Vender Details:\u2026...........................................)",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 100.0,
+            "balance": 207.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-07 00:00:00",
+            "date": "2026-01-07",
             "details": "Porter From C4465 Ankit Industrial to Englabs",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 3000.0,
+            "dr": 220.0,
+            "balance": 2987.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -85,8 +85,8 @@
             "date": null,
             "details": "Porter From Elin to Englabs C4873",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 550.0,
+            "balance": 2437.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -94,17 +94,17 @@
             "date": null,
             "details": "Porter From Labat Asia to Englabs C4803",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 274.0,
+            "balance": 2163.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-08 00:00:00",
+            "date": "2026-01-08",
             "details": "Porter From Talekar to Airport C4845",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 400.0,
+            "balance": 1763.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -112,8 +112,8 @@
             "date": null,
             "details": "Porter From Workaad to Railway Station C4888",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 250.0,
+            "balance": 1513.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -121,8 +121,8 @@
             "date": null,
             "details": "Porter From Railway Station to Englabs  C4888",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 150.0,
+            "balance": 1363.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -130,8 +130,8 @@
             "date": null,
             "details": "Porter Englabs to Excel Sample C4842",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 300.0,
+            "balance": 1063.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -139,8 +139,8 @@
             "date": null,
             "details": "Porter Aebocode courier C4728",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 106.0,
+            "balance": 957.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -148,8 +148,8 @@
             "date": null,
             "details": "Porter From CMS to Englabs C4874",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 84.0,
+            "balance": 873.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -157,26 +157,26 @@
             "date": null,
             "details": "Pickup",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 500.0,
+            "balance": 373.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-09 00:00:00",
+            "date": "2026-01-09",
             "details": "Milk &bill Only  by Arjun (Vender Details:\u2026...........................................)",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 64.0,
+            "balance": 309.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
             "date": null,
             "details": "Porter  FROM PLASTICPACK TO CORIER GUY Project ID C4882",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 4000.0,
+            "dr": 117.0,
+            "balance": 4192.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -184,17 +184,17 @@
             "date": null,
             "details": "Tea No Details",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 20.0,
+            "balance": 4172.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-10 00:00:00",
+            "date": "2026-01-10",
             "details": "Exp  223+167",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 390.0,
+            "balance": 3782.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -202,26 +202,26 @@
             "date": null,
             "details": "Porter From Talekar to Airport C4891",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 280.0,
+            "balance": 3502.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-11 00:00:00",
+            "date": "2026-01-11",
             "details": "Porter From Airport to Talekar  C4891",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 380.0,
+            "balance": 3122.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-13 00:00:00",
+            "date": "2026-01-13",
             "details": "C4465 Not Bolt JV Mill",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 516.0,
+            "balance": 2606.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -229,17 +229,17 @@
             "date": null,
             "details": "Porter From Pacificlab to Englabs",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 117.0,
+            "balance": 2489.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
             "date": null,
             "details": "Chandigarh airport Parking Bill Payments (Shiv Narayan Driver Englabs)",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 5000.0,
+            "dr": 40.0,
+            "balance": 7449.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -247,8 +247,8 @@
             "date": null,
             "details": "Milk & Ginger bill Only Sunday by Arjun (Vender Details:\u2026...........................................)",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 30.0,
+            "balance": 7419.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -256,8 +256,8 @@
             "date": null,
             "details": "Sugar & Tea ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 329.0,
+            "balance": 7090.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -265,8 +265,8 @@
             "date": null,
             "details": "Chandigarh airport Parking Bill Payments (Shiv Narayan Driver Englabs)",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 40.0,
+            "balance": 7050.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -274,8 +274,8 @@
             "date": null,
             "details": "Porter From CMS to Englabs C4867",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 122.0,
+            "balance": 6928.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -283,8 +283,8 @@
             "date": null,
             "details": "Porter From Englabs to DTDC C4867",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 105.0,
+            "balance": 6823.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -292,8 +292,8 @@
             "date": null,
             "details": "An unexplained cash discrepancy of 168 was noted at the site.",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 168.0,
+            "balance": 6655.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -301,17 +301,17 @@
             "date": null,
             "details": "Porter From Excel To Design Mind C4892 & C4895",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 282.0,
+            "balance": 6373.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-14 00:00:00",
+            "date": "2026-01-14",
             "details": "Print A0 Size Saha, Ambala",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 260.0,
+            "balance": 6113.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -319,8 +319,8 @@
             "date": null,
             "details": "Porter From Talekar to Airport C4891",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 300.0,
+            "balance": 5813.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -328,8 +328,8 @@
             "date": null,
             "details": "Porter From Faridabaad to Kyocera C4898",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 577.0,
+            "balance": 5236.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -337,8 +337,8 @@
             "date": null,
             "details": "Porter From Amuse 3D to Airport Chennai",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 650.0,
+            "balance": 4586.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -346,8 +346,8 @@
             "date": null,
             "details": "Porter From New Panchkula graphic to HSVP Sec 6 Panchkula Print ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 71.0,
+            "balance": 4515.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -355,8 +355,8 @@
             "date": null,
             "details": "Porter From Airport to Henkel C4891",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 550.0,
+            "balance": 3965.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -364,8 +364,8 @@
             "date": null,
             "details": "Chandigarh airport Parking Bill Payments (Shiv Narayan Driver Englabs)",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 40.0,
+            "balance": 3925.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -373,8 +373,8 @@
             "date": null,
             "details": "Porter From Englabs to Chandigarh Paints ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 107.0,
+            "balance": 3818.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -382,17 +382,17 @@
             "date": null,
             "details": "Puchased Materials (Slipper-5, Zip Lock - 6, Tissu Roll - 24, Garbej Bag - 20, Petro;-rs100) By Arjun, ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 2660.0,
+            "balance": 1158.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-15 00:00:00",
+            "date": "2026-01-15",
             "details": "Porter From Rapidroto to Airport (11-01-2026) by Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 410.0,
+            "balance": 748.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -400,8 +400,8 @@
             "date": null,
             "details": "Porter From Faridabad to Bajaj Courier by Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 350.0,
+            "balance": 398.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -409,8 +409,8 @@
             "date": null,
             "details": "Puchased Materials (Pen 20Nos) By Arjun, ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 200.0,
+            "balance": 198.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -418,17 +418,17 @@
             "date": null,
             "details": "Chandigarh airport Parking Bill Payments (Shiv Narayan Driver Englabs)",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 40.0,
+            "balance": 158.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-16 00:00:00",
+            "date": "2026-01-16",
             "details": "Porter From  Englabs to Aebocode C4811",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 5000.0,
+            "dr": 85.0,
+            "balance": 5073.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -436,8 +436,8 @@
             "date": null,
             "details": "Porter From Excel to Design Mind C4892 & C4842 by Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 290.0,
+            "balance": 4783.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -445,26 +445,26 @@
             "date": null,
             "details": "Airport Payments shivnarayan by, Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 100.0,
+            "balance": 4683.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-17 00:00:00",
+            "date": "2026-01-17",
             "details": "Puchased Materials (Butter Paper From Part Packing 25Nos) By Arjun, ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 200.0,
+            "balance": 4483.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-18 00:00:00",
+            "date": "2026-01-18",
             "details": "Cab Englabs to Phase 2 up & Down , Kartik for Office Work",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 447.0,
+            "balance": 4036.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -472,26 +472,26 @@
             "date": null,
             "details": "Puchased Milk Local Shop (10-JAN_2026_TO_18-JAN-2026) Packet 18 Rate 32 , 32*18=576,,,,,,By Arjun",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 576.0,
+            "balance": 3460.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-19 00:00:00",
+            "date": "2026-01-19",
             "details": "Porter From Excel to Delhi ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 380.0,
+            "balance": 3080.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-20 00:00:00",
+            "date": "2026-01-20",
             "details": "Porter From Englabs to Elin C4909 ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 600.0,
+            "balance": 2480.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -499,8 +499,8 @@
             "date": null,
             "details": "Cab Delhi to Chandi Garh C4909, C4919",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 600.0,
+            "balance": 1880.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -508,8 +508,8 @@
             "date": null,
             "details": "Porter Mohali to Englabs for HG Cleaning ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 300.0,
+            "balance": 1580.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -517,8 +517,8 @@
             "date": null,
             "details": "Porter From Englabs to Hella C4913",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 170.0,
+            "balance": 1410.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -526,17 +526,17 @@
             "date": null,
             "details": "Porter From Englabs to Aebocode",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 141.0,
+            "balance": 1269.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
             "date": null,
             "details": "Porter From Englabs to Aebocode",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 141.0,
+            "dr": 141.0,
+            "balance": 1269.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -544,8 +544,8 @@
             "date": null,
             "details": "Porter From Excel to Railway Station Delhi C4913 , C4909, (Rukshar Khatoon) by Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 190.0,
+            "balance": 1079.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -553,17 +553,17 @@
             "date": null,
             "details": "Porter From Plastic Pack to Workad to Delhi Railway Station, C4933, C4781, C4905, by Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 800.0,
+            "balance": 279.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-21 00:00:00",
+            "date": "2026-01-21",
             "details": "Porter From Englabs to Redington PDC by Ratnesh ",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 10000.0,
+            "dr": 148.0,
+            "balance": 10131.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -571,8 +571,8 @@
             "date": null,
             "details": "Cab Delhi to Airport C4909, C4919 by Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 350.0,
+            "balance": 9781.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -580,8 +580,8 @@
             "date": null,
             "details": "Cab Delhi to Chandigarh C4909, C4919 by Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 600.0,
+            "balance": 9181.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -589,8 +589,8 @@
             "date": null,
             "details": "Cab Delhi to Chandigarh C4909, C4919 by Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 190.0,
+            "balance": 8991.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -598,17 +598,17 @@
             "date": null,
             "details": "Cab Delhi to Chandigarh C4909, C4919 by Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 650.0,
+            "balance": 8341.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-22 00:00:00",
+            "date": "2026-01-22",
             "details": "Porter From Balaji to Englabs Foam rolll & Sheets by Gaurav",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 400.0,
+            "balance": 7941.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -616,8 +616,8 @@
             "date": null,
             "details": "Purchased to Ginger for Tea Time by Arjun",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 40.0,
+            "balance": 7901.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -625,8 +625,8 @@
             "date": null,
             "details": "Porter Englabs to Aebocode ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 62.0,
+            "balance": 7839.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -634,8 +634,8 @@
             "date": null,
             "details": "Chair Repair All Englabs by Shrerya Mam & Gaurav",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 2500.0,
+            "balance": 5339.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -643,17 +643,17 @@
             "date": null,
             "details": "Food no Details ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 500.0,
+            "balance": 4839.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-23 00:00:00",
+            "date": "2026-01-23",
             "details": "Mukesh Carpenter Bill No. 10",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 2400.0,
+            "balance": 2439.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -661,8 +661,8 @@
             "date": null,
             "details": "Porter From Englabs to Zirakpur  By Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 125.0,
+            "balance": 2314.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -670,8 +670,8 @@
             "date": null,
             "details": "Porter From Delhi to Faridabad  Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 510.0,
+            "balance": 1804.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -679,17 +679,17 @@
             "date": null,
             "details": "Porter From Chandigar to Delhi By Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 400.0,
+            "balance": 1404.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-24 00:00:00",
+            "date": "2026-01-24",
             "details": "Porter to Hella C4781",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 5000.0,
+            "dr": 350.0,
+            "balance": 6054.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -697,8 +697,8 @@
             "date": null,
             "details": "Porter From Excel to Delhi C4781 By Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 510.0,
+            "balance": 5544.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -706,8 +706,8 @@
             "date": null,
             "details": "Sohan Lal by Anurag",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 105.0,
+            "balance": 5439.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -715,17 +715,17 @@
             "date": null,
             "details": "Porter to Orient C4925",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 80.0,
+            "balance": 5359.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-27 00:00:00",
+            "date": "2026-01-27",
             "details": "Porter From Englabs to MSL C4863 By Sunny ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 266.0,
+            "balance": 5093.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -733,8 +733,8 @@
             "date": null,
             "details": "Porter From Englabs to Chandigarh C4009, C4913",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 263.0,
+            "balance": 4830.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -742,17 +742,17 @@
             "date": null,
             "details": "Porter From Englabs to Aebocode",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 142.0,
+            "balance": 4688.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-28 00:00:00",
+            "date": "2026-01-28",
             "details": "Porter From Excel to Delhi C4719 By Shubham",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 105.0,
+            "dr": 510.0,
+            "balance": 4283.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -760,8 +760,8 @@
             "date": null,
             "details": "Porter From Delhi to Chandigarh C4919 By Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 550.0,
+            "balance": 3733.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -769,8 +769,8 @@
             "date": null,
             "details": "Porter From Workaad to CHD Railway Station C4933, C4935 By Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 280.0,
+            "balance": 3453.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -778,8 +778,8 @@
             "date": null,
             "details": "Cab From Chandigarh to MSL ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1150.0,
+            "balance": 2303.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -787,17 +787,17 @@
             "date": null,
             "details": "Porter From Englabs to Aebocode ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 93.0,
+            "balance": 2210.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-29 00:00:00",
+            "date": "2026-01-29",
             "details": "Purchase to Surf, cell, ginger by Arjun ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1235.0,
+            "balance": 975.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -805,8 +805,8 @@
             "date": null,
             "details": "Porter From CMS to Englabs C4828",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 150.0,
+            "balance": 825.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -814,17 +814,17 @@
             "date": null,
             "details": "Porter Hella Delivery C4828",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 200.0,
+            "balance": 625.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-30 00:00:00",
+            "date": "2026-01-30",
             "details": "Kunwarlal Salary Advance by Sunny Singla",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 15000.0,
+            "dr": 15000.0,
+            "balance": 625.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -832,37 +832,154 @@
             "date": null,
             "details": "Porter From Englabs to Aebocode",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 100.0,
+            "balance": 525.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-01-31 00:00:00",
+            "date": "2026-01-31",
             "details": "Porter From Plastipack to Delhi Trai C4949",
             "cr": 0.0,
+            "dr": 380.0,
+            "balance": 145.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
             "dr": 0.0,
-            "balance": 0.0,
+            "balance": 145.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 145.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 145.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 145.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 145.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 145.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 145.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 145.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 145.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 145.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 145.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 145.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 145.0,
             "projectId": null,
             "projectDr": 0.0
         }
     ],
     "Feb_2026": [
         {
-            "date": "2026-02-01 00:00:00",
+            "date": "2026-02-01",
             "details": "Last Month Balance ",
-            "cr": 0.0,
+            "cr": 145.0,
             "dr": 0.0,
-            "balance": 0.0,
+            "balance": 145.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-02 00:00:00",
+            "date": "2026-02-02",
             "details": "Porter From Pacific to Englabs C4958",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 6000.0,
+            "dr": 116.0,
+            "balance": 6029.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -870,8 +987,8 @@
             "date": null,
             "details": "Porter From Plastic To Delhi RYL   C4949, C4959",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 400.0,
+            "balance": 5629.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -879,8 +996,8 @@
             "date": null,
             "details": "Porter by Train From Delhi RLY to Chandigarh RLY .   C4949, C4959, C4957",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 450.0,
+            "balance": 5179.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -888,17 +1005,17 @@
             "date": null,
             "details": "Porter by RapidoFrom CHD RLY to Englabs .   C4949, C4959, C4957",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 280.0,
+            "balance": 4899.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-03 00:00:00",
+            "date": "2026-02-03",
             "details": "Purchased Suger, tea leaf  Local Shop",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 398.0,
+            "balance": 4501.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -906,8 +1023,8 @@
             "date": null,
             "details": "Milk &bill Only 19-Jan to 31-Jan By Arjun , Local Shop",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 928.0,
+            "balance": 3573.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -915,8 +1032,8 @@
             "date": null,
             "details": "Porter From Englabs To Hella    C4971",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 200.0,
+            "balance": 3373.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -924,8 +1041,8 @@
             "date": null,
             "details": "Porter From Englabs To Hella    C4971",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 20.0,
+            "balance": 3353.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -933,17 +1050,17 @@
             "date": null,
             "details": "Porter From Pacific to Englabs C4958",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 116.0,
+            "balance": 3237.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-04 00:00:00",
+            "date": "2026-02-04",
             "details": "Porter From Englabs to Jal C4957",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 170.0,
+            "balance": 3067.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -951,17 +1068,17 @@
             "date": null,
             "details": "Porter From CMS to Englabs C4717",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 150.0,
+            "balance": 2917.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-05 00:00:00",
+            "date": "2026-02-05",
             "details": "Porter From Pune to Mumbai",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 2400.0,
+            "balance": 517.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -969,26 +1086,26 @@
             "date": null,
             "details": "Porter From Englabs to Hella C4941",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 180.0,
+            "balance": 337.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-07 00:00:00",
+            "date": "2026-02-07",
             "details": "Kusum didi Salary by Shubham Account",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 10000.0,
+            "dr": 10000.0,
+            "balance": 337.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
             "date": null,
             "details": "Porter From Labat PC to CMS C4539",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 5000.0,
+            "dr": 112.0,
+            "balance": 5225.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -996,8 +1113,8 @@
             "date": null,
             "details": "Porter Englabs to to Hella C4961",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 150.0,
+            "balance": 5075.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1005,8 +1122,8 @@
             "date": null,
             "details": "Porter Englabs to Zirakpur C4887",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 220.0,
+            "balance": 4855.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1014,8 +1131,8 @@
             "date": null,
             "details": "Porter Englabs to Sark Industries C4968",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 54.0,
+            "balance": 4801.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1023,8 +1140,8 @@
             "date": null,
             "details": "Porter From Delhi to Chandigarh C4968, C4970, C4934, C4958, C4961",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 500.0,
+            "balance": 4301.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1032,8 +1149,8 @@
             "date": null,
             "details": "Porter From Talekar to Airport C4952",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 290.0,
+            "balance": 4011.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1041,17 +1158,17 @@
             "date": null,
             "details": "Courier From Faridabad to Englabs C4973 by Rohit Verma",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 170.0,
+            "balance": 3841.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-09 00:00:00",
+            "date": "2026-02-09",
             "details": "Porter From Chandigarh Airport to Chennai Henkel Office C4953",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 600.0,
+            "balance": 3241.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1059,8 +1176,8 @@
             "date": null,
             "details": "Porter From CMS to Englabs C4539",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 121.0,
+            "balance": 3120.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1068,17 +1185,17 @@
             "date": null,
             "details": "Courier From Englabs to Passim  C4934 by Rohit Verma",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 150.0,
+            "balance": 2970.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-10 00:00:00",
+            "date": "2026-02-10",
             "details": "Milk &bill (Date 02-Feb to 10-Feb) By Arjun , Local Shop",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 804.0,
+            "balance": 2166.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1086,8 +1203,8 @@
             "date": null,
             "details": "Courier From Faridabad to Englabs C4973 by Rohit Verma",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 170.0,
+            "balance": 1996.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1095,8 +1212,8 @@
             "date": null,
             "details": "Porter From Faridabad to Baaz Gurugram C4972",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 450.0,
+            "balance": 1546.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1104,17 +1221,17 @@
             "date": null,
             "details": "Porter From Englabs to Hella C4941",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 150.0,
+            "balance": 1396.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-11 00:00:00",
+            "date": "2026-02-11",
             "details": "Porter From CICU to Englabs C4965, C4986",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 150.0,
+            "balance": 1246.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1122,8 +1239,8 @@
             "date": null,
             "details": "UPI Circle Payments Check Team",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1.0,
+            "balance": 1245.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1131,8 +1248,8 @@
             "date": null,
             "details": "UPI Circle Payments Check Team ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1.0,
+            "balance": 1244.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1140,17 +1257,17 @@
             "date": null,
             "details": "UPI Circle Payments Check Team ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1.0,
+            "balance": 1243.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-12 00:00:00",
+            "date": "2026-02-12",
             "details": "Porter From Workaad to Faridabaad By Rohit C4874",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 341.0,
+            "balance": 902.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1158,8 +1275,8 @@
             "date": null,
             "details": "Porter From Plastipackto Faridabad by Rohit  C4974",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 145.0,
+            "balance": 757.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1167,26 +1284,26 @@
             "date": null,
             "details": "Porter From Englabs to Aebocode C4872",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 156.0,
+            "balance": 601.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-13 00:00:00",
+            "date": "2026-02-13",
             "details": "Porter From Englabs to Sec 38 , Redinton Check by Ratnesh",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 145.0,
+            "balance": 456.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-14 00:00:00",
+            "date": "2026-02-14",
             "details": "Porter From Englabs to Hella C4954",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 200.0,
+            "balance": 256.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1194,26 +1311,35 @@
             "date": null,
             "details": "Purchased Sanding Paper 100, by arjun ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 250.0,
+            "balance": 6.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
             "date": null,
             "details": "Cash Back Received ",
-            "cr": 0.0,
+            "cr": 20.0,
             "dr": 0.0,
-            "balance": 0.0,
+            "balance": 26.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-18 00:00:00",
+            "date": "2026-02-16",
+            "details": "-",
+            "cr": 6000.0,
+            "dr": 0.0,
+            "balance": 6026.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": "2026-02-18",
             "details": "Breakfast Gaurav MSL Visit",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 160.0,
+            "balance": 5866.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1221,17 +1347,17 @@
             "date": null,
             "details": "Porter  From Excel to Marelli C4985",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 400.0,
+            "balance": 5466.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-19 00:00:00",
+            "date": "2026-02-19",
             "details": "Porter From  Delhi to Chandigarh by Car C4611",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 400.0,
+            "balance": 5066.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1239,8 +1365,8 @@
             "date": null,
             "details": "USB Type B ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 104.9,
+            "balance": 4961.1,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1248,8 +1374,8 @@
             "date": null,
             "details": "Porter From Englabs to SML Office C4611",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 100.0,
+            "balance": 4861.1,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1257,17 +1383,17 @@
             "date": null,
             "details": "Porter From Englabs to Aebocode C4956",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 80.0,
+            "balance": 4781.1,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-20 00:00:00",
+            "date": "2026-02-20",
             "details": "Milk &bill (Date\u2026....................................) By Arjun , Local Shop",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 608.0,
+            "balance": 4173.1,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1275,8 +1401,8 @@
             "date": null,
             "details": "Porter From Englabs to SG Engineering C4977",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 180.0,
+            "balance": 3993.1000000000004,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1284,17 +1410,17 @@
             "date": null,
             "details": "UPI By Shubham ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 90.0,
+            "balance": 3903.1000000000004,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-23 00:00:00",
+            "date": "2026-02-23",
             "details": "Porter From Englabs to ADSL Lalru C4788",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 5000.0,
+            "dr": 350.0,
+            "balance": 8553.1,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1302,8 +1428,8 @@
             "date": null,
             "details": "Puchased  Coffee Pouch 150pcs",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 319.5,
+            "balance": 8233.6,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1311,8 +1437,8 @@
             "date": null,
             "details": "Porter From Plastipack to Workaad C4994",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 240.0,
+            "balance": 7993.6,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1320,17 +1446,17 @@
             "date": null,
             "details": "Ride From Englabs to Phase for Shiv Narayan ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 82.0,
+            "balance": 7911.6,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-24 00:00:00",
+            "date": "2026-02-24",
             "details": "Black Spray Coat Charges Workaad Without GST C4994",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1500.0,
+            "balance": 6411.6,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1338,8 +1464,8 @@
             "date": null,
             "details": "Porter From Excel to Bjaj C4969  by Shubham ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 180.0,
+            "balance": 6231.6,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1347,8 +1473,8 @@
             "date": null,
             "details": "UPI By Shubham ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 220.0,
+            "balance": 6011.6,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1356,8 +1482,8 @@
             "date": null,
             "details": "Amzone Parcel Puching  machin  Reele  Part  By Monal Saini ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 243.7,
+            "balance": 5767.900000000001,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1365,17 +1491,17 @@
             "date": null,
             "details": "Englabs to Bharat Anand ,  Bainsa Tibba Account Bill No. 43",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 750.0,
+            "balance": 5017.900000000001,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-25 00:00:00",
+            "date": "2026-02-25",
             "details": "Uber From Delhi to Endureair C4998, C5004",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1000.0,
+            "balance": 4017.9000000000005,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1383,17 +1509,17 @@
             "date": null,
             "details": "Uber From Chandigarh to Delhi  C4998, C5004",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1200.0,
+            "balance": 2817.9000000000005,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-26 00:00:00",
+            "date": "2026-02-26",
             "details": "Porter From to Englabs to SG Engineeing C5017 ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 144.0,
+            "balance": 2673.9000000000005,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1401,8 +1527,8 @@
             "date": null,
             "details": "Purchased Adrak , by arjun ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 40.0,
+            "balance": 2633.9000000000005,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1410,8 +1536,8 @@
             "date": null,
             "details": "Englabs to TCP NCR Sec 18 , Gaurav",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 186.0,
+            "balance": 2447.9000000000005,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1419,17 +1545,17 @@
             "date": null,
             "details": "TCP NCR Sec 18 to Englabs Gaurav",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 181.0,
+            "balance": 2266.9000000000005,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-27 00:00:00",
+            "date": "2026-02-27",
             "details": "Amzone Parcel Puching  machin PCB  Part  By Monal Saini ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1265.96,
+            "balance": 1000.9400000000005,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1437,8 +1563,8 @@
             "date": null,
             "details": "Porter From Adroitec to Orient C5026",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 330.0,
+            "balance": 670.9400000000005,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1446,17 +1572,17 @@
             "date": null,
             "details": "Porter Faridabad to AV Maching  C5000",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 460.0,
+            "balance": 210.9400000000005,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-02-28 00:00:00",
+            "date": "2026-02-28",
             "details": "Blinkit wallet Account Transfer",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 5000.0,
+            "dr": 2000.0,
+            "balance": 3210.9400000000005,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1464,8 +1590,8 @@
             "date": null,
             "details": "Purchased Suger + Chaye patti , by arjun ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 420.0,
+            "balance": 2790.9400000000005,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1473,8 +1599,8 @@
             "date": null,
             "details": "Englabs to HSVP Ambala up & Down + Food , Gaurav",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 435.0,
+            "balance": 2355.9400000000005,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1482,8 +1608,8 @@
             "date": null,
             "details": "The auto rent fan has been sent to the repair shop by Thakur Parshad.",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 150.0,
+            "balance": 2205.9400000000005,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1491,8 +1617,8 @@
             "date": null,
             "details": "Porter From to  ebocode C5019",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 78.0,
+            "balance": 2127.9400000000005,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1500,37 +1626,334 @@
             "date": null,
             "details": "AC Mentinance Service Room No. 1061  7th Floor by Parmod Bahl ",
             "cr": 0.0,
+            "dr": 700.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
             "dr": 0.0,
-            "balance": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1427.9400000000005,
             "projectId": null,
             "projectDr": 0.0
         }
     ],
     "Mar_2026": [
         {
-            "date": "2026-03-01 00:00:00",
+            "date": "2026-03-01",
             "details": "Last Month Balance ",
-            "cr": 0.0,
+            "cr": 1427.0,
             "dr": 0.0,
-            "balance": 0.0,
+            "balance": 1427.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-02 00:00:00",
+            "date": "2026-03-02",
             "details": "Milk &bill (Date18 to 28 feb) By Arjun , Local Shop",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 736.0,
+            "balance": 691.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-03 00:00:00",
+            "date": "2026-03-03",
             "details": "Porter From Marco polo to \u2026..............    C5005 ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 100.0,
+            "balance": 591.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1538,17 +1961,17 @@
             "date": null,
             "details": "Porter From Workaad to siccu Sample Part By Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 450.0,
+            "balance": 141.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
             "date": null,
             "details": "3 Fan Reparing  By Thakur",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 5000.0,
+            "dr": 2500.0,
+            "balance": 2641.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1556,44 +1979,44 @@
             "date": null,
             "details": "Fan repairing rent by Thakur ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 150.0,
+            "balance": 2491.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-05 00:00:00",
+            "date": "2026-03-05",
             "details": "Purchase POWER CONNECT 2-Way Push Fit Connector (SET OF 50 Pieces) by Anurag",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1201.0,
+            "balance": 1290.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-06 00:00:00",
+            "date": "2026-03-06",
             "details": "Porter Workaad to Pltipck to Delhi C5040 by Shubham ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 680.0,
+            "balance": 610.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-06 00:00:00",
+            "date": "2026-03-06",
             "details": "Porter Delhi to Chandigarh C5040 BY Shubham ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 500.0,
+            "balance": 110.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-07 00:00:00",
+            "date": "2026-03-07",
             "details": "Porter  Englabs to Zirakpur c5040 By Shubham ",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 7000.0,
+            "dr": 200.0,
+            "balance": 6910.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1601,8 +2024,8 @@
             "date": null,
             "details": "Porter  From Englabs to Sark Industries C5038 By Shubham ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 80.0,
+            "balance": 6830.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1610,8 +2033,8 @@
             "date": null,
             "details": "Porter Railway Station CHD to Englabs C5040 By Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 300.0,
+            "balance": 6530.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1619,8 +2042,8 @@
             "date": null,
             "details": "Porter From Delhi to Endureair C5004 By Shubham ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 900.0,
+            "balance": 5630.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1628,26 +2051,26 @@
             "date": null,
             "details": "Porter From CHD to Delhi C5004 By Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1200.0,
+            "balance": 4430.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-10 00:00:00",
+            "date": "2026-03-10",
             "details": "Porter  From Englabs to Zirakpur C5004 & C4998 By Shubham ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 150.0,
+            "balance": 4280.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-11 00:00:00",
+            "date": "2026-03-11",
             "details": "Milk &bill (Date 01 to 11 March ) By Arjun , Local Shop",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 736.0,
+            "balance": 3544.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1655,8 +2078,8 @@
             "date": null,
             "details": "Purchased to Adrak by Arjin ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 40.0,
+            "balance": 3504.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1664,8 +2087,8 @@
             "date": null,
             "details": "Porter  From Chandigarh to Delhi C5004 By Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 600.0,
+            "balance": 2904.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1673,26 +2096,26 @@
             "date": null,
             "details": "Porter  From Plastipack to \u2026.............. C5033 By Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 110.0,
+            "balance": 2794.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-12 00:00:00",
+            "date": "2026-03-12",
             "details": "Porter Faridabad to Mumbai C5033 By Shubham ",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 8000.0,
+            "dr": 790.0,
+            "balance": 10004.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-13 00:00:00",
+            "date": "2026-03-13",
             "details": "Porter From CHD to Delhi C5049 By Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 350.0,
+            "balance": 9654.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1700,8 +2123,8 @@
             "date": null,
             "details": "Porter From Delhi to Endureair C4998 By Shubham ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 490.0,
+            "balance": 9164.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1709,8 +2132,8 @@
             "date": null,
             "details": "Porter From Englabs to Simsun C5040",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 360.0,
+            "balance": 8804.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1718,8 +2141,8 @@
             "date": null,
             "details": "Porter From Plastipack to Railway Station \u2026............ C5040",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 500.0,
+            "balance": 8304.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1727,8 +2150,8 @@
             "date": null,
             "details": "Porter  From Delhi ti CHD C5040 By Shubham ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 500.0,
+            "balance": 7804.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1736,8 +2159,8 @@
             "date": null,
             "details": "Porter  From CHD RLY to Englabs C5040 By Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 320.0,
+            "balance": 7484.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1745,8 +2168,8 @@
             "date": null,
             "details": "Porter From Faridabad to Mumbai C5033 By Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 170.0,
+            "balance": 7314.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1754,8 +2177,8 @@
             "date": null,
             "details": "Purchase Electrical Tape Fro Dalmitra Project By Arjun",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 100.0,
+            "balance": 7214.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1763,8 +2186,8 @@
             "date": null,
             "details": "Porter From Englabs to Aebocode C\u2026........ ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 75.0,
+            "balance": 7139.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1772,17 +2195,17 @@
             "date": null,
             "details": "Porter  From Englabs to Aebocode C\u2026............",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 150.0,
+            "balance": 6989.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-14 00:00:00",
+            "date": "2026-03-14",
             "details": "Paid to Gaurav 7th March TCP Sec-18 Food or 8th March DTP Kaithal Breakfast only ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 499.0,
+            "balance": 6490.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1790,8 +2213,8 @@
             "date": null,
             "details": "Porter From Englabs to Vijay Sir Home C5013",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 70.0,
+            "balance": 6420.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1799,8 +2222,8 @@
             "date": null,
             "details": "Porter From Plastipack to Railway Station Delhi  C5050",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 300.0,
+            "balance": 6120.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1808,17 +2231,17 @@
             "date": null,
             "details": "Porter From Englabs to Aebocode C5019, C5065, C4872",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 80.0,
+            "balance": 6040.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-16 00:00:00",
+            "date": "2026-03-16",
             "details": "Porter From Englabs to PDC by Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 150.0,
+            "balance": 5890.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1826,8 +2249,8 @@
             "date": null,
             "details": "Porter From Workaad to Karnal bypass C5056, C5063",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 400.0,
+            "balance": 5490.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1835,8 +2258,8 @@
             "date": null,
             "details": "Porter From Englabs to Zirakpur C5049",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 140.0,
+            "balance": 5350.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1844,8 +2267,8 @@
             "date": null,
             "details": "Porter  From ABS to Workaad C5049",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 380.0,
+            "balance": 4970.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1853,8 +2276,8 @@
             "date": null,
             "details": "Porter From MJF Delhi to Nipa C5049",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 400.0,
+            "balance": 4570.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1862,8 +2285,8 @@
             "date": null,
             "details": "Porter From Plastipack to Railway Station Delhi C5050",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 450.0,
+            "balance": 4120.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1871,8 +2294,8 @@
             "date": null,
             "details": "Porter From Delhi Railway Station to Chandigarh Railway Station C5050",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 250.0,
+            "balance": 3870.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1880,17 +2303,17 @@
             "date": null,
             "details": "Porter From Plastipack to BCH C5058",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 167.0,
+            "balance": 3703.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-17 00:00:00",
+            "date": "2026-03-17",
             "details": "Porter  From Delhi to Chandigarh C5056, C5063",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 450.0,
+            "balance": 3253.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1898,8 +2321,8 @@
             "date": null,
             "details": "Porter Airport to Hankel C5008",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 450.0,
+            "balance": 2803.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1907,8 +2330,8 @@
             "date": null,
             "details": "Porter From Englabs to Sark C5063",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 95.0,
+            "balance": 2708.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1916,8 +2339,8 @@
             "date": null,
             "details": "Ratnesh No Remarks",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 386.0,
+            "balance": 2322.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1925,8 +2348,8 @@
             "date": null,
             "details": "Porter From Englabs to Scope Derabassi C5060",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 170.0,
+            "balance": 2152.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1934,17 +2357,17 @@
             "date": null,
             "details": "Porter Aebocode C5061",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 78.0,
+            "balance": 2074.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-18 00:00:00",
+            "date": "2026-03-18",
             "details": "Purchased to Adrak by Arjin ",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 5000.0,
+            "dr": 40.0,
+            "balance": 7034.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1952,8 +2375,8 @@
             "date": null,
             "details": "Transfer to Blinkit Wallet ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1000.0,
+            "balance": 6034.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1961,26 +2384,26 @@
             "date": null,
             "details": "Purchase  to Exhaust Fan for Workshop ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 3400.0,
+            "balance": 2634.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
             "date": null,
             "details": "Porter  From to hella frol Plastipack to Delhi C5010",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 6.0,
+            "dr": 340.0,
+            "balance": 2300.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-19 00:00:00",
+            "date": "2026-03-19",
             "details": "Porter  From Delhi to Chandigarh C5010",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 5000.0,
+            "dr": 650.0,
+            "balance": 6650.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -1988,17 +2411,17 @@
             "date": null,
             "details": "Porter From to Mohali to Hella part C5010",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 195.0,
+            "balance": 6455.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-20 00:00:00",
+            "date": "2026-03-20",
             "details": "Milk &bill (Date18 to 28 feb) By Arjun , Local Shop",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 928.0,
+            "balance": 5527.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2006,17 +2429,17 @@
             "date": null,
             "details": "Porter From Marcopolo to AV Maching C5014 ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 420.0,
+            "balance": 5107.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-21 00:00:00",
+            "date": "2026-03-21",
             "details": "Madical kit for staff ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 650.0,
+            "balance": 4457.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2024,8 +2447,8 @@
             "date": null,
             "details": "Porter From Plastipack to \u2026.............. C5033",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 120.0,
+            "balance": 4337.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2033,26 +2456,26 @@
             "date": null,
             "details": "Porter From Faridabad to Bajaj C5033 ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1260.0,
+            "balance": 3077.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-22 00:00:00",
+            "date": "2026-03-22",
             "details": "Milk by Arjun ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 64.0,
+            "balance": 3013.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-23 00:00:00",
+            "date": "2026-03-23",
             "details": "Porter From Englabs to Passim C5074",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 90.0,
+            "balance": 2923.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2060,8 +2483,8 @@
             "date": null,
             "details": "Mohali Survey team Tea Break ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 160.0,
+            "balance": 2763.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2069,17 +2492,17 @@
             "date": null,
             "details": "Porter From Plastipack to Delhi C5010",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 450.0,
+            "balance": 2313.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-24 00:00:00",
+            "date": "2026-03-24",
             "details": "Milk ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 114.0,
+            "balance": 2199.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2087,8 +2510,8 @@
             "date": null,
             "details": "Mohali Survey team Lunch Break ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 170.0,
+            "balance": 2029.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2096,17 +2519,17 @@
             "date": null,
             "details": "Ishaan Entrpricess pen pickup Courier by Ratnesh ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 250.0,
+            "balance": 1779.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-25 00:00:00",
+            "date": "2026-03-25",
             "details": "Porter From Industrial to \u2026..................... , Enertics mold and parts only ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 180.0,
+            "balance": 1599.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2114,8 +2537,8 @@
             "date": null,
             "details": "Porter From Telekar to Airport C5008",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 280.0,
+            "balance": 1319.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2123,8 +2546,8 @@
             "date": null,
             "details": "Porter From Chandigarh to Tribun to Englabs office C5074, C5071, C5077",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 110.0,
+            "balance": 1209.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2132,8 +2555,8 @@
             "date": null,
             "details": "Porter From Englabs to Passim C5074",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 250.0,
+            "balance": 959.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2141,8 +2564,8 @@
             "date": null,
             "details": "Porter  From to Workaad to Nipa C5069",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 370.0,
+            "balance": 589.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2150,8 +2573,8 @@
             "date": null,
             "details": "Porter From Englabs to Sark C5077, C5086",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 90.0,
+            "balance": 499.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2159,8 +2582,8 @@
             "date": null,
             "details": "Porter  From Industrial area to Englabs  Enertics Gasket",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 200.0,
+            "balance": 389.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2168,35 +2591,35 @@
             "date": null,
             "details": "Porter From Talekar to Airport C5008",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 280.0,
+            "balance": 219.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-27 00:00:00",
+            "date": "2026-03-27",
             "details": "Porter From Hankel to airport to Channai office C5008",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1000.0,
+            "balance": -781.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-28 00:00:00",
+            "date": "2026-03-28",
             "details": "Purchased  to MJF Machine Springs by Anurag ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 450.0,
+            "balance": -1231.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-30 00:00:00",
+            "date": "2026-03-30",
             "details": "Porter Frome Orient to \u2026........... C5062",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 330.0,
+            "balance": -1561.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2204,8 +2627,8 @@
             "date": null,
             "details": "Porter From Sanjeev sheet metal to Simson ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 170.0,
+            "balance": -1731.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2213,17 +2636,17 @@
             "date": null,
             "details": "Porter From Englabs to Simson C5087",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 370.0,
+            "balance": -2101.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-03-31 00:00:00",
+            "date": "2026-03-31",
             "details": "Porter From Orient to\u2026............. C5062",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 330.0,
+            "balance": -2431.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2231,8 +2654,8 @@
             "date": null,
             "details": "Purchase Waste Pipe Invoice No. 2668",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 177.0,
+            "balance": -2608.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2240,8 +2663,8 @@
             "date": null,
             "details": "Porter From Englabs to Aebocode C5106",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 80.0,
+            "balance": -2688.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2249,8 +2672,8 @@
             "date": null,
             "details": "Porter From Englabs to Aebocode C5106",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 10.0,
+            "balance": -2698.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -2258,24 +2681,231 @@
             "date": null,
             "details": "Purchased to Milk 1 Packet Sky5 ",
             "cr": 0.0,
+            "dr": 33.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
             "dr": 0.0,
-            "balance": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": -2731.0,
             "projectId": null,
             "projectDr": 0.0
         }
     ],
     "Apr_2026": [
         {
-            "date": null,
-            "details": "-",
-            "cr": 49571.0,
-            "dr": 48018.0,
-            "balance": 1553.0,
-            "projectId": "C-XXXX",
-            "projectDr": 18699.0
-        },
-        {
-            "date": "2026-04-01 00:00:00",
+            "date": "2026-04-01",
             "details": "Last Month Balance ",
             "cr": -2731.0,
             "dr": 0.0,
@@ -2284,7 +2914,7 @@
             "projectDr": 0.0
         },
         {
-            "date": "2026-04-02 00:00:00",
+            "date": "2026-04-02",
             "details": "Purchase to TV Stand For delhi Expo",
             "cr": 5000.0,
             "dr": 4850.0,
@@ -2338,7 +2968,7 @@
             "projectDr": 1475.0
         },
         {
-            "date": "2026-04-03 00:00:00",
+            "date": "2026-04-03",
             "details": "Porter From Fixpro to Airport Expo Delhi",
             "cr": 0.0,
             "dr": 270.0,
@@ -2356,7 +2986,7 @@
             "projectDr": 0.0
         },
         {
-            "date": "2026-04-04 00:00:00",
+            "date": "2026-04-04",
             "details": "Purchased to Panchkula graphics (Stickers) For Delhi Expo by Devanshu  ",
             "cr": 0.0,
             "dr": 70.0,
@@ -2401,7 +3031,7 @@
             "projectDr": 0.0
         },
         {
-            "date": "2026-04-06 00:00:00",
+            "date": "2026-04-06",
             "details": "Porter From Ultra Spark to Enertics  C4851",
             "cr": 0.0,
             "dr": 210.0,
@@ -2446,7 +3076,7 @@
             "projectDr": 0.0
         },
         {
-            "date": "2026-04-07 00:00:00",
+            "date": "2026-04-07",
             "details": "Porter From Rohit sir PA11 to Endureair C5098",
             "cr": 0.0,
             "dr": 400.0,
@@ -2500,7 +3130,7 @@
             "projectDr": 300.0
         },
         {
-            "date": "2026-04-08 00:00:00",
+            "date": "2026-04-08",
             "details": "Blinkit UPI",
             "cr": 0.0,
             "dr": 197.0,
@@ -2536,7 +3166,7 @@
             "projectDr": 290.0
         },
         {
-            "date": "2026-04-09 00:00:00",
+            "date": "2026-04-09",
             "details": "Sai Dairy Milk Last Bill Full & Final",
             "cr": 0.0,
             "dr": 224.0,
@@ -2554,7 +3184,7 @@
             "projectDr": 0.0
         },
         {
-            "date": "2026-04-10 00:00:00",
+            "date": "2026-04-10",
             "details": "Milk 4 nos + 2 Sunday by Arjun ",
             "cr": 5000.0,
             "dr": 192.0,
@@ -2563,7 +3193,7 @@
             "projectDr": 0.0
         },
         {
-            "date": "2026-04-11 00:00:00",
+            "date": "2026-04-11",
             "details": "Blinkit UPI",
             "cr": 0.0,
             "dr": 704.0,
@@ -2590,7 +3220,7 @@
             "projectDr": 400.0
         },
         {
-            "date": "2026-04-12 00:00:00",
+            "date": "2026-04-12",
             "details": "Porter From Tribune to Englabs ITL C5131",
             "cr": 0.0,
             "dr": 130.0,
@@ -2599,7 +3229,7 @@
             "projectDr": 130.0
         },
         {
-            "date": "2026-04-13 00:00:00",
+            "date": "2026-04-13",
             "details": "Blinkit UPI",
             "cr": 0.0,
             "dr": 167.0,
@@ -2608,7 +3238,7 @@
             "projectDr": 0.0
         },
         {
-            "date": "2026-04-14 00:00:00",
+            "date": "2026-04-14",
             "details": "Porter  From Excel to Marelli C4925",
             "cr": 10000.0,
             "dr": 320.0,
@@ -2680,7 +3310,7 @@
             "projectDr": 0.0
         },
         {
-            "date": "2026-04-15 00:00:00",
+            "date": "2026-04-15",
             "details": "Zepto Account Transfer for  Milk etc",
             "cr": 0.0,
             "dr": 1000.0,
@@ -2689,7 +3319,7 @@
             "projectDr": 0.0
         },
         {
-            "date": "2026-04-16 00:00:00",
+            "date": "2026-04-16",
             "details": "Blinkit MILK UPI",
             "cr": 0.0,
             "dr": 168.0,
@@ -2725,7 +3355,7 @@
             "projectDr": 0.0
         },
         {
-            "date": "2026-04-18 00:00:00",
+            "date": "2026-04-18",
             "details": "Porter From Delhi to CHD C5131",
             "cr": 0.0,
             "dr": 1200.0,
@@ -2761,7 +3391,7 @@
             "projectDr": 0.0
         },
         {
-            "date": "2026-04-19 00:00:00",
+            "date": "2026-04-19",
             "details": "Purchase to Milk (Sunday) Cash",
             "cr": 0.0,
             "dr": 64.0,
@@ -2770,7 +3400,7 @@
             "projectDr": 0.0
         },
         {
-            "date": "2026-04-20 00:00:00",
+            "date": "2026-04-20",
             "details": "Purchase to Milk ) Cash",
             "cr": 5000.0,
             "dr": 32.0,
@@ -2833,7 +3463,7 @@
             "projectDr": 157.0
         },
         {
-            "date": "2026-04-21 00:00:00",
+            "date": "2026-04-21",
             "details": "PORTER From Englabs  to Hella Dera  bassi C4950",
             "cr": 0.0,
             "dr": 145.0,
@@ -2887,7 +3517,7 @@
             "projectDr": 345.0
         },
         {
-            "date": "2026-04-22 00:00:00",
+            "date": "2026-04-22",
             "details": "Blinkit UPI",
             "cr": 0.0,
             "dr": 210.0,
@@ -2914,7 +3544,7 @@
             "projectDr": 650.0
         },
         {
-            "date": "2026-04-23 00:00:00",
+            "date": "2026-04-23",
             "details": "Porter From Englabs to Aebocode C4922",
             "cr": 500.0,
             "dr": 127.0,
@@ -2932,7 +3562,7 @@
             "projectDr": 190.0
         },
         {
-            "date": "2026-04-24 00:00:00",
+            "date": "2026-04-24",
             "details": "Zepto UPI",
             "cr": 5000.0,
             "dr": 82.0,
@@ -2941,7 +3571,7 @@
             "projectDr": 0.0
         },
         {
-            "date": "2026-04-24 00:00:00",
+            "date": "2026-04-24",
             "details": "Porter From Faridabad to HC Robotics C5138",
             "cr": 0.0,
             "dr": 650.0,
@@ -2968,7 +3598,7 @@
             "projectDr": 600.0
         },
         {
-            "date": "2026-04-25 00:00:00",
+            "date": "2026-04-25",
             "details": "Zepto UPI",
             "cr": 0.0,
             "dr": 128.0,
@@ -2977,7 +3607,7 @@
             "projectDr": 0.0
         },
         {
-            "date": "2026-04-27 00:00:00",
+            "date": "2026-04-27",
             "details": "Zepto UPI",
             "cr": 0.0,
             "dr": 183.0,
@@ -2995,7 +3625,7 @@
             "projectDr": 0.0
         },
         {
-            "date": "2026-04-28 00:00:00",
+            "date": "2026-04-28",
             "details": "Zepto Wallet ",
             "cr": 3000.0,
             "dr": 1000.0,
@@ -3022,7 +3652,7 @@
             "projectDr": 200.0
         },
         {
-            "date": "2026-04-29 00:00:00",
+            "date": "2026-04-29",
             "details": "Logo Design (ITN) Delhi Expo Use Part",
             "cr": 0.0,
             "dr": 2000.0,
@@ -3049,7 +3679,7 @@
             "projectDr": 0.0
         },
         {
-            "date": "2026-04-30 00:00:00",
+            "date": "2026-04-30",
             "details": "Blinkit UPI (Purchased to Tea + Coffee Pouch) ",
             "cr": 0.0,
             "dr": 418.0,
@@ -3321,20 +3951,20 @@
     ],
     "May_2026": [
         {
-            "date": "2026-05-01 00:00:00",
+            "date": "2026-05-01",
             "details": "Last Month Balance ",
-            "cr": 0.0,
+            "cr": 1553.0,
             "dr": 0.0,
-            "balance": 0.0,
+            "balance": 1553.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
             "date": null,
             "details": "Missing Payments ",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 338.0,
+            "dr": 338.0,
+            "balance": 1553.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3342,53 +3972,53 @@
             "date": null,
             "details": "Porter From Englabs to Hella C4950",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 195.0,
+            "balance": 1358.0,
+            "projectId": "C4950",
+            "projectDr": 195.0
         },
         {
             "date": null,
             "details": "Porter From Englabs to Aebocode C4967",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 181.0,
+            "balance": 1177.0,
+            "projectId": "C4967",
+            "projectDr": 181.0
         },
         {
             "date": null,
             "details": "Porter From Adroitec to Endureair Noida C5174",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 250.0,
+            "balance": 927.0,
+            "projectId": "C5174",
+            "projectDr": 250.0
         },
         {
-            "date": "2026-05-02 00:00:00",
+            "date": "2026-05-02",
             "details": "Porter From SK Techno to Englabs C5130",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 161.0,
+            "balance": 766.0,
+            "projectId": "C5130",
+            "projectDr": 161.0
         },
         {
-            "date": "2026-05-04 00:00:00",
+            "date": "2026-05-04",
             "details": "Foam Rent ",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 5000.0,
+            "dr": 500.0,
+            "balance": 5266.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-05-05 00:00:00",
+            "date": "2026-05-05",
             "details": "Logo Design (ITN) Delhi Expo Use Part",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1000.0,
+            "balance": 4266.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3396,161 +4026,161 @@
             "date": null,
             "details": "Porter From Plastipack to delhi to chandigarh C5075",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 400.0,
+            "balance": 3866.0,
+            "projectId": "C5075",
+            "projectDr": 400.0
         },
         {
             "date": null,
             "details": "Porter From Plastipack to delhi to chandigarh C5115",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 400.0,
+            "balance": 3466.0,
+            "projectId": "C5115",
+            "projectDr": 400.0
         },
         {
             "date": null,
             "details": "Porter From Plastipack to delhi to chandigarh C5176",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 400.0,
+            "balance": 3066.0,
+            "projectId": "C5176",
+            "projectDr": 400.0
         },
         {
             "date": null,
             "details": "Porter From Cadqua to Orient C5193",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 421.0,
+            "balance": 2645.0,
+            "projectId": "C5193",
+            "projectDr": 421.0
         },
         {
             "date": null,
             "details": "Porter From Excel to Nipa C5172",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 260.0,
+            "balance": 2385.0,
+            "projectId": "C5172",
+            "projectDr": 260.0
         },
         {
             "date": null,
             "details": "Porter From Englabs to Aebocode C5185",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 150.0,
+            "balance": 2235.0,
+            "projectId": "C5185",
+            "projectDr": 150.0
         },
         {
-            "date": "2026-05-06 00:00:00",
+            "date": "2026-05-06",
             "details": "Porter From Aebocode to Englabs C5185",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 80.0,
+            "balance": 2155.0,
+            "projectId": "C5185",
+            "projectDr": 80.0
         },
         {
-            "date": "2026-05-07 00:00:00",
+            "date": "2026-05-07",
             "details": " Porter From Englabs to Param appliances C5191",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 85.0,
+            "balance": 2070.0,
+            "projectId": "C5191",
+            "projectDr": 85.0
         },
         {
             "date": null,
             "details": "Porter From Englabs to Derabassi C5153",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 101.0,
+            "balance": 1969.0,
+            "projectId": "C5153",
+            "projectDr": 101.0
         },
         {
             "date": null,
             "details": "Porter From Englabs to Derabassi C5075",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "cr": 400.0,
+            "dr": 100.0,
+            "balance": 2269.0,
+            "projectId": "C5075",
+            "projectDr": 100.0
         },
         {
             "date": null,
             "details": "Porter From Karnal to Chandigarh C5115",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "cr": 10000.0,
+            "dr": 2207.0,
+            "balance": 10062.0,
+            "projectId": "C5115",
+            "projectDr": 2207.0
         },
         {
-            "date": "2026-05-07 00:00:00",
+            "date": "2026-05-07",
             "details": "Porter From Gurugram to Karnal C5075",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 327.0,
+            "balance": 9735.0,
+            "projectId": "C5075",
+            "projectDr": 327.0
         },
         {
-            "date": "2026-05-08 00:00:00",
+            "date": "2026-05-08",
             "details": "Porter From Karnal to Chandigarh C5075",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 500.0,
+            "balance": 9235.0,
+            "projectId": "C5075",
+            "projectDr": 500.0
         },
         {
             "date": null,
             "details": "Porter From Chandigarh to Englabs C5075",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 130.0,
+            "balance": 9105.0,
+            "projectId": "C5075",
+            "projectDr": 130.0
         },
         {
             "date": null,
             "details": "Porter From Chandigarh to Englabs C5075",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 20.0,
+            "balance": 9085.0,
+            "projectId": "C5075",
+            "projectDr": 20.0
         },
         {
             "date": null,
             "details": "Porter From Englabs to Aebocode C5176",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 55.0,
+            "balance": 9030.0,
+            "projectId": "C5176",
+            "projectDr": 55.0
         },
         {
             "date": null,
             "details": "Porter From Englabs to Aebocode C5192",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 55.0,
+            "balance": 8975.0,
+            "projectId": "C5192",
+            "projectDr": 55.0
         },
         {
             "date": null,
             "details": "Zepto UPI",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 64.0,
+            "balance": 8911.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3558,35 +4188,35 @@
             "date": null,
             "details": "Porter From Englabs to Mohali C5184",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 184.0,
+            "balance": 8727.0,
+            "projectId": "C5184",
+            "projectDr": 184.0
         },
         {
-            "date": "2026-05-09 00:00:00",
+            "date": "2026-05-09",
             "details": "Porter From Labat Asia to Englabs C4860",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 463.0,
+            "balance": 8264.0,
+            "projectId": "C4860",
+            "projectDr": 463.0
         },
         {
             "date": null,
             "details": "Zepto UPI",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 25.0,
+            "balance": 8239.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-05-11 00:00:00",
+            "date": "2026-05-11",
             "details": "Zepto UPI",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 236.0,
+            "balance": 8003.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3594,35 +4224,35 @@
             "date": null,
             "details": "Porter From Englabs to Aebocode C4922",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 140.0,
+            "balance": 7863.0,
+            "projectId": "C4922",
+            "projectDr": 140.0
         },
         {
             "date": null,
             "details": "Porter From Excel to Kyocera C5159",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 550.0,
+            "balance": 7313.0,
+            "projectId": "C5159",
+            "projectDr": 550.0
         },
         {
             "date": null,
             "details": "Porter From Excel to Nipa C5197",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 320.0,
+            "balance": 6993.0,
+            "projectId": "C5197",
+            "projectDr": 320.0
         },
         {
-            "date": "2026-05-12 00:00:00",
+            "date": "2026-05-12",
             "details": "No Remarks ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 31.0,
+            "balance": 6962.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3630,62 +4260,62 @@
             "date": null,
             "details": "Porter From Faridabad Plastipack to Kyocera Gurugram C5159",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 153.0,
+            "balance": 6809.0,
+            "projectId": "C5159",
+            "projectDr": 153.0
         },
         {
             "date": null,
             "details": "Porter From UNO Mnda to Talekar C5190",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 170.0,
+            "balance": 6639.0,
+            "projectId": "C5190",
+            "projectDr": 170.0
         },
         {
             "date": null,
             "details": "Porter From Desigifyig Painting to Kyocera C5159",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 160.0,
+            "balance": 6479.0,
+            "projectId": "C5159",
+            "projectDr": 160.0
         },
         {
             "date": null,
             "details": "A0 Size Print 2NOS Drone  Survey Dhand, Kaithal",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 280.0,
+            "balance": 6199.0,
+            "projectId": "Dhand Survey",
+            "projectDr": 280.0
         },
         {
             "date": null,
             "details": "Porter From Panchkula Graphics to Englabs (Print A0 )",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 78.0,
+            "balance": 6121.0,
+            "projectId": "Dhand Survey",
+            "projectDr": 78.0
         },
         {
-            "date": "2026-05-13 00:00:00",
+            "date": "2026-05-13",
             "details": "Porter From Englabs to Sec- 18 Chandigarh (Print A0)",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 95.0,
+            "balance": 6026.0,
+            "projectId": "Dhand Survey",
+            "projectDr": 95.0
         },
         {
             "date": null,
             "details": "Zepto Wallet ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1000.0,
+            "balance": 5026.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3693,17 +4323,17 @@
             "date": null,
             "details": "Porter From Englabs to Ultraspark C4851",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 180.0,
+            "balance": 4846.0,
+            "projectId": "C4851",
+            "projectDr": 180.0
         },
         {
-            "date": "2026-05-14 00:00:00",
+            "date": "2026-05-14",
             "details": "Mobile Phone Repair Realme & cover & glass  By Gurpreet ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1550.0,
+            "balance": 3296.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3711,8 +4341,8 @@
             "date": null,
             "details": "Payment to real craft tech private limeted ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 625.0,
+            "balance": 2671.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3720,8 +4350,8 @@
             "date": null,
             "details": "Mobile Phone cover & glass  By Gurpreet ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 250.0,
+            "balance": 2421.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3729,8 +4359,8 @@
             "date": null,
             "details": "Mobile Phone cover & glass  By Gurpreet ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 150.0,
+            "balance": 2271.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3738,17 +4368,17 @@
             "date": null,
             "details": "Porter Team (Gurpreet Singh)Advance Payment",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 500.0,
+            "balance": 1771.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-05-15 00:00:00",
+            "date": "2026-05-15",
             "details": "Purchase to Led Lights & Adopter for Logo  By Gurpreet ",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 10000.0,
+            "dr": 500.0,
+            "balance": 11271.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3756,35 +4386,35 @@
             "date": null,
             "details": "Mobile Phone Repair Oppo By Gurpreet ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1200.0,
+            "balance": 10071.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-05-16 00:00:00",
+            "date": "2026-05-16",
             "details": "Porter From Delhi to Chandigarh C5195",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 1000.0,
+            "balance": 9071.0,
+            "projectId": "C5195",
+            "projectDr": 1000.0
         },
         {
             "date": null,
             "details": "Porter From Labat Asia to Englabs C4860",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 242.0,
+            "balance": 8829.0,
+            "projectId": "C4860",
+            "projectDr": 242.0
         },
         {
             "date": null,
             "details": "Expo Visit From Englabs to Railway station CHD (Shubham)",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 101.0,
+            "balance": 8728.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3792,26 +4422,26 @@
             "date": null,
             "details": "Mobile Phone cover & glass ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 250.0,
+            "balance": 8478.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-05-19 00:00:00",
+            "date": "2026-05-19",
             "details": "Porter From Mohali to Labat Asia C5195",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 131.0,
+            "balance": 8347.0,
+            "projectId": "C5195",
+            "projectDr": 131.0
         },
         {
             "date": null,
             "details": "Zepto Wallet  by Gaurav",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1000.0,
+            "balance": 7347.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3819,8 +4449,8 @@
             "date": null,
             "details": "Porter From CHD Paints to Englabs (Paints) Rent",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 300.0,
+            "balance": 7047.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3828,62 +4458,62 @@
             "date": null,
             "details": "Porter From Excel rapido to Proto type C5023",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 200.0,
+            "balance": 6847.0,
+            "projectId": "C5023",
+            "projectDr": 200.0
         },
         {
             "date": null,
             "details": "Porter  From Englabs to Lotus Defence C5227",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 101.0,
+            "balance": 6746.0,
+            "projectId": "C5227",
+            "projectDr": 101.0
         },
         {
             "date": null,
             "details": "Porter From Cadqua to Faridabad C5210",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "cr": 15000.0,
+            "dr": 450.0,
+            "balance": 21296.0,
+            "projectId": "C5210",
+            "projectDr": 450.0
         },
         {
             "date": null,
             "details": "Porter  From Paintint Cost to Proto type C5023",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 2500.0,
+            "balance": 18796.0,
+            "projectId": "C5023",
+            "projectDr": 2500.0
         },
         {
             "date": null,
             "details": "Porter From Faridabad to Orient C5210",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 100.0,
+            "balance": 18696.0,
+            "projectId": "C5210",
+            "projectDr": 100.0
         },
         {
             "date": null,
             "details": "Porter From Proto type to KS C5023",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 240.0,
+            "balance": 18456.0,
+            "projectId": "C5023",
+            "projectDr": 240.0
         },
         {
-            "date": "2026-05-20 00:00:00",
+            "date": "2026-05-20",
             "details": "Sky-5 Hotel  April Full Paymnets Englabs Only",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 5617.0,
+            "balance": 12839.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3891,35 +4521,35 @@
             "date": null,
             "details": "Porter From Faridabad to Pune C5023",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 1125.0,
+            "balance": 11714.0,
+            "projectId": "C5023",
+            "projectDr": 1125.0
         },
         {
             "date": null,
             "details": "Porter From Faridabad to Gurugram C5209",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 600.0,
+            "balance": 11114.0,
+            "projectId": "C5209",
+            "projectDr": 600.0
         },
         {
-            "date": "2026-05-21 00:00:00",
+            "date": "2026-05-21",
             "details": "Drone Survey Barwala Site (2 Person Dinner)",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 270.0,
+            "balance": 10844.0,
+            "projectId": "Bhood Survey",
+            "projectDr": 270.0
         },
         {
             "date": null,
             "details": "Purchase toSprits Led Lights & Drivers  By Gurpreet ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1200.0,
+            "balance": 9644.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3927,17 +4557,17 @@
             "date": null,
             "details": "Porter From Excel Rapid to KS C5179",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 183.0,
+            "balance": 9461.0,
+            "projectId": "C5179",
+            "projectDr": 183.0
         },
         {
             "date": null,
             "details": "Purchase Zip Lock By Gurpreet ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 330.0,
+            "balance": 9131.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3945,35 +4575,35 @@
             "date": null,
             "details": "Porter From Noida to Karnal ( JSS-CXXXX)",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 301.0,
+            "balance": 8830.0,
+            "projectId": "JSS",
+            "projectDr": 301.0
         },
         {
             "date": null,
             "details": "Porter From Excel Rapid to Nipa C5209",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 286.0,
+            "balance": 8544.0,
+            "projectId": "C5209",
+            "projectDr": 286.0
         },
         {
-            "date": "2026-05-22 00:00:00",
+            "date": "2026-05-22",
             "details": "Porter From Delhi to Chandigarh C5216",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 200.0,
+            "balance": 8344.0,
+            "projectId": "C5216",
+            "projectDr": 200.0
         },
         {
             "date": null,
             "details": "Blinkit UPI - (Purchased to MILK & COFFE POUCH)",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 284.0,
+            "balance": 8060.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -3981,80 +4611,80 @@
             "date": null,
             "details": "Porter From Tribune Chowk to Englabs (JSS - CXXX)",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 102.0,
+            "balance": 7958.0,
+            "projectId": "JSS",
+            "projectDr": 102.0
         },
         {
             "date": null,
             "details": "Porter From Delhi to HC Robotics Hydrabad C5179",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 1450.0,
+            "balance": 6508.0,
+            "projectId": "C5179",
+            "projectDr": 1450.0
         },
         {
             "date": null,
             "details": "Porter From Englabs to Sark C5216",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 100.0,
+            "balance": 6408.0,
+            "projectId": "C5216",
+            "projectDr": 100.0
         },
         {
             "date": null,
             "details": "Porter From Tribune Chowk to Englabs C5195",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 130.0,
+            "balance": 6278.0,
+            "projectId": "C5195",
+            "projectDr": 130.0
         },
         {
             "date": null,
             "details": "Porter From Noida to Englabs C5198",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 1000.0,
+            "balance": 5278.0,
+            "projectId": "C5198",
+            "projectDr": 1000.0
         },
         {
             "date": null,
             "details": "Porter From Excel to Courier C5212",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 256.0,
+            "balance": 5022.0,
+            "projectId": "C5212",
+            "projectDr": 256.0
         },
         {
             "date": null,
             "details": "Porter From Excel to Courier C5207",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 1450.0,
+            "balance": 3572.0,
+            "projectId": "C5207",
+            "projectDr": 1450.0
         },
         {
             "date": null,
             "details": "Porter From Talekarto Pune CXXXX",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 533.0,
+            "balance": 3039.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-05-23 00:00:00",
+            "date": "2026-05-23",
             "details": "Purchase to Milk By Arjun ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 132.0,
+            "balance": 2907.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4062,26 +4692,26 @@
             "date": null,
             "details": "Porter From Excel to Delhi C5195",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 504.0,
+            "balance": 2403.0,
+            "projectId": "C5195",
+            "projectDr": 504.0
         },
         {
-            "date": "2026-05-25 00:00:00",
+            "date": "2026-05-25",
             "details": "Porter From CHD Airport to Englabs C5190",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 5000.0,
+            "dr": 500.0,
+            "balance": 6903.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 500.0
         },
         {
             "date": null,
             "details": "From Englabs to Aebocode (Visit) ( Shreeya, Anurag, Aruti)",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 136.0,
+            "balance": 6767.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4089,8 +4719,8 @@
             "date": null,
             "details": "From Aebocode to Englabs (Visit) ( Shreeya, Anurag, Aruti) (Return )",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 134.0,
+            "balance": 6633.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4098,17 +4728,17 @@
             "date": null,
             "details": "Porter From Adroitec to Faridabad C5235",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 276.0,
+            "balance": 6357.0,
+            "projectId": "C5195",
+            "projectDr": 276.0
         },
         {
             "date": null,
             "details": "Purchased to New SIM For Civil Team / Stroe Room (Arjun - 7837484439)",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 350.0,
+            "balance": 6007.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4116,80 +4746,80 @@
             "date": null,
             "details": "Porter From Excel to Painter (Noida) C5023",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 200.0,
+            "balance": 5807.0,
+            "projectId": "C5195",
+            "projectDr": 200.0
         },
         {
             "date": null,
             "details": "Porter From Talekar to pune Airport C5223",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 400.0,
+            "balance": 5407.0,
+            "projectId": "C5223",
+            "projectDr": 400.0
         },
         {
-            "date": "2026-05-26 00:00:00",
+            "date": "2026-05-26",
             "details": "Porter Chennai to Henkel C5223",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 800.0,
+            "balance": 4607.0,
+            "projectId": "C5223",
+            "projectDr": 800.0
         },
         {
             "date": null,
             "details": "Porter From Noida to Faridabad C5023",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 270.0,
+            "balance": 4337.0,
+            "projectId": "C5223",
+            "projectDr": 270.0
         },
         {
             "date": null,
             "details": "Porter From Faridabad to Nipa Gurgram C4235",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 380.0,
+            "balance": 3957.0,
+            "projectId": "C4235",
+            "projectDr": 380.0
         },
         {
             "date": null,
             "details": "Porter From Delhi to Pune AV Machining C5023",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 1800.0,
+            "balance": 2157.0,
+            "projectId": "C5023",
+            "projectDr": 1800.0
         },
         {
-            "date": "2026-05-27 00:00:00",
+            "date": "2026-05-27",
             "details": "Porter From Delhi to CHD C5195",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 600.0,
+            "balance": 1557.0,
+            "projectId": "C5195",
+            "projectDr": 600.0
         },
         {
             "date": null,
             "details": "Porter From Talekar to Atomberg pune C5213",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 260.0,
+            "balance": 1297.0,
+            "projectId": "C5213",
+            "projectDr": 260.0
         },
         {
             "date": null,
             "details": "Purchase to Attachment Tape By Gurpreet ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 150.0,
+            "balance": 1147.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4197,8 +4827,8 @@
             "date": null,
             "details": "Purchase to Electricity Tape By Gurpreet ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 160.0,
+            "balance": 987.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4206,8 +4836,8 @@
             "date": null,
             "details": "Purchase to tv & ac remote  By Gurpreet ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 340.0,
+            "balance": 647.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4215,35 +4845,35 @@
             "date": null,
             "details": "Porter From CHD Airport to Englabs C5029",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 100.0,
+            "balance": 547.0,
+            "projectId": "C5029",
+            "projectDr": 100.0
         },
         {
-            "date": "2026-05-28 00:00:00",
+            "date": "2026-05-28",
             "details": "Porter From Excel to Paint C5023",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "cr": 10000.0,
+            "dr": 190.0,
+            "balance": 10357.0,
+            "projectId": "C5023",
+            "projectDr": 190.0
         },
         {
             "date": null,
             "details": "Porter From Noida to Faridabad C5023",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 300.0,
+            "balance": 10057.0,
+            "projectId": "C5023",
+            "projectDr": 300.0
         },
         {
-            "date": "2026-05-29 00:00:00",
+            "date": "2026-05-29",
             "details": "Zepto UPI (Milk & Namkin) by Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 182.0,
+            "balance": 9875.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4251,26 +4881,26 @@
             "date": null,
             "details": "Painting Charge for Painter Noida  C5023",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 1900.0,
+            "balance": 7975.0,
+            "projectId": "C5023",
+            "projectDr": 1900.0
         },
         {
             "date": null,
             "details": "Porter From Faridabad to Pune C5023",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 2250.0,
+            "balance": 5725.0,
+            "projectId": "C5023",
+            "projectDr": 2250.0
         },
         {
-            "date": "2026-05-30 00:00:00",
+            "date": "2026-05-30",
             "details": "Zepto UPI (Milk & Adrak) By Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 163.0,
+            "balance": 5562.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4278,8 +4908,8 @@
             "date": null,
             "details": "Zepto Wallet Add Amount by Gaurav",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1000.0,
+            "balance": 4562.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4287,26 +4917,26 @@
             "date": null,
             "details": "Porter From SK Techno to Englabs C5224",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 170.0,
+            "balance": 4392.0,
+            "projectId": "C5224",
+            "projectDr": 170.0
         },
         {
             "date": null,
             "details": "Porter From Abroitec Noida to Faridabad C5229",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 270.0,
+            "balance": 4122.0,
+            "projectId": "C5229",
+            "projectDr": 270.0
         },
         {
             "date": null,
             "details": "Mr. Bahl was paid in full (purchase of Englabs) May-2026",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 270.0,
+            "balance": 3852.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4314,8 +4944,8 @@
             "date": null,
             "details": "No Remarks ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 740.0,
+            "balance": 3112.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4323,28 +4953,46 @@
             "date": null,
             "details": "Porter From Rapid proto to Coimbatore C5023",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 1000.0,
+            "balance": 2112.0,
+            "projectId": "C5023",
+            "projectDr": 1000.0
         },
         {
             "date": null,
             "details": "Porter From Taleker to Atomberg C5228",
             "cr": 0.0,
+            "dr": 220.0,
+            "balance": 1892.0,
+            "projectId": "C5228",
+            "projectDr": 220.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
             "dr": 0.0,
-            "balance": 0.0,
+            "balance": 1892.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 1892.0,
             "projectId": null,
             "projectDr": 0.0
         }
     ],
     "Jun_2026": [
         {
-            "date": "2026-06-01 00:00:00",
+            "date": "2026-06-01",
             "details": "Last Month Balance ",
-            "cr": 0.0,
+            "cr": 1892.0,
             "dr": 0.0,
-            "balance": 0.0,
+            "balance": 1892.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4352,8 +5000,8 @@
             "date": null,
             "details": "Purchased to Fevikwik 10 pcs only Cxxx",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 650.0,
+            "balance": 1242.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4361,215 +5009,215 @@
             "date": null,
             "details": "Paid to Car Parking Airport C5023",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 40.0,
+            "balance": 1202.0,
+            "projectId": "C5023",
+            "projectDr": 40.0
         },
         {
             "date": null,
             "details": "Porter From Excel to Delhi C5195",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 271.0,
+            "balance": 931.0,
+            "projectId": "C5195",
+            "projectDr": 271.0
         },
         {
-            "date": "2026-06-02 00:00:00",
+            "date": "2026-06-02",
             "details": "Porter From Delhi to Chandigarh C5195",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 600.0,
+            "balance": 331.0,
+            "projectId": "C5195",
+            "projectDr": 600.0
         },
         {
-            "date": "2026-06-03 00:00:00",
+            "date": "2026-06-03",
             "details": "Porter From \u2026............. To \u2026................CXXXX Una Minda",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 100.0,
+            "balance": 231.0,
+            "projectId": "CXXXX",
+            "projectDr": 100.0
         },
         {
             "date": null,
             "details": "Porter From Englabs to Akash Bhardwaj C5238",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "cr": 10000.0,
+            "dr": 180.0,
+            "balance": 10051.0,
+            "projectId": "C5238",
+            "projectDr": 180.0
         },
         {
             "date": null,
             "details": "Porter From Englabs to Hella C5206",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 100.0,
+            "balance": 9951.0,
+            "projectId": "C5206",
+            "projectDr": 100.0
         },
         {
-            "date": "2026-06-04 00:00:00",
+            "date": "2026-06-04",
             "details": "Porter From Englabs to Hella C5206",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 101.0,
+            "balance": 9850.0,
+            "projectId": "C5206",
+            "projectDr": 101.0
         },
         {
             "date": null,
             "details": "Porter From Delhi to Chandigarh C5247",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 600.0,
+            "balance": 9250.0,
+            "projectId": "C5247",
+            "projectDr": 600.0
         },
         {
             "date": null,
             "details": "Porter From Chandigarh Railway to Englabs C5247",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 100.0,
+            "balance": 9150.0,
+            "projectId": "C5247",
+            "projectDr": 100.0
         },
         {
             "date": null,
             "details": "No Remarks",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 320.0,
+            "balance": 8830.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 320.0
         },
         {
             "date": null,
             "details": "No Remarks",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 200.0,
+            "balance": 8630.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 200.0
         },
         {
             "date": null,
             "details": "Porter From Henkel to Machining C5223",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 535.0,
+            "balance": 8095.0,
+            "projectId": "C5223",
+            "projectDr": 535.0
         },
         {
             "date": null,
             "details": "Porter From Only Screws to Chennai Airport C5230",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 150.0,
+            "balance": 7945.0,
+            "projectId": "C5230",
+            "projectDr": 150.0
         },
         {
-            "date": "2026-06-05 00:00:00",
+            "date": "2026-06-05",
             "details": "Zepto Wallet ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1000.0,
+            "balance": 6945.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 1000.0
         },
         {
-            "date": "2026-06-06 00:00:00",
+            "date": "2026-06-06",
             "details": "Porter From \u2026............. To  Henkel C5223",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 800.0,
+            "balance": 6145.0,
+            "projectId": "C5223",
+            "projectDr": 800.0
         },
         {
-            "date": "2026-06-09 00:00:00",
+            "date": "2026-06-09",
             "details": "Porter From Platoforus to Enertics C5230",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 110.0,
+            "balance": 6035.0,
+            "projectId": "C5230",
+            "projectDr": 110.0
         },
         {
-            "date": "2026-06-10 00:00:00",
+            "date": "2026-06-10",
             "details": "Porter From Excel to Faridabad  C5023",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 164.0,
+            "balance": 5871.0,
+            "projectId": "C5223",
+            "projectDr": 164.0
         },
         {
             "date": null,
             "details": "Porter From Englabs to Param Appliances C5249",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 80.0,
+            "balance": 5791.0,
+            "projectId": "C5249",
+            "projectDr": 80.0
         },
         {
             "date": null,
             "details": "Porter From Faridabad to AV Pune C5023",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 1750.0,
+            "balance": 4041.0,
+            "projectId": "C5023",
+            "projectDr": 1750.0
         },
         {
             "date": null,
             "details": "Paid to Gurpreet Porter For Electrical Items ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1000.0,
+            "balance": 3041.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 1000.0
         },
         {
             "date": null,
             "details": "Porter From Excel to Delhi C5195",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "cr": 350.0,
+            "dr": 350.0,
+            "balance": 3041.0,
+            "projectId": "C5195",
+            "projectDr": 350.0
         },
         {
-            "date": "2026-06-11 00:00:00",
+            "date": "2026-06-11",
             "details": "Porter From Delhi (Labat) to Chandigarh C5195",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 400.0,
+            "balance": 2641.0,
+            "projectId": "C5195",
+            "projectDr": 400.0
         },
         {
             "date": null,
             "details": "Porter From Chandigarh to Englabs C5195",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 100.0,
+            "balance": 2541.0,
+            "projectId": "C5195",
+            "projectDr": 100.0
         },
         {
             "date": null,
             "details": "Purchase to Sugar & Chaye Patti Cash",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 180.0,
+            "dr": 530.0,
+            "balance": 2191.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4577,17 +5225,17 @@
             "date": null,
             "details": "Porter From Adroitec to  \u2026................ C5242",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 240.0,
+            "balance": 1951.0,
+            "projectId": "C5242",
+            "projectDr": 240.0
         },
         {
             "date": null,
             "details": "Sky-5 Hotel  May Full Paymnets Englabs Only",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 931.0,
+            "balance": 1020.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4595,143 +5243,143 @@
             "date": null,
             "details": "Porter From Ridhan Chandigarh to Englabs ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 150.0,
+            "balance": 870.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-06-12 00:00:00",
+            "date": "2026-06-12",
             "details": "Porter From SK Techno to Englabs C5272",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "cr": 20000.0,
+            "dr": 170.0,
+            "balance": 20700.0,
+            "projectId": "C5272",
+            "projectDr": 170.0
         },
         {
             "date": null,
             "details": "Porter  From Plastofurs Interprises to Englabs C5230",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 108.0,
+            "balance": 20592.0,
+            "projectId": "C5230",
+            "projectDr": 108.0
         },
         {
-            "date": "2026-06-12 00:00:00",
+            "date": "2026-06-12",
             "details": "(Date: 10-04-2026) Porter From Plastipack to Delhi C4929 Paid to Shubham ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 353.0,
+            "balance": 20239.0,
+            "projectId": "C4929",
+            "projectDr": 353.0
         },
         {
             "date": null,
             "details": "(Date: 13-04-2026) Porter From Workaad to New Delhi C5131 Paid to Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 370.0,
+            "balance": 19869.0,
+            "projectId": "C5131",
+            "projectDr": 370.0
         },
         {
             "date": null,
             "details": "(Date: 14-04-2026) Porter From Chennai to Henkel Irungukotai C5008 Paid to Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 800.0,
+            "balance": 19069.0,
+            "projectId": "C5008",
+            "projectDr": 800.0
         },
         {
             "date": null,
             "details": "(Date: 18-04-2026) Porter From Excel Rapidetch to Marelli Manesar C5137  Paid to Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 550.0,
+            "balance": 18519.0,
+            "projectId": "C5137",
+            "projectDr": 550.0
         },
         {
             "date": null,
             "details": "(Date: 23-04-2026) Porter From Plastipack to New Delhi C5133 Paid to Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 480.0,
+            "balance": 18039.0,
+            "projectId": "C5133",
+            "projectDr": 480.0
         },
         {
             "date": null,
             "details": "(Date: 03-05-2026) Porter From Tribune Chowk to Englabs C5195 Paid to Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 300.0,
+            "balance": 17739.0,
+            "projectId": "C5195",
+            "projectDr": 300.0
         },
         {
             "date": null,
             "details": "(Date: 13-05-2026) Porter From Telekar to Atomberg C5189 Paid to Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 260.0,
+            "balance": 17479.0,
+            "projectId": "C5189",
+            "projectDr": 260.0
         },
         {
             "date": null,
             "details": "(Date: 15-05-2026) Porter From Rohit Sir to Rapideth C5212 Paid to Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 230.0,
+            "balance": 17249.0,
+            "projectId": "C5212",
+            "projectDr": 230.0
         },
         {
             "date": null,
             "details": "(Date: 16-05-2026) Porter From Excel Rapideth to Delhi C5195 Paid to Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 400.0,
+            "balance": 16849.0,
+            "projectId": "C5195",
+            "projectDr": 400.0
         },
         {
             "date": null,
             "details": "(Date: 17-05-2026) Porter From Delhi to Tribune Chowk to Englabs C5195 Paid to Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 601.0,
+            "balance": 16248.0,
+            "projectId": "C5195",
+            "projectDr": 601.0
         },
         {
             "date": null,
             "details": "(Date: 24-05-2026) Porter From Delhi to Chandigarh Tribune Chowk C5195 Paid to Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 500.0,
+            "balance": 15748.0,
+            "projectId": "C5239",
+            "projectDr": 500.0
         },
         {
             "date": null,
             "details": "(Date: 25-05-2026) Porter From Sark to Englabs C5239",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 104.0,
+            "balance": 15644.0,
+            "projectId": "C5239",
+            "projectDr": 104.0
         },
         {
             "date": null,
             "details": "(Date: 26-05-2026) Porter From Englabs to DRDO (Tender Copy Delivery) Paid to Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 200.0,
+            "balance": 15444.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4739,8 +5387,8 @@
             "date": null,
             "details": " (Date: 03-06-2026) Pune Customer Visit  Uber Rent (Shubham & Aruti Mam) Paid to Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 3117.0,
+            "balance": 12327.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4748,80 +5396,80 @@
             "date": null,
             "details": "(Date: 07-06-2026) Porter From Plastipack to Delhi C5244 Paid to Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 400.0,
+            "balance": 11927.0,
+            "projectId": "C5244",
+            "projectDr": 400.0
         },
         {
             "date": null,
             "details": "(Date: 07-06-2026) Porter From Delhi to Chandigarh C5244",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 600.0,
+            "balance": 11327.0,
+            "projectId": "C5244",
+            "projectDr": 600.0
         },
         {
             "date": null,
             "details": "(Date: 07-06-2026) Porter From Rnglabs to Henkel Mohali  C5244 Paid to Shubham",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 200.0,
+            "balance": 11127.0,
+            "projectId": "C5244",
+            "projectDr": 200.0
         },
         {
-            "date": "2026-06-12 00:00:00",
+            "date": "2026-06-12",
             "details": "Paid to Shubham to Gurpreet Porter Advance Rs500/- & Purchase to Electricals itmes Rs100/-",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 600.0,
+            "balance": 10527.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 600.0
         },
         {
             "date": null,
             "details": "Paid to Gurpreet Porter May full and June 12-06-2026 Full & Final Payments ",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 2.0,
+            "dr": 1082.0,
+            "balance": 9447.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 1082.0
         },
         {
-            "date": "2026-06-12 00:00:00",
+            "date": "2026-06-12",
             "details": "(Date: 02-05-2026) Porter From Plastipack to Karnal C\u2026...........",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 789.0,
+            "balance": 8658.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 789.0
         },
         {
             "date": null,
             "details": "(Date: 04-05-2026) Porter From Englabs to Labat Asia up & Down C\u2026..........",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 660.0,
+            "balance": 7998.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 660.0
         },
         {
             "date": null,
             "details": "(Date: 09-05-2026) Porter Anurag home to Labat ASIA Up & Down C\u2026..........",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 208.0,
+            "balance": 7790.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 208.0
         },
         {
             "date": null,
             "details": "(Date: 12-05-2026) Porter From Anurag home to GPP TO Ultraspark Up & Down C\u2026.......",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 64.0,
+            "balance": 7726.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4829,8 +5477,8 @@
             "date": null,
             "details": "(Date: 15-05-2026) Porter From Englabs to Ultraspark C\u2026...........",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 80.0,
+            "balance": 7646.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4838,17 +5486,17 @@
             "date": null,
             "details": "(Date: 16-05-2026) Porter From Anurag home to Tribune Chowk to Englabs C\u2026.........",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 270.0,
+            "balance": 7376.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 270.0
         },
         {
             "date": null,
             "details": "(Date: 16-05-2026) Porter From Englabs to Industrial  Area C\u2026........",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 285.0,
+            "balance": 7091.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4856,8 +5504,8 @@
             "date": null,
             "details": "(Date: 23-05-2026) Porter From \u2026.......... to Industrial  Area (Inserts Search) C\u2026........",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 112.0,
+            "balance": 6979.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4865,17 +5513,17 @@
             "date": null,
             "details": "(Date: 26-05-2026) Porter From Anurag Home to Industrial  Area C\u2026........",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 64.0,
+            "balance": 6915.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 64.0
         },
         {
             "date": null,
             "details": "(Date: 26-05-2026) Porter FromEnglabs  to Industrial  Area Up & Down  C\u2026........",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 160.0,
+            "balance": 6755.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4883,62 +5531,62 @@
             "date": null,
             "details": "(Date: 26-05-2026) Porter From Englabs to Excel to Karnal C5915",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 285.0,
+            "balance": 6470.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 285.0
         },
         {
             "date": null,
             "details": "(Date: 27-05-2026) Porter From Anurag Home to Industrial  Area C\u2026........",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 64.0,
+            "balance": 6406.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 64.0
         },
         {
             "date": null,
             "details": "(Date: 27-05-2026) Porter From Englabs to Industrial  C\u2026........",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 96.0,
+            "balance": 6310.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 96.0
         },
         {
             "date": null,
             "details": "(Date: 27-05-2026) Porter From \u2026............. to Rajesh Sir   C\u2026........",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 50.0,
+            "balance": 6260.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 50.0
         },
         {
             "date": null,
             "details": "(Date: 28-05-2026) Porter From Anurag Home  to Industrial Area   C\u2026........",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 64.0,
+            "balance": 6196.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 64.0
         },
         {
             "date": null,
             "details": "(Date: 29-05-2026) Porter From Anurag Home  to Industrial Area   C\u2026........",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 64.0,
+            "balance": 6132.0,
             "projectId": null,
             "projectDr": 0.0
         },
         {
-            "date": "2026-06-13 00:00:00",
+            "date": "2026-06-13",
             "details": "Zepto Wallet  by Gaurav",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1000.0,
+            "balance": 5132.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4946,8 +5594,8 @@
             "date": null,
             "details": "Purchase to Water bottel (250 & 1000ml qty 200) Advance Payments",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 1000.0,
+            "balance": 4132.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4955,26 +5603,26 @@
             "date": null,
             "details": "Porter  From Abbroitec to Endureair C5242",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 250.0,
+            "balance": 3882.0,
+            "projectId": "C5242",
+            "projectDr": 250.0
         },
         {
-            "date": "2026-06-15 00:00:00",
+            "date": "2026-06-15",
             "details": "Porter From Exvel to Courier C5021",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 170.0,
+            "balance": 3712.0,
+            "projectId": "C5021",
+            "projectDr": 170.0
         },
         {
             "date": null,
             "details": "Recharge Ratnesh SIM NO - 09  (8360585697) 14 Days Only",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 198.0,
+            "balance": 3514.0,
             "projectId": null,
             "projectDr": 0.0
         },
@@ -4982,44 +5630,422 @@
             "date": null,
             "details": "Paid to Mohali Airport Parking Fees C5251",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
-            "projectId": null,
-            "projectDr": 0.0
+            "dr": 40.0,
+            "balance": 3474.0,
+            "projectId": "C5251",
+            "projectDr": 40.0
         },
         {
             "date": null,
             "details": "Zepto Wallet  by Gaurav",
-            "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "cr": 8000.0,
+            "dr": 1000.0,
+            "balance": 10474.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 1000.0
         },
         {
-            "date": "2026-06-16 00:00:00",
+            "date": "2026-06-16",
             "details": "Purchase to Fexikvik 100pc ",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 6500.0,
+            "balance": 3974.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 6500.0
         },
         {
             "date": null,
             "details": "Porter From Faridbad to Pune C5021",
             "cr": 0.0,
-            "dr": 0.0,
-            "balance": 0.0,
+            "dr": 730.0,
+            "balance": 3244.0,
             "projectId": null,
-            "projectDr": 0.0
+            "projectDr": 730.0
         },
         {
             "date": null,
             "details": "Porter From Manimajra to Englabs Fevikwik 100pcs",
             "cr": 0.0,
+            "dr": 54.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 54.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
             "dr": 0.0,
-            "balance": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
+            "projectId": null,
+            "projectDr": 0.0
+        },
+        {
+            "date": null,
+            "details": "-",
+            "cr": 0.0,
+            "dr": 0.0,
+            "balance": 3190.0,
             "projectId": null,
             "projectDr": 0.0
         }

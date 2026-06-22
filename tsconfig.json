@@ -18,13 +18,16 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@components/*": ["src/components/*"],
-      "@common/*": ["src/components/common/*"],
-      "@features/*": ["src/features/*"],
-      "@lib/*": ["src/lib/*"],
-      "@services/*": ["src/lib/services/*"],
-      "@domain/*": ["src/lib/domain/*"],
-      "@config/*": ["src/lib/config/*"],
+      "@app/*": ["src/app/*"],
+      "@modules/*": ["src/modules/*"],
+      "@shared/*": ["src/shared/*"],
+      "@components/*": ["src/shared/components/*"],
+      "@common/*": ["src/shared/components/common/*"],
+      "@features/*": ["src/modules/*"],
+      "@lib/*": ["src/shared/utils/*", "src/shared/services/*"],
+      "@services/*": ["src/shared/services/*"],
+      "@domain/*": ["src/shared/services/*"],
+      "@config/*": ["src/shared/utils/config/*"],
       "@data/*": ["data/*"]
     }
   },

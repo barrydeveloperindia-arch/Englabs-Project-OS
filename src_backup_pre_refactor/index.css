@@ -1,0 +1,270 @@
+@import "tailwindcss";
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --industrial-slate: #0e4368;
+  --emerald-glow: 0 0 20px rgba(82, 204, 163, 0.2);
+  --card-shadow: 0 8px 32px 0 rgba(9, 42, 66, 0.08);
+}
+
+.dark {
+  --glass-bg: rgba(15, 23, 42, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --industrial-slate: #092a42;
+  --emerald-glow: 0 0 30px rgba(82, 204, 163, 0.3);
+  --card-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.5);
+}
+
+.dark body, 
+.dark #root,
+.dark main,
+.dark div[class*="bg-[#F8FAFC]"] {
+  background: radial-gradient(circle at top left, #0e4368, #092a42) !important;
+  color: #f8fafc !important;
+}
+
+.dark header,
+.dark div[class*="bg-white"] {
+  background: rgba(9, 42, 66, 0.6) !important;
+  backdrop-filter: blur(20px) !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.dark h1, .dark h2, .dark h3, .dark span, .dark p, .dark label, .dark td {
+  color: #ffffff !important;
+}
+
+.dark input, 
+.dark select, 
+.dark textarea {
+  background-color: rgba(9, 42, 66, 0.8) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark thead tr {
+  background-color: #092a42 !important;
+}
+
+.dark button:not([class*="bg-emerald"]):not([class*="bg-amber"]):not([class*="bg-rose"]):not([class*="bg-blue"]) {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
+}
+
+.dark .text-slate-400, .dark .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+/* UI Utilities */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+@media (max-width: 1279px) {
+  .pt-safe {
+    padding-top: max(env(safe-area-inset-top, 0px), 28px);
+  }
+}
+
+@theme {
+  --font-inter: "Inter", sans-serif;
+  --font-outfit: "Outfit", sans-serif;
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--card-shadow);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px 0 rgba(15, 23, 42, 0.12);
+  border-color: rgba(82, 204, 163, 0.3);
+}
+
+.industrial-glow {
+  box-shadow: var(--emerald-glow);
+}
+
+/* Micro-Interaction Engine */
+@keyframes fadeInUpStaggered {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes springZoom {
+  0% { transform: scale(0.9); opacity: 0; }
+  70% { transform: scale(1.02); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes statusBreath {
+  0%, 100% { opacity: 0.6; transform: scale(0.98); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+.staggered-entry {
+  animation: fadeInUpStaggered 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-spring-zoom {
+  animation: springZoom 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.status-breathing {
+  animation: statusBreath 2s ease-in-out infinite;
+}
+
+.btn-glow:hover {
+  box-shadow: 0 0 15px rgba(82, 204, 163, 0.4);
+}
+
+/* Custom Scrollbar for Clinical Aesthetic */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #E2E8F0;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #CBD5E1;
+}
+
+.dark-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dark-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* Clinical Printing Protocol */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .flex-1 {
+    display: block !important;
+  }
+
+  main {
+    padding: 20px !important;
+    overflow: visible !important;
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  th, td {
+    border-bottom: 1px solid #E2E8F0 !important;
+    padding: 12px 8px !important;
+    font-size: 10px !important;
+  }
+
+  .bg-white {
+    background: white !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .rounded-\[2\.5rem\] {
+    border-radius: 0 !important;
+  }
+
+  /* Force text colors for readability in print */
+  .text-slate-900 { color: black !important; }
+  .text-slate-400 { color: #64748b !important; }
+  .text-emerald-500 { color: #52cca3 !important; }
+  .text-amber-500 { color: #f59e0b !important; }
+}
+
+.no-print {
+  transition: opacity 0.3s ease;
+}
+
+/* Industrial Grid Overlay */
+.industrial-grid {
+  background-image: radial-gradient(#E2E8F0 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dark .industrial-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+}
+
+.animate-spin-slow {
+  animation: spin 8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+.animate-shake {
+  animation: shake 0.15s ease-in-out 0s 2;
+}

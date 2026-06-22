@@ -87,7 +87,7 @@ vi.mock('@services/database_service', () => ({
     syncAllProjectsToFirebase: vi.fn(() => Promise.resolve(true))
 }));
 
-vi.mock('@domain/inventory_service', () => ({
+vi.mock('@shared/services/inventory_service', () => ({
     processInventoryUpdate: vi.fn(() => Promise.resolve([{ success: true }])),
     fetchInventoryMaster: vi.fn(() => Promise.resolve([])),
     fetchStockMovement: vi.fn(() => Promise.resolve([])),
@@ -95,7 +95,7 @@ vi.mock('@domain/inventory_service', () => ({
     fetchMaterialRequirements: vi.fn(() => Promise.resolve([]))
 }));
 
-vi.mock('@domain/system_guard', () => ({
+vi.mock('@shared/services/system_guard', () => ({
     logAction: vi.fn(),
     AuditLog: vi.fn()
 }));
@@ -121,6 +121,7 @@ describe('Antigravity Dashboard UI', () => {
     beforeEach(() => {
         localStorage.setItem('englabs_authenticated', 'true');
         localStorage.setItem('englabs_user_role', 'ADMIN');
+        localStorage.setItem('englabs_last_project_id', 'C2718');
     });
 
     afterEach(() => {
@@ -133,7 +134,7 @@ describe('Antigravity Dashboard UI', () => {
             const initBtn = await screen.findByText('Initialize Workday', {}, { timeout: 1000 });
             if (initBtn) fireEvent.click(initBtn);
         } catch (e) {}
-        expect(await screen.findByText('Project Command Center')).toBeDefined();
+        expect(await screen.findByText('Mission Control')).toBeDefined();
     });
 
     it('displays the default mock project', async () => {
@@ -142,6 +143,8 @@ describe('Antigravity Dashboard UI', () => {
             const initBtn = await screen.findByText('Initialize Workday', {}, { timeout: 1000 });
             if (initBtn) fireEvent.click(initBtn);
         } catch (e) {}
+        const projectsTab = await screen.findByTestId('sidebar-btn-projects');
+        fireEvent.click(projectsTab);
         const elements = await screen.findAllByText('THROTTLE AEROSPACE');
         expect(elements.length).toBeGreaterThan(0);
         const idElements = await screen.findAllByText('C2718');

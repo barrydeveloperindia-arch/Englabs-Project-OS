@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateBudgetUtilization, getNextStage, isCXXXFormat, ProjectData } from '@domain/project';
+import { calculateBudgetUtilization, getNextStage, isCXXXFormat, ProjectData } from '@shared/services/project';
 
 describe('Antigravity Project Logic', () => {
     it('should correctly calculate budget utilization', () => {

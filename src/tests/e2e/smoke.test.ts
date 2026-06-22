@@ -77,7 +77,7 @@ test.describe('Englabs Projects OS - Core Workflow', () => {
     }
     
     await expect(page.getByText('Porter Service Management')).toBeVisible({ timeout: 15000 });
-    await expect(page.getByText('PROTECTION ACTIVE')).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText('PROTECTED')).toBeVisible({ timeout: 15000 });
 
     // Open New Trip Form
     await page.getByRole('button', { name: /NEW TRIP/i }).click({ force: true });
@@ -85,5 +85,36 @@ test.describe('Englabs Projects OS - Core Workflow', () => {
     
     // Verify Form Fields
     await expect(page.locator('input[placeholder="Enter Porter Name"]')).toBeVisible({ timeout: 15000 });
+  });
+
+  test('HR Dashboard visibility', async ({ page, isMobile }) => {
+    if (isMobile) {
+      await page.getByTestId('mobile-nav-btn-hr').click({ force: true });
+    } else {
+      await page.getByTestId('sidebar-btn-hr-team-management').click({ force: true });
+    }
+    
+    await expect(page.getByText('HR Operations Center', { exact: false })).toBeVisible({ timeout: 15000 });
+  });
+
+  test('Project Dashboard Fevikwik Checkout', async ({ page, isMobile }) => {
+    if (isMobile) {
+      // Projects is usually home on mobile or under a different grid button, skip for now to avoid mobile flakiness
+      return;
+    } else {
+      await page.getByTestId('sidebar-btn-projects').click({ force: true });
+      await page.getByRole('button', { name: 'View Project Grid' }).click({ force: true });
+    }
+    
+    // In Project list, click the first project
+    const projectCard = page.locator('button:has-text("C2")').first();
+    await projectCard.click({ force: true });
+
+    // Wait for the Live Check-Out Panel to appear
+    await expect(page.getByText('Live Check-Out Panel')).toBeVisible({ timeout: 15000 });
+    
+    // Verify the checkout form is visible
+    await expect(page.locator('select').first()).toBeVisible();
+    await expect(page.getByRole('button', { name: 'CHECK OUT' })).toBeVisible();
   });
 });

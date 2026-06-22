@@ -125,13 +125,16 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@components': path.resolve(__dirname, './src/components'),
-      '@common': path.resolve(__dirname, './src/components/common'),
-      '@features': path.resolve(__dirname, './src/features'),
-      '@lib': path.resolve(__dirname, './src/lib'),
-      '@services': path.resolve(__dirname, './src/lib/services'),
-      '@domain': path.resolve(__dirname, './src/lib/domain'),
-      '@config': path.resolve(__dirname, './src/lib/config'),
+      '@app': path.resolve(__dirname, './src/app'),
+      '@modules': path.resolve(__dirname, './src/modules'),
+      '@shared': path.resolve(__dirname, './src/shared'),
+      '@components': path.resolve(__dirname, './src/shared/components'),
+      '@common': path.resolve(__dirname, './src/shared/components/common'),
+      '@features': path.resolve(__dirname, './src/modules'),
+      '@lib': path.resolve(__dirname, './src/shared/utils'),
+      '@services': path.resolve(__dirname, './src/shared/services'),
+      '@domain': path.resolve(__dirname, './src/shared/services'),
+      '@config': path.resolve(__dirname, './src/shared/utils/config'),
       '@data': path.resolve(__dirname, './data'),
     }
   },
@@ -146,6 +149,6 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/tests/setup.ts',
-    exclude: ['**/node_modules/**', '**/dist/**', '**/src/tests/e2e/**'],
+    exclude: ['**/node_modules/**', '**/dist/**', '**/src/tests/e2e/**', '**/src_backup_pre_refactor/**'],
   },
 })

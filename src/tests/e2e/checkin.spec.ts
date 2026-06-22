@@ -22,14 +22,14 @@ test('Check in Fevikwik', async ({ page }) => {
 
     // 1. Navigate to Stock Registry via the correct viewport navigation
     const isMobile = await page.evaluate(() => window.innerWidth < 768);
-    const navBtn = page.getByTestId('sidebar-btn-store');
+    const navBtn = page.getByTestId('sidebar-btn-reports');
     
     if (isMobile) {
         // Mobile layout routing
         const moreNav = page.getByTestId('mobile-nav-btn-more');
         if (await moreNav.isVisible()) {
             await moreNav.click({ force: true });
-            await page.getByTestId('mobile-grid-btn-store').click({ force: true });
+            await page.getByTestId('mobile-grid-btn-reports').click({ force: true });
         }
     } else {
         if (await navBtn.isVisible()) {
@@ -65,7 +65,7 @@ test('Check in Fevikwik', async ({ page }) => {
     await page.getByText('+ Show Advanced Options').click();
 
     // 7. Fill Supplier
-    await page.getByPlaceholder('Enter Supplier Name').fill('SUMEER SANITARY AND HARDWARE STORE');
+    await page.getByPlaceholder('Enter or select Supplier Name').fill('SUMEER SANITARY AND HARDWARE STORE');
 
     await page.getByPlaceholder('Audit details or invoice notes...').fill('FEVIKWIK 203 [20GM] - Invoice 10 dated 15-Jun-26');
 

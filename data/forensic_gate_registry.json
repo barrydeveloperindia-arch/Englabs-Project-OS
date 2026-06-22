@@ -483,5 +483,48 @@
     "isLocked": true,
     "status": "VERIFIED",
     "version": 1
+  },
+  {
+    "id": "IN-1531",
+    "timestamp": "2026-06-18T11:00:00Z",
+    "type": "INWARD",
+    "materialName": "Toilet Roll & Naphthalene balls",
+    "quantity": 121,
+    "items": [
+      {
+        "id": 1,
+        "name": "Toilet Roll",
+        "hsnCode": "ENG123",
+        "quantity": 120,
+        "unit": "Nos",
+        "rate": 19,
+        "amount": 2280
+      },
+      {
+        "id": 2,
+        "name": "Naphthalene balls",
+        "hsnCode": "eng1234",
+        "quantity": 1,
+        "unit": "Kg",
+        "rate": 260,
+        "amount": 260
+      }
+    ],
+    "partyName": "Sh. Lakshmi Chemical's",
+    "invoiceNumber": "852",
+    "vehicleNumber": "LOCAL",
+    "fromLocation": "Kalka, Hry.",
+    "toLocation": "MAIN STORE",
+    "amount": 2540,
+    "paidAmount": 2540,
+    "remainingAmount": 0,
+    "paymentStatus": "PAID",
+    "paymentMode": "CASH",
+    "employeeName": "SAM",
+    "supervisorName": "Gaurav Panchal",
+    "remarks": "INWARD MATERIAL - TOILET ROLL & NAPHTHALENE BALLS",
+    "isLocked": true,
+    "status": "VERIFIED",
+    "version": 1
   }
 ]

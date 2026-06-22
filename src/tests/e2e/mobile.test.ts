@@ -32,7 +32,7 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
   });
 
   test('1. Viewport Scaling & Main Bottom Tab Transitions', async ({ page, isMobile }) => {
-    await expect(page).toHaveTitle(/(ENGLABS PROJECTS OS|ENGLABS PORTER SERVICE)/);
+    await expect(page).toHaveTitle(/(ENGLABS PROJECTS OS|ENGLABS PORTER SERVICE|Englabs India Pvt. Ltd)/);
 
     if (isMobile) {
       // Verify sidebar is completely hidden
@@ -40,8 +40,8 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
 
       // Sequential tab transitions verifying headers and touch targets
       const tabs = [
-        { testid: 'mobile-nav-btn-projects', expected: 'Mission Control' },
-        { testid: 'mobile-nav-btn-logistics', expected: 'Recent Movements' }
+        { testid: 'mobile-nav-btn-projects', expected: 'Project Master' },
+        { testid: 'mobile-nav-btn-hr', expected: 'HR Operations Center' }
       ];
 
       for (const tab of tabs) {
@@ -53,7 +53,7 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
       }
     } else {
       // Desktop verification fallback
-      await expect(page.getByText('Mission Control', { exact: false })).toBeVisible({ timeout: 15000 });
+      await expect(page.getByText('Project Master', { exact: false })).toBeVisible({ timeout: 15000 });
     }
   });
 
@@ -61,7 +61,7 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
     if (isMobile) {
       // Go to Projects Tab
       await page.getByTestId('mobile-nav-btn-projects').click({ force: true });
-      await expect(page.getByText('Mission Control')).toBeVisible({ timeout: 15000 });
+      await expect(page.getByText('Project Master')).toBeVisible({ timeout: 15000 });
 
       // Check standard mock project card hydration
       const projectCard = page.locator('div:has-text("C2")').first();
@@ -73,6 +73,12 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
     if (isMobile) {
       // Go to Projects Tab
       await page.getByTestId('mobile-nav-btn-projects').click({ force: true });
+      
+      // Click a project card to go to Mission Control
+      const projectCard = page.locator('div:has-text("C2")').first();
+      await expect(projectCard).toBeVisible({ timeout: 15000 });
+      await projectCard.click({ force: true });
+
       await expect(page.getByText('Production Pipeline')).toBeVisible({ timeout: 15000 });
 
       // Click the first stage card (Engineering Design) which toggles its completion status
@@ -206,9 +212,9 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
   test('7.5. Record Transit (Check-Out) Flow with Searchable Combobox', async ({ page, isMobile }) => {
     if (isMobile) {
       await page.getByTestId('mobile-nav-btn-more').click({ force: true });
-      await page.getByTestId('mobile-grid-btn-stock-report').click({ force: true });
+      await page.getByTestId('mobile-grid-btn-reports').click({ force: true });
     } else {
-      await page.getByTestId('sidebar-btn-stock-analytics-report').click({ force: true });
+      await page.getByTestId('sidebar-btn-reports').click({ force: true });
     }
 
     // Navigate to Stock view first to ensure catalog is loaded from Firestore
@@ -225,16 +231,17 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
     await checkOutViewBtn.click({ force: true });
 
     // Verify view header is visible (use .first() to prevent strict mode violations with header and card h2)
-    await expect(page.getByText('Material Check-Out', { exact: false }).first()).toBeVisible({ timeout: 15000 });
+    const checkOutForm = page.locator('div.max-w-xl:has-text("Material Check-Out")');
+    await expect(checkOutForm.getByText('Material Check-Out', { exact: false }).first()).toBeVisible({ timeout: 15000 });
 
     // Find the searchable combobox input
-    const comboboxInput = page.locator('input[placeholder="Type to search material..."]');
+    const comboboxInput = checkOutForm.locator('input[placeholder="Type to search material..."]');
     await expect(comboboxInput).toBeVisible({ timeout: 15000 });
     await comboboxInput.click();
     await comboboxInput.fill('a');
 
     // Find the first suggestion button dynamically (immune to inventory depletion)
-    const firstSuggestion = page.locator('div.relative:has(> input[placeholder="Type to search material..."]) div.absolute button').first();
+    const firstSuggestion = checkOutForm.locator('div.relative:has(> input[placeholder="Type to search material..."]) div.absolute button').first();
     await expect(firstSuggestion).toBeVisible({ timeout: 15000 });
     
     // Get the name of the suggestion to assert value
@@ -247,20 +254,20 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
     }
 
     // Enter checkout quantity
-    const quantityInput = page.locator('input[type="number"]').first();
+    const quantityInput = checkOutForm.locator('input[type="number"]').first();
     await expect(quantityInput).toBeVisible({ timeout: 15000 });
     await quantityInput.fill('2');
 
     // Select operator/staff/project/issuer
-    await page.getByText('+ Show Advanced Options').click();
-    const selects = page.locator('select');
+    await checkOutForm.getByText('+ Show Advanced Options').click();
+    const selects = checkOutForm.locator('select');
     await selects.nth(0).selectOption({ index: 1 });
     await selects.nth(1).selectOption({ index: 1 });
     await selects.nth(2).selectOption({ index: 1 });
     await selects.nth(3).selectOption({ index: 1 });
 
     // Submit check-out
-    const confirmBtn = page.getByRole('button', { name: 'Issue Material' });
+    const confirmBtn = checkOutForm.getByRole('button', { name: 'Issue Material' });
     await expect(confirmBtn).toBeVisible({ timeout: 15000 });
     await confirmBtn.click({ force: true });
 
@@ -278,7 +285,7 @@ test.describe('Englabs Projects OS - Exhaustive Mobile UI & Data Integration Sui
 
     // Verify Porter panel loads
     await expect(page.getByText('Porter Service Management')).toBeVisible({ timeout: 15000 });
-    await expect(page.getByText('PROTECTION ACTIVE')).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText('PROTECTED')).toBeVisible({ timeout: 15000 });
 
     // Trigger New Trip Form
     await page.getByRole('button', { name: /NEW TRIP/i }).click({ force: true });

@@ -1731,6 +1731,30 @@
         "totalOutward": 0,
         "minThreshold": 5,
         "lastUpdated": "2026-05-14T12:00:00Z"
+      },
+      {
+        "name": "Toilet Roll",
+        "itemCode": "Eng-145",
+        "category": "General",
+        "currentStock": 120,
+        "unit": "Nos",
+        "location": "MAIN STORE",
+        "totalInward": 120,
+        "totalOutward": 0,
+        "minThreshold": 2,
+        "lastUpdated": "2026-06-18T11:00:00Z"
+      },
+      {
+        "name": "Naphthalene balls",
+        "itemCode": "Eng-146",
+        "category": "Chemicals",
+        "currentStock": 1,
+        "unit": "Kg",
+        "location": "MAIN STORE",
+        "totalInward": 1,
+        "totalOutward": 0,
+        "minThreshold": 1,
+        "lastUpdated": "2026-06-18T11:00:00Z"
       }
     ]
   },

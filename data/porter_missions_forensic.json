@@ -719,10 +719,10 @@
         "materialDescription": "Check IDBI Bank",
         "distanceKm": 2,
         "ratePerKm": 10,
-        "grossAmount": 20,
-        "advanceAmount": 1000,
-        "remainingBalance": -980,
-        "totalAmount": 20,
+        "grossAmount": 20.0,
+        "advanceAmount": 0.0,
+        "remainingBalance": 20.0,
+        "totalAmount": 20.0,
         "paymentStatus": "COMPLETED",
         "deliveryStatus": "DELIVERED",
         "timeline": [
@@ -756,10 +756,10 @@
         "materialDescription": "Electrical",
         "distanceKm": 20,
         "ratePerKm": 10,
-        "grossAmount": 200,
-        "advanceAmount": 4000,
-        "remainingBalance": -3800,
-        "totalAmount": 200,
+        "grossAmount": 200.0,
+        "advanceAmount": 1058.0,
+        "remainingBalance": -858.0,
+        "totalAmount": 200.0,
         "paymentStatus": "COMPLETED",
         "deliveryStatus": "DELIVERED",
         "timeline": [
@@ -775,6 +775,108 @@
                 "status": "DELIVERED",
                 "timestamp": "2026-06-12T12:39:54.372Z",
                 "remarks": "Payment Settled via UPI (Txn: 164929955900)"
+            }
+        ]
+    },
+    {
+        "id": "PTR-2026-0022",
+        "timestamp": "2026-06-18T10:00:00Z",
+        "date": "2026-06-18",
+        "time": "10:00 AM",
+        "porterName": "Gurpreet Singh",
+        "vehicleNumber": "CH01AB5781",
+        "customerName": "Shreaya mam",
+        "customerMobile": "918894825152",
+        "fromLocation": "Englabs",
+        "toLocation": "MDC-5  Panchkula",
+        "deliveryAddress": "MDC-5  Panchkula",
+        "materialDescription": "Cottan",
+        "distanceKm": 2,
+        "ratePerKm": 10,
+        "grossAmount": 20.0,
+        "advanceAmount": 0.0,
+        "remainingBalance": 20.0,
+        "totalAmount": 20.0,
+        "paymentStatus": "COMPLETED",
+        "deliveryStatus": "DELIVERED",
+        "timeline": [
+            {
+                "status": "ACCEPTED",
+                "timestamp": "2026-06-18T09:30:00Z",
+                "remarks": "Mission Initialized"
+            },
+            {
+                "status": "DELIVERED",
+                "timestamp": "2026-06-18T12:00:00Z",
+                "remarks": "Completed"
+            }
+        ]
+    },
+    {
+        "id": "PTR-2026-0023",
+        "timestamp": "2026-06-19T10:00:00Z",
+        "date": "2026-06-19",
+        "time": "10:00 AM",
+        "porterName": "Gurpreet Singh",
+        "vehicleNumber": "CH01AB5781",
+        "customerName": "Gaurav & Bharat sir",
+        "customerMobile": "918894825152",
+        "fromLocation": "Englabs",
+        "toLocation": "Sec-18 Chandigarh -> manimajra -> housing board",
+        "deliveryAddress": "Sec-18 Chandigarh -> manimajra -> housing board",
+        "materialDescription": "Drill bit, bakking powder jain sons hardware & electrical items",
+        "distanceKm": 25,
+        "ratePerKm": 10,
+        "grossAmount": 250.0,
+        "advanceAmount": 0.0,
+        "remainingBalance": 250.0,
+        "totalAmount": 250.0,
+        "paymentStatus": "COMPLETED",
+        "deliveryStatus": "DELIVERED",
+        "timeline": [
+            {
+                "status": "ACCEPTED",
+                "timestamp": "2026-06-19T09:30:00Z",
+                "remarks": "Mission Initialized"
+            },
+            {
+                "status": "DELIVERED",
+                "timestamp": "2026-06-19T12:00:00Z",
+                "remarks": "Completed"
+            }
+        ]
+    },
+    {
+        "id": "PTR-2026-0024",
+        "timestamp": "2026-06-22T10:00:00Z",
+        "date": "2026-06-22",
+        "time": "10:00 AM",
+        "porterName": "Gurpreet Singh",
+        "vehicleNumber": "CH01AB5781",
+        "customerName": "Shubham & Anurag",
+        "customerMobile": "918894825152",
+        "fromLocation": "Englabs",
+        "toLocation": "Airport Mohali",
+        "deliveryAddress": "Airport Mohali",
+        "materialDescription": "Parcel C5023",
+        "distanceKm": 40,
+        "ratePerKm": 10,
+        "grossAmount": 400.0,
+        "advanceAmount": 0.0,
+        "remainingBalance": 400.0,
+        "totalAmount": 400.0,
+        "paymentStatus": "COMPLETED",
+        "deliveryStatus": "DELIVERED",
+        "timeline": [
+            {
+                "status": "ACCEPTED",
+                "timestamp": "2026-06-22T09:30:00Z",
+                "remarks": "Mission Initialized"
+            },
+            {
+                "status": "DELIVERED",
+                "timestamp": "2026-06-22T12:00:00Z",
+                "remarks": "Completed"
             }
         ]
     }

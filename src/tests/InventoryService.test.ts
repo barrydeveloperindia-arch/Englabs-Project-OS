@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { processInventoryUpdate } from '@domain/inventory_service';
-import { GateEntry } from '@domain/gate_system';
+import { processInventoryUpdate } from '@shared/services/inventory_service';
+import { GateEntry } from '@shared/services/gate_system';
 
 // Mock Firebase dependency to prevent actual database calls
 vi.mock('firebase/firestore', () => ({
@@ -9,6 +9,9 @@ vi.mock('firebase/firestore', () => ({
     collection: vi.fn(),
     query: vi.fn(),
     getDocs: vi.fn(),
+    getDoc: vi.fn(),
+    deleteDoc: vi.fn(),
+    updateDoc: vi.fn(),
     orderBy: vi.fn()
 }));
 

@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Login } from '@shared/components/auth/Login';
+import { AuthService } from '@shared/services/auth_service';
+import { User } from '@shared/types/database.types';
 import logo from '@/assets/englabs_logo.png';
 import { 
     Layout, 
@@ -32,38 +35,40 @@ import {
     MapPin
 } from 'lucide-react';
 import NewProjectModal from '@common/NewProjectModal';
-import GateRegister from '@features/porter/GateRegister';
-import Showroom from '@features/dashboard/Showroom';
-import FoodRegister from '@features/food/FoodRegister';
-import SystemGuardDashboard from '@features/dashboard/SystemGuardDashboard';
-import BillingDashboard from '@features/projects/BillingDashboard';
-import { ManagementDashboard } from '@features/accounts/ManagementDashboard';
-import { RequireRole } from './components/auth/RequireRole';
-import DigitalEvidence from '@features/dashboard/DigitalEvidence';
-import InventoryManager from '@features/store/InventoryManager';
-import Sky5Terminal from '@features/dashboard/Sky5Terminal';
-import StoreStockReport from '@features/reports/StoreStockReport';
-import StoreGuardianDashboard from '@features/store/StoreGuardianDashboard';
-import MobileDashboard from '@features/dashboard/MobileDashboard';
-import HRDashboard from '@features/hr/HRDashboard';
-import { PayrollTerminal } from '@features/hr/PayrollTerminal';
+import GateRegister from '@modules/inventory/porter/GateRegister';
+import Showroom from '@modules/dashboard/main/Showroom';
+import FoodRegister from '@modules/inventory/food/FoodRegister';
+import SystemGuardDashboard from '@modules/dashboard/main/SystemGuardDashboard';
+import BillingDashboard from '@modules/projects/main/BillingDashboard';
+import { ManagementDashboard } from '@modules/finance/main/ManagementDashboard';
+import { RequireRole } from '@shared/components/auth/RequireRole';
+import DigitalEvidence from '@modules/dashboard/main/DigitalEvidence';
+import InventoryManager from '@modules/inventory/store/InventoryManager';
+import Sky5Terminal from '@modules/dashboard/main/Sky5Terminal';
+import StoreStockReport from '@modules/inventory/reports/StoreStockReport';
+import StoreGuardianDashboard from '@modules/inventory/store/StoreGuardianDashboard';
+import MobileDashboard from '@modules/dashboard/main/MobileDashboard';
+import CommandCenterDashboard from '@modules/dashboard/main/CommandCenterDashboard';
+import HRDashboard from '@modules/hr/main/HRDashboard';
+import { PayrollTerminal } from '@modules/hr/main/PayrollTerminal';
 import { STAFF_ROSTER } from '@config/constants';
 import AddStaffModal from '@common/AddStaffModal';
-import PorterRegister from '@features/porter/PorterRegister';
-import HandoverDashboard from '@features/projects/HandoverDashboard';
-import ProjectLookupDashboard from '@features/projects/ProjectLookupDashboard';
-import { ProjectBudgets } from '@features/projects/ProjectBudgets';
+import PorterRegister from '@modules/inventory/porter/PorterRegister';
+import HandoverDashboard from '@modules/projects/main/HandoverDashboard';
+import ProjectLookupDashboard from '@modules/projects/main/ProjectLookupDashboard';
+import { ProjectBudgets } from '@modules/projects/main/ProjectBudgets';
 import { ProjectData, STAGES, ProjectStage } from '@domain/project';
 import { logAction, AuditLog } from '@domain/system_guard';
 import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry, deleteGateEntryFromFirebase } from '@services/database_service';
 import { processInventoryUpdate, fetchInventoryMaster, fetchStockMovement, recordManualTransaction } from '@domain/inventory_service';
 import forensicRegistry from '@data/forensic_gate_registry.json';
 import porterForensic from '@data/porter_missions_forensic.json';
+import { PlaceholderModule } from '@components/common/PlaceholderModule';
 import { DesktopSidebar } from '@components/layout/DesktopSidebar';
 import { MobileLayout } from '@components/layout/MobileLayout';
-import { ProjectListGrid } from '@features/projects/ProjectListGrid';
-import { ProjectDashboard } from '@features/projects/ProjectDashboard';
-import { ProjectManagementDashboard } from '@features/projects/ProjectManagementDashboard';
+import { ProjectListGrid } from '@modules/projects/main/ProjectListGrid';
+import { ProjectDashboard } from '@modules/projects/main/ProjectDashboard';
+import { ProjectManagementDashboard } from '@modules/projects/main/ProjectManagementDashboard';
 
 
 const staticProjects: ProjectData[] = [];
@@ -120,7 +125,7 @@ interface SidebarButtonProps {
     color?: 'emerald' | 'amber';
 }
 
-type View = 'HOME' | 'PROJECTS' | 'PROJECT_MANAGEMENT_DASHBOARD' | 'GATE_REGISTER' | 'FOOD_REGISTER' | 'BILLING' | 'EVIDENCE' | 'INVENTORY' | 'SKY5_TERMINAL' | 'STOCK_REPORT' | 'PORTER_SERVICE' | 'PROJECT_LOOKUP' | 'PROJECT_BUDGETS' | 'STORE_GUARDIAN' | 'MANAGEMENT_DASHBOARD' | 'SETTINGS' | 'GATE_DISPLAY' | 'MASTER_TASK_REGISTER' | 'ATTENDANCE' | 'PAYROLL';
+type View = string;
 
 const SidebarButton: React.FC<SidebarButtonProps> = ({ active, onClick, icon, label, color = 'emerald' }) => {
     const activeClass = color === 'emerald' 
@@ -153,57 +158,30 @@ const App: React.FC = () => {
         setShowHandover(false);
     };
 
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-        return localStorage.getItem('englabs_authenticated') === 'true';
-    });
-    const [userRole, setUserRole] = useState<'ADMIN' | 'STAFF' | null>(() => {
-        return localStorage.getItem('englabs_user_role') as 'ADMIN' | 'STAFF' | null;
-    });
-    const [pin, setPin] = useState("");
-    const [pinError, setPinError] = useState(false);
+    const [authInitializing, setAuthInitializing] = useState(true);
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-    const handlePinInput = (num: string) => {
-        if (pin.length >= 4) return;
-        const newPin = pin + num;
-        setPin(newPin);
-        
-        if (newPin.length === 4) {
-            if (newPin === "0001") {
-                setIsAuthenticated(true);
-                setUserRole("ADMIN");
-                localStorage.setItem("englabs_authenticated", "true");
-                localStorage.setItem("englabs_user_role", "ADMIN");
-                setPin("");
-            } else if (newPin === "2580") {
-                setIsAuthenticated(true);
-                setUserRole("STAFF");
-                setCurrentView("STOCK_REPORT");
-                localStorage.setItem("englabs_authenticated", "true");
-                localStorage.setItem("englabs_user_role", "STAFF");
-                setPin("");
-            } else {
-                setPinError(true);
-                setTimeout(() => {
-                    setPinError(false);
-                    setPin("");
-                }, 500);
-            }
-        }
-    };
+    useEffect(() => {
+        AuthService.init((user) => {
+            setCurrentUser(user);
+            setAuthInitializing(false);
+        });
+    }, []);
 
-    const handlePinBackspace = () => {
-        setPin(prev => prev.slice(0, -1));
-    };
-
-    const handleLogout = () => {
-        setIsAuthenticated(false);
-        setUserRole(null);
-        localStorage.removeItem("englabs_authenticated");
-        localStorage.removeItem("englabs_user_role");
+    const handleLogout = async () => {
+        await AuthService.logout();
     };
 
     const [projects, setProjects] = useState<ProjectData[]>(staticProjects);
-    const [selectedProject, setSelectedProject] = useState<ProjectData | null>(staticProjects[0] || null);
+    const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
+    const handleSelectProject = (project: ProjectData | null) => {
+        setSelectedProject(project);
+        if (project) {
+            localStorage.setItem('englabs_last_project_id', project.projectId);
+        } else {
+            localStorage.removeItem('englabs_last_project_id');
+        }
+    };
     const [searchQuery, setSearchQuery] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [projectFilter, setProjectFilter] = useState<'ALL' | 'ACTIVE' | 'UPCOMING'>('ALL');
@@ -247,13 +225,6 @@ const App: React.FC = () => {
 
             const forensic = (porterForensic as any[]).filter((t: any) => !deletedSet.has(t.id));
             let trips = saved && saved !== 'undefined' ? JSON.parse(saved) : [];
-            trips = trips.map((t: any) => {
-                if ((t.id === 'PTR-2026-0020' && t.advanceAmount === 1000) || 
-                    (t.id === 'PTR-2026-0021' && t.advanceAmount === 4000)) {
-                    return { ...t, advanceAmount: 0, remainingBalance: t.grossAmount };
-                }
-                return t;
-            });
             trips = trips.filter((t: any) => !deletedSet.has(t.id) && !(t.id === 'PTR-2026-0022' && t.grossAmount > 1000));
             
             const forensicMap = new Map(forensic.map(f => [f.id, f]));
@@ -340,7 +311,10 @@ const App: React.FC = () => {
     const [currentView, setCurrentView] = useState<View>(() => {
         const role = localStorage.getItem('englabs_user_role');
         const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-        return role === 'STAFF' ? 'STOCK_REPORT' : (isMobile ? 'HOME' : 'PROJECT_MANAGEMENT_DASHBOARD');
+        if (role === 'STAFF' || role === 'Store Manager') return 'STOCK_REPORT';
+        if (role === 'HR') return 'ATTENDANCE';
+        if (role === 'Accountant') return 'BILLING';
+        return isMobile ? 'HOME' : 'PROJECTS';
     });
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -366,8 +340,9 @@ const App: React.FC = () => {
             console.log("Loaded projects:", loadedProjects.length);
             if (loadedProjects.length > 0) {
                 setProjects(loadedProjects);
-                const defaultProject = loadedProjects.find(p => p.projectId === 'C2718') || loadedProjects[0];
-                setSelectedProject(defaultProject);
+                const lastId = localStorage.getItem('englabs_last_project_id');
+                const matched = lastId ? loadedProjects.find(p => p.projectId === lastId) : null;
+                setSelectedProject(matched || null);
             } else {
                 console.warn("No projects loaded from ../data/*.json");
             }
@@ -449,21 +424,13 @@ const App: React.FC = () => {
         localStorage.setItem('englabs_porter_v1', JSON.stringify(porterTrips));
     }, [porterTrips]);
 
-    // One-time startup cleanup of old, invalid PTR-2026-0022 (₹5,400) and wrong advances from localStorage
+    // One-time startup cleanup of old, invalid PTR-2026-0022 (₹5,400) from localStorage
     useEffect(() => {
         try {
             setPorterTrips(prev => {
-                let changed = false;
-                const updated = prev.map(t => {
-                    if ((t.id === 'PTR-2026-0020' && t.advanceAmount !== 0) || 
-                        (t.id === 'PTR-2026-0021' && t.advanceAmount !== 0)) {
-                        changed = true;
-                        return { ...t, advanceAmount: 0, remainingBalance: t.grossAmount };
-                    }
-                    return t;
-                }).filter((t: any) => !(t.id === 'PTR-2026-0022' && t.grossAmount > 1000));
+                const updated = prev.filter((t: any) => !(t.id === 'PTR-2026-0022' && t.grossAmount > 1000));
                 
-                if (changed || updated.length !== prev.length) {
+                if (updated.length !== prev.length) {
                     localStorage.setItem('englabs_porter_v1', JSON.stringify(updated));
                     localStorage.setItem('englabs_porter_backup_vault', JSON.stringify(updated));
                     return updated;
@@ -592,99 +559,14 @@ const App: React.FC = () => {
         }
     };
 
-    if (!selectedProject) return <div className="h-screen w-screen bg-[#092a42] flex items-center justify-center text-white font-black text-4xl">INITIALIZING...</div>;
+    if (projects.length === 0) return <div className="h-screen w-screen bg-[#092a42] flex items-center justify-center text-white font-black text-4xl">INITIALIZING...</div>;
 
-    if (!isAuthenticated) {
-        return (
-            <div className="h-screen w-screen bg-[#092a42] flex items-center justify-center text-white font-sans p-6 overflow-hidden relative">
-                {/* Decorative background grid and graphics */}
-                <div className="absolute inset-0 industrial-grid opacity-20" />
-                <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-emerald-500/10 blur-[120px] animate-pulse" />
-                <div className="absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-blue-500/10 blur-[120px] animate-pulse" />
+    if (authInitializing) {
+        return <div className="h-screen w-screen bg-[#092a42] flex items-center justify-center text-white font-black text-2xl animate-pulse">AUTHORIZING SECURITY...</div>;
+    }
 
-                <div className="w-full max-w-[400px] max-h-full overflow-y-auto bg-slate-950/40 backdrop-blur-xl border border-white/5 rounded-[2.5rem] p-4 sm:p-8 flex flex-col items-center shadow-2xl relative z-10 animate-spring-zoom">
-                    {/* Brand header */}
-                    <div className="flex items-center gap-3.5 mb-1 sm:mb-2">
-                        <div className="p-1.5 sm:p-2 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl shadow-lg shadow-emerald-500/20">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-900 sm:w-5 sm:h-5">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                            </svg>
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="text-sm sm:text-base font-black tracking-tighter text-white">
-                                {import.meta.env.VITE_APP_MODE === 'STORE' ? 'ENGLABS STORE' : import.meta.env.VITE_APP_MODE === 'PORTER_SERVICE' ? 'PORTER SERVICE' : 'ENGLABS PROJECTS'}
-                            </span>
-                            <span className="text-[7px] sm:text-[8px] font-black text-slate-400 tracking-[0.3em] uppercase">
-                                {import.meta.env.VITE_APP_MODE === 'STORE' ? 'Enterprise Stock OS' : import.meta.env.VITE_APP_MODE === 'PORTER_SERVICE' ? 'Porter Logistics OS' : 'Enterprise Projects OS'}
-                            </span>
-                        </div>
-                    </div>
-
-                    <div className="h-[1px] w-full bg-white/5 my-3 sm:my-6" />
-
-                    <h2 className="text-xs sm:text-sm font-black text-slate-400 uppercase tracking-widest mb-0.5 sm:mb-1 text-center">SYSTEM ACCESS LOCK</h2>
-                    <p className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-4 sm:mb-8 text-center">Enter PIN to authorize access</p>
-
-                    {/* PIN circular indicators */}
-                    <div className={`flex gap-3 sm:gap-4 mb-4 sm:mb-10 ${pinError ? 'animate-shake' : ''}`}>
-                        {[0, 1, 2, 3].map((index) => (
-                            <div 
-                                key={index} 
-                                className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full transition-all duration-300 ${
-                                    pinError 
-                                    ? 'bg-rose-500 border border-rose-400 shadow-[0_0_12px_rgba(239,68,68,0.5)]'
-                                    : index < pin.length 
-                                    ? 'bg-emerald-400 border border-emerald-300 shadow-[0_0_12px_rgba(52,211,153,0.5)]' 
-                                    : 'bg-slate-800 border border-slate-700/50'
-                                }`} 
-                            />
-                        ))}
-                    </div>
-
-                    {/* Numeric Keypad */}
-                    <div className="grid grid-cols-3 gap-2.5 sm:gap-4 w-full max-w-[240px] sm:max-w-[280px] mb-3 sm:mb-6">
-                        {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((num) => (
-                            <button
-                                key={num}
-                                type="button"
-                                onClick={() => handlePinInput(num)}
-                                className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white/5 border border-white/5 font-black text-lg sm:text-xl hover:bg-white/10 hover:border-white/10 transition-all flex items-center justify-center shadow-lg active:scale-95 cursor-pointer text-white"
-                            >
-                                {num}
-                            </button>
-                        ))}
-                        <button
-                            type="button"
-                            onClick={() => setPin("")}
-                            className="w-12 h-12 sm:w-16 sm:h-16 rounded-full font-black text-[9px] sm:text-[10px] uppercase tracking-widest text-slate-500 hover:text-white flex items-center justify-center transition-all active:scale-95 cursor-pointer"
-                        >
-                            Clear
-                        </button>
-                        <button
-                            key="0"
-                            type="button"
-                            onClick={() => handlePinInput("0")}
-                            className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white/5 border border-white/5 font-black text-lg sm:text-xl hover:bg-white/10 hover:border-white/10 transition-all flex items-center justify-center shadow-lg active:scale-95 cursor-pointer text-white"
-                        >
-                            0
-                        </button>
-                        <button
-                            type="button"
-                            onClick={handlePinBackspace}
-                            className="w-12 h-12 sm:w-16 sm:h-16 rounded-full font-black text-[9px] sm:text-[10px] uppercase tracking-widest text-slate-500 hover:text-white flex items-center justify-center transition-all active:scale-95 cursor-pointer"
-                        >
-                            Delete
-                        </button>
-                    </div>
-
-                    {pinError && (
-                        <p className="text-[10px] font-black text-rose-400 uppercase tracking-wider animate-bounce">
-                            INCORRECT PIN. ACCESS DENIED.
-                        </p>
-                    )}
-                </div>
-            </div>
-        );
+    if (!currentUser) {
+        return <Login />;
     }
 
     if (showHandover) {
@@ -698,19 +580,27 @@ const App: React.FC = () => {
             <DesktopSidebar 
                 currentView={currentView}
                 setCurrentView={setCurrentView}
-                userRole={userRole}
+                userRole={currentUser?.role as string || 'Engineer'}
                 handleLogout={handleLogout}
                 setIsModalOpen={setIsModalOpen}
                 appMode={import.meta.env.VITE_APP_MODE || 'PROJECTS'}
             />
 
             <div className="flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden pb-16 md:pb-0">
-                {currentView === 'PROJECT_MANAGEMENT_DASHBOARD' ? (
+                {currentView === 'COMMAND_CENTER' || currentView.startsWith('DASHBOARD_') ? (
+                    <CommandCenterDashboard 
+                        projects={projects}
+                        gateEntries={gateEntries}
+                        porterTrips={porterTrips}
+                        inventoryItems={inventoryItems}
+                    />
+                ) : currentView === 'PROJECT_MANAGEMENT_DASHBOARD' ? (
                     <ProjectManagementDashboard 
                         projects={projects}
                         onSelectProject={() => setCurrentView('PROJECTS')}
                     />
-                ) : currentView === 'PROJECTS' ? (
+                ) : (currentView === 'PROJECTS' || currentView.startsWith('PROJECTS_')) && 
+                    currentView !== 'PROJECT_LOOKUP' && currentView !== 'PROJECT_BUDGETS' ? (
                     !selectedProject ? (
                         <ProjectListGrid 
                             projects={projects}
@@ -718,13 +608,13 @@ const App: React.FC = () => {
                             setSearchQuery={setSearchQuery}
                             projectFilter={projectFilter}
                             setProjectFilter={setProjectFilter}
-                            onSelectProject={setSelectedProject}
+                            onSelectProject={handleSelectProject}
                         />
                     ) : (
                         <ProjectDashboard 
                             selectedProject={selectedProject}
-                            onBack={() => setSelectedProject(null)}
-                            userRole={userRole}
+                            onBack={() => handleSelectProject(null)}
+                            userRole={currentUser?.role as string || 'Engineer'}
                             updateStage={(stageName, newStatus) => {
                                 setProjects(prev => prev.map(p => {
                                     if (p.projectId === selectedProject.projectId) {
@@ -764,7 +654,7 @@ const App: React.FC = () => {
                     <ProjectLookupDashboard />
                 ) : currentView === 'PROJECT_BUDGETS' ? (
                     <ProjectBudgets projects={projects} />
-                ) : currentView === 'GATE_REGISTER' ? (
+                ) : (currentView === 'GATE_REGISTER' || currentView === 'STORE_INWARD' || currentView === 'STORE_OUTWARD') ? (
                     <GateRegister 
                         entries={gateEntries} 
                         onNewEntry={handleNewGateEntry}
@@ -773,22 +663,22 @@ const App: React.FC = () => {
                         onLog={(log) => setAuditLogs(prev => [log, ...prev])} 
                         onFullSync={handleFullSync}
                     />
-                ) : currentView === 'FOOD_REGISTER' ? (
+                ) : (currentView === 'FOOD_REGISTER' || currentView === 'FOOD_MEALS') ? (
                     <FoodRegister onLog={(log) => setAuditLogs(prev => [log, ...prev])} />
-                ) : currentView === 'ATTENDANCE' ? (
-                    <RequireRole role="ADMIN">
+                ) : (currentView === 'ATTENDANCE' || currentView === 'HR_MASTER' || currentView === 'HR_LEAVE' || currentView === 'HR_PERFORMANCE' || currentView === 'HR_IDCARD' || currentView === 'HR_ALLOCATION' || currentView === 'HR_LOGS') ? (
+                    <RequireRole allowedRoles={['ADMIN', 'HR'] as any}>
                         <HRDashboard />
                     </RequireRole>
-                ) : currentView === 'PAYROLL' ? (
-                    <RequireRole role="ADMIN">
+                ) : (currentView === 'PAYROLL' || currentView === 'HR_PAYROLL') ? (
+                    <RequireRole allowedRoles={['ADMIN', 'HR'] as any}>
                         <PayrollTerminal />
                     </RequireRole>
                 ) : currentView === 'BILLING' ? (
-                    <RequireRole role="ADMIN">
+                    <RequireRole allowedRoles={['ADMIN', 'Accountant'] as any}>
                         <BillingDashboard />
                     </RequireRole>
                 ) : currentView === 'MANAGEMENT_DASHBOARD' ? (
-                    <RequireRole role="ADMIN">
+                    <RequireRole allowedRoles={['ADMIN', 'Accountant'] as any}>
                         <ManagementDashboard />
                     </RequireRole>
                 ) : currentView === 'SKY5_TERMINAL' ? (
@@ -797,7 +687,7 @@ const App: React.FC = () => {
                     <InventoryManager />
                 ) : currentView === 'STOCK_REPORT' ? (
                     <StoreStockReport 
-                        userRole={userRole || 'STAFF'} 
+                        userRole={(currentUser?.role === 'ADMIN' || currentUser?.role === 'Admin') ? 'ADMIN' : 'STAFF'} 
                         projects={projects} 
                         staffList={staffList}
                         onAddStaff={handleAddStaff}
@@ -805,7 +695,7 @@ const App: React.FC = () => {
                     />
                 ) : currentView === 'STORE_GUARDIAN' ? (
                     <StoreGuardianDashboard />
-                ) : currentView === 'PORTER_SERVICE' ? (
+                ) : (currentView === 'PORTER_SERVICE' || currentView.startsWith('PORTER_')) ? (
                     <PorterRegister 
                         trips={porterTrips}
                         onNewTrip={(trip) => setPorterTrips(prev => [trip, ...prev])}
@@ -824,7 +714,7 @@ const App: React.FC = () => {
                             }
                         }}
                     />
-                ) : currentView === 'SETTINGS' ? (
+                ) : (currentView === 'SETTINGS' || currentView.startsWith('SETTINGS_')) ? (
                     <div className="flex-1 flex flex-col items-center justify-center bg-slate-50 border border-slate-200 rounded-3xl m-6 shadow-sm">
                         <div className="bg-emerald-500/10 p-6 rounded-full mb-6">
                             <Settings className="w-12 h-12 text-emerald-500" />
@@ -846,15 +736,17 @@ const App: React.FC = () => {
                             }} 
                         />
                     </div>
-                ) : (
+                ) : currentView === 'EVIDENCE' ? (
                     <DigitalEvidence onAutoRegister={handleNewGateEntry} />
+                ) : (
+                    <PlaceholderModule title={currentView} />
                 )}
             </div>
 
             <MobileLayout 
                 currentView={currentView}
                 setCurrentView={setCurrentView}
-                userRole={userRole}
+                userRole={currentUser?.role as string || 'Engineer'}
                 handleLogout={handleLogout}
                 isMobileMenuOpen={isMobileMenuOpen}
                 setIsMobileMenuOpen={setIsMobileMenuOpen}

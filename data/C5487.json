@@ -1,0 +1,65 @@
+{
+    "projectId": "C5487",
+    "client": "EndureAir",
+    "planning": {
+        "value": 0,
+        "budget": 0,
+        "deliveryTerms": "TBD",
+        "poConfirmed": false,
+        "startDate": "2026-06-17",
+        "poNumber": "PENDING"
+    },
+    "production": {
+        "currentStage": "Engineering Design",
+        "stages": [
+            {
+                "name": "Engineering Design",
+                "status": "In Progress"
+            },
+            {
+                "name": "Machine Processing",
+                "status": "Pending"
+            },
+            {
+                "name": "Workshop Fabrication",
+                "status": "Pending"
+            },
+            {
+                "name": "Sanding",
+                "status": "Pending"
+            },
+            {
+                "name": "Painting",
+                "status": "Pending"
+            },
+            {
+                "name": "Drying",
+                "status": "Pending"
+            },
+            {
+                "name": "Finishing",
+                "status": "Pending"
+            },
+            {
+                "name": "Final Packaging",
+                "status": "Pending"
+            }
+        ]
+    },
+    "metrics": {
+        "totalComponents": 0,
+        "materialConsumption": "Tracking active...",
+        "workforce": [
+            "TBD"
+        ]
+    },
+    "financials": {
+        "vendorName": "TBD",
+        "vendorLocation": "TBD",
+        "dispatchBudget": null,
+        "totalCost": 0,
+        "profitLoss": null,
+        "deliveryFeeMode": "To pay basis",
+        "poNumber": "PENDING"
+    }
+}
