@@ -21,6 +21,7 @@ interface POReleaseProps {
 export const PORelease: React.FC<POReleaseProps> = ({ projects }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [marginFilter, setMarginFilter] = useState<'all' | 'low' | 'healthy'>('all');
+    const [selectedDate, setSelectedDate] = useState<string>('all');
     const [sortBy, setSortBy] = useState<'id' | 'margin' | 'cost' | 'sale'>('id');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
@@ -28,6 +29,17 @@ export const PORelease: React.FC<POReleaseProps> = ({ projects }) => {
     const poProjects = useMemo(() => {
         return projects.filter(p => p.poRelease && p.poRelease.vendorName);
     }, [projects]);
+
+    // Unique dates list for filter
+    const uniqueDates = useMemo(() => {
+        const dates = new Set<string>();
+        poProjects.forEach(p => {
+            if (p.poRelease?.releaseDate) {
+                dates.add(p.poRelease.releaseDate);
+            }
+        });
+        return Array.from(dates).sort((a, b) => b.localeCompare(a));
+    }, [poProjects]);
 
     // Filter & Sort
     const processedProjects = useMemo(() => {
@@ -50,7 +62,11 @@ export const PORelease: React.FC<POReleaseProps> = ({ projects }) => {
                     (marginFilter === 'low' && marginPct < 20) ||
                     (marginFilter === 'healthy' && marginPct >= 20);
 
-                return matchesSearch && matchesMargin;
+                const matchesDate = 
+                    selectedDate === 'all' || 
+                    po.releaseDate === selectedDate;
+
+                return matchesSearch && matchesMargin && matchesDate;
             })
             .sort((a, b) => {
                 let comparison = 0;
@@ -74,7 +90,7 @@ export const PORelease: React.FC<POReleaseProps> = ({ projects }) => {
                 }
                 return sortOrder === 'asc' ? comparison : -comparison;
             });
-    }, [poProjects, searchQuery, marginFilter, sortBy, sortOrder]);
+    }, [poProjects, searchQuery, marginFilter, selectedDate, sortBy, sortOrder]);
 
     // Aggregate statistics
     const stats = useMemo(() => {
@@ -215,9 +231,9 @@ export const PORelease: React.FC<POReleaseProps> = ({ projects }) => {
 
                 {/* Table Container */}
                 <div className="bg-white p-6 md:p-8 rounded-[1.75rem] border border-slate-100 shadow-sm">
-                    <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mb-6">
+                    <div className="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4 mb-6">
                         {/* Search */}
-                        <div className="relative flex-1 max-w-md">
+                        <div className="relative flex-grow min-w-[280px] max-w-md">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                             <input 
                                 type="text" 
@@ -239,6 +255,17 @@ export const PORelease: React.FC<POReleaseProps> = ({ projects }) => {
                                 <option value="all">ALL PROJECTS</option>
                                 <option value="low">LOW MARGIN (&lt; 20%)</option>
                                 <option value="healthy">HEALTHY MARGIN (&gt;= 20%)</option>
+                            </select>
+
+                            <select 
+                                className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none"
+                                value={selectedDate}
+                                onChange={(e) => setSelectedDate(e.target.value)}
+                            >
+                                <option value="all">ALL DATES</option>
+                                {uniqueDates.map(d => (
+                                    <option key={d} value={d}>{d}</option>
+                                ))}
                             </select>
 
                             <button 

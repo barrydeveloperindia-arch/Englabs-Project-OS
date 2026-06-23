@@ -30,6 +30,7 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
     const [searchQuery, setSearchQuery] = useState('');
     const [blockerFilter, setBlockerFilter] = useState<'all' | 'blocked' | 'clean'>('all');
     const [selectedDate, setSelectedDate] = useState<string>('all');
+    const [selectedStaff, setSelectedStaff] = useState<string>('all');
 
     // Edit modal states
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -134,15 +135,27 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
         return Array.from(dates).sort((a, b) => b.localeCompare(a));
     }, [standupProjects]);
 
+    // Unique staff leads list for filter
+    const uniqueStaff = useMemo(() => {
+        const staff = new Set<string>();
+        standupProjects.forEach(p => {
+            const lead = p.production.stages.find(st => st.status === 'In Progress')?.lead || p.production.stages[0]?.lead || 'Team';
+            staff.add(lead);
+        });
+        return Array.from(staff).sort((a, b) => a.localeCompare(b));
+    }, [standupProjects]);
+
     // Filter & search standups
     const processedStandups = useMemo(() => {
         return standupProjects.filter(p => {
             const standup = p.dailyStandup!;
+            const lead = p.production.stages.find(st => st.status === 'In Progress')?.lead || p.production.stages[0]?.lead || 'Team';
+            
             const matchesSearch = 
                 p.projectId.toLowerCase().includes(searchQuery.toLowerCase()) || 
                 p.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 (standup.discussingNotes || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-                (p.production.stages[0]?.lead || '').toLowerCase().includes(searchQuery.toLowerCase());
+                lead.toLowerCase().includes(searchQuery.toLowerCase());
 
             const isBlocked = standup.inputsRequired && 
                               standup.inputsRequired.trim() !== '' && 
@@ -158,9 +171,13 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
                 selectedDate === 'all' || 
                 standup.preparingPartsDate === selectedDate;
 
-            return matchesSearch && matchesBlocker && matchesDate;
+            const matchesStaff = 
+                selectedStaff === 'all' || 
+                lead === selectedStaff;
+
+            return matchesSearch && matchesBlocker && matchesDate && matchesStaff;
         });
-    }, [standupProjects, searchQuery, blockerFilter, selectedDate]);
+    }, [standupProjects, searchQuery, blockerFilter, selectedDate, selectedStaff]);
 
     // Aggregate stats
     const stats = useMemo(() => {
@@ -317,9 +334,9 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
                 </div>
 
                 {/* Filters Row */}
-                <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 bg-white p-6 rounded-[1.75rem] border border-slate-100 shadow-sm">
+                <div className="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4 bg-white p-6 rounded-[1.75rem] border border-slate-100 shadow-sm">
                     {/* Search */}
-                    <div className="relative flex-1 max-w-md">
+                    <div className="relative flex-grow min-w-[280px] max-w-md">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                         <input 
                             type="text" 
@@ -341,6 +358,17 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
                             <option value="all">ALL ITEMS</option>
                             <option value="blocked">BLOCKED (INPUTS REQ)</option>
                             <option value="clean">NO BLOCKERS</option>
+                        </select>
+
+                        <select 
+                            className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none"
+                            value={selectedStaff}
+                            onChange={(e) => setSelectedStaff(e.target.value)}
+                        >
+                            <option value="all">ALL STAFF</option>
+                            {uniqueStaff.map(s => (
+                                <option key={s} value={s}>{s}</option>
+                            ))}
                         </select>
 
                         <select 

@@ -235,9 +235,9 @@ export const ProjectBudgets: React.FC<ProjectBudgetsProps> = ({ projects }) => {
                     
                     {/* Projects Ledger Table */}
                     <div className="flex-1 bg-white p-6 md:p-8 rounded-[1.75rem] border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.01)] overflow-hidden">
-                        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mb-6">
+                        <div className="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4 mb-6">
                             {/* Search */}
-                            <div className="relative flex-1 max-w-md">
+                            <div className="relative flex-grow min-w-[280px] max-w-md">
                                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                                 <input 
                                     type="text" 
