@@ -186,6 +186,7 @@ const App: React.FC = () => {
             localStorage.removeItem('englabs_last_project_id');
         }
     };
+    const [dbSyncError, setDbSyncError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [projectFilter, setProjectFilter] = useState<'ALL' | 'ACTIVE' | 'UPCOMING'>('ALL');
@@ -355,9 +356,48 @@ const App: React.FC = () => {
                         }
                         return staticProj;
                     });
+                    setDbSyncError(null);
                 }
             } catch (fbErr) {
                 console.error("Failed to load projects from Firestore, falling back to local files:", fbErr);
+                setDbSyncError("Unable to connect to live database. Loading offline local data.");
+            }
+
+            // Overlay any localStorage overrides to protect manual standup entries from being lost/removed
+            try {
+                const localSaved = localStorage.getItem('englabs_project_overrides');
+                if (localSaved) {
+                    const localOverrides = JSON.parse(localSaved);
+                    finalProjects = finalProjects.map(proj => {
+                        const localOverride = localOverrides[proj.projectId];
+                        if (localOverride) {
+                            console.log(`Applying localStorage override for project ${proj.projectId} to preserve manual standup entries.`);
+                            return {
+                                ...proj,
+                                ...localOverride,
+                                dailyStandup: {
+                                    ...proj.dailyStandup,
+                                    ...localOverride.dailyStandup
+                                },
+                                planning: {
+                                    ...proj.planning,
+                                    ...localOverride.planning
+                                },
+                                production: {
+                                    ...proj.production,
+                                    ...localOverride.production
+                                },
+                                metrics: {
+                                    ...proj.metrics,
+                                    ...localOverride.metrics
+                                }
+                            } as ProjectData;
+                        }
+                        return proj;
+                    });
+                }
+            } catch (e) {
+                console.error("Failed to merge project overrides from localStorage:", e);
             }
             
             console.log("Loaded projects:", finalProjects.length);
@@ -610,6 +650,48 @@ const App: React.FC = () => {
             />
 
             <div className="flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden pb-16 md:pb-0">
+                {dbSyncError && (
+                    <div className="bg-amber-500/10 border-b border-amber-500/20 text-amber-400 px-4 py-2.5 flex items-center justify-between text-xs font-bold gap-3 flex-shrink-0 animate-in slide-in-from-top duration-300">
+                        <div className="flex items-center gap-2">
+                            <AlertCircle className="w-4 h-4 text-amber-400 flex-shrink-0 animate-pulse" />
+                            <span>{dbSyncError}</span>
+                        </div>
+                        <button 
+                            type="button"
+                            onClick={async () => {
+                                try {
+                                    setDbSyncError(null);
+                                    const localSaved = localStorage.getItem('englabs_project_overrides');
+                                    if (localSaved) {
+                                        const localOverrides = JSON.parse(localSaved);
+                                        const overrideList = Object.values(localOverrides);
+                                        if (overrideList.length > 0) {
+                                            const success = await syncAllProjectsToFirebase(overrideList);
+                                            if (success) {
+                                                alert("All local updates successfully synchronized to the live database!");
+                                                // Reload projects from Firestore to align everything
+                                                const fbProjects = await fetchProjectsFromFirebase();
+                                                const fbMap = new Map(fbProjects.map((p: any) => [p.projectId, p]));
+                                                setProjects(prev => prev.map(proj => {
+                                                    const fbProj = fbMap.get(proj.projectId);
+                                                    return fbProj ? { ...proj, ...fbProj } : proj;
+                                                }));
+                                            } else {
+                                                throw new Error("Failed to sync some projects");
+                                            }
+                                        }
+                                    }
+                                } catch (e) {
+                                    console.error("Manual sync failed:", e);
+                                    setDbSyncError("Sync failed. The live database might still be unreachable or quota exceeded.");
+                                }
+                            }}
+                            className="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 px-2.5 py-1 rounded transition-all text-[10px] uppercase tracking-wider font-black"
+                        >
+                            Retry Sync
+                        </button>
+                    </div>
+                )}
                 {currentView === 'COMMAND_CENTER' || currentView.startsWith('DASHBOARD_') ? (
                     <CommandCenterDashboard 
                         projects={projects}
@@ -629,7 +711,12 @@ const App: React.FC = () => {
                         projects={projects} 
                         onUpdateProject={async (updatedProj) => {
                             setProjects(prev => prev.map(p => p.projectId === updatedProj.projectId ? updatedProj : p));
-                            await saveProjectToFirebase(updatedProj);
+                            const res = await saveProjectToFirebase(updatedProj);
+                            if (!res.success) {
+                                setDbSyncError("Failed to sync change to live database. Saved locally.");
+                            } else {
+                                setDbSyncError(null);
+                            }
                         }}
                     />
                 ) : currentView === 'PO_RELEASE' ? (

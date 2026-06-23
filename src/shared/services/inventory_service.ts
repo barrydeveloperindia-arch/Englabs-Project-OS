@@ -162,11 +162,13 @@ function cleanUndefined(obj: any): any {
 }
 
 let isSeeded = false;
+let seedingAttempted = false;
 
 // Automated seeding for new collections if they are empty
 export async function seedStoreStockReport() {
     if (!db || isTest) return;
-    if (isSeeded) return;
+    if (isSeeded || seedingAttempted) return;
+    seedingAttempted = true; // Mark as attempted to prevent subsequent calls if network fails/timeout
     try {
         const catalogSnap = await getDocsWithTimeout(query(collection(db, "material_catalog"), limit(1)));
         const stockSnap = await getDocsWithTimeout(query(collection(db, "current_stock"), limit(1)));

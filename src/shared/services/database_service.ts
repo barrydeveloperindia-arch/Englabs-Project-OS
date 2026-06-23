@@ -41,6 +41,19 @@ export const syncLocalToFirebase = async (entries: GateEntry[]) => {
 
 export const saveProjectToFirebase = async (project: any) => {
     if (!db) return { success: false, error: "Database not initialized" };
+    
+    // Cache to localStorage as an offline backup if running in browser
+    if (typeof window !== 'undefined' && window.localStorage) {
+        try {
+            const localSaved = window.localStorage.getItem('englabs_project_overrides');
+            const localMap = localSaved ? JSON.parse(localSaved) : {};
+            localMap[project.projectId] = project;
+            window.localStorage.setItem('englabs_project_overrides', JSON.stringify(localMap));
+        } catch (e) {
+            console.error("Failed to cache project to localStorage:", e);
+        }
+    }
+
     try {
         // CLEAN UNDEFINED VALUES FOR FIREBASE
         const cleanProject = JSON.parse(JSON.stringify(project));
@@ -87,12 +100,7 @@ export const deleteGateEntryFromFirebase = async (entryId: string) => {
 };
 
 export const fetchProjectsFromFirebase = async () => {
-    if (!db) return [];
-    try {
-        const querySnapshot = await getDocs(collection(db, "projects"));
-        return querySnapshot.docs.map(doc => doc.data());
-    } catch (e) {
-        console.error("Error fetching projects from Firebase:", e);
-        return [];
-    }
+    if (!db) throw new Error("Database not initialized");
+    const querySnapshot = await getDocs(collection(db, "projects"));
+    return querySnapshot.docs.map(doc => doc.data());
 };
