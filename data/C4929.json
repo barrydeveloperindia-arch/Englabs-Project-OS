@@ -2,12 +2,12 @@
     "projectId": "C4929",
     "client": "GOEL ENTERPRISES SCANNING",
     "planning": {
-        "value": 1133,
-        "budget": 793,
         "deliveryTerms": "Included",
+        "budget": 793,
+        "poNumber": "P2100-EL12-PO-16835",
+        "value": 1133,
         "poConfirmed": true,
-        "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-16835"
+        "startDate": "2026-06-02"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -48,10 +48,10 @@
     },
     "metrics": {
         "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
         "vendorName": "PLASTIPACK INDUSTRIES",

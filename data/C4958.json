@@ -2,12 +2,12 @@
     "projectId": "C4958",
     "client": "SIMSUN INNOTECH",
     "planning": {
-        "value": 1650,
-        "budget": 1155,
         "deliveryTerms": "ToPay",
+        "poNumber": "P2100-EL12-PO-16769",
+        "budget": 1155,
+        "value": 1650,
         "poConfirmed": true,
-        "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-16769"
+        "startDate": "2026-06-02"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -48,10 +48,10 @@
     },
     "metrics": {
         "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
         "vendorName": "Pacific Labs .",

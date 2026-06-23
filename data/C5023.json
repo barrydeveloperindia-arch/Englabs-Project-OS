@@ -3,11 +3,11 @@
     "client": "AV MACHINING",
     "planning": {
         "value": 41320,
-        "budget": 28924,
-        "deliveryTerms": "ToPay",
         "poConfirmed": true,
         "startDate": "2026-05-23",
-        "poNumber": "P2100-EL-12-PO-16911"
+        "poNumber": "P2100-EL-12-PO-16911",
+        "budget": 28924,
+        "deliveryTerms": "ToPay"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -48,11 +48,11 @@
         ]
     },
     "metrics": {
-        "totalComponents": 90,
         "materialConsumption": "VC P.P. Inserts",
         "workforce": [
             "Devanshu"
-        ]
+        ],
+        "totalComponents": 90
     },
     "financials": {
         "vendorName": "Excel",
@@ -64,13 +64,13 @@
         "poNumber": "P2100-EL-12-PO-16911"
     },
     "dailyStandup": {
-        "srNo": "=1+A15",
         "discussingNotes": "(Vaccume Casting @Ratnesh ) Shubham to Rohit",
         "preparingPartsDate": "2026-06-20",
-        "routeFrom": "Noida",
-        "routeTo": "pune",
+        "inputsRequired": "NO",
         "porterPayments": 0,
-        "inputsRequired": "NO"
+        "routeTo": "pune",
+        "srNo": "=1+A15",
+        "routeFrom": "Noida"
     },
     "poRelease": {
         "customerSalePrice": 41320,

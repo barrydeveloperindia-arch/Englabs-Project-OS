@@ -2,12 +2,12 @@
     "projectId": "C2718",
     "client": "THROTTLE AEROSPACE",
     "planning": {
-        "value": 5605,
         "budget": 3923,
+        "poNumber": "",
         "deliveryTerms": "ToPay",
-        "poConfirmed": false,
         "startDate": "2022-09-05",
-        "poNumber": ""
+        "value": 5605,
+        "poConfirmed": false
     },
     "production": {
         "currentStage": "Engineering Design",

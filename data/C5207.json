@@ -3,11 +3,11 @@
     "client": "HC ROBOTICS",
     "planning": {
         "value": 0,
-        "budget": 0,
-        "deliveryTerms": "ToPay",
         "poConfirmed": true,
         "startDate": "2026-06-02",
-        "poNumber": "P2100-EL-12-PO-16904"
+        "deliveryTerms": "ToPay",
+        "poNumber": "P2100-EL-12-PO-16904",
+        "budget": 0
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -47,11 +47,11 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
         "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "totalComponents": 0
     },
     "financials": {
         "vendorName": "Excel",

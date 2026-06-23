@@ -2,11 +2,12 @@
     "projectId": "C5267",
     "client": "ITL (SONALIKA)",
     "planning": {
-        "value": 104180,
+        "poNumber": "",
         "budget": 72926,
         "deliveryTerms": "ToPay",
-        "poConfirmed": false,
-        "startDate": "2026-06-13"
+        "startDate": "2026-06-13",
+        "value": 104180,
+        "poConfirmed": false
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -63,13 +64,13 @@
         "poNumber": null
     },
     "dailyStandup": {
+        "routeFrom": "Delhi",
         "srNo": "=1+A10",
-        "discussingNotes": "4 nos part coming today",
-        "preparingPartsDate": "2026-06-22",
-        "routeFrom": "Delhi ",
-        "routeTo": "Englabs ",
+        "routeTo": "Englabs",
         "porterPayments": 0,
-        "inputsRequired": "NO"
+        "inputsRequired": "NO",
+        "preparingPartsDate": "2026-06-22",
+        "discussingNotes": "4 nos part coming today"
     },
     "poRelease": {
         "customerSalePrice": 104180,

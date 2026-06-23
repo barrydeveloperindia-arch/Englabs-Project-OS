@@ -2,12 +2,12 @@
     "projectId": "C2737",
     "client": "Rukman Udyog",
     "planning": {
-        "value": 8000,
-        "budget": 5600,
-        "deliveryTerms": "ToPay",
-        "poConfirmed": true,
         "startDate": "2022-09-23",
-        "poNumber": ""
+        "value": 8000,
+        "poConfirmed": true,
+        "deliveryTerms": "ToPay",
+        "poNumber": "",
+        "budget": 5600
     },
     "production": {
         "currentStage": "Engineering Design",

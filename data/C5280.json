@@ -65,9 +65,9 @@
     "dailyStandup": {
         "srNo": "=1+A9",
         "discussingNotes": "No updates recorded.",
-        "preparingPartsDate": "2026-06-23",
+        "preparingPartsDate": "Not Confrim",
         "routeFrom": "Noida",
-        "routeTo": "Englabs ",
+        "routeTo": "Englabs",
         "porterPayments": 0,
         "inputsRequired": "NO"
     },

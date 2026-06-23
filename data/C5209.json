@@ -2,12 +2,12 @@
     "projectId": "C5209",
     "client": "NIPA",
     "planning": {
-        "value": 0,
-        "budget": 0,
-        "deliveryTerms": "ToPay",
-        "poConfirmed": true,
         "startDate": "2026-06-02",
-        "poNumber": "P2100-EL-12-PO-16906"
+        "poConfirmed": true,
+        "value": 0,
+        "poNumber": "P2100-EL-12-PO-16906",
+        "budget": 0,
+        "deliveryTerms": "ToPay"
     },
     "production": {
         "currentStage": "Engineering Design",

@@ -85,3 +85,14 @@ export const deleteGateEntryFromFirebase = async (entryId: string) => {
         return { success: false, error: e };
     }
 };
+
+export const fetchProjectsFromFirebase = async () => {
+    if (!db) return [];
+    try {
+        const querySnapshot = await getDocs(collection(db, "projects"));
+        return querySnapshot.docs.map(doc => doc.data());
+    } catch (e) {
+        console.error("Error fetching projects from Firebase:", e);
+        return [];
+    }
+};

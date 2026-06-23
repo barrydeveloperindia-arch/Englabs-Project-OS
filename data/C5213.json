@@ -2,12 +2,12 @@
     "projectId": "C5213",
     "client": "ATOMBERG",
     "planning": {
-        "value": 0,
         "budget": 0,
+        "poNumber": "P2100-EL-12-PO-16909",
         "deliveryTerms": "ToPay",
-        "poConfirmed": true,
         "startDate": "2026-06-02",
-        "poNumber": "P2100-EL-12-PO-16909"
+        "poConfirmed": true,
+        "value": 0
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -48,10 +48,10 @@
     },
     "metrics": {
         "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
         "vendorName": "Talekar",

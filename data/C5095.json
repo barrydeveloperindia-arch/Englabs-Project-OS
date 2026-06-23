@@ -2,12 +2,12 @@
     "projectId": "C5095",
     "client": "SARK GROUP",
     "planning": {
-        "value": 1200,
+        "poNumber": "P2100-EL12-PO-16842",
         "budget": 840,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-16842"
+        "value": 1200,
+        "startDate": "2026-06-02"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -48,10 +48,10 @@
     },
     "metrics": {
         "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
         "vendorName": "RSD ENTERPRISES",

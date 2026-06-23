@@ -2,12 +2,12 @@
     "projectId": "C5140",
     "client": "AEBOCODE",
     "planning": {
-        "value": 43335,
         "budget": 30334,
+        "poNumber": "P2100-EL12-PO-16862",
         "deliveryTerms": "ToPay",
-        "poConfirmed": true,
         "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-16862"
+        "poConfirmed": true,
+        "value": 43335
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -47,11 +47,11 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active...",
+        "totalComponents": 0
     },
     "financials": {
         "vendorName": "ADROITEC INFORMATION SYSTEMS PVT LTD",

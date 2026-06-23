@@ -2,12 +2,12 @@
     "projectId": "C5115",
     "client": "SONALIKA",
     "planning": {
-        "value": 0,
+        "poNumber": "P2100-EL-12-PO-16878",
         "budget": 0,
         "deliveryTerms": "Included",
-        "poConfirmed": true,
         "startDate": "2026-06-02",
-        "poNumber": "P2100-EL-12-PO-16878"
+        "value": 0,
+        "poConfirmed": true
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -48,10 +48,10 @@
     },
     "metrics": {
         "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
         "vendorName": "Plastipack",

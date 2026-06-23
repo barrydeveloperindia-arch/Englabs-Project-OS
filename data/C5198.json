@@ -2,12 +2,12 @@
     "projectId": "C5198",
     "client": "MODERN MANUFACTURER",
     "planning": {
-        "value": 0,
+        "poNumber": "",
         "budget": 0,
         "deliveryTerms": "ToPay",
-        "poConfirmed": false,
         "startDate": "2026-06-02",
-        "poNumber": ""
+        "value": 0,
+        "poConfirmed": false
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -47,11 +47,11 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active...",
+        "totalComponents": 0
     },
     "financials": {
         "vendorName": "Adroitec",

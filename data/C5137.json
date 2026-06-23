@@ -2,12 +2,12 @@
     "projectId": "C5137",
     "client": "MARELLI",
     "planning": {
-        "value": 7282.84,
+        "poNumber": "P2100-EL12-PO-16860",
         "budget": 5098,
         "deliveryTerms": "ToPay",
-        "poConfirmed": true,
         "startDate": "2026-04-28",
-        "poNumber": "P2100-EL12-PO-16860"
+        "value": 7282.84,
+        "poConfirmed": true
     },
     "production": {
         "currentStage": "Workshop Fabrication",
@@ -55,14 +55,14 @@
         ]
     },
     "metrics": {
-        "totalComponents": 34,
         "materialConsumption": "Aluminum 6061, MS Sheet",
         "workforce": [
             "Gaurav Panchal",
             "Paras",
             "Parth",
             "Sandeep"
-        ]
+        ],
+        "totalComponents": 34
     },
     "financials": {
         "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED",

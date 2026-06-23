@@ -2,12 +2,12 @@
     "projectId": "C5124",
     "client": "MICROTEK ( ARVIND )",
     "planning": {
+        "startDate": "2026-04-28",
+        "poConfirmed": true,
         "value": 7910,
         "budget": 5537,
-        "deliveryTerms": "ToPay",
-        "poConfirmed": true,
-        "startDate": "2026-04-28",
-        "poNumber": "P2100-EL12-PO-16870"
+        "poNumber": "P2100-EL12-PO-16870",
+        "deliveryTerms": "ToPay"
     },
     "production": {
         "currentStage": "Workshop Fabrication",
@@ -56,13 +56,13 @@
     },
     "metrics": {
         "totalComponents": 37,
-        "materialConsumption": "Aluminum 6061, MS Sheet",
         "workforce": [
             "Gaurav Panchal",
             "Paras",
             "Parth",
             "Sandeep"
-        ]
+        ],
+        "materialConsumption": "Aluminum 6061, MS Sheet"
     },
     "financials": {
         "vendorName": "ADROITEC INFORMATION SYSTEMS PVT LTD",

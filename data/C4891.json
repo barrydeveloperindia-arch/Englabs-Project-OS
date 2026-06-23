@@ -3,11 +3,11 @@
     "client": "HENKEL",
     "planning": {
         "value": 143400,
-        "budget": 100380,
-        "deliveryTerms": "ToPay",
         "poConfirmed": true,
         "startDate": "2026-06-02",
-        "poNumber": "P2100-EL20-PO-16740"
+        "deliveryTerms": "ToPay",
+        "poNumber": "P2100-EL20-PO-16740",
+        "budget": 100380
     },
     "production": {
         "currentStage": "Engineering Design",

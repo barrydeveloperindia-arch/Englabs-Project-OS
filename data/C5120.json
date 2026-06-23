@@ -2,12 +2,12 @@
     "projectId": "C5120",
     "client": "YASH APPLIANCES",
     "planning": {
-        "value": 1749,
-        "budget": 1224,
-        "deliveryTerms": "ToPay",
-        "poConfirmed": true,
         "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-16850"
+        "value": 1749,
+        "poConfirmed": true,
+        "deliveryTerms": "ToPay",
+        "poNumber": "P2100-EL12-PO-16850",
+        "budget": 1224
     },
     "production": {
         "currentStage": "Engineering Design",

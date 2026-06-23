@@ -2,11 +2,11 @@
     "projectId": "C5254",
     "client": "ITL (SONALIKA)",
     "planning": {
+        "startDate": "2026-06-06",
+        "poConfirmed": false,
         "value": 374716,
         "budget": 262301,
-        "deliveryTerms": "ToPay",
-        "poConfirmed": false,
-        "startDate": "2026-06-06"
+        "deliveryTerms": "ToPay"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -48,10 +48,10 @@
     },
     "metrics": {
         "totalComponents": 36,
-        "materialConsumption": "MJF Black Paint",
         "workforce": [
             "Shubham"
-        ]
+        ],
+        "materialConsumption": "MJF Black Paint"
     },
     "financials": {
         "vendorName": "Excel Repid TECH",
@@ -63,12 +63,12 @@
         "poNumber": null
     },
     "dailyStandup": {
-        "srNo": "=1+A5",
-        "discussingNotes": "Out of a total of 36 parts, 09 parts have been completed and are ready for dispatch.",
-        "preparingPartsDate": "2026-06-23",
-        "routeFrom": "Faridabad ",
-        "routeTo": "Englabs ",
+        "routeTo": "Englabs",
         "porterPayments": 0,
+        "srNo": "=1+A5",
+        "routeFrom": "Faridabad",
+        "discussingNotes": "Out of a total of 36 parts, 09 parts have been completed and are ready for dispatch.",
+        "preparingPartsDate": "Accordind to shubham dispatch go ahed",
         "inputsRequired": "NO"
     },
     "poRelease": {

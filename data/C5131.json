@@ -2,11 +2,11 @@
     "projectId": "C5131",
     "client": "Sonalika RepeAT Order 12 Nos",
     "planning": {
-        "value": 37775.62,
-        "budget": 26443,
-        "deliveryTerms": "Included",
-        "poConfirmed": true,
         "startDate": "2026-06-02",
+        "value": 37775.62,
+        "poConfirmed": true,
+        "deliveryTerms": "Included",
+        "budget": 26443,
         "poNumber": "P2100-EL12-PO-16857"
     },
     "production": {

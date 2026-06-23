@@ -2,12 +2,12 @@
     "projectId": "C5229",
     "client": "ENDUREAIR",
     "planning": {
-        "value": 0,
-        "budget": 0,
-        "deliveryTerms": "ToPay",
         "poConfirmed": true,
+        "value": 0,
         "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-61000"
+        "deliveryTerms": "ToPay",
+        "poNumber": "P2100-EL12-PO-61000",
+        "budget": 0
     },
     "production": {
         "currentStage": "Engineering Design",

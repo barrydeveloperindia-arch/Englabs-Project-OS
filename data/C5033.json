@@ -3,10 +3,10 @@
     "client": "BAJAJ",
     "planning": {
         "value": 0,
-        "budget": 0,
-        "deliveryTerms": "Included",
         "poConfirmed": true,
         "startDate": "2026-06-02",
+        "deliveryTerms": "Included",
+        "budget": 0,
         "poNumber": "P2100-EL12-PO-16809"
     },
     "production": {
@@ -47,11 +47,11 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active...",
+        "totalComponents": 0
     },
     "financials": {
         "vendorName": "Plastipack",

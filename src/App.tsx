@@ -63,7 +63,7 @@ import { PORelease } from '@modules/projects/main/PORelease';
 import { InvoiceRelease } from '@modules/projects/main/InvoiceRelease';
 import { ProjectData, STAGES, ProjectStage } from '@domain/project';
 import { logAction, AuditLog } from '@domain/system_guard';
-import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry, deleteGateEntryFromFirebase, saveProjectToFirebase } from '@services/database_service';
+import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry, deleteGateEntryFromFirebase, saveProjectToFirebase, fetchProjectsFromFirebase } from '@services/database_service';
 import { processInventoryUpdate, fetchInventoryMaster, fetchStockMovement, recordManualTransaction } from '@domain/inventory_service';
 import forensicRegistry from '@data/forensic_gate_registry.json';
 import porterForensic from '@data/porter_missions_forensic.json';
@@ -325,7 +325,7 @@ const App: React.FC = () => {
     useEffect(() => {
         console.log("Found project files:", Object.keys(projectFiles));
         
-        const loadProjects = () => {
+        const loadProjects = async () => {
             const loadedProjects: ProjectData[] = [];
             for (const path in projectFiles) {
                 try {
@@ -341,14 +341,33 @@ const App: React.FC = () => {
                 }
             }
             
-            console.log("Loaded projects:", loadedProjects.length);
-            if (loadedProjects.length > 0) {
-                setProjects(loadedProjects);
+            let finalProjects = loadedProjects;
+            try {
+                console.log("Fetching latest projects from Firestore...");
+                const fbProjects = await fetchProjectsFromFirebase();
+                if (fbProjects && fbProjects.length > 0) {
+                    console.log(`Successfully fetched ${fbProjects.length} projects from Firestore.`);
+                    const fbMap = new Map(fbProjects.map((p: any) => [p.projectId, p]));
+                    finalProjects = loadedProjects.map(staticProj => {
+                        const fbProj = fbMap.get(staticProj.projectId);
+                        if (fbProj) {
+                            return { ...staticProj, ...fbProj } as ProjectData;
+                        }
+                        return staticProj;
+                    });
+                }
+            } catch (fbErr) {
+                console.error("Failed to load projects from Firestore, falling back to local files:", fbErr);
+            }
+            
+            console.log("Loaded projects:", finalProjects.length);
+            if (finalProjects.length > 0) {
+                setProjects(finalProjects);
                 const lastId = localStorage.getItem('englabs_last_project_id');
-                const matched = lastId ? loadedProjects.find(p => p.projectId === lastId) : null;
+                const matched = lastId ? finalProjects.find(p => p.projectId === lastId) : null;
                 setSelectedProject(matched || null);
             } else {
-                console.warn("No projects loaded from ../data/*.json");
+                console.warn("No projects loaded");
             }
         };
         loadProjects();

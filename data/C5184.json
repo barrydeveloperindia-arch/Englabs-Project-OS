@@ -2,12 +2,12 @@
     "projectId": "C5184",
     "client": "SG ENGINEERING WORKS",
     "planning": {
-        "value": 0,
         "budget": 0,
+        "poNumber": "P2100-EL-12-PO-16890",
         "deliveryTerms": "ToPay",
+        "value": 0,
         "poConfirmed": true,
-        "startDate": "2026-06-02",
-        "poNumber": "P2100-EL-12-PO-16890"
+        "startDate": "2026-06-02"
     },
     "production": {
         "currentStage": "Engineering Design",

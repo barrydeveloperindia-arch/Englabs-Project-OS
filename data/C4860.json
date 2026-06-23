@@ -2,11 +2,11 @@
     "projectId": "C4860",
     "client": "LABAT ASIA PUR / 2025-26 / WOT-46",
     "planning": {
-        "value": 57959,
-        "budget": 40571,
-        "deliveryTerms": "ToPay",
-        "poConfirmed": true,
         "startDate": "2026-06-02",
+        "value": 57959,
+        "poConfirmed": true,
+        "deliveryTerms": "ToPay",
+        "budget": 40571,
         "poNumber": "P2100-EL12-PO-70870"
     },
     "production": {
@@ -48,10 +48,10 @@
     },
     "metrics": {
         "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
         "vendorName": "Labat Asia",

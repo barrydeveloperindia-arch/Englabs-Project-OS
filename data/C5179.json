@@ -2,12 +2,12 @@
     "projectId": "C5179",
     "client": "HC ROBOTICS",
     "planning": {
-        "value": 0,
         "budget": 0,
+        "poNumber": "P2100-EL-12-PO-16899",
         "deliveryTerms": "ToPay",
+        "value": 0,
         "poConfirmed": true,
-        "startDate": "2026-06-02",
-        "poNumber": "P2100-EL-12-PO-16899"
+        "startDate": "2026-06-02"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -48,10 +48,10 @@
     },
     "metrics": {
         "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
         "vendorName": "Excel",

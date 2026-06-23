@@ -1,0 +1,86 @@
+{
+    "projectId": "C5255",
+    "client": "BAJAJ",
+    "planning": {
+        "deliveryTerms": "30 days",
+        "budget": 5699.6,
+        "value": 9010,
+        "poConfirmed": true,
+        "startDate": "2026-06-23"
+    },
+    "production": {
+        "currentStage": "Final Packaging",
+        "stages": [
+            {
+                "name": "Engineering Design",
+                "status": "Completed"
+            },
+            {
+                "name": "Machine Processing",
+                "status": "Completed"
+            },
+            {
+                "name": "Workshop Fabrication",
+                "status": "Completed"
+            },
+            {
+                "name": "Sanding",
+                "status": "Completed"
+            },
+            {
+                "name": "Painting",
+                "status": "Completed"
+            },
+            {
+                "name": "Drying",
+                "status": "Completed"
+            },
+            {
+                "name": "Finishing",
+                "status": "Completed"
+            },
+            {
+                "name": "Final Packaging",
+                "status": "Completed"
+            }
+        ]
+    },
+    "metrics": {
+        "materialConsumption": "handle_gasket-C5255",
+        "totalComponents": 20
+    },
+    "financials": {
+        "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED",
+        "vendorLocation": "Delhi",
+        "dispatchBudget": 0,
+        "totalCost": 6725,
+        "profitLoss": 2310.4,
+        "deliveryFeeMode": "To pay basis",
+        "poNumber": "P2100-EL12-PO-16953"
+    },
+    "dailyStandup": {
+        "routeFrom": "Delhi",
+        "porterPayments": 0,
+        "routeTo": "Englabs",
+        "srNo": "24",
+        "preparingPartsDate": "2026-06-23",
+        "inputsRequired": "NO",
+        "discussingNotes": "All 20 parts have been completed and are ready for dispatch."
+    },
+    "poRelease": {
+        "customerSalePrice": 9010,
+        "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED",
+        "vendorLocation": "Delhi",
+        "poVendorSent": "P2100-EL12-PO-16953",
+        "vendorCost": 6725,
+        "releaseDate": "2026-06-23"
+    },
+    "invoiceRelease": {
+        "gstRate": 18,
+        "gstValue": 1621.8,
+        "totalInvoiceAmount": 10631.8,
+        "paymentTerms": "30 days",
+        "invoiceNumber": "QTN-5255",
+        "paymentStatus": "Pending"
+    }
+}

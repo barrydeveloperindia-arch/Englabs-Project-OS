@@ -2,12 +2,12 @@
     "projectId": "C5014",
     "client": "AV MACHINING SOLUTIONS",
     "planning": {
-        "value": 14630,
-        "budget": 10241,
         "deliveryTerms": "ToPay",
+        "budget": 10241,
+        "poNumber": "P2100-EL12-PO-16847",
+        "value": 14630,
         "poConfirmed": true,
-        "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-16847"
+        "startDate": "2026-06-02"
     },
     "production": {
         "currentStage": "Engineering Design",

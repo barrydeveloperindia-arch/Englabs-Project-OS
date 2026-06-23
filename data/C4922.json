@@ -2,12 +2,12 @@
     "projectId": "C4922",
     "client": "Aebocode Technologies",
     "planning": {
-        "value": 58245,
         "budget": 40772,
+        "poNumber": "P2100-EL12-PO-16864",
         "deliveryTerms": "ToPay",
+        "value": 58245,
         "poConfirmed": true,
-        "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-16864"
+        "startDate": "2026-06-02"
     },
     "production": {
         "currentStage": "Engineering Design",

@@ -2,12 +2,12 @@
     "projectId": "C5154",
     "client": "HENKEL",
     "planning": {
-        "value": 0,
-        "budget": 0,
         "deliveryTerms": "Included",
+        "poNumber": "P2100-EL12-PO-74536",
+        "budget": 0,
         "poConfirmed": true,
-        "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-74536"
+        "value": 0,
+        "startDate": "2026-06-02"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -47,11 +47,11 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active...",
+        "totalComponents": 0
     },
     "financials": {
         "vendorName": "Cadqua",

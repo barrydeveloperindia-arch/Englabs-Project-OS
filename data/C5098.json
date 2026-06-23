@@ -2,12 +2,12 @@
     "projectId": "C5098",
     "client": "ENDUREAIR",
     "planning": {
+        "startDate": "2026-06-02",
+        "poConfirmed": true,
         "value": 32047.8,
         "budget": 22433,
-        "deliveryTerms": "ToPay",
-        "poConfirmed": true,
-        "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-16843"
+        "poNumber": "P2100-EL12-PO-16843",
+        "deliveryTerms": "ToPay"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -47,11 +47,11 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
         "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "totalComponents": 0
     },
     "financials": {
         "vendorName": "M/s. Amuse",

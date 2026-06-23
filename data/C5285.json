@@ -65,12 +65,12 @@
     },
     "dailyStandup": {
         "srNo": "=1+A24",
-        "discussingNotes": "No updates recorded.",
-        "preparingPartsDate": "2026-06-23",
-        "routeFrom": "Noida",
-        "routeTo": "Faridabad",
+        "discussingNotes": "Talekar cross check shubham",
+        "preparingPartsDate": "2023-06-22",
+        "routeFrom": "Pune",
+        "routeTo": "Englabs",
         "porterPayments": 0,
-        "inputsRequired": "NO"
+        "inputsRequired": "Cad File"
     },
     "poRelease": {
         "customerSalePrice": 140000,

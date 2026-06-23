@@ -2,11 +2,12 @@
     "projectId": "C5288",
     "client": "ORIENT",
     "planning": {
-        "value": 19372,
-        "budget": 13560,
         "deliveryTerms": "Porter",
-        "poConfirmed": false,
-        "startDate": "2026-06-10"
+        "poNumber": "PO-98213",
+        "budget": 13560,
+        "startDate": "2026-06-10",
+        "value": 19372,
+        "poConfirmed": true
     },
     "production": {
         "currentStage": "Final Packaging",
@@ -54,11 +55,11 @@
         ]
     },
     "metrics": {
-        "totalComponents": 11,
-        "materialConsumption": "SLS ABS",
         "workforce": [
             "Devanshu"
-        ]
+        ],
+        "materialConsumption": "Steel Plate 8mm",
+        "totalComponents": 150
     },
     "financials": {
         "vendorName": "Cadqua",
@@ -70,13 +71,13 @@
         "poNumber": null
     },
     "dailyStandup": {
-        "srNo": "=1+A14",
-        "discussingNotes": "Under Process Porter Service",
+        "inputsRequired": "NO",
         "preparingPartsDate": "2026-06-18",
+        "discussingNotes": "Under Process Porter Service",
         "routeFrom": "Ghaziabad",
-        "routeTo": "Faridabad",
+        "srNo": "=1+A14",
         "porterPayments": 450,
-        "inputsRequired": "NO"
+        "routeTo": "Faridabad"
     },
     "poRelease": {
         "customerSalePrice": 19372,

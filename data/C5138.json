@@ -2,12 +2,12 @@
     "projectId": "C5138",
     "client": "HC ROBOTICS",
     "planning": {
-        "value": 0,
-        "budget": 0,
         "deliveryTerms": "ToPay",
+        "poNumber": "P2100-EL12-PO-56766",
+        "budget": 0,
+        "value": 0,
         "poConfirmed": true,
-        "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-56766"
+        "startDate": "2026-06-02"
     },
     "production": {
         "currentStage": "Engineering Design",

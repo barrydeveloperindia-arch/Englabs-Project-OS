@@ -2,12 +2,12 @@
     "projectId": "C4935",
     "client": "MSL INDIA",
     "planning": {
-        "value": 22200,
-        "budget": 15540,
-        "deliveryTerms": "ToPay",
         "poConfirmed": true,
+        "value": 22200,
         "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-16761"
+        "budget": 15540,
+        "poNumber": "P2100-EL12-PO-16761",
+        "deliveryTerms": "ToPay"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -48,10 +48,10 @@
     },
     "metrics": {
         "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
         "vendorName": "CHAMBER OF INDUSTRIAL AND COMMERCIAL UNDERTAKINGS",

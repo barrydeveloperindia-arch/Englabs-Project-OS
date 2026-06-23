@@ -2,12 +2,12 @@
     "projectId": "C4985",
     "client": "MARELLI",
     "planning": {
-        "value": 13873.96,
-        "budget": 9712,
         "deliveryTerms": "ToPay",
+        "poNumber": "P2100-EL12-PO-16849",
+        "budget": 9712,
+        "value": 13873.96,
         "poConfirmed": true,
-        "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-16849"
+        "startDate": "2026-06-02"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -47,11 +47,11 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active...",
+        "totalComponents": 0
     },
     "financials": {
         "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED",

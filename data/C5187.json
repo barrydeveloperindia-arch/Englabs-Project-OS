@@ -2,12 +2,12 @@
     "projectId": "C5187",
     "client": "AVEER INDUSTRIES",
     "planning": {
-        "value": 2450,
-        "budget": 1715,
-        "deliveryTerms": "ToPay",
         "poConfirmed": true,
+        "value": 2450,
         "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-16886"
+        "deliveryTerms": "ToPay",
+        "poNumber": "P2100-EL12-PO-16886",
+        "budget": 1715
     },
     "production": {
         "currentStage": "Engineering Design",

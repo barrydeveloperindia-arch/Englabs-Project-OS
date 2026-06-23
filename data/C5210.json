@@ -3,11 +3,11 @@
     "client": "ORIENT",
     "planning": {
         "value": 16000,
-        "budget": 11200,
-        "deliveryTerms": "ToPay",
         "poConfirmed": true,
         "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-62000"
+        "budget": 11200,
+        "poNumber": "P2100-EL12-PO-62000",
+        "deliveryTerms": "ToPay"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -47,11 +47,11 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
         "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "totalComponents": 0
     },
     "financials": {
         "vendorName": "CADQUA 3D LLP",

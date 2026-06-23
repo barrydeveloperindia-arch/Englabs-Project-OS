@@ -2,12 +2,12 @@
     "projectId": "C5195",
     "client": "LABAT ASIA",
     "planning": {
-        "value": 110100,
-        "budget": 77070,
         "deliveryTerms": "ToPay",
+        "poNumber": "P2100-EL12-PO-74404",
+        "budget": 0,
+        "value": 0,
         "poConfirmed": true,
-        "startDate": "2026-05-05",
-        "poNumber": "P2100-EL12-PO-74404"
+        "startDate": "2026-06-02"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -48,11 +48,11 @@
         ]
     },
     "metrics": {
-        "totalComponents": 150,
-        "materialConsumption": "VC ABS Grey Paint",
         "workforce": [
-            "Shubham"
-        ]
+            "TBD"
+        ],
+        "materialConsumption": "Tracking active...",
+        "totalComponents": 0
     },
     "financials": {
         "vendorName": "Excel",
@@ -62,15 +62,6 @@
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
         "poNumber": "P2100-EL12-PO-74404"
-    },
-    "dailyStandup": {
-        "srNo": "=1+A20",
-        "discussingNotes": "No updates recorded.",
-        "preparingPartsDate": "2026-06-23",
-        "routeFrom": "Noida",
-        "routeTo": "Faridabad",
-        "porterPayments": 0,
-        "inputsRequired": "NO"
     },
     "poRelease": {
         "customerSalePrice": 110100,
@@ -87,5 +78,8 @@
         "paymentTerms": "30 days",
         "invoiceNumber": "INV-5195",
         "paymentStatus": "Pending"
+    },
+    "dailyStandup": {
+        "inputsRequired": "NO"
     }
 }

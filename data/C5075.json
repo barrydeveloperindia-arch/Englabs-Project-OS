@@ -2,12 +2,12 @@
     "projectId": "C5075",
     "client": "HELLA",
     "planning": {
-        "value": 0,
-        "budget": 0,
         "deliveryTerms": "Included",
-        "poConfirmed": true,
+        "poNumber": "P2100-EL-12-PO-16880",
+        "budget": 0,
         "startDate": "2026-06-02",
-        "poNumber": "P2100-EL-12-PO-16880"
+        "poConfirmed": true,
+        "value": 0
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -48,10 +48,10 @@
     },
     "metrics": {
         "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
         "vendorName": "Plastipack",

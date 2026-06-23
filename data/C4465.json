@@ -2,12 +2,12 @@
     "projectId": "C4465",
     "client": "SOMAFUSION WELLNESS LLP",
     "planning": {
-        "value": 35000,
-        "budget": 24500,
-        "deliveryTerms": "ToPay",
-        "poConfirmed": true,
         "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-16715"
+        "poConfirmed": true,
+        "value": 35000,
+        "poNumber": "P2100-EL12-PO-16715",
+        "budget": 24500,
+        "deliveryTerms": "ToPay"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -48,10 +48,10 @@
     },
     "metrics": {
         "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
         "vendorName": "Ankit Industrial",

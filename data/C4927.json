@@ -2,12 +2,12 @@
     "projectId": "C4927",
     "client": "HENKEL",
     "planning": {
-        "value": 152300,
-        "budget": 106610,
-        "deliveryTerms": "ToPay",
         "poConfirmed": true,
+        "value": 152300,
         "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-16750"
+        "deliveryTerms": "ToPay",
+        "poNumber": "P2100-EL12-PO-16750",
+        "budget": 106610
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -48,10 +48,10 @@
     },
     "metrics": {
         "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
         "vendorName": "Talekar Group Of Company",

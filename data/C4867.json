@@ -2,12 +2,12 @@
     "projectId": "C4867",
     "client": "BAJAJ ELECTRICALS",
     "planning": {
-        "value": 11446,
         "budget": 8012,
+        "poNumber": "P2100-EL40-INV-17380",
         "deliveryTerms": "ToPay",
-        "poConfirmed": true,
         "startDate": "2026-06-01",
-        "poNumber": "P2100-EL40-INV-17380"
+        "poConfirmed": true,
+        "value": 11446
     },
     "production": {
         "currentStage": "Workshop Fabrication",
@@ -56,12 +56,12 @@
     },
     "metrics": {
         "totalComponents": 44,
-        "materialConsumption": "Aluminum 6061, MS Sheet",
         "workforce": [
             "Gaurav Panchal",
             "Paras",
             "Parth",
             "Sandeep"
-        ]
+        ],
+        "materialConsumption": "Aluminum 6061, MS Sheet"
     }
 }

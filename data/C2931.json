@@ -2,12 +2,12 @@
     "projectId": "C2931",
     "client": "(Free from Dirt,  Damages, pit lines, porosity and Flash)",
     "planning": {
-        "value": 0,
+        "poNumber": "",
         "budget": 0,
         "deliveryTerms": "ToPay",
-        "poConfirmed": true,
         "startDate": "2026-05-03",
-        "poNumber": ""
+        "poConfirmed": true,
+        "value": 0
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -48,9 +48,9 @@
     },
     "metrics": {
         "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active..."
     }
 }

@@ -2,12 +2,12 @@
     "projectId": "C5212",
     "client": "HC ROBOTICS",
     "planning": {
-        "value": 0,
-        "budget": 0,
-        "deliveryTerms": "ToPay",
-        "poConfirmed": false,
         "startDate": "2026-06-02",
-        "poNumber": ""
+        "poConfirmed": false,
+        "value": 0,
+        "deliveryTerms": "ToPay",
+        "poNumber": "",
+        "budget": 0
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -47,11 +47,11 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
         "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "totalComponents": 0
     },
     "financials": {
         "vendorName": "Excel",

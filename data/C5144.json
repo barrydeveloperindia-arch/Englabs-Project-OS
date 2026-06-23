@@ -2,12 +2,12 @@
     "projectId": "C5144",
     "client": "NIPA",
     "planning": {
-        "value": 2625,
-        "budget": 1837,
         "deliveryTerms": "ToPay",
-        "poConfirmed": true,
+        "budget": 1837,
+        "poNumber": "P2100-EL12-PO-16865",
         "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-16865"
+        "value": 2625,
+        "poConfirmed": true
     },
     "production": {
         "currentStage": "Engineering Design",

@@ -2,12 +2,12 @@
     "projectId": "C5224",
     "client": "VIBRACOUSTIC",
     "planning": {
-        "value": 0,
         "budget": 0,
+        "poNumber": "",
         "deliveryTerms": "ToPay",
         "poConfirmed": false,
-        "startDate": "2026-06-02",
-        "poNumber": ""
+        "value": 0,
+        "startDate": "2026-06-02"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -47,11 +47,11 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
         "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "totalComponents": 0
     },
     "financials": {
         "vendorName": "SK Techno",

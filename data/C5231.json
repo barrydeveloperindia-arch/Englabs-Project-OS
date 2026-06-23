@@ -73,8 +73,8 @@
         "srNo": "=1+A12",
         "discussingNotes": "No updates recorded.",
         "preparingPartsDate": "2026-06-20",
-        "routeFrom": "Delhi ",
-        "routeTo": "Englabs ",
+        "routeFrom": "Delhi",
+        "routeTo": "Englabs",
         "porterPayments": 168,
         "inputsRequired": "NO"
     },

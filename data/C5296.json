@@ -2,12 +2,12 @@
     "projectId": "C5296",
     "client": "AEBOCODE",
     "planning": {
+        "poConfirmed": true,
         "value": 48800,
-        "budget": 34160,
-        "deliveryTerms": "ToPay",
-        "poConfirmed": false,
         "startDate": "2026-06-22",
-        "poNumber": "P2100-EL12-PO-74523"
+        "poNumber": "P2100-EL12-PO-74523",
+        "budget": 34160,
+        "deliveryTerms": "ToPay"
     },
     "production": {
         "currentStage": "Workshop Fabrication",
@@ -56,10 +56,10 @@
     },
     "metrics": {
         "totalComponents": 14,
-        "materialConsumption": "PA12",
         "workforce": [
             "Devanshu"
-        ]
+        ],
+        "materialConsumption": "PA12"
     },
     "financials": {
         "vendorName": "Adroitec Information System Pvt Ltd (Noida)",
@@ -71,13 +71,13 @@
         "poNumber": "P2100-EL12-PO-74523"
     },
     "dailyStandup": {
-        "srNo": "=1+A25",
         "discussingNotes": "TO QTY, 14  NOIDA TO ENGLABS COMING TODAY",
-        "preparingPartsDate": "2026-06-23",
-        "routeFrom": "NOIDA",
-        "routeTo": "Englabs ",
+        "preparingPartsDate": "TODAY IS COMING ",
+        "inputsRequired": "NO",
         "porterPayments": 0,
-        "inputsRequired": "NO"
+        "routeTo": "Englabs",
+        "srNo": "=1+A25",
+        "routeFrom": "NOIDA"
     },
     "poRelease": {
         "customerSalePrice": 48800,

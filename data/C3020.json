@@ -2,12 +2,12 @@
     "projectId": "C3020",
     "client": "IDEAFORGE",
     "planning": {
-        "value": 74276.88,
+        "poNumber": "",
         "budget": 51994,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2023-06-12",
-        "poNumber": ""
+        "value": 74276.88,
+        "startDate": "2023-06-12"
     },
     "production": {
         "currentStage": "Workshop Fabrication",

@@ -2,12 +2,12 @@
     "projectId": "C5178",
     "client": "Aebocode Technologies",
     "planning": {
-        "value": 100000,
         "budget": 70000,
+        "poNumber": "P2100-EL12-PO-16854",
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-04-28",
-        "poNumber": "P2100-EL12-PO-16854"
+        "value": 100000,
+        "startDate": "2026-04-28"
     },
     "production": {
         "currentStage": "Workshop Fabrication",

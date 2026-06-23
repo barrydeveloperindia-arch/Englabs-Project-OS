@@ -2,11 +2,12 @@
     "projectId": "C5273",
     "client": "HC ROBOTIC",
     "planning": {
+        "startDate": "2026-06-12",
         "value": 128352,
-        "budget": 89846,
+        "poConfirmed": true,
         "deliveryTerms": "ToPay",
-        "poConfirmed": false,
-        "startDate": "2026-06-12"
+        "poNumber": "",
+        "budget": 89846
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -48,10 +49,10 @@
     },
     "metrics": {
         "totalComponents": 48,
-        "materialConsumption": "MJF Black Paint",
         "workforce": [
             "Anurag"
-        ]
+        ],
+        "materialConsumption": "MJF Black Paint"
     },
     "financials": {
         "vendorName": "Excel",
@@ -63,13 +64,13 @@
         "poNumber": null
     },
     "dailyStandup": {
-        "srNo": "=1+A7",
-        "discussingNotes": "Part coming today",
-        "preparingPartsDate": "2026-06-22",
-        "routeFrom": "Delhi ",
-        "routeTo": "Englabs ",
+        "routeFrom": "Delhi",
         "porterPayments": 0,
-        "inputsRequired": "NO"
+        "routeTo": "Englabs",
+        "srNo": "=1+A7",
+        "inputsRequired": "NO",
+        "preparingPartsDate": "2026-06-22",
+        "discussingNotes": "Part coming today"
     },
     "poRelease": {
         "customerSalePrice": 128352,

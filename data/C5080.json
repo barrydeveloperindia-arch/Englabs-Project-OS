@@ -2,12 +2,12 @@
     "projectId": "C5080",
     "client": "PRG TECH",
     "planning": {
-        "value": 3990,
-        "budget": 2793,
         "deliveryTerms": "ToPay",
+        "poNumber": "P2100-EL12-PO-16831",
+        "budget": 2793,
+        "value": 3990,
         "poConfirmed": true,
-        "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-16831"
+        "startDate": "2026-06-02"
     },
     "production": {
         "currentStage": "Engineering Design",

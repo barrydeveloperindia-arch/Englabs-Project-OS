@@ -2,12 +2,12 @@
     "projectId": "C5191",
     "client": "PARAM APPLIANCES",
     "planning": {
-        "value": 0,
-        "budget": 0,
         "deliveryTerms": "ToPay",
-        "poConfirmed": true,
+        "poNumber": "P2100-EL12-PO-18105",
+        "budget": 0,
         "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-18105"
+        "poConfirmed": true,
+        "value": 0
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -47,11 +47,11 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active...",
+        "totalComponents": 0
     },
     "financials": {
         "vendorName": "Param Appliances",
