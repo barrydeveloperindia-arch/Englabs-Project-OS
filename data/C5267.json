@@ -61,5 +61,30 @@
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
         "poNumber": null
+    },
+    "dailyStandup": {
+        "srNo": "=1+A10",
+        "discussingNotes": "4 nos part coming today",
+        "preparingPartsDate": "2026-06-22",
+        "routeFrom": "Delhi ",
+        "routeTo": "Englabs ",
+        "porterPayments": 0,
+        "inputsRequired": "NO"
+    },
+    "poRelease": {
+        "customerSalePrice": 104180,
+        "vendorName": "Excel Repid TECH",
+        "vendorLocation": "Delhi",
+        "poVendorSent": "N/A",
+        "vendorCost": 0,
+        "releaseDate": "2026-06-13"
+    },
+    "invoiceRelease": {
+        "gstRate": 18,
+        "gstValue": 18752,
+        "totalInvoiceAmount": 122932,
+        "paymentTerms": "30 days",
+        "invoiceNumber": "QTN-5267",
+        "paymentStatus": "Pending"
     }
 }

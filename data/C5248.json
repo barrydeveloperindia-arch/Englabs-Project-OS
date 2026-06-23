@@ -62,5 +62,30 @@
         "profitLoss": null,
         "deliveryFeeMode": "Porter system",
         "poNumber": "P2100-EL12-PO-74483"
+    },
+    "dailyStandup": {
+        "srNo": "=1+A22",
+        "discussingNotes": "No updates recorded.",
+        "preparingPartsDate": "2026-06-23",
+        "routeFrom": "Talekar pune",
+        "routeTo": "mumbai ",
+        "porterPayments": 0,
+        "inputsRequired": "Cad File"
+    },
+    "poRelease": {
+        "customerSalePrice": 155950,
+        "vendorName": "S K TECHNO (Mohali)",
+        "vendorLocation": "Mohali",
+        "poVendorSent": "N/A",
+        "vendorCost": 68000,
+        "releaseDate": "2026-06-08"
+    },
+    "invoiceRelease": {
+        "gstRate": 18,
+        "gstValue": 28071,
+        "totalInvoiceAmount": 184021,
+        "paymentTerms": "30 days",
+        "invoiceNumber": "INV-5248",
+        "paymentStatus": "Pending"
     }
 }

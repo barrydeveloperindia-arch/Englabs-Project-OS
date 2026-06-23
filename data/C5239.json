@@ -61,5 +61,30 @@
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
         "poNumber": null
+    },
+    "dailyStandup": {
+        "srNo": "=1+A19",
+        "discussingNotes": "design only",
+        "preparingPartsDate": "2026-06-22",
+        "routeFrom": "nil",
+        "routeTo": "nil",
+        "porterPayments": 0,
+        "inputsRequired": "NO"
+    },
+    "poRelease": {
+        "customerSalePrice": 33650,
+        "vendorName": "Bharat sir",
+        "vendorLocation": "nil",
+        "poVendorSent": "N/A",
+        "vendorCost": 0,
+        "releaseDate": "2026-05-26"
+    },
+    "invoiceRelease": {
+        "gstRate": 18,
+        "gstValue": 6057,
+        "totalInvoiceAmount": 39707,
+        "paymentTerms": "Bharat sir",
+        "invoiceNumber": "QTN-5239",
+        "paymentStatus": "Pending"
     }
 }

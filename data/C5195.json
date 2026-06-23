@@ -62,5 +62,30 @@
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
         "poNumber": "P2100-EL12-PO-74404"
+    },
+    "dailyStandup": {
+        "srNo": "=1+A20",
+        "discussingNotes": "No updates recorded.",
+        "preparingPartsDate": "2026-06-23",
+        "routeFrom": "Noida",
+        "routeTo": "Faridabad",
+        "porterPayments": 0,
+        "inputsRequired": "NO"
+    },
+    "poRelease": {
+        "customerSalePrice": 110100,
+        "vendorName": "Excel",
+        "vendorLocation": "Delhi",
+        "poVendorSent": "P2100-EL12-PO-74404",
+        "vendorCost": 0,
+        "releaseDate": "2026-05-05"
+    },
+    "invoiceRelease": {
+        "gstRate": 18,
+        "gstValue": 19818,
+        "totalInvoiceAmount": 129918,
+        "paymentTerms": "30 days",
+        "invoiceNumber": "INV-5195",
+        "paymentStatus": "Pending"
     }
 }

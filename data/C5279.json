@@ -69,5 +69,30 @@
         "profitLoss": 21500,
         "deliveryFeeMode": "Porter system",
         "poNumber": "P2100-EL12-PO-74478"
+    },
+    "dailyStandup": {
+        "srNo": "1",
+        "discussingNotes": "Project Closed According to Anurag",
+        "preparingPartsDate": "2026-06-17",
+        "routeFrom": "SKTECHNO MOHALI",
+        "routeTo": "Englabs ",
+        "porterPayments": 0,
+        "inputsRequired": "NO"
+    },
+    "poRelease": {
+        "customerSalePrice": 21500,
+        "vendorName": "SK Techno",
+        "vendorLocation": "Mohali",
+        "poVendorSent": "N/A",
+        "vendorCost": 0,
+        "releaseDate": "2026-06-23"
+    },
+    "invoiceRelease": {
+        "gstRate": 18,
+        "gstValue": 3870,
+        "totalInvoiceAmount": 25370,
+        "paymentTerms": "ADVANCE DONE",
+        "invoiceNumber": "INV-5279",
+        "paymentStatus": "Paid"
     }
 }

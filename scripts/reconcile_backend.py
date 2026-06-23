@@ -13,9 +13,9 @@ import fitz  # PyMuPDF
 WORKSPACE_DIR = r"c:\Users\SAM\Documents\Antigravity\Englabs Projects"
 ENQUIRY_FILE = r"C:\Users\SAM\OneDrive - Englabs India Pvt Ltd\2025 ENQUIRIES\ENQUIRIES REGISTER_SA UPDATED - 01-06.xlsx"
 ONEDRIVE_DIR = r"C:\Users\SAM\OneDrive - Englabs India Pvt Ltd\2025 ENQUIRIES"
-SITE_CASH_FILE = r"G:\Englabs_HR Team Managements\Site Cash Details\Englabs Site Cash.xlsx"
-BACKUP_DIR = r"G:\Englabs_HR Team Managements\Site Cash Details\Backups"
-HISTORY_FILE = r"G:\Englabs_HR Team Managements\Site Cash Details\update_history.json"
+SITE_CASH_FILE = r"G:\HR Team Managements\Englabs Projects APK\Patty Cash Details\Englabs Patty Cash.xlsx"
+BACKUP_DIR = r"G:\HR Team Managements\Englabs Projects APK\Patty Cash Details\Backups"
+HISTORY_FILE = r"G:\HR Team Managements\Englabs Projects APK\Patty Cash Details\update_history.json"
 CACHE_FILE = os.path.join(WORKSPACE_DIR, "data", "project_directory_cache.json")
 OUTLOOK_DB_FILE = os.path.join(WORKSPACE_DIR, "data", "outlook_processed_db.json")
 
@@ -488,7 +488,7 @@ def reconcile_all_excel(specific_ids=None):
         
         # Open with openpyxl to preserve formulas/styles
         wb = openpyxl.load_workbook(SITE_CASH_FILE, data_only=False)
-        sheet = wb['Projects wise Details_2026']
+        sheet = wb['Projects_wise_Details_2026']
         
         # Style definition for professional look
         from openpyxl.styles import Font, Alignment, Border, Side

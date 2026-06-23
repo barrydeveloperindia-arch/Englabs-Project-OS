@@ -68,5 +68,30 @@
         "profitLoss": 5526,
         "deliveryFeeMode": "Porter system",
         "poNumber": null
+    },
+    "dailyStandup": {
+        "srNo": "=1+A14",
+        "discussingNotes": "Under Process Porter Service",
+        "preparingPartsDate": "2026-06-18",
+        "routeFrom": "Ghaziabad",
+        "routeTo": "Faridabad",
+        "porterPayments": 450,
+        "inputsRequired": "NO"
+    },
+    "poRelease": {
+        "customerSalePrice": 19372,
+        "vendorName": "Cadqua",
+        "vendorLocation": "Ghaziabad",
+        "poVendorSent": "16948",
+        "vendorCost": 13846,
+        "releaseDate": "2026-06-10"
+    },
+    "invoiceRelease": {
+        "gstRate": 18,
+        "gstValue": 3487,
+        "totalInvoiceAmount": 22859,
+        "paymentTerms": "30 days",
+        "invoiceNumber": "QTN-5288",
+        "paymentStatus": "Paid"
     }
 }

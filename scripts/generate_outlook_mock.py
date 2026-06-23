@@ -3,10 +3,10 @@ import re
 import os
 import pandas as pd
 
-site_cash_file = r"G:\Englabs_HR Team Managements\Site Cash Details\Englabs Site Cash.xlsx"
+site_cash_file = r"G:\HR Team Managements\Englabs Projects APK\Patty Cash Details\Englabs Patty Cash.xlsx"
 outlook_db_file = r"c:\Users\SAM\Documents\Antigravity\Englabs Projects\data\outlook_processed_db.json"
 
-df_site = pd.read_excel(site_cash_file, sheet_name='Projects wise Details_2026', header=1)
+df_site = pd.read_excel(site_cash_file, sheet_name='Projects_wise_Details_2026', header=1)
 # Clean customer name to get client mapping
 project_ids = df_site['Current Projects Detasils (Project ID)'].dropna().tolist()
 
@@ -32,7 +32,7 @@ cities = [
 
 # We will read what we already solved in the Excel file
 # and create communications for them
-wb = pd.read_excel(site_cash_file, sheet_name='Projects wise Details_2026', header=1)
+wb = pd.read_excel(site_cash_file, sheet_name='Projects_wise_Details_2026', header=1)
 records = []
 
 # Keep the two original steel/IoT logs

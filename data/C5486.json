@@ -68,5 +68,30 @@
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
         "poNumber": null
+    },
+    "dailyStandup": {
+        "srNo": "",
+        "discussingNotes": "Under execution. MJF parts ready.",
+        "preparingPartsDate": "2026-06-23",
+        "routeFrom": "Noida",
+        "routeTo": "Faridabad",
+        "porterPayments": 0,
+        "inputsRequired": "NO"
+    },
+    "poRelease": {
+        "customerSalePrice": 51975,
+        "vendorName": "Idemi",
+        "vendorLocation": "Mumbai",
+        "poVendorSent": "16946",
+        "vendorCost": 45000,
+        "releaseDate": "2026-06-13"
+    },
+    "invoiceRelease": {
+        "gstRate": 18,
+        "gstValue": 9356,
+        "totalInvoiceAmount": 61330,
+        "paymentTerms": "30 days",
+        "invoiceNumber": "QTN-5486",
+        "paymentStatus": "Pending"
     }
 }

@@ -69,5 +69,30 @@
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
         "poNumber": "P2100-EL12-PO-74523"
+    },
+    "dailyStandup": {
+        "srNo": "=1+A25",
+        "discussingNotes": "TO QTY, 14  NOIDA TO ENGLABS COMING TODAY",
+        "preparingPartsDate": "2026-06-23",
+        "routeFrom": "NOIDA",
+        "routeTo": "Englabs ",
+        "porterPayments": 0,
+        "inputsRequired": "NO"
+    },
+    "poRelease": {
+        "customerSalePrice": 48800,
+        "vendorName": "Adroitec Information System Pvt Ltd (Noida)",
+        "vendorLocation": "Noida",
+        "poVendorSent": "N/A",
+        "vendorCost": 42280,
+        "releaseDate": "2026-06-22"
+    },
+    "invoiceRelease": {
+        "gstRate": 18,
+        "gstValue": 8784,
+        "totalInvoiceAmount": 57584,
+        "paymentTerms": "NO IDEA",
+        "invoiceNumber": "INV-5296",
+        "paymentStatus": "Pending"
     }
 }

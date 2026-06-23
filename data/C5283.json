@@ -62,5 +62,30 @@
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
         "poNumber": "P2100-EL12-PO-74483"
+    },
+    "dailyStandup": {
+        "srNo": "=1+A23",
+        "discussingNotes": "No updates recorded.",
+        "preparingPartsDate": "2026-06-23",
+        "routeFrom": "Noida",
+        "routeTo": "Faridabad",
+        "porterPayments": 0,
+        "inputsRequired": "NO"
+    },
+    "poRelease": {
+        "customerSalePrice": 215000,
+        "vendorName": "Marco Polo",
+        "vendorLocation": "Pune",
+        "poVendorSent": "N/A",
+        "vendorCost": 187100,
+        "releaseDate": "2026-06-17"
+    },
+    "invoiceRelease": {
+        "gstRate": 18,
+        "gstValue": 38700,
+        "totalInvoiceAmount": 253700,
+        "paymentTerms": "30 days",
+        "invoiceNumber": "INV-5283",
+        "paymentStatus": "Pending"
     }
 }

@@ -60,7 +60,11 @@ export const sidebarConfig: MenuGroup[] = [
                     { id: "PROJECT_MANAGEMENT_DASHBOARD", label: "Projects Dashboard" },
                     { id: "PROJECTS", label: "Project Directory" },
                     { id: "PROJECT_LOOKUP", label: "Project Search" },
-                    { id: "PROJECT_BUDGETS", label: "Project Budgets" }
+                    { id: "PROJECT_BUDGETS", label: "Project Budgets" },
+                    { id: "PROJECTS_TRACKER", label: "Projects Tracker" },
+                    { id: "DAILY_STANDUP", label: "Daily Standup" },
+                    { id: "PO_RELEASE", label: "PO Release" },
+                    { id: "INVOICE_RELEASE", label: "Invoice Release" }
                 ]
             }
         ]

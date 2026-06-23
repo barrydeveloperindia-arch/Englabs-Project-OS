@@ -61,5 +61,30 @@
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
         "poNumber": null
+    },
+    "dailyStandup": {
+        "srNo": "=1+A7",
+        "discussingNotes": "Part coming today",
+        "preparingPartsDate": "2026-06-22",
+        "routeFrom": "Delhi ",
+        "routeTo": "Englabs ",
+        "porterPayments": 0,
+        "inputsRequired": "NO"
+    },
+    "poRelease": {
+        "customerSalePrice": 128352,
+        "vendorName": "Excel",
+        "vendorLocation": "Delhi",
+        "poVendorSent": "N/A",
+        "vendorCost": 0,
+        "releaseDate": "2026-06-12"
+    },
+    "invoiceRelease": {
+        "gstRate": 18,
+        "gstValue": 23103,
+        "totalInvoiceAmount": 151455,
+        "paymentTerms": "30 days",
+        "invoiceNumber": "QTN-5273",
+        "paymentStatus": "Pending"
     }
 }

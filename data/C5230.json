@@ -69,5 +69,30 @@
         "profitLoss": null,
         "deliveryFeeMode": "Porter system",
         "poNumber": "P2100-EL12-PO-74523"
+    },
+    "dailyStandup": {
+        "srNo": "=1+A21",
+        "discussingNotes": "1,000 pieces are arriving today, and the target is to dispatch them today itself; Anurag will handle this.",
+        "preparingPartsDate": "2026-06-23",
+        "routeFrom": "Chandigarh ",
+        "routeTo": "Englabs ",
+        "porterPayments": 0,
+        "inputsRequired": "Part Feed Back"
+    },
+    "poRelease": {
+        "customerSalePrice": 25430,
+        "vendorName": "SK Techno",
+        "vendorLocation": "Mohali",
+        "poVendorSent": "N/A",
+        "vendorCost": 0,
+        "releaseDate": "2026-06-23"
+    },
+    "invoiceRelease": {
+        "gstRate": 18,
+        "gstValue": 4577,
+        "totalInvoiceAmount": 30007,
+        "paymentTerms": "30 days",
+        "invoiceNumber": "INV-5230",
+        "paymentStatus": "Pending"
     }
 }

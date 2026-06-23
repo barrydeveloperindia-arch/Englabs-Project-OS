@@ -61,5 +61,30 @@
         "profitLoss": null,
         "deliveryFeeMode": "Porter system",
         "poNumber": null
+    },
+    "dailyStandup": {
+        "srNo": "=1+A13",
+        "discussingNotes": "Today, Porter is ready for the Noida-to-Faridabad route.",
+        "preparingPartsDate": "2026-06-19",
+        "routeFrom": "Noida",
+        "routeTo": "Faridabad",
+        "porterPayments": 290,
+        "inputsRequired": "NO"
+    },
+    "poRelease": {
+        "customerSalePrice": 21260,
+        "vendorName": "Adroitec",
+        "vendorLocation": "Noida",
+        "poVendorSent": "16947",
+        "vendorCost": 18445,
+        "releaseDate": "2026-06-15"
+    },
+    "invoiceRelease": {
+        "gstRate": 18,
+        "gstValue": 3827,
+        "totalInvoiceAmount": 25087,
+        "paymentTerms": "30 days",
+        "invoiceNumber": "QTN-5152",
+        "paymentStatus": "Pending"
     }
 }

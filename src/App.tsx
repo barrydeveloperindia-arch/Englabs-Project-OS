@@ -57,6 +57,10 @@ import PorterRegister from '@modules/inventory/porter/PorterRegister';
 import HandoverDashboard from '@modules/projects/main/HandoverDashboard';
 import ProjectLookupDashboard from '@modules/projects/main/ProjectLookupDashboard';
 import { ProjectBudgets } from '@modules/projects/main/ProjectBudgets';
+import { ProjectsTracker } from '@modules/projects/main/ProjectsTracker';
+import { DailyStandup } from '@modules/projects/main/DailyStandup';
+import { PORelease } from '@modules/projects/main/PORelease';
+import { InvoiceRelease } from '@modules/projects/main/InvoiceRelease';
 import { ProjectData, STAGES, ProjectStage } from '@domain/project';
 import { logAction, AuditLog } from '@domain/system_guard';
 import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry, deleteGateEntryFromFirebase } from '@services/database_service';
@@ -599,6 +603,14 @@ const App: React.FC = () => {
                         projects={projects}
                         onSelectProject={() => setCurrentView('PROJECTS')}
                     />
+                ) : currentView === 'PROJECTS_TRACKER' ? (
+                    <ProjectsTracker projects={projects} onSelectProject={handleSelectProject} />
+                ) : currentView === 'DAILY_STANDUP' ? (
+                    <DailyStandup projects={projects} />
+                ) : currentView === 'PO_RELEASE' ? (
+                    <PORelease projects={projects} />
+                ) : currentView === 'INVOICE_RELEASE' ? (
+                    <InvoiceRelease projects={projects} />
                 ) : (currentView === 'PROJECTS' || currentView.startsWith('PROJECTS_')) && 
                     currentView !== 'PROJECT_LOOKUP' && currentView !== 'PROJECT_BUDGETS' ? (
                     !selectedProject ? (

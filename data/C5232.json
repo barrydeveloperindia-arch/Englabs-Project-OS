@@ -68,5 +68,30 @@
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
         "poNumber": null
+    },
+    "dailyStandup": {
+        "srNo": "=1+A11",
+        "discussingNotes": "\nThis part is currently with staff member Denanshu; it still needs to be painted, and only then can it be sent to the client.",
+        "preparingPartsDate": "2026-06-20",
+        "routeFrom": "Delhi ",
+        "routeTo": "Englabs ",
+        "porterPayments": 168,
+        "inputsRequired": "NO"
+    },
+    "poRelease": {
+        "customerSalePrice": 29766,
+        "vendorName": "Excel Repid TECH",
+        "vendorLocation": "Delhi",
+        "poVendorSent": "N/A",
+        "vendorCost": 168,
+        "releaseDate": "2026-06-12"
+    },
+    "invoiceRelease": {
+        "gstRate": 18,
+        "gstValue": 5358,
+        "totalInvoiceAmount": 35124,
+        "paymentTerms": "30 days",
+        "invoiceNumber": "QTN-5232",
+        "paymentStatus": "Pending"
     }
 }

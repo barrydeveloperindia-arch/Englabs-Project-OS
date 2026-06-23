@@ -99,7 +99,7 @@ const apiPlugin = () => ({
       
       // GET /api/history
       if (req.url === '/api/history' && req.method === 'GET') {
-        const historyFile = 'G:\\Englabs_HR Team Managements\\Site Cash Details\\update_history.json';
+        const historyFile = 'G:\\HR Team Managements\\Englabs Projects APK\\Patty Cash Details\\update_history.json';
         res.writeHead(200, { 'Content-Type': 'application/json' });
         if (fs.existsSync(historyFile)) {
           const content = fs.readFileSync(historyFile, 'utf8');

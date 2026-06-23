@@ -38,6 +38,31 @@ export interface ProjectData {
         workforce: string[];
     };
     financials?: FinancialData;
+    dailyStandup?: {
+        srNo?: string;
+        discussingNotes?: string;
+        preparingPartsDate?: string;
+        routeFrom?: string;
+        routeTo?: string;
+        porterPayments?: number;
+        inputsRequired?: string;
+    };
+    poRelease?: {
+        customerSalePrice?: number;
+        vendorName?: string;
+        vendorLocation?: string;
+        poVendorSent?: string;
+        vendorCost?: number;
+        releaseDate?: string;
+    };
+    invoiceRelease?: {
+        gstRate?: number;
+        gstValue?: number;
+        totalInvoiceAmount?: number;
+        paymentTerms?: string;
+        invoiceNumber?: string;
+        paymentStatus?: string;
+    };
 }
 
 export const STAGES = [

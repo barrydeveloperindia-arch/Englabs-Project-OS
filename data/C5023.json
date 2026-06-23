@@ -62,5 +62,30 @@
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
         "poNumber": "P2100-EL-12-PO-16911"
+    },
+    "dailyStandup": {
+        "srNo": "=1+A15",
+        "discussingNotes": "(Vaccume Casting @Ratnesh ) Shubham to Rohit",
+        "preparingPartsDate": "2026-06-20",
+        "routeFrom": "Noida",
+        "routeTo": "pune",
+        "porterPayments": 0,
+        "inputsRequired": "NO"
+    },
+    "poRelease": {
+        "customerSalePrice": 41320,
+        "vendorName": "Excel",
+        "vendorLocation": "Delhi",
+        "poVendorSent": "P2100-EL-12-PO-16911",
+        "vendorCost": 0,
+        "releaseDate": "2026-05-23"
+    },
+    "invoiceRelease": {
+        "gstRate": 18,
+        "gstValue": 7438,
+        "totalInvoiceAmount": 48758,
+        "paymentTerms": "Bharat sir",
+        "invoiceNumber": "INV-5023",
+        "paymentStatus": "Pending"
     }
 }
