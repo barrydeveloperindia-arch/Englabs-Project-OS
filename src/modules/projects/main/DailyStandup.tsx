@@ -10,19 +10,85 @@ import {
     AlertTriangle,
     CheckCircle2,
     Calendar,
-    Briefcase
+    Briefcase,
+    Edit3,
+    X
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { ProjectData } from '@shared/services/project';
 
 interface DailyStandupProps {
     projects: ProjectData[];
+    onUpdateProject?: (project: ProjectData) => void;
 }
 
-export const DailyStandup: React.FC<DailyStandupProps> = ({ projects }) => {
+export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdateProject }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [blockerFilter, setBlockerFilter] = useState<'all' | 'blocked' | 'clean'>('all');
     const [selectedDate, setSelectedDate] = useState<string>('all');
+
+    // Edit modal states
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [editingProject, setEditingProject] = useState<ProjectData | null>(null);
+    const [notes, setNotes] = useState('');
+    const [lead, setLead] = useState('');
+    const [routeFrom, setRouteFrom] = useState('');
+    const [routeTo, setRouteTo] = useState('');
+    const [porterPayments, setPorterPayments] = useState<number | string>(0);
+    const [inputsRequired, setInputsRequired] = useState('');
+    const [preparingPartsDate, setPreparingPartsDate] = useState('');
+
+    const openEditModal = (project: ProjectData) => {
+        const s = project.dailyStandup || {};
+        const staffLead = project.production.stages.find(st => st.status === 'In Progress')?.lead || project.production.stages[0]?.lead || 'Team';
+        
+        setEditingProject(project);
+        setNotes(s.discussingNotes || '');
+        setLead(staffLead);
+        setRouteFrom(s.routeFrom || '');
+        setRouteTo(s.routeTo || '');
+        setPorterPayments(s.porterPayments !== undefined ? s.porterPayments : 0);
+        setInputsRequired(s.inputsRequired || '');
+        setPreparingPartsDate(s.preparingPartsDate || new Date().toISOString().split('T')[0]);
+        setIsEditModalOpen(true);
+    };
+
+    const handleSave = () => {
+        if (!editingProject) return;
+
+        const updatedStages = [...editingProject.production.stages];
+        const activeStageIndex = updatedStages.findIndex(st => st.status === 'In Progress');
+        const targetIndex = activeStageIndex !== -1 ? activeStageIndex : 0;
+        if (updatedStages[targetIndex]) {
+            updatedStages[targetIndex] = {
+                ...updatedStages[targetIndex],
+                lead: lead
+            };
+        }
+
+        const updatedProject: ProjectData = {
+            ...editingProject,
+            production: {
+                ...editingProject.production,
+                stages: updatedStages
+            },
+            dailyStandup: {
+                ...editingProject.dailyStandup,
+                discussingNotes: notes,
+                routeFrom: routeFrom,
+                routeTo: routeTo,
+                porterPayments: Number(porterPayments) || 0,
+                inputsRequired: inputsRequired,
+                preparingPartsDate: preparingPartsDate
+            }
+        };
+
+        if (onUpdateProject) {
+            onUpdateProject(updatedProject);
+        }
+        setIsEditModalOpen(false);
+        setEditingProject(null);
+    };
 
     // Extract projects that have valid standup data
     const standupProjects = useMemo(() => {
@@ -361,13 +427,22 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects }) => {
                                 </div>
 
                                 {/* Actions */}
-                                <button 
-                                    onClick={() => handleShareWhatsApp(p)}
-                                    className="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-black py-3 rounded-xl text-xs flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer mt-auto"
-                                >
-                                    <MessageSquare className="w-4 h-4" />
-                                    <span>SHARE UPDATE</span>
-                                </button>
+                                <div className="flex gap-2 mt-auto">
+                                    <button 
+                                        onClick={() => handleShareWhatsApp(p)}
+                                        className="flex-grow bg-[#25D366] hover:bg-[#20ba5a] text-white font-black py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer"
+                                    >
+                                        <MessageSquare className="w-4 h-4" />
+                                        <span>SHARE UPDATE</span>
+                                    </button>
+                                    <button 
+                                        onClick={() => openEditModal(p)}
+                                        className="bg-[#0e4368] hover:bg-[#0a324e] text-white font-black py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer"
+                                    >
+                                        <Edit3 className="w-4 h-4" />
+                                        <span>EDIT</span>
+                                    </button>
+                                </div>
                             </div>
                         );
                     })}
@@ -384,6 +459,136 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects }) => {
                 </div>
 
             </div>
+
+            {/* Edit Modal */}
+            {isEditModalOpen && editingProject && (
+                <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-[#0e4368] border border-white/10 rounded-[2rem] shadow-2xl w-full max-w-lg p-8 relative flex flex-col gap-6 text-white animate-spring-zoom max-h-[90vh] overflow-y-auto custom-scrollbar">
+                        {/* Header */}
+                        <div className="flex justify-between items-start">
+                            <div className="flex flex-col">
+                                <h3 className="text-lg font-black tracking-tight text-white uppercase">Edit Standup Log</h3>
+                                <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest mt-1">
+                                    Project {editingProject.projectId} — {editingProject.client}
+                                </span>
+                            </div>
+                            <button 
+                                onClick={() => {
+                                    setIsEditModalOpen(false);
+                                    setEditingProject(null);
+                                }}
+                                className="p-2 hover:bg-white/10 rounded-xl transition-all cursor-pointer"
+                            >
+                                <X className="w-5 h-5 text-slate-300 hover:text-white" />
+                            </button>
+                        </div>
+
+                        {/* Form */}
+                        <div className="space-y-4">
+                            {/* Notes */}
+                            <div className="space-y-1">
+                                <label className="text-[9px] font-black text-slate-300 uppercase tracking-wider block">Standup Discussion Notes</label>
+                                <textarea 
+                                    className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all min-h-[80px]"
+                                    value={notes}
+                                    onChange={(e) => setNotes(e.target.value)}
+                                    placeholder="Enter standup progress details..."
+                                />
+                            </div>
+
+                            {/* Lead */}
+                            <div className="space-y-1">
+                                <label className="text-[9px] font-black text-slate-300 uppercase tracking-wider block">Coordinating Lead</label>
+                                <input 
+                                    type="text"
+                                    className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                                    value={lead}
+                                    onChange={(e) => setLead(e.target.value)}
+                                    placeholder="Lead name..."
+                                />
+                            </div>
+
+                            {/* Route */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                    <label className="text-[9px] font-black text-slate-300 uppercase tracking-wider block">Route From</label>
+                                    <input 
+                                        type="text"
+                                        className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                                        value={routeFrom}
+                                        onChange={(e) => setRouteFrom(e.target.value)}
+                                        placeholder="From location..."
+                                    />
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-[9px] font-black text-slate-300 uppercase tracking-wider block">Route To</label>
+                                    <input 
+                                        type="text"
+                                        className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                                        value={routeTo}
+                                        onChange={(e) => setRouteTo(e.target.value)}
+                                        placeholder="To location..."
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Payment / Date */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                    <label className="text-[9px] font-black text-slate-300 uppercase tracking-wider block">Porter Payment (₹)</label>
+                                    <input 
+                                        type="number"
+                                        className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                                        value={porterPayments}
+                                        onChange={(e) => setPorterPayments(e.target.value)}
+                                        placeholder="Amount in INR..."
+                                    />
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-[9px] font-black text-slate-300 uppercase tracking-wider block">Standup Date</label>
+                                    <input 
+                                        type="date"
+                                        className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                                        value={preparingPartsDate}
+                                        onChange={(e) => setPreparingPartsDate(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Blocker (Inputs Required) */}
+                            <div className="space-y-1">
+                                <label className="text-[9px] font-black text-slate-300 uppercase tracking-wider block">Blocked Action / Inputs Req (Leave blank or 'None' if healthy)</label>
+                                <input 
+                                    type="text"
+                                    className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                                    value={inputsRequired}
+                                    onChange={(e) => setInputsRequired(e.target.value)}
+                                    placeholder="e.g. Awaiting client PO, Raw material dispatch pending..."
+                                />
+                            </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="flex gap-3 mt-2">
+                            <button 
+                                onClick={() => {
+                                    setIsEditModalOpen(false);
+                                    setEditingProject(null);
+                                }}
+                                className="flex-1 border border-white/10 hover:bg-white/5 text-white font-bold py-3.5 rounded-xl transition-all cursor-pointer text-xs"
+                            >
+                                CANCEL
+                            </button>
+                            <button 
+                                onClick={handleSave}
+                                className="flex-1 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold py-3.5 rounded-xl transition-all cursor-pointer text-xs shadow-lg shadow-emerald-950/20"
+                            >
+                                SAVE CHANGES
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

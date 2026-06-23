@@ -116,7 +116,7 @@
           "specs": [
             {
               "title": "Dashboard loads and shows core projects",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -129,18 +129,48 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2401,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 20022,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Project Master')\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Project Master')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Project Master')\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Project Master')\u001b[22m\n\n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts:27:72",
+                        "location": {
+                          "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                          "column": 72,
+                          "line": 27
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 25 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Command Center'\u001b[39m\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mfalse\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m15000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 26 |\u001b[39m     } \u001b[36melse\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 27 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Project Master'\u001b[39m\u001b[33m,\u001b[39m { exact\u001b[33m:\u001b[39m \u001b[36mfalse\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m15000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 28 |\u001b[39m     }\n \u001b[90m 29 |\u001b[39m     \n \u001b[90m 30 |\u001b[39m     \u001b[90m// Check for some project cards\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                            "column": 72,
+                            "line": 27
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Project Master')\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Project Master')\u001b[22m\n\n\n  25 |       await expect(page.getByRole('heading', { name: 'Command Center', exact: false })).toBeVisible({ timeout: 15000 });\n  26 |     } else {\n> 27 |       await expect(page.getByText('Project Master', { exact: false })).toBeVisible({ timeout: 15000 });\n     |                                                                        ^\n  28 |     }\n  29 |     \n  30 |     // Check for some project cards\n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts:27:72"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:07:33.279Z",
+                      "startTime": "2026-06-23T07:36:11.282Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\test-results\\smoke-Englabs-Projects-OS--28864-ads-and-shows-core-projects-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                        "column": 72,
+                        "line": 27
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "4a239ced0e52b6754d8b-e8bb48ebffc8fbc1da7f",
@@ -170,7 +200,7 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 0,
+                      "workerIndex": 1,
                       "parallelIndex": 0,
                       "status": "skipped",
                       "duration": 0,
@@ -178,7 +208,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:07:35.749Z",
+                      "startTime": "2026-06-23T07:36:31.655Z",
                       "annotations": [
                         {
                           "type": "skip",
@@ -202,7 +232,7 @@
             },
             {
               "title": "Inventory visibility",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -213,20 +243,42 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 0,
+                      "workerIndex": 1,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2393,
-                      "errors": [],
+                      "status": "timedOut",
+                      "duration": 30016,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                            "column": 51,
+                            "line": 64
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('sidebar-btn-store')\u001b[22m\n\n\n  62 |       await page.getByTestId('mobile-grid-btn-store').click({ force: true });\n  63 |     } else {\n> 64 |       await page.getByTestId('sidebar-btn-store').click({ force: true });\n     |                                                   ^\n  65 |     }\n  66 |     \n  67 |     await expect(page.getByText('Inventory Command')).toBeVisible({ timeout: 30000 });\n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts:64:51"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:07:35.749Z",
+                      "startTime": "2026-06-23T07:36:31.655Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\test-results\\smoke-Englabs-Projects-OS--ff68d-rkflow-Inventory-visibility-chromium\\error-context.md"
+                        }
+                      ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "4a239ced0e52b6754d8b-e1558aa3e99c7ec3f0a9",
@@ -236,7 +288,7 @@
             },
             {
               "title": "Porter Service workflow",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -247,20 +299,42 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 0,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2408,
-                      "errors": [],
+                      "status": "timedOut",
+                      "duration": 30014,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                            "column": 60,
+                            "line": 76
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('sidebar-btn-porter-service')\u001b[22m\n\n\n  74 |       await page.getByTestId('mobile-grid-btn-porter').click({ force: true });\n  75 |     } else {\n> 76 |       await page.getByTestId('sidebar-btn-porter-service').click({ force: true });\n     |                                                            ^\n  77 |     }\n  78 |     \n  79 |     await expect(page.getByText('Porter Service Management')).toBeVisible({ timeout: 15000 });\n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts:76:60"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:07:38.148Z",
+                      "startTime": "2026-06-23T07:37:02.018Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\test-results\\smoke-Englabs-Projects-OS--55e85-low-Porter-Service-workflow-chromium\\error-context.md"
+                        }
+                      ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "4a239ced0e52b6754d8b-97f1d6b6530e25aeb33f",
@@ -270,7 +344,7 @@
             },
             {
               "title": "HR Dashboard visibility",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -281,20 +355,42 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 0,
+                      "workerIndex": 3,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2397,
-                      "errors": [],
+                      "status": "timedOut",
+                      "duration": 30017,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                            "column": 64,
+                            "line": 94
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('sidebar-btn-hr-team-management')\u001b[22m\n\n\n  92 |       await page.getByTestId('mobile-nav-btn-hr').click({ force: true });\n  93 |     } else {\n> 94 |       await page.getByTestId('sidebar-btn-hr-team-management').click({ force: true });\n     |                                                                ^\n  95 |     }\n  96 |     \n  97 |     await expect(page.getByText('HR Operations Center', { exact: false })).toBeVisible({ timeout: 15000 });\n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts:94:64"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:07:40.562Z",
+                      "startTime": "2026-06-23T07:37:32.375Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\test-results\\smoke-Englabs-Projects-OS--d0d27-low-HR-Dashboard-visibility-chromium\\error-context.md"
+                        }
+                      ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "4a239ced0e52b6754d8b-772708bcaa940178bcf1",
@@ -304,7 +400,7 @@
             },
             {
               "title": "Project Dashboard Fevikwik Checkout",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -315,20 +411,42 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 0,
+                      "workerIndex": 4,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2730,
-                      "errors": [],
+                      "status": "timedOut",
+                      "duration": 30024,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                            "column": 54,
+                            "line": 105
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('sidebar-btn-projects')\u001b[22m\n\n\n  103 |       return;\n  104 |     } else {\n> 105 |       await page.getByTestId('sidebar-btn-projects').click({ force: true });\n      |                                                      ^\n  106 |       await page.getByRole('button', { name: 'View Project Grid' }).click({ force: true });\n  107 |     }\n  108 |     \n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts:105:54"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:07:42.965Z",
+                      "startTime": "2026-06-23T07:38:02.732Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\test-results\\smoke-Englabs-Projects-OS--acf04-Dashboard-Fevikwik-Checkout-chromium\\error-context.md"
+                        }
+                      ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "4a239ced0e52b6754d8b-44384fb67e9b9bafaf44",
@@ -338,7 +456,7 @@
             },
             {
               "title": "Dashboard loads and shows core projects",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -349,20 +467,50 @@
                   "projectName": "Mobile Chrome (Pixel 5)",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 5,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2432,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 17313,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Command Center' })\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Command Center' })\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Command Center' })\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Command Center' })\u001b[22m\n\n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts:25:89",
+                        "location": {
+                          "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                          "column": 89,
+                          "line": 25
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[35m/Englabs India Pvt. Ltd/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 24 |\u001b[39m     \u001b[36mif\u001b[39m (isMobile) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 25 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Command Center'\u001b[39m\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mfalse\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m15000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 26 |\u001b[39m     } \u001b[36melse\u001b[39m {\n \u001b[90m 27 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Project Master'\u001b[39m\u001b[33m,\u001b[39m { exact\u001b[33m:\u001b[39m \u001b[36mfalse\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m15000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 28 |\u001b[39m     }\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                            "column": 89,
+                            "line": 25
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Command Center' })\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Command Center' })\u001b[22m\n\n\n  23 |     await expect(page).toHaveTitle(/Englabs India Pvt. Ltd/);\n  24 |     if (isMobile) {\n> 25 |       await expect(page.getByRole('heading', { name: 'Command Center', exact: false })).toBeVisible({ timeout: 15000 });\n     |                                                                                         ^\n  26 |     } else {\n  27 |       await expect(page.getByText('Project Master', { exact: false })).toBeVisible({ timeout: 15000 });\n  28 |     }\n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts:25:89"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:07:45.981Z",
+                      "startTime": "2026-06-23T07:38:33.115Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\test-results\\smoke-Englabs-Projects-OS--28864-ads-and-shows-core-projects-Mobile-Chrome-Pixel-5-\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                        "column": 89,
+                        "line": 25
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "4a239ced0e52b6754d8b-853756e0e99d1ef99e7d",
@@ -392,7 +540,7 @@
                   "projectName": "Mobile Chrome (Pixel 5)",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 6,
                       "parallelIndex": 0,
                       "status": "skipped",
                       "duration": 0,
@@ -400,7 +548,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:07:48.478Z",
+                      "startTime": "2026-06-23T07:38:50.778Z",
                       "annotations": [
                         {
                           "type": "skip",
@@ -424,7 +572,7 @@
             },
             {
               "title": "Inventory visibility",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -435,20 +583,42 @@
                   "projectName": "Mobile Chrome (Pixel 5)",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 6,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2387,
-                      "errors": [],
+                      "status": "timedOut",
+                      "duration": 30016,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                            "column": 53,
+                            "line": 61
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('mobile-nav-btn-more')\u001b[22m\n\n\n  59 |   test('Inventory visibility', async ({ page, isMobile }) => {\n  60 |     if (isMobile) {\n> 61 |       await page.getByTestId('mobile-nav-btn-more').click({ force: true });\n     |                                                     ^\n  62 |       await page.getByTestId('mobile-grid-btn-store').click({ force: true });\n  63 |     } else {\n  64 |       await page.getByTestId('sidebar-btn-store').click({ force: true });\n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts:61:53"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:07:48.478Z",
+                      "startTime": "2026-06-23T07:38:50.779Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\test-results\\smoke-Englabs-Projects-OS--ff68d-rkflow-Inventory-visibility-Mobile-Chrome-Pixel-5-\\error-context.md"
+                        }
+                      ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "4a239ced0e52b6754d8b-edccf8b7ead3d6ffadb7",
@@ -458,7 +628,7 @@
             },
             {
               "title": "Porter Service workflow",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -469,20 +639,42 @@
                   "projectName": "Mobile Chrome (Pixel 5)",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 7,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2462,
-                      "errors": [],
+                      "status": "timedOut",
+                      "duration": 30020,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                            "column": 53,
+                            "line": 73
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('mobile-nav-btn-more')\u001b[22m\n\n\n  71 |   test('Porter Service workflow', async ({ page, isMobile }) => {\n  72 |     if (isMobile) {\n> 73 |       await page.getByTestId('mobile-nav-btn-more').click({ force: true });\n     |                                                     ^\n  74 |       await page.getByTestId('mobile-grid-btn-porter').click({ force: true });\n  75 |     } else {\n  76 |       await page.getByTestId('sidebar-btn-porter-service').click({ force: true });\n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts:73:53"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:07:50.871Z",
+                      "startTime": "2026-06-23T07:39:21.136Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\test-results\\smoke-Englabs-Projects-OS--55e85-low-Porter-Service-workflow-Mobile-Chrome-Pixel-5-\\error-context.md"
+                        }
+                      ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "4a239ced0e52b6754d8b-527aee92aca2bfe1201b",
@@ -492,7 +684,7 @@
             },
             {
               "title": "HR Dashboard visibility",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -503,20 +695,42 @@
                   "projectName": "Mobile Chrome (Pixel 5)",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 8,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2409,
-                      "errors": [],
+                      "status": "timedOut",
+                      "duration": 30009,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                            "column": 51,
+                            "line": 92
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('mobile-nav-btn-hr')\u001b[22m\n\n\n  90 |   test('HR Dashboard visibility', async ({ page, isMobile }) => {\n  91 |     if (isMobile) {\n> 92 |       await page.getByTestId('mobile-nav-btn-hr').click({ force: true });\n     |                                                   ^\n  93 |     } else {\n  94 |       await page.getByTestId('sidebar-btn-hr-team-management').click({ force: true });\n  95 |     }\n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts:92:51"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:07:53.339Z",
+                      "startTime": "2026-06-23T07:39:51.498Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\test-results\\smoke-Englabs-Projects-OS--d0d27-low-HR-Dashboard-visibility-Mobile-Chrome-Pixel-5-\\error-context.md"
+                        }
+                      ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "4a239ced0e52b6754d8b-e6a2ad7f5e467bf32b47",
@@ -537,15 +751,15 @@
                   "projectName": "Mobile Chrome (Pixel 5)",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 9,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2344,
+                      "duration": 2309,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:07:55.754Z",
+                      "startTime": "2026-06-23T07:40:21.840Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -560,7 +774,7 @@
             },
             {
               "title": "Dashboard loads and shows core projects",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -571,20 +785,50 @@
                   "projectName": "Mobile Safari (iPhone 12)",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 10,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2596,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 17729,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Command Center' })\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Command Center' })\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Command Center' })\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Command Center' })\u001b[22m\n\n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts:25:89",
+                        "location": {
+                          "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                          "column": 89,
+                          "line": 25
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[35m/Englabs India Pvt. Ltd/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 24 |\u001b[39m     \u001b[36mif\u001b[39m (isMobile) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 25 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Command Center'\u001b[39m\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mfalse\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m15000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 26 |\u001b[39m     } \u001b[36melse\u001b[39m {\n \u001b[90m 27 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Project Master'\u001b[39m\u001b[33m,\u001b[39m { exact\u001b[33m:\u001b[39m \u001b[36mfalse\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m15000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 28 |\u001b[39m     }\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                            "column": 89,
+                            "line": 25
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Command Center' })\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Command Center' })\u001b[22m\n\n\n  23 |     await expect(page).toHaveTitle(/Englabs India Pvt. Ltd/);\n  24 |     if (isMobile) {\n> 25 |       await expect(page.getByRole('heading', { name: 'Command Center', exact: false })).toBeVisible({ timeout: 15000 });\n     |                                                                                         ^\n  26 |     } else {\n  27 |       await expect(page.getByText('Project Master', { exact: false })).toBeVisible({ timeout: 15000 });\n  28 |     }\n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts:25:89"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:07:58.395Z",
+                      "startTime": "2026-06-23T07:40:24.474Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\test-results\\smoke-Englabs-Projects-OS--28864-ads-and-shows-core-projects-Mobile-Safari-iPhone-12-\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                        "column": 89,
+                        "line": 25
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "4a239ced0e52b6754d8b-7599ee5f39b2d9209314",
@@ -614,7 +858,7 @@
                   "projectName": "Mobile Safari (iPhone 12)",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 11,
                       "parallelIndex": 0,
                       "status": "skipped",
                       "duration": 0,
@@ -622,7 +866,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:08:01.049Z",
+                      "startTime": "2026-06-23T07:40:42.526Z",
                       "annotations": [
                         {
                           "type": "skip",
@@ -646,7 +890,7 @@
             },
             {
               "title": "Inventory visibility",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -657,20 +901,42 @@
                   "projectName": "Mobile Safari (iPhone 12)",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 11,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2635,
-                      "errors": [],
+                      "status": "timedOut",
+                      "duration": 30026,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                            "column": 53,
+                            "line": 61
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('mobile-nav-btn-more')\u001b[22m\n\n\n  59 |   test('Inventory visibility', async ({ page, isMobile }) => {\n  60 |     if (isMobile) {\n> 61 |       await page.getByTestId('mobile-nav-btn-more').click({ force: true });\n     |                                                     ^\n  62 |       await page.getByTestId('mobile-grid-btn-store').click({ force: true });\n  63 |     } else {\n  64 |       await page.getByTestId('sidebar-btn-store').click({ force: true });\n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts:61:53"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:08:01.049Z",
+                      "startTime": "2026-06-23T07:40:42.527Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\test-results\\smoke-Englabs-Projects-OS--ff68d-rkflow-Inventory-visibility-Mobile-Safari-iPhone-12-\\error-context.md"
+                        }
+                      ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "4a239ced0e52b6754d8b-1b4f46ef10a86f533588",
@@ -680,7 +946,7 @@
             },
             {
               "title": "Porter Service workflow",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -691,20 +957,42 @@
                   "projectName": "Mobile Safari (iPhone 12)",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 12,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2683,
-                      "errors": [],
+                      "status": "timedOut",
+                      "duration": 30015,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                            "column": 53,
+                            "line": 73
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('mobile-nav-btn-more')\u001b[22m\n\n\n  71 |   test('Porter Service workflow', async ({ page, isMobile }) => {\n  72 |     if (isMobile) {\n> 73 |       await page.getByTestId('mobile-nav-btn-more').click({ force: true });\n     |                                                     ^\n  74 |       await page.getByTestId('mobile-grid-btn-porter').click({ force: true });\n  75 |     } else {\n  76 |       await page.getByTestId('sidebar-btn-porter-service').click({ force: true });\n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts:73:53"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:08:03.690Z",
+                      "startTime": "2026-06-23T07:41:12.861Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\test-results\\smoke-Englabs-Projects-OS--55e85-low-Porter-Service-workflow-Mobile-Safari-iPhone-12-\\error-context.md"
+                        }
+                      ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "4a239ced0e52b6754d8b-58d16f7cf7aa90fe95b6",
@@ -714,7 +1002,7 @@
             },
             {
               "title": "HR Dashboard visibility",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -725,20 +1013,42 @@
                   "projectName": "Mobile Safari (iPhone 12)",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 13,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2620,
-                      "errors": [],
+                      "status": "timedOut",
+                      "duration": 30015,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts",
+                            "column": 51,
+                            "line": 92
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('mobile-nav-btn-hr')\u001b[22m\n\n\n  90 |   test('HR Dashboard visibility', async ({ page, isMobile }) => {\n  91 |     if (isMobile) {\n> 92 |       await page.getByTestId('mobile-nav-btn-hr').click({ force: true });\n     |                                                   ^\n  93 |     } else {\n  94 |       await page.getByTestId('sidebar-btn-hr-team-management').click({ force: true });\n  95 |     }\n    at C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\tests\\e2e\\smoke.test.ts:92:51"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:08:06.378Z",
+                      "startTime": "2026-06-23T07:41:43.185Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\test-results\\smoke-Englabs-Projects-OS--d0d27-low-HR-Dashboard-visibility-Mobile-Safari-iPhone-12-\\error-context.md"
+                        }
+                      ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "4a239ced0e52b6754d8b-e99239b5f26a31f62930",
@@ -759,15 +1069,15 @@
                   "projectName": "Mobile Safari (iPhone 12)",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 14,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2609,
+                      "duration": 2642,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-06-23T07:08:09.004Z",
+                      "startTime": "2026-06-23T07:42:13.508Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -787,11 +1097,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-06-23T07:07:32.989Z",
-    "duration": 38660.606999999996,
-    "expected": 15,
+    "startTime": "2026-06-23T07:36:11.003Z",
+    "duration": 365219.504,
+    "expected": 2,
     "skipped": 3,
-    "unexpected": 0,
+    "unexpected": 13,
     "flaky": 0
   }
 }

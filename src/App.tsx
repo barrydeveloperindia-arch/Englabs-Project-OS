@@ -63,7 +63,7 @@ import { PORelease } from '@modules/projects/main/PORelease';
 import { InvoiceRelease } from '@modules/projects/main/InvoiceRelease';
 import { ProjectData, STAGES, ProjectStage } from '@domain/project';
 import { logAction, AuditLog } from '@domain/system_guard';
-import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry, deleteGateEntryFromFirebase } from '@services/database_service';
+import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry, deleteGateEntryFromFirebase, saveProjectToFirebase } from '@services/database_service';
 import { processInventoryUpdate, fetchInventoryMaster, fetchStockMovement, recordManualTransaction } from '@domain/inventory_service';
 import forensicRegistry from '@data/forensic_gate_registry.json';
 import porterForensic from '@data/porter_missions_forensic.json';
@@ -606,7 +606,13 @@ const App: React.FC = () => {
                 ) : currentView === 'PROJECTS_TRACKER' ? (
                     <ProjectsTracker projects={projects} onSelectProject={handleSelectProject} />
                 ) : currentView === 'DAILY_STANDUP' ? (
-                    <DailyStandup projects={projects} />
+                    <DailyStandup 
+                        projects={projects} 
+                        onUpdateProject={async (updatedProj) => {
+                            setProjects(prev => prev.map(p => p.projectId === updatedProj.projectId ? updatedProj : p));
+                            await saveProjectToFirebase(updatedProj);
+                        }}
+                    />
                 ) : currentView === 'PO_RELEASE' ? (
                     <PORelease projects={projects} />
                 ) : currentView === 'INVOICE_RELEASE' ? (

@@ -1,10 +1,13 @@
 # 🛡️ Antigravity Enterprise QA Protection Report
 
-**Timestamp**: 2026-06-23T07:08:11.691Z
+**Timestamp**: 2026-06-23T07:42:16.316Z
 
 ## 1. Test Execution Status
 - **Functional & Unit Tests**: ✅ PASSED
-- **E2E & Mobile Compatibility**: ✅ PASSED
+- **E2E & Mobile Compatibility**: ❌ FAILED
+
+### Error Logs
+- E2E Tests Failed: Command failed: npx playwright test src/tests/e2e/smoke.test.ts
 
 ## 2. Database Integrity & Sync Health
 | Database File | Pre-Test Hash | Post-Test Hash | Corruption Status |
@@ -43,7 +46,7 @@
 | C5008.json | `5743b178` | `5743b178` | ✅ SECURE |
 | C5010.json | `ea50d4d0` | `ea50d4d0` | ✅ SECURE |
 | C5014.json | `94d0064b` | `94d0064b` | ✅ SECURE |
-| C5023.json | `424afdf5` | `424afdf5` | ✅ SECURE |
+| C5023.json | `f694e9ff` | `f694e9ff` | ✅ SECURE |
 | C5029.json | `e8f68da8` | `e8f68da8` | ✅ SECURE |
 | C5033.json | `53a21d23` | `53a21d23` | ✅ SECURE |
 | C5039.json | `6e2197d7` | `6e2197d7` | ✅ SECURE |
@@ -75,7 +78,7 @@
 | C5140.json | `e1e4ef61` | `e1e4ef61` | ✅ SECURE |
 | C5142.json | `b1d4fc75` | `b1d4fc75` | ✅ SECURE |
 | C5144.json | `3d93ede0` | `3d93ede0` | ✅ SECURE |
-| C5152.json | `b931a9e9` | `b931a9e9` | ✅ SECURE |
+| C5152.json | `2671e139` | `2671e139` | ✅ SECURE |
 | C5153.json | `5c390d8c` | `5c390d8c` | ✅ SECURE |
 | C5154.json | `3d400760` | `3d400760` | ✅ SECURE |
 | C5159.json | `277e3ea0` | `277e3ea0` | ✅ SECURE |
@@ -92,7 +95,7 @@
 | C5191.json | `6d44e8dd` | `6d44e8dd` | ✅ SECURE |
 | C5192.json | `5c0a548a` | `5c0a548a` | ✅ SECURE |
 | C5193.json | `c0f3f65c` | `c0f3f65c` | ✅ SECURE |
-| C5195.json | `43276859` | `43276859` | ✅ SECURE |
+| C5195.json | `70e69d07` | `70e69d07` | ✅ SECURE |
 | C5197.json | `6ed6e855` | `6ed6e855` | ✅ SECURE |
 | C5198.json | `d115b5b5` | `d115b5b5` | ✅ SECURE |
 | C5207.json | `6ecc2be2` | `6ecc2be2` | ✅ SECURE |
@@ -106,25 +109,25 @@
 | C5227.json | `f8435873` | `f8435873` | ✅ SECURE |
 | C5228.json | `1907a3e2` | `1907a3e2` | ✅ SECURE |
 | C5229.json | `0ed9690b` | `0ed9690b` | ✅ SECURE |
-| C5230.json | `56c99437` | `56c99437` | ✅ SECURE |
-| C5231.json | `2ea4539b` | `2ea4539b` | ✅ SECURE |
-| C5232.json | `ee8f5901` | `ee8f5901` | ✅ SECURE |
-| C5237.json | `65de6c77` | `65de6c77` | ✅ SECURE |
-| C5239.json | `ee832bb9` | `ee832bb9` | ✅ SECURE |
-| C5248.json | `ea77b55d` | `ea77b55d` | ✅ SECURE |
-| C5251.json | `d0fafa2e` | `d0fafa2e` | ✅ SECURE |
-| C5254.json | `ccbc0e48` | `ccbc0e48` | ✅ SECURE |
-| C5262.json | `537374d7` | `537374d7` | ✅ SECURE |
-| C5267.json | `16ae8a4b` | `16ae8a4b` | ✅ SECURE |
-| C5273.json | `0c3f94f3` | `0c3f94f3` | ✅ SECURE |
-| C5279.json | `30bdeb87` | `30bdeb87` | ✅ SECURE |
-| C5280.json | `46527a17` | `46527a17` | ✅ SECURE |
-| C5283.json | `359ea720` | `359ea720` | ✅ SECURE |
-| C5285.json | `4e6603f1` | `4e6603f1` | ✅ SECURE |
-| C5286.json | `043523b8` | `043523b8` | ✅ SECURE |
-| C5288.json | `4fe91958` | `4fe91958` | ✅ SECURE |
-| C5296.json | `aace313b` | `aace313b` | ✅ SECURE |
-| C5486.json | `c942e4f4` | `c942e4f4` | ✅ SECURE |
+| C5230.json | `58f034f4` | `58f034f4` | ✅ SECURE |
+| C5231.json | `f206333f` | `f206333f` | ✅ SECURE |
+| C5232.json | `e3b72228` | `e3b72228` | ✅ SECURE |
+| C5237.json | `2b313531` | `2b313531` | ✅ SECURE |
+| C5239.json | `89f6c612` | `89f6c612` | ✅ SECURE |
+| C5248.json | `1c81d58b` | `1c81d58b` | ✅ SECURE |
+| C5251.json | `04044f3c` | `04044f3c` | ✅ SECURE |
+| C5254.json | `97290f5d` | `97290f5d` | ✅ SECURE |
+| C5262.json | `f29736e7` | `f29736e7` | ✅ SECURE |
+| C5267.json | `1aeda5ae` | `1aeda5ae` | ✅ SECURE |
+| C5273.json | `2d80c4d1` | `2d80c4d1` | ✅ SECURE |
+| C5279.json | `aa596ff5` | `aa596ff5` | ✅ SECURE |
+| C5280.json | `bb902485` | `bb902485` | ✅ SECURE |
+| C5283.json | `7bfeb1d7` | `7bfeb1d7` | ✅ SECURE |
+| C5285.json | `8fd48149` | `8fd48149` | ✅ SECURE |
+| C5286.json | `b9f1d4c2` | `b9f1d4c2` | ✅ SECURE |
+| C5288.json | `bf851935` | `bf851935` | ✅ SECURE |
+| C5296.json | `8f8b34ae` | `8f8b34ae` | ✅ SECURE |
+| C5486.json | `0f12cb0c` | `0f12cb0c` | ✅ SECURE |
 | C5487.json | `8c2c3ced` | `8c2c3ced` | ✅ SECURE |
 | C5488.json | `87ce0255` | `87ce0255` | ✅ SECURE |
 | C5489.json | `921c5da0` | `921c5da0` | ✅ SECURE |
@@ -132,7 +135,7 @@
 | C5491.json | `1f572caf` | `1f572caf` | ✅ SECURE |
 | ENGLABS.json | `ad3fff0e` | `ad3fff0e` | ✅ SECURE |
 | forensic_gate_registry.json | `2c55cf43` | `2c55cf43` | ✅ SECURE |
-| handover_state.json | `269d6d95` | `269d6d95` | ✅ SECURE |
+| handover_state.json | `735b6cfa` | `735b6cfa` | ✅ SECURE |
 | master_inventory_may_2026.json | `4b3d952b` | `4b3d952b` | ✅ SECURE |
 | master_projects_db.json | `704b6c43` | `704b6c43` | ✅ SECURE |
 | migration_dry_run_report.json | `7b75a4d4` | `7b75a4d4` | ✅ SECURE |
