@@ -12,10 +12,14 @@ import {
     Calendar,
     Briefcase,
     Edit3,
-    X
+    X,
+    Box,
+    Package,
+    FileText,
+    Check
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
-import { ProjectData } from '@shared/services/project';
+import { ProjectData, STAGES } from '@shared/services/project';
 
 interface DailyStandupProps {
     projects: ProjectData[];
@@ -37,6 +41,11 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
     const [porterPayments, setPorterPayments] = useState<number | string>(0);
     const [inputsRequired, setInputsRequired] = useState('');
     const [preparingPartsDate, setPreparingPartsDate] = useState('');
+    const [currentStage, setCurrentStage] = useState('');
+    const [materialConsumption, setMaterialConsumption] = useState('');
+    const [totalComponents, setTotalComponents] = useState<number | string>(0);
+    const [poNumber, setPoNumber] = useState('');
+    const [poConfirmed, setPoConfirmed] = useState(false);
 
     const openEditModal = (project: ProjectData) => {
         const s = project.dailyStandup || {};
@@ -50,6 +59,14 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
         setPorterPayments(s.porterPayments !== undefined ? s.porterPayments : 0);
         setInputsRequired(s.inputsRequired || '');
         setPreparingPartsDate(s.preparingPartsDate || new Date().toISOString().split('T')[0]);
+        
+        // Load metadata fields
+        setCurrentStage(project.production.currentStage || 'Engineering Design');
+        setMaterialConsumption(project.metrics.materialConsumption || '');
+        setTotalComponents(project.metrics.totalComponents !== undefined ? project.metrics.totalComponents : 0);
+        setPoNumber(project.planning.poNumber || '');
+        setPoConfirmed(project.planning.poConfirmed || false);
+        
         setIsEditModalOpen(true);
     };
 
@@ -68,9 +85,20 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
 
         const updatedProject: ProjectData = {
             ...editingProject,
+            planning: {
+                ...editingProject.planning,
+                poNumber: poNumber,
+                poConfirmed: poConfirmed
+            },
             production: {
                 ...editingProject.production,
+                currentStage: currentStage,
                 stages: updatedStages
+            },
+            metrics: {
+                ...editingProject.metrics,
+                materialConsumption: materialConsumption,
+                totalComponents: Number(totalComponents) || 0
             },
             dailyStandup: {
                 ...editingProject.dailyStandup,
@@ -392,6 +420,26 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
                                             <span className="font-medium text-slate-800">{lead}</span>
                                         </div>
 
+                                        <div className="flex items-center gap-2.5 text-xs text-slate-600">
+                                            <Briefcase className="w-4 h-4 text-slate-400 shrink-0" />
+                                            <span className="font-bold">Current Stage:</span>
+                                            <span className="inline-flex items-center px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-extrabold text-[9px] uppercase border border-blue-100">{p.production.currentStage || 'Pending'}</span>
+                                        </div>
+
+                                        {p.metrics.materialConsumption && (
+                                            <div className="flex items-center gap-2.5 text-xs text-slate-600">
+                                                <Box className="w-4 h-4 text-slate-400 shrink-0" />
+                                                <span className="font-bold">Materials:</span>
+                                                <span className="font-medium text-slate-800 truncate max-w-[200px]" title={p.metrics.materialConsumption}>{p.metrics.materialConsumption}</span>
+                                            </div>
+                                        )}
+
+                                        <div className="flex items-center gap-2.5 text-xs text-slate-600">
+                                            <Package className="w-4 h-4 text-slate-400 shrink-0" />
+                                            <span className="font-bold">Total Qty:</span>
+                                            <span className="font-mono font-bold text-slate-800">{p.metrics.totalComponents || 0} pcs</span>
+                                        </div>
+
                                         {(s.routeFrom && s.routeFrom !== 'N/A') && (
                                             <div className="flex items-start gap-2.5 text-xs text-slate-600">
                                                 <MapPin className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
@@ -406,6 +454,20 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
                                             <DollarSign className="w-4 h-4 text-slate-400 shrink-0" />
                                             <span className="font-bold">Porter Payment:</span>
                                             <span className="font-mono font-bold text-slate-800">₹{s.porterPayments || 0}</span>
+                                        </div>
+
+                                        <div className="flex items-center gap-2.5 text-xs text-slate-600">
+                                            <FileText className="w-4 h-4 text-slate-400 shrink-0" />
+                                            <span className="font-bold">Client PO Status:</span>
+                                            {p.planning.poConfirmed ? (
+                                                <span className="inline-flex items-center gap-1 text-[9px] bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                                                    Confirmed ({p.planning.poNumber || 'No PO#'})
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1 text-[9px] bg-amber-500/10 text-amber-600 border border-amber-500/20 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                                                    Awaiting PO
+                                                </span>
+                                            )}
                                         </div>
 
                                         <div className="flex items-center gap-2.5 text-xs text-slate-600">
@@ -489,23 +551,60 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
                             <div className="space-y-1">
                                 <label className="text-[9px] font-black text-slate-300 uppercase tracking-wider block">Standup Discussion Notes</label>
                                 <textarea 
-                                    className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all min-h-[80px]"
+                                    className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all min-h-[70px]"
                                     value={notes}
                                     onChange={(e) => setNotes(e.target.value)}
                                     placeholder="Enter standup progress details..."
                                 />
                             </div>
 
-                            {/* Lead */}
-                            <div className="space-y-1">
-                                <label className="text-[9px] font-black text-slate-300 uppercase tracking-wider block">Coordinating Lead</label>
-                                <input 
-                                    type="text"
-                                    className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
-                                    value={lead}
-                                    onChange={(e) => setLead(e.target.value)}
-                                    placeholder="Lead name..."
-                                />
+                            {/* Lead & Current Stage */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                    <label className="text-[9px] font-black text-slate-300 uppercase tracking-wider block">Coordinating Lead</label>
+                                    <input 
+                                        type="text"
+                                        className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                                        value={lead}
+                                        onChange={(e) => setLead(e.target.value)}
+                                        placeholder="Lead name..."
+                                    />
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-[9px] font-black text-slate-300 uppercase tracking-wider block">Current Stage</label>
+                                    <select 
+                                        className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                                        value={currentStage}
+                                        onChange={(e) => setCurrentStage(e.target.value)}
+                                    >
+                                        {STAGES.map(stage => (
+                                            <option key={stage} value={stage} className="bg-[#0e4368] text-white">{stage}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+
+                            {/* Materials & Components Qty */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                    <label className="text-[9px] font-black text-slate-300 uppercase tracking-wider block">Material Details</label>
+                                    <input 
+                                        type="text"
+                                        className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                                        value={materialConsumption}
+                                        onChange={(e) => setMaterialConsumption(e.target.value)}
+                                        placeholder="e.g. Grey Primer (5L)"
+                                    />
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-[9px] font-black text-slate-300 uppercase tracking-wider block">Total Components Qty</label>
+                                    <input 
+                                        type="number"
+                                        className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                                        value={totalComponents}
+                                        onChange={(e) => setTotalComponents(e.target.value)}
+                                    />
+                                </div>
                             </div>
 
                             {/* Route */}
@@ -552,6 +651,36 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
                                         value={preparingPartsDate}
                                         onChange={(e) => setPreparingPartsDate(e.target.value)}
                                     />
+                                </div>
+                            </div>
+
+                            {/* Client PO Fields */}
+                            <div className="grid grid-cols-2 gap-4 items-center">
+                                <div className="space-y-1">
+                                    <label className="text-[9px] font-black text-slate-300 uppercase tracking-wider block">Client PO Number</label>
+                                    <input 
+                                        type="text"
+                                        className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                                        value={poNumber}
+                                        onChange={(e) => setPoNumber(e.target.value)}
+                                        placeholder="PO-XXXXX"
+                                    />
+                                </div>
+                                <div className="flex items-center gap-3 pt-4 pl-1">
+                                    <button 
+                                        type="button"
+                                        onClick={() => setPoConfirmed(prev => !prev)}
+                                        className={`w-5 h-5 rounded flex items-center justify-center border transition-all ${
+                                            poConfirmed 
+                                                ? 'bg-emerald-500 border-emerald-400 text-slate-900' 
+                                                : 'border-slate-600 bg-slate-900/50 text-transparent'
+                                        }`}
+                                    >
+                                        <Check className="w-3.5 h-3.5 stroke-[4]" />
+                                    </button>
+                                    <span className="text-xs font-bold text-slate-300 cursor-pointer select-none" onClick={() => setPoConfirmed(prev => !prev)}>
+                                        Client PO Confirmed
+                                    </span>
                                 </div>
                             </div>
 
