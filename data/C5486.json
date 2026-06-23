@@ -1,0 +1,72 @@
+{
+    "projectId": "C5486",
+    "client": "ITL (SONALIKA)",
+    "planning": {
+        "value": 51975,
+        "budget": 36382,
+        "deliveryTerms": "ToPay",
+        "poConfirmed": false,
+        "startDate": "2026-06-13"
+    },
+    "production": {
+        "currentStage": "Workshop Fabrication",
+        "stages": [
+            {
+                "name": "Engineering Design",
+                "status": "Completed",
+                "lead": "Shubham"
+            },
+            {
+                "name": "Machine Processing",
+                "status": "Completed",
+                "lead": "Paras"
+            },
+            {
+                "name": "Workshop Fabrication",
+                "status": "In Progress",
+                "lead": "Parth"
+            },
+            {
+                "name": "Sanding",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Painting",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Drying",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Finishing",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Final Packaging",
+                "status": "Pending",
+                "lead": "Shubham"
+            }
+        ]
+    },
+    "metrics": {
+        "totalComponents": 10,
+        "materialConsumption": "MJF / SLS",
+        "workforce": [
+            "Shubham"
+        ]
+    },
+    "financials": {
+        "vendorName": "Idemi",
+        "vendorLocation": "Mumbai",
+        "dispatchBudget": 0,
+        "totalCost": null,
+        "profitLoss": null,
+        "deliveryFeeMode": "To pay basis",
+        "poNumber": null
+    }
+}

@@ -73,15 +73,15 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
 
     const getFilteredConfig = () => {
         return sidebarConfig.map(group => {
-            if (group.roles && !group.roles.includes(userRole || '')) {
+            if (group.roles && !group.roles.includes((userRole || '') as any)) {
                 return null;
             }
             const filteredMenus = group.menus.map(menu => {
-                if (menu.roles && !menu.roles.includes(userRole || '')) {
+                if (menu.roles && !menu.roles.includes((userRole || '') as any)) {
                     return null;
                 }
                 const filteredSub = menu.subItems.filter(sub => {
-                    return !sub.roles || sub.roles.includes(userRole || '');
+                    return !sub.roles || sub.roles.includes((userRole || '') as any);
                 });
                 if (filteredSub.length > 0) {
                     return { ...menu, subItems: filteredSub };

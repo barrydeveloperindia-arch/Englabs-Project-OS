@@ -1,12 +1,12 @@
 {
     "projectId": "C5195",
-    "client": "LABAT REPEAT VC ABS",
+    "client": "LABAT ASIA",
     "planning": {
-        "value": 0,
-        "budget": 0,
+        "value": 110100,
+        "budget": 77070,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02",
+        "startDate": "2026-05-05",
         "poNumber": "P2100-EL12-PO-74404"
     },
     "production": {
@@ -14,7 +14,8 @@
         "stages": [
             {
                 "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "lead": "Shubham"
             },
             {
                 "name": "Machine Processing",
@@ -47,18 +48,18 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
+        "totalComponents": 150,
+        "materialConsumption": "VC ABS Grey Paint",
         "workforce": [
-            "TBD"
+            "Shubham"
         ]
     },
     "financials": {
         "vendorName": "Excel",
-        "vendorLocation": "Faridabad",
+        "vendorLocation": "Delhi",
         "dispatchBudget": 0,
         "totalCost": null,
-        "profitLoss": -2841,
+        "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
         "poNumber": "P2100-EL12-PO-74404"
     }

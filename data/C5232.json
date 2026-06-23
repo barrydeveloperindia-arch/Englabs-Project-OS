@@ -1,0 +1,72 @@
+{
+    "projectId": "C5232",
+    "client": "ITL (SONALIKA)",
+    "planning": {
+        "value": 29766,
+        "budget": 20836,
+        "deliveryTerms": "ToPay",
+        "poConfirmed": false,
+        "startDate": "2026-06-12"
+    },
+    "production": {
+        "currentStage": "Workshop Fabrication",
+        "stages": [
+            {
+                "name": "Engineering Design",
+                "status": "Completed",
+                "lead": "Devanshu"
+            },
+            {
+                "name": "Machine Processing",
+                "status": "Completed",
+                "lead": "Paras"
+            },
+            {
+                "name": "Workshop Fabrication",
+                "status": "In Progress",
+                "lead": "Parth"
+            },
+            {
+                "name": "Sanding",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Painting",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Drying",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Finishing",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Final Packaging",
+                "status": "Pending",
+                "lead": "Devanshu"
+            }
+        ]
+    },
+    "metrics": {
+        "totalComponents": 5,
+        "materialConsumption": "MJF Black Paint",
+        "workforce": [
+            "Devanshu"
+        ]
+    },
+    "financials": {
+        "vendorName": "Excel Repid TECH",
+        "vendorLocation": "Delhi",
+        "dispatchBudget": 0,
+        "totalCost": null,
+        "profitLoss": null,
+        "deliveryFeeMode": "To pay basis",
+        "poNumber": null
+    }
+}

@@ -1,0 +1,73 @@
+{
+    "projectId": "C5230",
+    "client": "ENERTICS",
+    "planning": {
+        "value": 25430,
+        "budget": 17801,
+        "deliveryTerms": "Porter",
+        "poConfirmed": false,
+        "startDate": "2026-06-23",
+        "poNumber": "P2100-EL12-PO-74523"
+    },
+    "production": {
+        "currentStage": "Workshop Fabrication",
+        "stages": [
+            {
+                "name": "Engineering Design",
+                "status": "Completed",
+                "lead": "Anurag"
+            },
+            {
+                "name": "Machine Processing",
+                "status": "Completed",
+                "lead": "Paras"
+            },
+            {
+                "name": "Workshop Fabrication",
+                "status": "In Progress",
+                "lead": "Parth"
+            },
+            {
+                "name": "Sanding",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Painting",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Drying",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Finishing",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Final Packaging",
+                "status": "Pending",
+                "lead": "Anurag"
+            }
+        ]
+    },
+    "metrics": {
+        "totalComponents": 1000,
+        "materialConsumption": "NYLON GF",
+        "workforce": [
+            "Anurag"
+        ]
+    },
+    "financials": {
+        "vendorName": "SK Techno",
+        "vendorLocation": "Mohali",
+        "dispatchBudget": 0,
+        "totalCost": null,
+        "profitLoss": null,
+        "deliveryFeeMode": "Porter system",
+        "poNumber": "P2100-EL12-PO-74523"
+    }
+}

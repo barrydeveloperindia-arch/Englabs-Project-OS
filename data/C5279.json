@@ -1,0 +1,73 @@
+{
+    "projectId": "C5279",
+    "client": "MENTHOSA",
+    "planning": {
+        "value": 21500,
+        "budget": 15050,
+        "deliveryTerms": "Porter",
+        "poConfirmed": false,
+        "startDate": "2026-06-23",
+        "poNumber": "P2100-EL12-PO-74478"
+    },
+    "production": {
+        "currentStage": "Final Packaging",
+        "stages": [
+            {
+                "name": "Engineering Design",
+                "status": "Completed",
+                "lead": "Anurag"
+            },
+            {
+                "name": "Machine Processing",
+                "status": "Completed",
+                "lead": "Paras"
+            },
+            {
+                "name": "Workshop Fabrication",
+                "status": "Completed",
+                "lead": "Parth"
+            },
+            {
+                "name": "Sanding",
+                "status": "Completed",
+                "lead": "Parth"
+            },
+            {
+                "name": "Painting",
+                "status": "Completed",
+                "lead": "Parth"
+            },
+            {
+                "name": "Drying",
+                "status": "Completed",
+                "lead": "Parth"
+            },
+            {
+                "name": "Finishing",
+                "status": "Completed",
+                "lead": "Parth"
+            },
+            {
+                "name": "Final Packaging",
+                "status": "Completed",
+                "lead": "Anurag"
+            }
+        ]
+    },
+    "metrics": {
+        "totalComponents": 1,
+        "materialConsumption": "PU MENTHOSA",
+        "workforce": [
+            "Anurag"
+        ]
+    },
+    "financials": {
+        "vendorName": "SK Techno",
+        "vendorLocation": "Mohali",
+        "dispatchBudget": 0,
+        "totalCost": 21500,
+        "profitLoss": 21500,
+        "deliveryFeeMode": "Porter system",
+        "poNumber": "P2100-EL12-PO-74478"
+    }
+}

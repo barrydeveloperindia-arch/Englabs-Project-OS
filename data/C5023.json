@@ -1,12 +1,12 @@
 {
     "projectId": "C5023",
-    "client": "AV MACHINING SOLUTIONS",
+    "client": "AV MACHINING",
     "planning": {
-        "value": 0,
-        "budget": 0,
+        "value": 41320,
+        "budget": 28924,
         "deliveryTerms": "ToPay",
         "poConfirmed": true,
-        "startDate": "2026-06-02",
+        "startDate": "2026-05-23",
         "poNumber": "P2100-EL-12-PO-16911"
     },
     "production": {
@@ -14,7 +14,8 @@
         "stages": [
             {
                 "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "lead": "Devanshu"
             },
             {
                 "name": "Machine Processing",
@@ -47,19 +48,19 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
+        "totalComponents": 90,
+        "materialConsumption": "VC P.P. Inserts",
         "workforce": [
-            "TBD"
+            "Devanshu"
         ]
     },
     "financials": {
         "vendorName": "Excel",
-        "vendorLocation": "Faridabad",
+        "vendorLocation": "Delhi",
         "dispatchBudget": 0,
         "totalCost": null,
-        "profitLoss": -11505,
-        "deliveryFeeMode": null,
+        "profitLoss": null,
+        "deliveryFeeMode": "To pay basis",
         "poNumber": "P2100-EL-12-PO-16911"
     }
 }

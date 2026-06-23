@@ -1,0 +1,72 @@
+{
+    "projectId": "C5237",
+    "client": "BAJAJ",
+    "planning": {
+        "value": 4850,
+        "budget": 3395,
+        "deliveryTerms": "ToPay",
+        "poConfirmed": true,
+        "startDate": "2026-06-08"
+    },
+    "production": {
+        "currentStage": "Final Packaging",
+        "stages": [
+            {
+                "name": "Engineering Design",
+                "status": "Completed",
+                "lead": "Shubham"
+            },
+            {
+                "name": "Machine Processing",
+                "status": "Completed",
+                "lead": "Paras"
+            },
+            {
+                "name": "Workshop Fabrication",
+                "status": "Completed",
+                "lead": "Parth"
+            },
+            {
+                "name": "Sanding",
+                "status": "Completed",
+                "lead": "Parth"
+            },
+            {
+                "name": "Painting",
+                "status": "Completed",
+                "lead": "Parth"
+            },
+            {
+                "name": "Drying",
+                "status": "Completed",
+                "lead": "Parth"
+            },
+            {
+                "name": "Finishing",
+                "status": "Completed",
+                "lead": "Parth"
+            },
+            {
+                "name": "Final Packaging",
+                "status": "Completed",
+                "lead": "Shubham"
+            }
+        ]
+    },
+    "metrics": {
+        "totalComponents": 9,
+        "materialConsumption": "SLA / ABS",
+        "workforce": [
+            "Shubham"
+        ]
+    },
+    "financials": {
+        "vendorName": "RSD (WORKAAD)",
+        "vendorLocation": "NOIDA",
+        "dispatchBudget": 0,
+        "totalCost": 4850,
+        "profitLoss": 1325,
+        "deliveryFeeMode": "To pay basis",
+        "poNumber": null
+    }
+}

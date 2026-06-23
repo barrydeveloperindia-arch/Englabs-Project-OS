@@ -1,0 +1,73 @@
+{
+    "projectId": "C5296",
+    "client": "AEBOCODE",
+    "planning": {
+        "value": 48800,
+        "budget": 34160,
+        "deliveryTerms": "ToPay",
+        "poConfirmed": false,
+        "startDate": "2026-06-22",
+        "poNumber": "P2100-EL12-PO-74523"
+    },
+    "production": {
+        "currentStage": "Workshop Fabrication",
+        "stages": [
+            {
+                "name": "Engineering Design",
+                "status": "Completed",
+                "lead": "Devanshu"
+            },
+            {
+                "name": "Machine Processing",
+                "status": "Completed",
+                "lead": "Paras"
+            },
+            {
+                "name": "Workshop Fabrication",
+                "status": "In Progress",
+                "lead": "Parth"
+            },
+            {
+                "name": "Sanding",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Painting",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Drying",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Finishing",
+                "status": "Pending",
+                "lead": "Parth"
+            },
+            {
+                "name": "Final Packaging",
+                "status": "Pending",
+                "lead": "Devanshu"
+            }
+        ]
+    },
+    "metrics": {
+        "totalComponents": 14,
+        "materialConsumption": "PA12",
+        "workforce": [
+            "Devanshu"
+        ]
+    },
+    "financials": {
+        "vendorName": "Adroitec Information System Pvt Ltd (Noida)",
+        "vendorLocation": "Noida",
+        "dispatchBudget": 0,
+        "totalCost": null,
+        "profitLoss": null,
+        "deliveryFeeMode": "To pay basis",
+        "poNumber": "P2100-EL12-PO-74523"
+    }
+}

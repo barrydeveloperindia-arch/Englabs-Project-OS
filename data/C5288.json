@@ -1,0 +1,72 @@
+{
+    "projectId": "C5288",
+    "client": "ORIENT",
+    "planning": {
+        "value": 19372,
+        "budget": 13560,
+        "deliveryTerms": "Porter",
+        "poConfirmed": false,
+        "startDate": "2026-06-10"
+    },
+    "production": {
+        "currentStage": "Final Packaging",
+        "stages": [
+            {
+                "name": "Engineering Design",
+                "status": "Completed",
+                "lead": "Devanshu"
+            },
+            {
+                "name": "Machine Processing",
+                "status": "Completed",
+                "lead": "Paras"
+            },
+            {
+                "name": "Workshop Fabrication",
+                "status": "Completed",
+                "lead": "Parth"
+            },
+            {
+                "name": "Sanding",
+                "status": "Completed",
+                "lead": "Parth"
+            },
+            {
+                "name": "Painting",
+                "status": "Completed",
+                "lead": "Parth"
+            },
+            {
+                "name": "Drying",
+                "status": "Completed",
+                "lead": "Parth"
+            },
+            {
+                "name": "Finishing",
+                "status": "Completed",
+                "lead": "Parth"
+            },
+            {
+                "name": "Final Packaging",
+                "status": "Completed",
+                "lead": "Devanshu"
+            }
+        ]
+    },
+    "metrics": {
+        "totalComponents": 11,
+        "materialConsumption": "SLS ABS",
+        "workforce": [
+            "Devanshu"
+        ]
+    },
+    "financials": {
+        "vendorName": "Cadqua",
+        "vendorLocation": "Ghaziabad",
+        "dispatchBudget": 0,
+        "totalCost": 19372,
+        "profitLoss": 5526,
+        "deliveryFeeMode": "Porter system",
+        "poNumber": null
+    }
+}
