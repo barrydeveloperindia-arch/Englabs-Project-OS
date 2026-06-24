@@ -13,7 +13,7 @@ service cloud.firestore {
     // Dynamic Role Fetcher (Assuming a user_roles collection exists, or overriding for staging testing)
     function getUserRole() {
       // For staging testing, if email is admin, treat as admin, else treat as staff
-      return (request.auth.token.email == 'admin@englabs.com' || request.auth.token.email == 'englabscivilteam@gmail.com') ? 'ADMIN' : 'STAFF';
+      return (request.auth.token.email == 'admin@englabs.com' || request.auth.token.email == 'englabscivilteam@gmail.com' || request.auth.token.email == 'gauravpanchalenglab@gmail.com') ? 'ADMIN' : 'STAFF';
     }
 
     function isAdmin() {
@@ -34,6 +34,12 @@ service cloud.firestore {
       // Admins can create/delete. Staff can only update cost metrics.
       allow create, delete: if isAdmin();
       allow update: if isStaff();
+    }
+
+    // Projects (Vite App Sync)
+    match /projects/{projectId} {
+      allow read: if isAuthenticated();
+      allow create, update, delete: if isStaff();
     }
 
     // 2. Inventory Ledger (Append Only)

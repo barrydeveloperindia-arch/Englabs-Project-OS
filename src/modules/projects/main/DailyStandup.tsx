@@ -160,6 +160,7 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
             const isBlocked = standup.inputsRequired && 
                               standup.inputsRequired.trim() !== '' && 
                               standup.inputsRequired.toUpperCase() !== 'NONE' && 
+                              standup.inputsRequired.toUpperCase() !== 'NO' && 
                               standup.inputsRequired.toUpperCase() !== 'N/A';
             
             const matchesBlocker = 
@@ -193,6 +194,7 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
             const isBlocked = standup.inputsRequired && 
                               standup.inputsRequired.trim() !== '' && 
                               standup.inputsRequired.toUpperCase() !== 'NONE' && 
+                              standup.inputsRequired.toUpperCase() !== 'NO' && 
                               standup.inputsRequired.toUpperCase() !== 'N/A';
             if (isBlocked) {
                 blockedCount++;
@@ -247,7 +249,10 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
                         `   • Notes: ${s.discussingNotes}\n` +
                         `   • Lead: ${lead}\n` +
                         `   • Route: ${s.routeFrom || 'N/A'} -> ${s.routeTo || 'N/A'} (₹${s.porterPayments || 0})\n`;
-            if (s.inputsRequired && s.inputsRequired.toUpperCase() !== 'NONE' && s.inputsRequired.toUpperCase() !== 'N/A') {
+            if (s.inputsRequired && 
+                s.inputsRequired.toUpperCase() !== 'NONE' && 
+                s.inputsRequired.toUpperCase() !== 'NO' && 
+                s.inputsRequired.toUpperCase() !== 'N/A') {
                 textBody += `   • *Blocker:* ${s.inputsRequired}\n`;
             }
             textBody += `\n`;
@@ -419,6 +424,7 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
                         const isBlocked = s.inputsRequired && 
                                           s.inputsRequired.trim() !== '' && 
                                           s.inputsRequired.toUpperCase() !== 'NONE' && 
+                                          s.inputsRequired.toUpperCase() !== 'NO' && 
                                           s.inputsRequired.toUpperCase() !== 'N/A';
 
                         return (
