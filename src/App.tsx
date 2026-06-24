@@ -845,6 +845,7 @@ const App: React.FC = () => {
                     <HotelRegister 
                         projects={projects}
                         staffList={staffList}
+                        onAddProject={(newProj) => setProjects(prev => [...prev, newProj])}
                     />
                 ) : currentView === 'STORE_GUARDIAN' ? (
                     <StoreGuardianDashboard />

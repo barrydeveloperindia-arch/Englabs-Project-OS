@@ -88,7 +88,7 @@ describe('HotelRegister Component Tests', () => {
         fireEvent.change(screen.getByPlaceholderText('e.g. Mr. Sumeet (Karan Traders)'), {
             target: { value: 'Guest Client Name' }
         });
-        fireEvent.change(screen.getByPlaceholderText('e.g. Landmark Hotel, Chandigarh'), {
+        fireEvent.change(screen.getByPlaceholderText('e.g. Landmark Hotel'), {
             target: { value: 'Hotel Taj Palace' }
         });
         fireEvent.change(screen.getByPlaceholderText('Amount in ₹'), {

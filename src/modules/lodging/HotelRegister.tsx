@@ -16,9 +16,14 @@ import {
     CheckCircle2, 
     AlertCircle,
     X,
-    UserCheck
+    UserCheck,
+    QrCode,
+    Phone,
+    MapPin,
+    Paperclip
 } from 'lucide-react';
 import { ProjectData } from '@shared/services/project';
+import NewProjectModal from '@common/NewProjectModal';
 
 interface HotelStay {
     id: string;
@@ -27,6 +32,9 @@ interface HotelStay {
     associatedProjectId: string; // project ID or 'GENERAL'
     hotelName: string;
     roomNumber?: string;
+    floorNumber?: string;
+    hotelContact?: string;
+    hotelLocation?: string;
     checkInDate: string;
     checkOutDate: string;
     purpose: string;
@@ -34,15 +42,18 @@ interface HotelStay {
     paymentStatus: 'PAID' | 'PENDING';
     notes?: string;
     timestamp: string;
+    invoiceFile?: string;
 }
 
 interface HotelRegisterProps {
     projects: ProjectData[];
     staffList: string[];
+    onAddProject?: (newProj: ProjectData) => void;
 }
 
-export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffList }) => {
+export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffList, onAddProject }) => {
     const [stays, setStays] = useState<HotelStay[]>([]);
+    const [isAddProjectModalOpen, setIsAddProjectModalOpen] = useState(false);
     const [isFormOpen, setIsFormOpen] = useState(false);
     
     // Form fields
@@ -51,12 +62,17 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
     const [projectId, setProjectId] = useState('GENERAL');
     const [hotelName, setHotelName] = useState('');
     const [roomNumber, setRoomNumber] = useState('');
+    const [floorNumber, setFloorNumber] = useState('');
+    const [hotelContact, setHotelContact] = useState('');
+    const [hotelLocation, setHotelLocation] = useState('');
     const [checkInDate, setCheckInDate] = useState('');
     const [checkOutDate, setCheckOutDate] = useState('');
     const [purpose, setPurpose] = useState('Client Visit');
     const [cost, setCost] = useState('');
     const [paymentStatus, setPaymentStatus] = useState<'PAID' | 'PENDING'>('PAID');
     const [notes, setNotes] = useState('');
+    const [invoiceFileName, setInvoiceFileName] = useState('');
+    const [isQrModalOpen, setIsQrModalOpen] = useState(false);
     
     // Filters
     const [searchQuery, setSearchQuery] = useState('');
@@ -83,13 +99,17 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
                     associatedProjectId: 'C5023',
                     hotelName: 'Hotel Sunbeam, Chandigarh',
                     roomNumber: '304',
+                    floorNumber: '3rd',
+                    hotelContact: '+91 98765 43210',
+                    hotelLocation: 'Sector 22, Chandigarh',
                     checkInDate: '2026-06-20',
                     checkOutDate: '2026-06-22',
                     purpose: 'Staff Overtime & Night Shift',
                     cost: 4500,
                     paymentStatus: 'PAID',
                     notes: 'Overtime supervisor stay for urgent C5023 assembly dispatch.',
-                    timestamp: new Date('2026-06-20T10:00:00Z').toISOString()
+                    timestamp: new Date('2026-06-20T10:00:00Z').toISOString(),
+                    invoiceFile: 'invoice_anurag_HTL_0001.pdf'
                 },
                 {
                     id: 'HTL-2026-0002',
@@ -98,13 +118,17 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
                     associatedProjectId: 'C5124',
                     hotelName: 'Taj Mahal Hotel, New Delhi',
                     roomNumber: '1208',
+                    floorNumber: '12th',
+                    hotelContact: '+91 11 2302 3322',
+                    hotelLocation: 'Mansingh Road, New Delhi',
                     checkInDate: '2026-06-22',
                     checkOutDate: '2026-06-24',
                     purpose: 'Client Inspection & Review',
                     cost: 14200,
                     paymentStatus: 'PAID',
                     notes: 'Design approval stay for high-value client delegation.',
-                    timestamp: new Date('2026-06-22T09:30:00Z').toISOString()
+                    timestamp: new Date('2026-06-22T09:30:00Z').toISOString(),
+                    invoiceFile: 'invoice_client_HTL_0002.pdf'
                 },
                 {
                     id: 'HTL-2026-0003',
@@ -113,6 +137,9 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
                     associatedProjectId: 'C5230',
                     hotelName: 'Hotel Aroma, Chandigarh',
                     roomNumber: '102',
+                    floorNumber: '1st',
+                    hotelContact: '+91 172 401 0000',
+                    hotelLocation: 'Sector 22-C, Chandigarh',
                     checkInDate: '2026-06-24',
                     checkOutDate: '2026-06-25',
                     purpose: 'Vendor Procurement Alignment',
@@ -178,13 +205,17 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
             associatedProjectId: projectId,
             hotelName: hotelName.trim(),
             roomNumber: roomNumber.trim() || undefined,
+            floorNumber: floorNumber.trim() || undefined,
+            hotelContact: hotelContact.trim() || undefined,
+            hotelLocation: hotelLocation.trim() || undefined,
             checkInDate,
             checkOutDate,
             purpose: purpose.trim(),
             cost: numericCost,
             paymentStatus,
             notes: notes.trim() || undefined,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            invoiceFile: invoiceFileName.trim() || undefined
         };
 
         const updated = [newStay, ...stays];
@@ -195,10 +226,14 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
         setProjectId('GENERAL');
         setHotelName('');
         setRoomNumber('');
+        setFloorNumber('');
+        setHotelContact('');
+        setHotelLocation('');
         setCheckInDate('');
         setCheckOutDate('');
         setCost('');
         setNotes('');
+        setInvoiceFileName('');
         setIsFormOpen(false);
     };
 
@@ -376,9 +411,7 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
                             <button onClick={() => setIsFormOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
                                 <X className="w-5 h-5" />
                             </button>
-                        </div>
-
-                        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        </div>                        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
                                 <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Guest Type</label>
                                 <select 
@@ -418,27 +451,84 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
 
                             <div>
                                 <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Associated Project</label>
-                                <select 
-                                    value={projectId}
-                                    onChange={(e) => setProjectId(e.target.value)}
-                                    className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 dark:text-white focus:outline-none focus:border-[#52cca3] transition-all"
-                                >
-                                    <option value="GENERAL">General/Administrative (No Project)</option>
-                                    {projects.map(p => (
-                                        <option key={p.projectId} value={p.projectId}>{p.projectId} - {p.client || 'Internal'}</option>
-                                    ))}
-                                </select>
+                                <div className="flex gap-2">
+                                    <select 
+                                        value={projectId}
+                                        onChange={(e) => setProjectId(e.target.value)}
+                                        className="flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 dark:text-white focus:outline-none focus:border-[#52cca3] transition-all"
+                                    >
+                                        <option value="GENERAL">General/Administrative (No Project)</option>
+                                        {projects.map(p => (
+                                            <option key={p.projectId} value={p.projectId}>{p.projectId} - {p.client || 'Internal'}</option>
+                                        ))}
+                                    </select>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsAddProjectModalOpen(true)}
+                                        className="bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 px-3 rounded-xl flex items-center justify-center text-slate-700 dark:text-slate-200 transition-all active:scale-95 shadow-sm"
+                                        title="Add New Project"
+                                    >
+                                        <Plus className="w-4 h-4" />
+                                    </button>
+                                </div>
                             </div>
 
                             <div>
-                                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Hotel Name & Location</label>
+                                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Hotel Name</label>
                                 <input 
+                                    required
                                     type="text"
                                     value={hotelName}
                                     onChange={(e) => setHotelName(e.target.value)}
-                                    placeholder="e.g. Landmark Hotel, Chandigarh"
+                                    placeholder="e.g. Landmark Hotel"
                                     className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#52cca3] transition-all"
                                 />
+                            </div>
+
+                            <div>
+                                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Hotel Contact Number</label>
+                                <div className="flex gap-2">
+                                    <input 
+                                        type="text"
+                                        value={hotelContact}
+                                        onChange={(e) => setHotelContact(e.target.value)}
+                                        placeholder="e.g. +91 98765 43210"
+                                        className="flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#52cca3] transition-all"
+                                    />
+                                    {hotelContact && (
+                                        <a 
+                                            href={`tel:${hotelContact}`}
+                                            className="bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 px-3 rounded-xl flex items-center justify-center text-slate-700 dark:text-slate-200 transition-all active:scale-95 shadow-sm"
+                                            title="Call Hotel"
+                                        >
+                                            <Phone className="w-4 h-4 text-[#52cca3]" />
+                                        </a>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Hotel Location / Address</label>
+                                <div className="flex gap-2">
+                                    <input 
+                                        type="text"
+                                        value={hotelLocation}
+                                        onChange={(e) => setHotelLocation(e.target.value)}
+                                        placeholder="e.g. Sector 22, Chandigarh"
+                                        className="flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#52cca3] transition-all"
+                                    />
+                                    {hotelLocation && (
+                                        <a 
+                                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(hotelLocation)}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 px-3 rounded-xl flex items-center justify-center text-slate-700 dark:text-slate-200 transition-all active:scale-95 shadow-sm"
+                                            title="Locate Hotel"
+                                        >
+                                            <MapPin className="w-4 h-4 text-indigo-400" />
+                                        </a>
+                                    )}
+                                </div>
                             </div>
 
                             <div>
@@ -447,25 +537,50 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
                                     type="text"
                                     value={roomNumber}
                                     onChange={(e) => setRoomNumber(e.target.value)}
-                                    placeholder="e.g. 204 or Deluxe Suite"
+                                    placeholder="e.g. 204"
+                                    className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#52cca3] transition-all"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Floor Number (Optional)</label>
+                                <input 
+                                    type="text"
+                                    value={floorNumber}
+                                    onChange={(e) => setFloorNumber(e.target.value)}
+                                    placeholder="e.g. Ground or 3rd"
                                     className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#52cca3] transition-all"
                                 />
                             </div>
 
                             <div>
                                 <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Stay Cost (INR)</label>
-                                <input 
-                                    type="number"
-                                    value={cost}
-                                    onChange={(e) => setCost(e.target.value)}
-                                    placeholder="Amount in ₹"
-                                    className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#52cca3] transition-all"
-                                />
+                                <div className="flex gap-2">
+                                    <input 
+                                        required
+                                        type="number"
+                                        value={cost}
+                                        onChange={(e) => setCost(e.target.value)}
+                                        placeholder="Amount in ₹"
+                                        className="flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#52cca3] transition-all"
+                                    />
+                                    {Number(cost) > 0 && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsQrModalOpen(true)}
+                                            className="bg-emerald-500 hover:bg-emerald-600 text-white font-black px-3 rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 text-[10px] uppercase tracking-wider"
+                                            title="Generate Sky5 UPI QR Code"
+                                        >
+                                            <QrCode className="w-4 h-4" /> QR Pay
+                                        </button>
+                                    )}
+                                </div>
                             </div>
 
                             <div>
                                 <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Check-In Date</label>
                                 <input 
+                                    required
                                     type="date"
                                     value={checkInDate}
                                     onChange={(e) => setCheckInDate(e.target.value)}
@@ -476,6 +591,7 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
                             <div>
                                 <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Check-Out Date</label>
                                 <input 
+                                    required
                                     type="date"
                                     value={checkOutDate}
                                     onChange={(e) => setCheckOutDate(e.target.value)}
@@ -486,6 +602,7 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
                             <div>
                                 <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Purpose of Stay</label>
                                 <input 
+                                    required
                                     type="text"
                                     value={purpose}
                                     onChange={(e) => setPurpose(e.target.value)}
@@ -522,7 +639,37 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
                                 </div>
                             </div>
 
-                            <div className="md:col-span-2">
+                            <div>
+                                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Attach Invoice</label>
+                                <div className="flex gap-2">
+                                    <input 
+                                        type="file" 
+                                        id="invoice-upload"
+                                        className="hidden" 
+                                        onChange={(e) => {
+                                            if (e.target.files && e.target.files[0]) {
+                                                setInvoiceFileName(e.target.files[0].name);
+                                            }
+                                        }}
+                                    />
+                                    <input 
+                                        type="text"
+                                        readOnly
+                                        value={invoiceFileName}
+                                        placeholder="No file selected"
+                                        className="flex-1 bg-slate-50 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-xs font-bold text-slate-500 cursor-not-allowed focus:outline-none"
+                                    />
+                                    <button 
+                                        type="button"
+                                        onClick={() => document.getElementById('invoice-upload')?.click()}
+                                        className="bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 px-4 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 transition-all flex items-center justify-center gap-2 shadow-sm"
+                                    >
+                                        Choose
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
                                 <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Notes & Additional details</label>
                                 <input 
                                     type="text"
@@ -642,6 +789,14 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
                                                 {/* ID */}
                                                 <td className="py-4 px-6 text-xs font-black text-[#0e4368] dark:text-[#52cca3] whitespace-nowrap">
                                                     {stay.id}
+                                                    {stay.invoiceFile && (
+                                                        <div className="flex items-center gap-1 mt-1">
+                                                            <Paperclip className="w-3 h-3 text-slate-400 shrink-0" />
+                                                            <span className="text-[9px] font-bold text-slate-400 truncate max-w-[80px]" title={stay.invoiceFile}>
+                                                                {stay.invoiceFile}
+                                                            </span>
+                                                        </div>
+                                                    )}
                                                 </td>
                                                 
                                                 {/* Guest Info */}
@@ -681,10 +836,20 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
                                                             <Building className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                                                             {stay.hotelName}
                                                         </span>
-                                                        {stay.roomNumber && (
+                                                        {(stay.roomNumber || stay.floorNumber) && (
                                                             <span className="text-[9px] font-semibold text-slate-400 pl-5 uppercase tracking-wide">
-                                                                Room: {stay.roomNumber}
+                                                                Room: {stay.roomNumber || 'N/A'} {stay.floorNumber ? `(Floor: ${stay.floorNumber})` : ''}
                                                             </span>
+                                                        )}
+                                                        {stay.hotelContact && (
+                                                            <a href={`tel:${stay.hotelContact}`} className="text-[9px] font-bold text-slate-400 pl-5 hover:text-[#52cca3] transition-colors flex items-center gap-1 mt-0.5">
+                                                                <Phone className="w-2.5 h-2.5" /> {stay.hotelContact}
+                                                            </a>
+                                                        )}
+                                                        {stay.hotelLocation && (
+                                                            <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(stay.hotelLocation)}`} target="_blank" rel="noopener noreferrer" className="text-[9px] font-bold text-slate-400 pl-5 hover:text-indigo-400 transition-colors flex items-center gap-1 mt-0.5">
+                                                                <MapPin className="w-2.5 h-2.5" /> {stay.hotelLocation}
+                                                            </a>
                                                         )}
                                                     </div>
                                                 </td>
@@ -742,6 +907,69 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
                 </div>
 
             </div>
+
+            {isAddProjectModalOpen && (
+                <NewProjectModal 
+                    isOpen={isAddProjectModalOpen}
+                    onClose={() => setIsAddProjectModalOpen(false)}
+                    onAdd={(newProj) => {
+                        if (onAddProject) {
+                            onAddProject(newProj);
+                        }
+                        setProjectId(newProj.projectId);
+                    }}
+                    existingProjects={projects.map(p => p.projectId)}
+                />
+            )}
+
+            {isQrModalOpen && (
+                <div className="fixed inset-0 z-[110] flex items-center justify-center p-6">
+                    <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setIsQrModalOpen(false)} />
+                    
+                    <div className="relative w-full max-w-sm bg-white rounded-[2rem] shadow-2xl p-8 border border-slate-100 animate-in zoom-in-95 duration-200 flex flex-col items-center">
+                        <div className="w-full flex justify-between items-center mb-6">
+                            <div>
+                                <h3 className="text-sm font-black text-slate-900 tracking-tight uppercase text-center">Sky5 Payment QR</h3>
+                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 text-center">UPI Instant Settlement</p>
+                            </div>
+                            <button onClick={() => setIsQrModalOpen(false)} className="p-2 hover:bg-slate-50 rounded-full transition-colors text-slate-400 hover:text-slate-900 shadow-sm">
+                                <X className="w-4 h-4" />
+                            </button>
+                        </div>
+
+                        <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100 flex items-center justify-center mb-6">
+                            <img 
+                                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=Q15213511@ybl%26pn=Sky5%20Hotel%26am=${cost}%26cu=INR`} 
+                                alt="Sky5 Payment QR"
+                                className="w-48 h-48 rounded-2xl"
+                            />
+                        </div>
+
+                        <div className="w-full space-y-3 bg-slate-50 p-5 rounded-2xl border border-slate-100 mb-6 col-span-1">
+                            <div className="flex justify-between items-center text-xs">
+                                <span className="text-slate-400 font-bold uppercase text-[9px] tracking-wider">Payee Name</span>
+                                <span className="text-slate-800 font-black">Sky5 Hotel</span>
+                            </div>
+                            <div className="flex justify-between items-center text-xs">
+                                <span className="text-slate-400 font-bold uppercase text-[9px] tracking-wider">UPI Address</span>
+                                <span className="text-slate-800 font-bold font-mono">Q15213511@ybl</span>
+                            </div>
+                            <div className="flex justify-between items-center text-xs border-t border-slate-200/60 pt-3">
+                                <span className="text-slate-400 font-bold uppercase text-[9px] tracking-wider">Payable Amount</span>
+                                <span className="text-[#52cca3] font-black text-lg">₹{Number(cost || 0).toLocaleString('en-IN')}</span>
+                            </div>
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={() => setIsQrModalOpen(false)}
+                            className="w-full bg-slate-900 text-white font-black py-4 rounded-2xl hover:bg-slate-800 transition-all text-xs uppercase tracking-widest shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                        >
+                            <CheckCircle2 className="w-4 h-4" /> Done / Confirmed
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
