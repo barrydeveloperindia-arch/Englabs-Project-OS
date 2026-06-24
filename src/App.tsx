@@ -905,7 +905,12 @@ const App: React.FC = () => {
                 setIsMobileMenuOpen={setIsMobileMenuOpen}
             />
 
-            <NewProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onAdd={(newProj) => setProjects(prev => [...prev, newProj])} />
+            <NewProjectModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                onAdd={(newProj) => setProjects(prev => [...prev, newProj])} 
+                existingProjects={projects.map(p => p.projectId)}
+            />
             <AddStaffModal isOpen={isAddStaffModalOpen} onClose={() => setIsAddStaffModalOpen(false)} onAdd={handleAddStaff} existingStaff={staffList} />
         </div>
     );
