@@ -213,16 +213,26 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
     const handleShareWhatsApp = (project: ProjectData) => {
         const standup = project.dailyStandup!;
         const lead = project.production.stages.find(s => s.status === 'In Progress')?.lead || project.production.stages[0]?.lead || 'Team';
+        const poStatus = project.planning.poConfirmed 
+            ? `Confirmed (${project.planning.poNumber || 'No PO#'})` 
+            : 'Awaiting PO';
+
         const text = encodeURIComponent(
-            `*Daily Standup Update*\n` +
-            `*Project ID:* ${project.projectId}\n` +
-            `*Client:* ${project.client}\n` +
-            `*Discussing Notes:* ${standup.discussingNotes}\n` +
-            `*Coordinating Staff:* ${lead}\n` +
-            `*Route:* ${standup.routeFrom || 'N/A'} ➔ ${standup.routeTo || 'N/A'}\n` +
-            `*Porter Payment:* ₹${standup.porterPayments || 0}\n` +
-            `*Inputs Required:* ${standup.inputsRequired || 'None'}\n` +
-            `*Date:* ${standup.preparingPartsDate || 'N/A'}`
+            `📊 *ENGLABS STANDUP UPDATE*\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `📁 *Project:* [${project.projectId}] ${project.client}\n` +
+            `📌 *Current Stage:* ${project.production.currentStage || 'Pending'}\n` +
+            `📝 *Discussing Notes:* ${standup.discussingNotes || 'N/A'}\n` +
+            `👤 *Coordinating Staff:* ${lead}\n` +
+            `📦 *Materials:* ${project.metrics.materialConsumption || 'N/A'}\n` +
+            `🔢 *Quantity:* ${project.metrics.totalComponents || 0} pcs\n` +
+            `📍 *Route:* ${standup.routeFrom || 'N/A'} ➔ ${standup.routeTo || 'N/A'}\n` +
+            `💰 *Porter Payment:* ₹${standup.porterPayments || 0}\n` +
+            `🧾 *Client PO Status:* ${poStatus}\n` +
+            `🚨 *Blocker / Inputs Req:* ${standup.inputsRequired || 'None'}\n` +
+            `📅 *Date:* ${standup.preparingPartsDate || 'N/A'}\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `🌐 _Command OS Forensic Dispatch_`
         );
         window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
     };
@@ -233,6 +243,7 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
             const s = p.dailyStandup!;
             const lead = p.production.stages.find(st => st.status === 'In Progress')?.lead || p.production.stages[0]?.lead || 'Team';
             textBody += `${idx + 1}. *[${p.projectId}] ${p.client}*\n` +
+                        `   • Stage: ${p.production.currentStage || 'Pending'}\n` +
                         `   • Notes: ${s.discussingNotes}\n` +
                         `   • Lead: ${lead}\n` +
                         `   • Route: ${s.routeFrom || 'N/A'} -> ${s.routeTo || 'N/A'} (₹${s.porterPayments || 0})\n`;
