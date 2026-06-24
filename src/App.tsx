@@ -46,6 +46,7 @@ import DigitalEvidence from '@modules/dashboard/main/DigitalEvidence';
 import InventoryManager from '@modules/inventory/store/InventoryManager';
 import Sky5Terminal from '@modules/dashboard/main/Sky5Terminal';
 import StoreStockReport from '@modules/inventory/reports/StoreStockReport';
+import HotelRegister from '@modules/lodging/HotelRegister';
 import StoreGuardianDashboard from '@modules/inventory/store/StoreGuardianDashboard';
 import MobileDashboard from '@modules/dashboard/main/MobileDashboard';
 import CommandCenterDashboard from '@modules/dashboard/main/CommandCenterDashboard';
@@ -839,6 +840,11 @@ const App: React.FC = () => {
                         staffList={staffList}
                         onAddStaff={handleAddStaff}
                         onAddProject={(newProj) => setProjects(prev => [...prev, newProj])}
+                    />
+                ) : currentView === 'HOTEL_LOGS' ? (
+                    <HotelRegister 
+                        projects={projects}
+                        staffList={staffList}
                     />
                 ) : currentView === 'STORE_GUARDIAN' ? (
                     <StoreGuardianDashboard />

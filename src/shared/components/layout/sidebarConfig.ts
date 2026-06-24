@@ -8,7 +8,8 @@ import {
     Settings,
     FileText,
     Utensils,
-    Shield
+    Shield,
+    Hotel
 } from 'lucide-react';
 import { UserRole } from '@shared/types/database.types';
 
@@ -111,6 +112,14 @@ export const sidebarConfig: MenuGroup[] = [
                 iconName: "Truck",
                 subItems: [
                     { id: "PORTER_SERVICE", label: "Porter Dispatch" }
+                ]
+            },
+            {
+                id: "HOTEL_STAYS",
+                label: "Hotel Stays",
+                iconName: "Hotel",
+                subItems: [
+                    { id: "HOTEL_LOGS", label: "Hotel Stay Logs" }
                 ]
             }
         ]
