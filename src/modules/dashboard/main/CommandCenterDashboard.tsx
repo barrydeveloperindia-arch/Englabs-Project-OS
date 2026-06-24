@@ -6,10 +6,10 @@ import {
     Truck, 
     AlertTriangle, 
     FileText, 
-    CheckCircle, 
-    Clock, 
-    Package,
-    Shield
+    Shield,
+    ChevronDown,
+    ChevronUp,
+    Settings
 } from 'lucide-react';
 import { ProjectData } from '@shared/services/project';
 import { AuthService } from '@shared/services/auth_service';
@@ -25,22 +25,22 @@ interface DashboardProps {
 
 const Widget = ({ title, value, subtitle, icon: Icon, colorClass, status = 'active' }: any) => {
     return (
-        <div className={`p-6 rounded-2xl border ${status === 'disabled' ? 'bg-slate-50 border-slate-100 opacity-60' : 'bg-white border-slate-200'} shadow-sm flex flex-col relative overflow-hidden transition-all hover:shadow-md`}>
-            {status === 'disabled' && (
-                <div className="absolute top-2 right-2 text-[10px] font-bold bg-slate-200 text-slate-500 px-2 py-0.5 rounded-full">PENDING MODULE</div>
-            )}
+        <div className="glass-card p-6 rounded-3xl border border-slate-200/50 dark:border-white/5 flex flex-col relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
             <div className="flex justify-between items-start mb-4">
-                <div className={`p-3 rounded-xl ${status === 'disabled' ? 'bg-slate-200 text-slate-400' : colorClass}`}>
-                    <Icon className="w-6 h-6" />
+                <div className={`p-3 rounded-2xl ${colorClass} bg-opacity-10 dark:bg-opacity-20`}>
+                    <Icon className="w-5 h-5" />
                 </div>
+                {status === 'active' && (
+                    <span className="w-2 h-2 rounded-full bg-[#52cca3] status-breathing"></span>
+                )}
             </div>
-            <h3 className="text-slate-500 text-sm font-semibold mb-1">{title}</h3>
-            <div className="text-3xl font-black text-slate-800 tracking-tighter mb-1">
-                {status === 'disabled' ? '0' : value}
+            <h3 className="text-slate-400 dark:text-slate-300 text-xs font-black uppercase tracking-wider mb-1">{title}</h3>
+            <div className="text-3xl font-black text-slate-800 dark:text-white tracking-tighter mb-1 font-outfit">
+                {value}
             </div>
             {subtitle && (
-                <div className="text-xs text-slate-400 font-medium">
-                    {status === 'disabled' ? 'Module ready for activation' : subtitle}
+                <div className="text-[10px] text-slate-400 dark:text-slate-400 font-bold uppercase tracking-wider">
+                    {subtitle}
                 </div>
             )}
         </div>
@@ -50,9 +50,9 @@ const Widget = ({ title, value, subtitle, icon: Icon, colorClass, status = 'acti
 const CommandCenterDashboard: React.FC<DashboardProps> = ({ projects, gateEntries, porterTrips, inventoryItems }) => {
     const userRole = AuthService.getCurrentUser()?.role || 'Viewer';
     const [logs, setLogs] = useState<ActivityLog[]>([]);
+    const [showInactiveModules, setShowInactiveModules] = useState(false);
 
     useEffect(() => {
-        // Mock a 30 second auto-refresh for logs
         const fetchLogs = () => {
             setLogs(ActivityLogger.getLogs().slice(0, 5));
         };
@@ -70,113 +70,167 @@ const CommandCenterDashboard: React.FC<DashboardProps> = ({ projects, gateEntrie
     const todaysPorterTrips = porterTrips.filter(t => new Date(t.timestamp).toDateString() === today).length;
     const lowStockItems = inventoryItems.filter(i => i.currentStock <= i.reorderLevel).length;
 
+    // Check which widgets to show based on roles
+    const showAttendance = AuthService.hasRole(['Super Admin', 'HR']);
+    const showStock = AuthService.hasRole(['Super Admin', 'Admin', 'Store Manager']);
+    const showLogistics = AuthService.hasRole(['Super Admin', 'Admin', 'Store Manager']);
+
     return (
-        <div className="flex-1 overflow-y-auto bg-slate-50/50 p-4 md:p-8">
-            <div className="max-w-7xl mx-auto">
-                <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-slate-900 rounded-xl flex items-center justify-center text-white shadow-lg">
-                        <Shield className="w-6 h-6" />
+        <div className="flex-1 overflow-y-auto bg-slate-50/50 dark:bg-transparent p-4 md:p-10 custom-scrollbar industrial-grid">
+            <div className="max-w-[1600px] mx-auto flex flex-col gap-8">
+                
+                {/* Header */}
+                <div className="flex items-center gap-4 border-b border-slate-200/40 dark:border-white/5 pb-6">
+                    <div className="w-12 h-12 bg-[#0e4368] dark:bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-[#52cca3] shadow-lg shadow-slate-900/10">
+                        <Shield className="w-5 h-5" />
                     </div>
-                    <div>
-                        <h1 className="text-2xl font-black text-slate-900 tracking-tight">Enterprise Command Center</h1>
-                        <p className="text-sm font-medium text-slate-500">Live operational overview for {userRole}</p>
+                    <div className="flex flex-col">
+                        <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tight uppercase leading-none">Enterprise Command Center</h1>
+                        <span className="text-[10px] font-black text-slate-400 dark:text-slate-400 uppercase tracking-[0.2em] mt-2">
+                            Live operational overview — {userRole} mode
+                        </span>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                {/* Primary Bento Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <Widget 
-                        title="Total Projects" 
+                        title="Active Projects" 
                         value={projects.length} 
-                        subtitle={`${activeProjects} Active / ${completedProjects} Completed`}
+                        subtitle={`${activeProjects} In Progress / ${completedProjects} Done`}
                         icon={Briefcase} 
-                        colorClass="bg-blue-100 text-blue-600" 
+                        colorClass="bg-blue-500/10 text-blue-500" 
                     />
                     
-                    {AuthService.hasRole(['Super Admin', 'HR']) && (
+                    {showAttendance ? (
                         <Widget 
                             title="Daily Attendance" 
                             value="84%" 
                             subtitle="16 Present / 3 Absent"
                             icon={Users} 
-                            colorClass="bg-emerald-100 text-emerald-600" 
+                            colorClass="bg-emerald-500/10 text-emerald-500" 
                         />
+                    ) : (
+                        <div className="glass-card p-6 rounded-3xl border border-slate-200/50 dark:border-white/5 flex flex-col justify-center items-center text-center bg-slate-100/50 dark:bg-white/5 opacity-55">
+                            <Users className="w-8 h-8 text-slate-300 dark:text-slate-600 mb-2" />
+                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Attendance Shielded</span>
+                        </div>
                     )}
 
-                    {AuthService.hasRole(['Super Admin', 'Admin', 'Store Manager']) && (
+                    {showStock ? (
                         <Widget 
                             title="Low Stock Alerts" 
                             value={lowStockItems} 
-                            subtitle="Items below reorder level"
+                            subtitle={lowStockItems > 0 ? "Replenish required" : "All levels healthy"}
                             icon={AlertTriangle} 
-                            colorClass={lowStockItems > 0 ? "bg-rose-100 text-rose-600" : "bg-emerald-100 text-emerald-600"} 
+                            colorClass={lowStockItems > 0 ? "bg-rose-500/10 text-rose-500" : "bg-emerald-500/10 text-emerald-500"} 
                         />
+                    ) : (
+                        <div className="glass-card p-6 rounded-3xl border border-slate-200/50 dark:border-white/5 flex flex-col justify-center items-center text-center bg-slate-100/50 dark:bg-white/5 opacity-55">
+                            <AlertTriangle className="w-8 h-8 text-slate-300 dark:text-slate-600 mb-2" />
+                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Inventory Shielded</span>
+                        </div>
                     )}
 
-                    {AuthService.hasRole(['Super Admin', 'Admin', 'Store Manager']) && (
+                    {showLogistics ? (
                         <Widget 
                             title="Today's Logistics" 
                             value={todaysGateEntries + todaysPorterTrips} 
-                            subtitle={`${todaysGateEntries} Gate / ${todaysPorterTrips} Porter`}
+                            subtitle={`${todaysGateEntries} Gate Pass / ${todaysPorterTrips} Porter`}
                             icon={Truck} 
-                            colorClass="bg-amber-100 text-amber-600" 
+                            colorClass="bg-amber-500/10 text-amber-500" 
                         />
+                    ) : (
+                        <div className="glass-card p-6 rounded-3xl border border-slate-200/50 dark:border-white/5 flex flex-col justify-center items-center text-center bg-slate-100/50 dark:bg-white/5 opacity-55">
+                            <Truck className="w-8 h-8 text-slate-300 dark:text-slate-600 mb-2" />
+                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Logistics Shielded</span>
+                        </div>
                     )}
-
-                    {AuthService.hasRole(['Super Admin', 'Accountant']) && (
-                        <Widget 
-                            title="Pending Invoices" 
-                            value="0" 
-                            icon={FileText} 
-                            colorClass="bg-indigo-100 text-indigo-600" 
-                            status="disabled"
-                        />
-                    )}
-
-                    <Widget 
-                        title="Fleet Status" 
-                        value="0" 
-                        icon={Truck} 
-                        colorClass="bg-slate-100 text-slate-600" 
-                        status="disabled"
-                    />
                 </div>
 
-                {/* Activity Log Stream */}
-                <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-                    <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-                        <div className="flex items-center gap-2">
-                            <Activity className="w-5 h-5 text-slate-400" />
-                            <h2 className="text-sm font-bold text-slate-800">Live Activity Stream</h2>
+                {/* Live Activity Stream */}
+                <div className="glass-card border border-slate-200/50 dark:border-white/5 rounded-3xl overflow-hidden shadow-sm">
+                    <div className="px-6 py-4 border-b border-slate-200/40 dark:border-white/5 flex items-center justify-between bg-slate-100/30 dark:bg-white/5">
+                        <div className="flex items-center gap-2.5">
+                            <Activity className="w-4 h-4 text-[#52cca3] shrink-0" />
+                            <h2 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">Live Activity Stream</h2>
                         </div>
-                        <div className="flex items-center gap-2 text-xs font-medium text-emerald-600">
-                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                            Live Updates
+                        <div className="flex items-center gap-2 text-[9px] font-black text-[#52cca3] uppercase tracking-widest bg-[#52cca3]/10 px-3 py-1.5 rounded-xl">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#52cca3] status-breathing"></span>
+                            System Live
                         </div>
                     </div>
-                    <div className="divide-y divide-slate-100">
+                    <div className="divide-y divide-slate-200/40 dark:divide-white/5">
                         {logs.length === 0 ? (
-                            <div className="p-8 text-center text-slate-500 text-sm font-medium">
+                            <div className="p-8 text-center text-slate-400 text-xs font-bold uppercase tracking-wider">
                                 No recent activity logged in this session.
                             </div>
                         ) : (
-                            logs.map(log => (
-                                <div key={log.id} className="p-4 flex items-start gap-4 hover:bg-slate-50 transition-colors">
-                                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0">
-                                        <span className="text-[10px] font-black text-slate-600">{log.userName.substring(0, 2).toUpperCase()}</span>
+                            logs.map((log, index) => (
+                                <div 
+                                    key={log.id} 
+                                    className="p-4 flex items-start gap-4 hover:bg-slate-100/40 dark:hover:bg-white/5 transition-colors duration-200 staggered-entry"
+                                    style={{ animationDelay: `${index * 80}ms` }}
+                                >
+                                    <div className="w-8 h-8 rounded-xl bg-[#0e4368]/10 dark:bg-white/5 border border-slate-200/50 dark:border-white/5 flex items-center justify-center flex-shrink-0">
+                                        <span className="text-[10px] font-black text-[#0e4368] dark:text-[#52cca3]">{log.userName.substring(0, 2).toUpperCase()}</span>
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-medium text-slate-900">
-                                            {log.userName} <span className="text-slate-500 font-normal">{log.actionType.toLowerCase()} in</span> {log.module}
+                                        <p className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+                                            <span className="font-extrabold text-slate-950 dark:text-white uppercase tracking-wider mr-1">{log.userName}</span> 
+                                            <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wide mr-1">{log.actionType.toLowerCase()} in</span> 
+                                            <span className="font-extrabold text-[#0e4368] dark:text-[#52cca3] uppercase tracking-wider">{log.module}</span>
                                         </p>
-                                        {log.details && <p className="text-xs text-slate-500 mt-0.5 truncate">{log.details}</p>}
+                                        {log.details && (
+                                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium bg-slate-100/50 dark:bg-white/5 p-2 rounded-xl border border-slate-200/30 dark:border-transparent truncate">
+                                                {log.details}
+                                            </p>
+                                        )}
                                     </div>
-                                    <div className="text-[10px] font-bold text-slate-400 whitespace-nowrap">
+                                    <div className="text-[9px] font-black text-slate-400 whitespace-nowrap uppercase">
                                         {new Date(log.timestamp).toLocaleTimeString()}
                                     </div>
                                 </div>
                             ))
                         )}
                     </div>
+                </div>
+
+                {/* Collapsible Pending Modules Footer Tray */}
+                <div className="glass-card border border-slate-200/40 dark:border-white/5 rounded-3xl overflow-hidden mt-2">
+                    <button 
+                        onClick={() => setShowInactiveModules(prev => !prev)}
+                        className="w-full px-6 py-4 flex items-center justify-between text-left cursor-pointer hover:bg-slate-100/30 dark:hover:bg-white/5 transition-all"
+                    >
+                        <div className="flex items-center gap-2.5">
+                            <Settings className="w-4 h-4 text-slate-400" />
+                            <span className="text-xs font-black text-slate-400 uppercase tracking-widest">System Services & Gateways</span>
+                        </div>
+                        {showInactiveModules ? (
+                            <ChevronUp className="w-4 h-4 text-slate-400" />
+                        ) : (
+                            <ChevronDown className="w-4 h-4 text-slate-400" />
+                        )}
+                    </button>
+                    
+                    {showInactiveModules && (
+                        <div className="p-6 border-t border-slate-200/40 dark:border-white/5 bg-slate-100/10 dark:bg-white/5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="p-4 rounded-2xl border border-dashed border-slate-300 dark:border-white/5 flex items-center gap-3 opacity-60">
+                                <FileText className="w-5 h-5 text-slate-400 shrink-0" />
+                                <div>
+                                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Pending Invoices</h4>
+                                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Integration Awaiting Activation</span>
+                                </div>
+                            </div>
+                            <div className="p-4 rounded-2xl border border-dashed border-slate-300 dark:border-white/5 flex items-center gap-3 opacity-60">
+                                <Truck className="w-5 h-5 text-slate-400 shrink-0" />
+                                <div>
+                                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Fleet Status Map</h4>
+                                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">GPS Tracking Integration Pending</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
             </div>

@@ -26,15 +26,10 @@ test('Check in Fevikwik', async ({ page }) => {
     
     if (isMobile) {
         // Mobile layout routing
-        const moreNav = page.getByTestId('mobile-nav-btn-more');
-        if (await moreNav.isVisible()) {
-            await moreNav.click({ force: true });
-            await page.getByTestId('mobile-grid-btn-reports').click({ force: true });
-        }
+        await page.getByTestId('mobile-nav-btn-more').click({ force: true });
+        await page.getByTestId('mobile-grid-btn-reports').click({ force: true });
     } else {
-        if (await navBtn.isVisible()) {
-            await navBtn.click({ force: true });
-        }
+        await navBtn.click({ force: true });
     }
 
 
