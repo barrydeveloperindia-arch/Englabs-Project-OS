@@ -60,6 +60,7 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
     const [viewingTimeline, setViewingTimeline] = useState<PorterTrip | null>(null);
     const [viewingInvoice, setViewingInvoice] = useState<PorterTrip | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [timeFilter, setTimeFilter] = useState<'ALL' | 'DAY' | 'WEEK' | 'MONTH'>('ALL');
     const [selectedProof, setSelectedProof] = useState<string | null>(null);
     const [isHealed, setIsHealed] = useState(false);
     const [isMigrating, setIsMigrating] = useState(false);
@@ -313,11 +314,36 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
         deliveredCount: (trips || []).filter(t => t.deliveryStatus === 'DELIVERED').length
     };
 
-    const filteredTrips = trips.filter(t => 
-        t.porterName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        t.materialDescription?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        t.id?.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredTrips = (() => {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        const todayStr = `${yyyy}-${mm}-${dd}`;
+        const currentMonthStr = `${yyyy}-${mm}`;
+        const currentWeekStart = getStartOfWeek(todayStr);
+        const currentWeekEnd = getEndOfWeek(todayStr);
+
+        let list = trips || [];
+
+        // Apply time filter
+        if (timeFilter === 'DAY') {
+            list = list.filter(t => t.date === todayStr);
+        } else if (timeFilter === 'WEEK') {
+            list = list.filter(t => t.date && t.date >= currentWeekStart && t.date <= currentWeekEnd);
+        } else if (timeFilter === 'MONTH') {
+            list = list.filter(t => t.date && t.date.startsWith(currentMonthStr));
+        }
+
+        // Apply search query
+        return list.filter(t => 
+            t.porterName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            t.materialDescription?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            t.id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            t.fromLocation?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            t.toLocation?.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    })();
 
     const exportToExcel = () => {
         const ws = XLSX.utils.json_to_sheet(trips.map(t => ({
@@ -391,6 +417,69 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
             `━━━━━━━━━━━━━━━━━━━━\n` +
             `🛡️ _Verified by Porter Protection Agent_`
         );
+        const url = `https://wa.me/?text=${text}`;
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const shareFilteredSummary = () => {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        const todayStr = `${yyyy}-${mm}-${dd}`;
+        const currentMonthStr = `${yyyy}-${mm}`;
+        const currentWeekStart = getStartOfWeek(todayStr);
+        const currentWeekEnd = getEndOfWeek(todayStr);
+
+        let periodLabel = 'ALL TIME';
+        if (timeFilter === 'DAY') {
+            periodLabel = `TODAY (${todayStr})`;
+        } else if (timeFilter === 'WEEK') {
+            periodLabel = `THIS WEEK (${formatDateRange(currentWeekStart, currentWeekEnd)})`;
+        } else if (timeFilter === 'MONTH') {
+            periodLabel = `THIS MONTH (${getMonthLabel(todayStr)})`;
+        }
+
+        const count = filteredTrips.length;
+        const distance = filteredTrips.reduce((acc, curr) => acc + (curr.distanceKm || 0), 0);
+        const gross = filteredTrips.reduce((acc, curr) => acc + (curr.grossAmount || 0), 0);
+        const advance = filteredTrips.reduce((acc, curr) => acc + (curr.advanceAmount || 0), 0);
+        const remaining = filteredTrips.reduce((acc, curr) => acc + (curr.remainingBalance || 0), 0);
+
+        const porterName = filteredTrips[0]?.porterName || 'Gurpreet Singh';
+        const isOverpaid = remaining < 0;
+        const balanceText = isOverpaid 
+            ? `*Net Balance:* -₹${Math.abs(remaining).toLocaleString()} (Overpaid)`
+            : `*Net Balance:* ₹${remaining.toLocaleString()}`;
+
+        const tripDetailsText = filteredTrips.slice(0, 10).map(t => 
+            `• ${t.id} (${t.date}): ${t.fromLocation}➔${t.toLocation} (${t.distanceKm}KM) - Bal: ₹${t.remainingBalance}`
+        ).join('\n');
+
+        const limitNotice = filteredTrips.length > 10 ? `\n_And ${filteredTrips.length - 10} more missions..._` : '';
+
+        const text = encodeURIComponent(
+            `📊 *ENGLABS PORTER REPORT - ${periodLabel}*\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `👤 *Porter:* ${porterName}\n` +
+            `🚚 *Missions Count:* ${count}\n` +
+            `🛣️ *Total Distance:* ${distance} KM\n\n` +
+            `💰 *FINANCIAL SUMMARY*\n` +
+            `• Gross Total: ₹${gross.toLocaleString()}\n` +
+            `• Advances: ₹${advance.toLocaleString()}\n` +
+            `• ${balanceText}\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `🚚 *MISSIONS LIST:*\n${tripDetailsText || 'No missions in this period.'}${limitNotice}\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `🌐 _Command OS Forensic Dispatch_`
+        );
+
         const url = `https://wa.me/?text=${text}`;
         const link = document.createElement('a');
         link.href = url;
@@ -794,26 +883,61 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                 ) : (
                     <div className="max-w-[1400px] mx-auto space-y-8">
                         {/* CONTROLS */}
-                        <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0 print:hidden mb-4">
-                            <div className="relative w-full md:w-96">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                <input 
-                                    type="text"
-                                    placeholder="Search Porter, ID or Material..."
-                                    className="w-full bg-slate-50 border border-slate-100 rounded-xl py-3 pl-12 pr-4 text-sm font-bold outline-none focus:border-emerald-500 transition-all"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                />
+                        <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-6 print:hidden mb-4">
+                            <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 w-full xl:w-auto">
+                                <div className="relative w-full md:w-80">
+                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                    <input 
+                                        type="text"
+                                        placeholder="Search Porter, ID or Material..."
+                                        className="w-full bg-slate-50 border border-slate-100 rounded-xl py-3 pl-12 pr-4 text-sm font-bold outline-none focus:border-emerald-500 transition-all"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
+                                </div>
+                                
+                                {/* TIME FILTER BUTTONS */}
+                                <div className="flex bg-slate-100 p-1.5 rounded-2xl border border-slate-200 gap-1 shrink-0">
+                                    <button 
+                                        onClick={() => setTimeFilter('ALL')}
+                                        className={`px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all cursor-pointer ${timeFilter === 'ALL' ? 'bg-[#0e4368] text-white shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                                    >
+                                        All Time
+                                    </button>
+                                    <button 
+                                        onClick={() => setTimeFilter('DAY')}
+                                        className={`px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all cursor-pointer ${timeFilter === 'DAY' ? 'bg-[#0e4368] text-white shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                                    >
+                                        Day-wise
+                                    </button>
+                                    <button 
+                                        onClick={() => setTimeFilter('WEEK')}
+                                        className={`px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all cursor-pointer ${timeFilter === 'WEEK' ? 'bg-[#0e4368] text-white shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                                    >
+                                        Weekly
+                                    </button>
+                                    <button 
+                                        onClick={() => setTimeFilter('MONTH')}
+                                        className={`px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all cursor-pointer ${timeFilter === 'MONTH' ? 'bg-[#0e4368] text-white shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                                    >
+                                        Monthly
+                                    </button>
+                                </div>
                             </div>
-                            <div className="flex flex-wrap gap-2 md:gap-4 w-full md:w-auto items-center">
+                            
+                            <div className="flex flex-wrap gap-2 md:gap-4 w-full xl:w-auto items-center xl:justify-end">
                                 <button
                                     onClick={() => setShowAdvancedData(!showAdvancedData)}
                                     className="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 transition-all text-[10px] font-black uppercase tracking-widest text-slate-500 mr-4"
                                 >
                                     {showAdvancedData ? '- Hide Advanced Data' : '+ Show Advanced Data'}
                                 </button>
-                                <button onClick={shareMonthlySummary} className="flex items-center gap-2 px-6 py-3 bg-emerald-50 border border-emerald-100 rounded-xl hover:bg-emerald-100 transition-all text-[10px] font-black uppercase tracking-widest text-emerald-600 shadow-sm">
-                                    <MessageSquare className="w-4 h-4" /> SHARE
+                                <button 
+                                    onClick={shareFilteredSummary} 
+                                    className="flex items-center gap-2 px-6 py-3 bg-emerald-50 border border-emerald-100 rounded-xl hover:bg-emerald-100 transition-all text-[10px] font-black uppercase tracking-widest text-emerald-600 shadow-sm cursor-pointer"
+                                >
+                                    <MessageSquare className="w-4 h-4" /> 
+                                    {timeFilter === 'ALL' ? 'SHARE ALL' : timeFilter === 'DAY' ? 'SHARE TODAY' : timeFilter === 'WEEK' ? 'SHARE WEEKLY' : 'SHARE MONTHLY'}
                                 </button>
                                 <button onClick={exportToExcel} className="flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-all text-[10px] font-black uppercase tracking-widest text-slate-600 shadow-sm">
                                     <Download className="w-4 h-4" /> EXCEL

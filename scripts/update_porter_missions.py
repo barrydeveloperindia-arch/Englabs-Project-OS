@@ -2,6 +2,7 @@ import json
 import pandas as pd
 import math
 import os
+import re
 
 excel_path = r'G:\HR Team Managements\Englabs Projects APK\Porter Team\Log Book of Bike  - CH0-1AB-5781.xlsx'
 json_path = r'C:\Users\SAM\Documents\Antigravity\Englabs Projects\data\porter_missions_forensic.json'
@@ -18,27 +19,11 @@ with open(json_path, 'r', encoding='utf-8') as f:
 # Load June sheet
 df = pd.read_excel(excel_path, sheet_name='June', header=None)
 
-# We know the rows are:
-# SR 6: Index 14 in df (row 15 in excel)
-# SR 7: Index 15 in df (row 16 in excel)
-# SR 8: Index 16 in df (row 17 in excel)
-# SR 9: Index 17 in df (row 18 in excel)
-# SR 10: Index 18 in df (row 19 in excel)
+# We know SR 1 starts at index 9 in df (row 10 in excel)
+# We will loop through df starting from index 9
+# Keep going as long as Col 4 (SR. NO.) is a valid integer
 
-# Let's map columns from Row 8 (Index 8 in df)
-# Col 4: SR. NO.
-# Col 5: Date
-# Col 6: Travel summery
-# Col 7: Travel reason
-# Col 8: Under Work
-# Col 9: KM
-# Col 10: RATE
-# Col 11: AMOUNT
-# Col 12: Advance
-# Col 13: Balance
-
-def parse_row(row_idx, trip_id):
-    row = df.iloc[row_idx]
+def parse_row(row, trip_id):
     date_val = row[5]
     if isinstance(date_val, pd.Timestamp) or hasattr(date_val, 'strftime'):
         date_str = date_val.strftime('%Y-%m-%d')
@@ -51,7 +36,17 @@ def parse_row(row_idx, trip_id):
     km = float(row[9]) if pd.notna(row[9]) else 0.0
     rate = float(row[10]) if pd.notna(row[10]) else 10.0
     amount = float(row[11]) if pd.notna(row[11]) else (km * rate)
-    advance = float(row[12]) if pd.notna(row[12]) and str(row[12]).strip() != '' else 0.0
+    
+    # Check if row[12] is valid number
+    try:
+        val_12 = str(row[12]).strip()
+        if pd.notna(row[12]) and val_12 != '' and val_12 != 'nan':
+            advance = float(row[12])
+        else:
+            advance = 0.0
+    except:
+        advance = 0.0
+        
     balance = amount - advance
     
     # Locations
@@ -60,12 +55,9 @@ def parse_row(row_idx, trip_id):
     
     summary_clean = summary.replace("up & down", "").replace("up & Down", "").strip()
     if "from" in summary_clean.lower() and "to" in summary_clean.lower():
-        # Case insensitive split on "to" with flexible spacing
-        import re
         parts = re.split(r'\s+to\s+|\sto\s|\sto|\sto\s', summary_clean, flags=re.IGNORECASE)
         if len(parts) >= 2:
             from_part = parts[0].strip()
-            # Clean from prefix
             if from_part.lower().startswith("from "):
                 from_loc = from_part[5:].strip()
             elif from_part.lower().startswith("from"):
@@ -73,17 +65,11 @@ def parse_row(row_idx, trip_id):
             else:
                 from_loc = from_part
             
-            # Reconstruct destination list
             dest_parts = [d.strip() for d in parts[1:] if d.strip()]
             to_loc = " -> ".join(dest_parts)
             
-    # For display formatting
-    if from_loc == "Englabs":
-        from_loc = "Englabs"
-    
-    # Format time based on SR NO. or hardcoded standard
     time_str = "10:00 AM"
-    timestamp = f"{date_str}T10:00:00Z"
+    timestamp = f"{date_str}T10:00:00Z" if date_str else None
     
     return {
         "id": trip_id,
@@ -104,82 +90,67 @@ def parse_row(row_idx, trip_id):
         "advanceAmount": advance,
         "remainingBalance": balance,
         "totalAmount": amount,
-        "paymentStatus": "COMPLETED",
+        "paymentStatus": "COMPLETED" if balance <= 0 else "PARTIAL",
         "deliveryStatus": "DELIVERED",
         "timeline": [
             {
                 "status": "ACCEPTED",
-                "timestamp": f"{date_str}T09:30:00Z",
+                "timestamp": f"{date_str}T09:30:00Z" if date_str else None,
                 "remarks": "Mission Initialized"
             },
             {
                 "status": "DELIVERED",
-                "timestamp": f"{date_str}T12:00:00Z",
+                "timestamp": f"{date_str}T12:00:00Z" if date_str else None,
                 "remarks": "Completed"
             }
         ]
     }
 
-# Update PTR-2026-0020
-row_20 = parse_row(14, "PTR-2026-0020")
-for trip in trips:
-    if trip['id'] == "PTR-2026-0020":
-        trip['advanceAmount'] = row_20['advanceAmount']
-        trip['remainingBalance'] = row_20['remainingBalance']
-        trip['grossAmount'] = row_20['grossAmount']
-        trip['totalAmount'] = row_20['totalAmount']
-        trip['distanceKm'] = row_20['distanceKm']
-        trip['ratePerKm'] = row_20['ratePerKm']
-        trip['materialDescription'] = row_20['materialDescription']
-        trip['customerName'] = row_20['customerName']
-        trip['fromLocation'] = row_20['fromLocation']
-        trip['toLocation'] = row_20['toLocation']
-        trip['deliveryAddress'] = row_20['deliveryAddress']
+# Map existing IDs in trips
+trip_map = {t['id']: t for t in trips}
 
-# Update PTR-2026-0021
-row_21 = parse_row(15, "PTR-2026-0021")
-for trip in trips:
-    if trip['id'] == "PTR-2026-0021":
-        trip['advanceAmount'] = row_21['advanceAmount']
-        trip['remainingBalance'] = row_21['remainingBalance']
-        trip['grossAmount'] = row_21['grossAmount']
-        trip['totalAmount'] = row_21['totalAmount']
-        trip['distanceKm'] = row_21['distanceKm']
-        trip['ratePerKm'] = row_21['ratePerKm']
-        trip['materialDescription'] = row_21['materialDescription']
-        trip['customerName'] = row_21['customerName']
-        trip['fromLocation'] = row_21['fromLocation']
-        trip['toLocation'] = row_21['toLocation']
-        trip['deliveryAddress'] = row_21['deliveryAddress']
-
-# Append PTR-2026-0022
-trip_ids = [t['id'] for t in trips]
-if "PTR-2026-0022" not in trip_ids:
-    trips.append(parse_row(16, "PTR-2026-0022"))
-else:
-    # Update it if already exists
-    row_22 = parse_row(16, "PTR-2026-0022")
-    for trip in trips:
-        if trip['id'] == "PTR-2026-0022":
-            trip.update(row_22)
-
-# Append PTR-2026-0023
-if "PTR-2026-0023" not in trip_ids:
-    trips.append(parse_row(17, "PTR-2026-0023"))
-else:
-    row_23 = parse_row(17, "PTR-2026-0023")
-    for trip in trips:
-        if trip['id'] == "PTR-2026-0023":
-            trip.update(row_23)
-
-# Append PTR-2026-0024
-if "PTR-2026-0024" not in trip_ids:
-    trips.append(parse_row(18, "PTR-2026-0024"))
-else:
-    row_24 = parse_row(18, "PTR-2026-0024")
-    for trip in trips:
-        if trip['id'] == "PTR-2026-0024":
-            trip.update(row_24)
+for idx in range(9, len(df)):
+    row = df.iloc[idx]
+    sr_no_val = row[4]
+    if pd.isna(sr_no_val):
+        continue
+    
+    try:
+        sr_no = int(float(sr_no_val))
+    except ValueError:
+        continue
+        
+    # Check if date is empty or travel summary is empty
+    date_val = row[5]
+    summary_val = row[6]
+    if pd.isna(date_val) or pd.isna(summary_val) or str(date_val).strip() == '' or str(summary_val).strip() == '':
+        continue
+        
+    trip_id = f"PTR-2026-{(14 + sr_no):04d}"
+    parsed_trip = parse_row(row, trip_id)
+    
+    if trip_id in trip_map:
+        orig = trip_map[trip_id]
+        orig.update({
+            "timestamp": parsed_trip["timestamp"] or orig.get("timestamp"),
+            "date": parsed_trip["date"] or orig.get("date"),
+            "customerName": parsed_trip["customerName"] or orig.get("customerName"),
+            "fromLocation": parsed_trip["fromLocation"] or orig.get("fromLocation"),
+            "toLocation": parsed_trip["toLocation"] or orig.get("toLocation"),
+            "deliveryAddress": parsed_trip["deliveryAddress"] or orig.get("deliveryAddress"),
+            "materialDescription": parsed_trip["materialDescription"] or orig.get("materialDescription"),
+            "distanceKm": parsed_trip["distanceKm"],
+            "ratePerKm": parsed_trip["ratePerKm"],
+            "grossAmount": parsed_trip["grossAmount"],
+            "advanceAmount": parsed_trip["advanceAmount"],
+            "remainingBalance": parsed_trip["remainingBalance"],
+            "totalAmount": parsed_trip["totalAmount"]
+        })
+        print(f"Updated {trip_id}: {parsed_trip['date']}, {parsed_trip['fromLocation']} -> {parsed_trip['toLocation']}")
+    else:
+        trips.append(parsed_trip)
+        trip_map[trip_id] = parsed_trip
+        print(f"Added {trip_id}: {parsed_trip['date']}, {parsed_trip['fromLocation']} -> {parsed_trip['toLocation']}")
 
 # Write back
 with open(json_path, 'w', encoding='utf-8') as f:
