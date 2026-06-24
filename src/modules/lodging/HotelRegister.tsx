@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { 
     Building, 
     Plus, 
@@ -20,10 +21,15 @@ import {
     QrCode,
     Phone,
     MapPin,
-    Paperclip
+    Paperclip,
+    MessageSquare,
+    Printer
 } from 'lucide-react';
 import { ProjectData } from '@shared/services/project';
 import NewProjectModal from '@common/NewProjectModal';
+import { COMPANY_DETAILS } from '@shared/services/billing_system';
+import signature from '@/assets/englabs_signature.png';
+import logo from '@/assets/englabs_logo.png';
 
 interface HotelStay {
     id: string;
@@ -44,6 +50,324 @@ interface HotelStay {
     timestamp: string;
     invoiceFile?: string;
 }
+
+interface HotelInvoiceSlipProps {
+    stay: HotelStay;
+    onClose: () => void;
+}
+
+const HotelInvoiceSlip: React.FC<HotelInvoiceSlipProps> = ({ stay, onClose }) => {
+    useEffect(() => {
+        document.body.classList.add('invoice-view-active');
+        return () => {
+            document.body.classList.remove('invoice-view-active');
+        };
+    }, []);
+
+    const handlePrint = () => {
+        window.print();
+    };
+
+    const inDate = new Date(stay.checkInDate);
+    const outDate = new Date(stay.checkOutDate);
+    const diffTime = Math.abs(outDate.getTime() - inDate.getTime());
+    const nights = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
+    const ratePerNight = Math.round(stay.cost / nights);
+
+    const invoiceContent = (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300 print:bg-white print:p-0 print:block print:static">
+            <div className="bg-white w-full max-w-[900px] h-[90vh] rounded-[3rem] shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-300 print:h-auto print:w-full print:max-w-none print:shadow-none print:rounded-none print:block print:static">
+                
+                {/* ACTIONS HEADER (HIDDEN ON PRINT) */}
+                <div className="bg-[#0e4368] p-6 text-white flex justify-between items-center print:hidden shrink-0">
+                    <div className="flex items-center gap-3">
+                        <FileText className="w-5 h-5 text-emerald-500" />
+                        <span className="text-xs font-black uppercase tracking-widest text-emerald-500">Official Lodging Portal v5.0</span>
+                    </div>
+                    <div className="flex gap-2">
+                        <button onClick={handlePrint} className="p-3 bg-emerald-500 text-slate-900 rounded-xl transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest hover:bg-emerald-400">
+                            <Printer className="w-4 h-4" /> GENERATE & PRINT OFFICIAL PDF
+                        </button>
+                        <button onClick={onClose} className="p-3 hover:bg-white/10 rounded-xl transition-all">
+                            <X className="w-5 h-5" />
+                        </button>
+                    </div>
+                </div>
+
+                {/* THE DOCUMENT CONTENT */}
+                <div id="official-invoice-document" className="flex-1 overflow-y-auto p-12 md:p-20 custom-scrollbar bg-white relative print:overflow-visible print:p-[15mm]">
+                    
+                    {/* EXECUTIVE HEADER */}
+                    <div className="flex justify-between items-start mb-12 border-b-4 border-slate-900 pb-12">
+                        <div className="flex flex-col gap-6">
+                            <img src={logo} alt="Englabs" className="h-16 object-contain self-start" />
+                            <div>
+                                <h1 className="text-3xl font-black tracking-tighter text-slate-900">{COMPANY_DETAILS.name}</h1>
+                                <p className="text-[10px] font-bold text-slate-500 mt-2 max-w-sm leading-relaxed uppercase tracking-wider">
+                                    {COMPANY_DETAILS.address}
+                                </p>
+                                <div className="flex gap-6 mt-4">
+                                    <div className="flex flex-col">
+                                        <span className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em]">Contact</span>
+                                        <span className="text-[11px] font-black text-slate-900">{COMPANY_DETAILS.mobile}</span>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em]">GSTIN</span>
+                                        <span className="text-[11px] font-black text-slate-900">{COMPANY_DETAILS.gstin}</span>
+                                    </div>
+                                    <a href={COMPANY_DETAILS.mapLink} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-blue-500 hover:underline print:hidden">
+                                        <MapPin className="w-3 h-3" />
+                                        <span className="text-[9px] font-black uppercase tracking-widest">Map Location</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="text-right flex flex-col justify-between h-full">
+                            <h2 className="text-5xl font-black text-slate-100 uppercase tracking-tighter leading-none select-none mb-6 flex flex-col gap-2">
+                                <span>LODGING SLIP</span>
+                                <span className="text-xl text-emerald-500 tracking-widest">(PAID VIA UPI)</span>
+                            </h2>
+                            <div className="space-y-4">
+                                <div>
+                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">LODGING ID</p>
+                                    <p className="text-2xl font-black text-slate-900 tracking-tighter">INV-{stay.id.split('-').pop()}</p>
+                                </div>
+                                <div className="grid grid-cols-2 gap-8">
+                                    <div>
+                                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em]">Date Issued</p>
+                                        <p className="text-[11px] font-black text-slate-900">{new Date(stay.timestamp || Date.now()).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em]">Ref Register</p>
+                                        <p className="text-[11px] font-black text-slate-900">{stay.id}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* GUEST & STAY SUMMARY */}
+                    <div className="grid grid-cols-12 gap-8 mb-12">
+                        <div className="col-span-7 bg-slate-50 p-10 rounded-[2.5rem] border border-slate-100">
+                            <h3 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mb-4">Guest Details</h3>
+                            <p className="text-2xl font-black text-slate-900 mb-1">{stay.guestName}</p>
+                            <span className="inline-flex text-[9px] font-black px-2 py-0.5 mb-4 rounded uppercase tracking-wider bg-indigo-500/10 text-indigo-600 border border-indigo-500/20">
+                                {stay.guestType} Guest
+                            </span>
+                            
+                            <div className="grid grid-cols-2 gap-6 border-t border-slate-200 pt-6">
+                                <div>
+                                    <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Project ID</p>
+                                    <p className="text-xs font-black text-slate-900">{stay.associatedProjectId === 'GENERAL' ? 'Internal Admin' : stay.associatedProjectId}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Purpose of Stay</p>
+                                    <p className="text-xs font-black text-slate-900">{stay.purpose}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-span-5 bg-slate-900 p-10 rounded-[2.5rem] text-white flex flex-col justify-center relative overflow-hidden shadow-2xl">
+                            <p className="text-[9px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-2">Grand Total Paid</p>
+                            <p className="text-5xl font-black tracking-tighter">
+                                ₹{stay.cost.toLocaleString('en-IN')}
+                            </p>
+                            <p className="text-[9px] font-bold text-slate-400 mt-4 uppercase tracking-widest">
+                                Settled Instantly via UPI payment bridge
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* HOTEL DETAILS & ACCOMMODATION TABLE */}
+                    <div className="mb-12">
+                        <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-4">Accommodation Details</h3>
+                        <table className="w-full">
+                            <thead>
+                                <tr className="border-b-2 border-slate-900">
+                                    <th className="py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest w-16">Sr.</th>
+                                    <th className="py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Accommodation & Location</th>
+                                    <th className="py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-widest">Room / Floor</th>
+                                    <th className="py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-widest">Check-In</th>
+                                    <th className="py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-widest">Check-Out</th>
+                                    <th className="py-4 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Nights</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                <tr className="print:break-inside-avoid">
+                                    <td className="py-5 text-sm font-bold text-slate-400">01</td>
+                                    <td className="py-5 text-sm font-black text-slate-900">
+                                        <div>{stay.hotelName}</div>
+                                        {stay.hotelLocation && (
+                                            <div className="text-[10px] text-slate-400 font-bold mt-0.5">{stay.hotelLocation}</div>
+                                        )}
+                                        {stay.hotelContact && (
+                                            <div className="text-[9px] text-slate-400 font-semibold mt-0.5">Contact: {stay.hotelContact}</div>
+                                        )}
+                                    </td>
+                                    <td className="py-5 text-center text-xs font-black text-slate-900">
+                                        Room {stay.roomNumber || 'N/A'} {stay.floorNumber ? `(Floor: ${stay.floorNumber})` : ''}
+                                    </td>
+                                    <td className="py-5 text-center text-xs font-bold text-slate-700">{stay.checkInDate}</td>
+                                    <td className="py-5 text-center text-xs font-bold text-slate-700">{stay.checkOutDate}</td>
+                                    <td className="py-5 text-right text-sm font-black text-slate-900">{nights} {nights > 1 ? 'Nights' : 'Night'}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot className="border-t-2 border-slate-900">
+                                <tr>
+                                    <td colSpan={5} className="py-4 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">Daily Lodging Rate (Est.)</td>
+                                    <td className="py-4 text-right text-sm font-black text-slate-900">₹{ratePerNight.toLocaleString('en-IN')} / Night</td>
+                                </tr>
+                                <tr className="bg-slate-50 border-t border-slate-100">
+                                    <td colSpan={5} className="py-4 text-right text-[10px] font-black text-slate-900 uppercase tracking-widest">Grand Total Amount</td>
+                                    <td className="py-4 text-right text-lg font-black text-emerald-600">
+                                        ₹{stay.cost.toLocaleString('en-IN')}
+                                    </td>
+                                </tr>
+                                <tr className="border-t border-slate-100">
+                                    <td colSpan={5} className="py-3 text-right text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                                        Amount Paid
+                                    </td>
+                                    <td className="py-3 text-right text-sm font-black text-slate-900">
+                                        ₹{stay.cost.toLocaleString('en-IN')}
+                                    </td>
+                                </tr>
+                                <tr className="border-t-2 border-slate-900">
+                                    <td colSpan={5} className="py-4 text-right text-[10px] font-black text-slate-900 uppercase tracking-widest">
+                                        Balance Due / Remaining
+                                    </td>
+                                    <td className="py-4 text-right text-xl font-black text-emerald-600">
+                                        ₹0
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    {/* FOOTER & UPI QR AUTHENTICATION */}
+                    <div className="grid grid-cols-2 gap-12 mt-16 print:break-inside-avoid">
+                        <div>
+                            <div className="flex items-center gap-6 mb-8">
+                                <div className="p-3 bg-white border border-slate-100 rounded-2xl shadow-sm print:bg-white">
+                                    <img 
+                                        src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=Q15213511@ybl%26pn=Sky5%20Hotel%26am=${stay.cost}%26cu=INR`} 
+                                        alt="Sky5 Payment QR"
+                                        className="w-20 h-20 rounded-xl"
+                                    />
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-1">Sky5 Instant Settlement</p>
+                                    <p className="text-[8px] font-bold text-slate-400 leading-relaxed max-w-[150px]">
+                                        Scan this UPI QR to verify or audit stay payments directly.
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="text-[8px] font-bold text-slate-400 space-y-1 uppercase tracking-widest">
+                                <p>• Computer generated lodging receipt, no physical signature required.</p>
+                                <p>• Lodging services rendered in complete accordance with company policy.</p>
+                                <p>• Subject to Panchkula Jurisdiction.</p>
+                            </div>
+                        </div>
+                        <div className="flex flex-col items-center justify-end text-center">
+                            <div className="relative mb-4">
+                                <img src={signature} alt="Sign" className="h-24 object-contain opacity-90 mix-blend-multiply" />
+                                <div className="absolute inset-0 border-b-2 border-slate-900 translate-y-4"></div>
+                            </div>
+                            <p className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em]">Authorized Signatory</p>
+                            <p className="text-xs font-black text-slate-900 mt-1 uppercase">Gaurav Panchal</p>
+                            <p className="text-[8px] font-bold text-slate-400 mt-1 uppercase tracking-widest">Englabs India Private Limited</p>
+                        </div>
+                    </div>
+                </div>
+
+                <style dangerouslySetInnerHTML={{ __html: `
+                    @media print {
+                        @page {
+                            size: A4;
+                            margin: 10mm;
+                        }
+                        
+                        /* CRITICAL: Total Isolation Strategy */
+                        #root {
+                            display: none !important;
+                        }
+                        
+                        body {
+                            background: white !important;
+                            margin: 0 !important;
+                            padding: 0 !important;
+                            width: 210mm !important;
+                        }
+
+                        #official-invoice-document {
+                            display: block !important;
+                            width: 190mm !important;
+                            margin: 0 auto !important;
+                            padding: 5mm 0 !important;
+                        }
+
+                        .custom-scrollbar {
+                            overflow: visible !important;
+                            height: auto !important;
+                        }
+
+                        .mb-12 { margin-bottom: 3mm !important; }
+                        .mb-8 { margin-bottom: 2mm !important; }
+                        .p-10, .p-12, .p-20 { padding: 5mm !important; }
+
+                        .grid-cols-12 { 
+                            display: flex !important; 
+                            gap: 5mm !important;
+                            height: auto !important;
+                            align-items: flex-start !important;
+                        }
+                        .col-span-7 { width: 60% !important; }
+                        .col-span-5 { width: 40% !important; }
+                        
+                        .h-full, .h-[90vh] { height: auto !important; }
+                        .justify-center, .justify-between { justify-content: flex-start !important; }
+
+                        * {
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
+                        }
+
+                        .grid, tr, table {
+                            break-inside: avoid !important;
+                        }
+                        
+                        table {
+                            break-before: auto !important;
+                            margin-top: 0 !important;
+                        }
+                        
+                        h1, h2, h3 { margin-top: 0 !important; margin-bottom: 2mm !important; }
+                        
+                        .bg-slate-900 {
+                            background-color: #0e4368 !important;
+                            color: white !important;
+                        }
+                        .bg-slate-50 {
+                            background-color: #f8fafc !important;
+                        }
+                    }
+                    
+                    .custom-scrollbar::-webkit-scrollbar {
+                        width: 6px;
+                    }
+                    .custom-scrollbar::-webkit-scrollbar-track {
+                        background: #f1f1f1;
+                    }
+                    .custom-scrollbar::-webkit-scrollbar-thumb {
+                        background: #cbd5e1;
+                        border-radius: 10px;
+                    }
+                `}} />
+            </div>
+        </div>
+    );
+
+    return createPortal(invoiceContent, document.body);
+};
 
 interface HotelRegisterProps {
     projects: ProjectData[];
@@ -73,6 +397,7 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
     const [notes, setNotes] = useState('');
     const [invoiceFileName, setInvoiceFileName] = useState('');
     const [isQrModalOpen, setIsQrModalOpen] = useState(false);
+    const [selectedInvoiceStay, setSelectedInvoiceStay] = useState<HotelStay | null>(null);
     
     // Filters
     const [searchQuery, setSearchQuery] = useState('');
@@ -158,6 +483,24 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
     const saveStays = (updatedStays: HotelStay[]) => {
         setStays(updatedStays);
         localStorage.setItem('englabs_hotel_stays', JSON.stringify(updatedStays));
+    };
+
+    const handleWhatsAppShare = (stay: HotelStay) => {
+        const message = `*ENGLABS PROJECTS - HOTEL STAY COORDINATES*
+-------------------------------------------------
+*Guest*: ${stay.guestName} (${stay.guestType})
+*Associated Project*: ${stay.associatedProjectId}
+*Hotel*: ${stay.hotelName}
+*Location*: ${stay.hotelLocation || 'N/A'}
+*Contact*: ${stay.hotelContact || 'N/A'}
+*Room/Floor*: Room ${stay.roomNumber || 'N/A'}, Floor ${stay.floorNumber || 'N/A'}
+*Check-in*: ${stay.checkInDate}
+*Check-out*: ${stay.checkOutDate}
+*Total Cost*: ₹${stay.cost.toLocaleString('en-IN')}
+*Status*: ${stay.paymentStatus}
+-------------------------------------------------`;
+        const encodedText = encodeURIComponent(message);
+        window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
     };
 
     // Auto-fill purpose based on guest type
@@ -888,14 +1231,32 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
 
                                                 {/* Actions */}
                                                 <td className="py-4 px-6 text-center">
-                                                    <button 
-                                                        type="button" 
-                                                        onClick={() => handleDelete(stay.id)}
-                                                        className="text-slate-400 hover:text-rose-500 p-1.5 hover:bg-slate-100 dark:hover:bg-white/5 rounded-lg transition-all"
-                                                        title="Delete Stay record"
-                                                    >
-                                                        <Trash2 className="w-4 h-4" />
-                                                    </button>
+                                                    <div className="flex items-center justify-center gap-1">
+                                                        <button 
+                                                            type="button" 
+                                                            onClick={() => setSelectedInvoiceStay(stay)}
+                                                            className="text-slate-400 hover:text-indigo-500 p-1.5 hover:bg-slate-100 dark:hover:bg-white/5 rounded-lg transition-all"
+                                                            title="Generate Invoice Slip"
+                                                        >
+                                                            <FileText className="w-4 h-4" />
+                                                        </button>
+                                                        <button 
+                                                            type="button" 
+                                                            onClick={() => handleWhatsAppShare(stay)}
+                                                            className="text-slate-400 hover:text-emerald-500 p-1.5 hover:bg-slate-100 dark:hover:bg-white/5 rounded-lg transition-all"
+                                                            title="Share on WhatsApp"
+                                                        >
+                                                            <MessageSquare className="w-4 h-4" />
+                                                        </button>
+                                                        <button 
+                                                            type="button" 
+                                                            onClick={() => handleDelete(stay.id)}
+                                                            className="text-slate-400 hover:text-rose-500 p-1.5 hover:bg-slate-100 dark:hover:bg-white/5 rounded-lg transition-all"
+                                                            title="Delete Stay record"
+                                                        >
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         );
@@ -969,6 +1330,13 @@ export const HotelRegister: React.FC<HotelRegisterProps> = ({ projects, staffLis
                         </button>
                     </div>
                 </div>
+            )}
+
+            {selectedInvoiceStay && (
+                <HotelInvoiceSlip 
+                    stay={selectedInvoiceStay} 
+                    onClose={() => setSelectedInvoiceStay(null)} 
+                />
             )}
         </div>
     );
