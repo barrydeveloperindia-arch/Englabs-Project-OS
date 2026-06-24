@@ -349,13 +349,25 @@ const App: React.FC = () => {
                 if (fbProjects && fbProjects.length > 0) {
                     console.log(`Successfully fetched ${fbProjects.length} projects from Firestore.`);
                     const fbMap = new Map(fbProjects.map((p: any) => [p.projectId, p]));
-                    finalProjects = loadedProjects.map(staticProj => {
+                    
+                    const mergedProjects = loadedProjects.map(staticProj => {
                         const fbProj = fbMap.get(staticProj.projectId);
                         if (fbProj) {
                             return { ...staticProj, ...fbProj } as ProjectData;
                         }
                         return staticProj;
                     });
+
+                    // Append any new projects from Firestore not defined in local static JSON files
+                    const staticIds = new Set(loadedProjects.map(p => p.projectId));
+                    fbProjects.forEach((fbProj: any) => {
+                        if (fbProj && fbProj.projectId && !staticIds.has(fbProj.projectId)) {
+                            console.log(`Loading new Firestore-only project: ${fbProj.projectId}`);
+                            mergedProjects.push(fbProj as ProjectData);
+                        }
+                    });
+
+                    finalProjects = mergedProjects;
                     setDbSyncError(null);
                 }
             } catch (fbErr) {
@@ -368,6 +380,8 @@ const App: React.FC = () => {
                 const localSaved = localStorage.getItem('englabs_project_overrides');
                 if (localSaved) {
                     const localOverrides = JSON.parse(localSaved);
+                    
+                    // Apply override overlays to existing list
                     finalProjects = finalProjects.map(proj => {
                         const localOverride = localOverrides[proj.projectId];
                         if (localOverride) {
@@ -394,6 +408,15 @@ const App: React.FC = () => {
                             } as ProjectData;
                         }
                         return proj;
+                    });
+
+                    // Append any manually created override projects that do not exist in the list
+                    const finalIds = new Set(finalProjects.map(p => p.projectId));
+                    Object.values(localOverrides).forEach((localProj: any) => {
+                        if (localProj && localProj.projectId && !finalIds.has(localProj.projectId)) {
+                            console.log(`Appending offline-created project override: ${localProj.projectId}`);
+                            finalProjects.push(localProj as ProjectData);
+                        }
                     });
                 }
             } catch (e) {
