@@ -197,6 +197,22 @@ export const MobileLayout: React.FC<MobileLayoutProps> = ({
                                     active={currentView === 'INVENTORY'}
                                 />
                             )}
+                            {['Super Admin', 'Admin', 'ADMIN', 'Project Manager', 'Engineer', 'Accountant'].includes(userRole || '') && (
+                                <MobileGridButton 
+                                    onClick={() => { setCurrentView('PO_RELEASE'); setIsMobileMenuOpen(false); }} 
+                                    icon={<Icons.FileText className="w-6 h-6" />} 
+                                    label="PO Release" 
+                                    active={currentView === 'PO_RELEASE'}
+                                />
+                            )}
+                            {['Super Admin', 'Admin', 'ADMIN', 'Project Manager', 'Engineer', 'Accountant'].includes(userRole || '') && (
+                                <MobileGridButton 
+                                    onClick={() => { setCurrentView('INVOICE_RELEASE'); setIsMobileMenuOpen(false); }} 
+                                    icon={<Icons.Receipt className="w-6 h-6" />} 
+                                    label="Invoice Release" 
+                                    active={currentView === 'INVOICE_RELEASE'}
+                                />
+                            )}
                             {['Super Admin', 'Admin', 'ADMIN', 'Store Manager', 'STAFF', 'Project Manager', 'Engineer', 'HR', 'Accountant'].includes(userRole || '') && (
                                 <MobileGridButton 
                                     onClick={() => { setCurrentView('FOOD_REGISTER'); setIsMobileMenuOpen(false); }} 

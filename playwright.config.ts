@@ -20,10 +20,10 @@ export default defineConfig({
       name: 'Mobile Chrome (Pixel 5)',
       use: { ...devices['Pixel 5'] },
     },
-    {
-      name: 'Mobile Safari (iPhone 12)',
-      use: { ...devices['iPhone 12'] },
-    }
+    // {
+    //   name: 'Mobile Safari (iPhone 12)',
+    //   use: { ...devices['iPhone 12'] },
+    // }
   ],
   webServer: {
     command: 'npm run dev',
