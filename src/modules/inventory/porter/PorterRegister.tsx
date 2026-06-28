@@ -350,24 +350,87 @@ const PorterRegister: React.FC<Props> = ({ trips, advances = [], onNewTrip, onUp
     })();
 
     const exportToExcel = () => {
-        const ws = XLSX.utils.json_to_sheet(trips.map(t => ({
-            ID: t.id,
-            Date: t.date,
-            Time: t.time,
-            Porter: t.porterName,
-            Vehicle: t.vehicleNumber,
-            From: t.fromLocation,
-            To: t.toLocation,
-            Material: t.materialDescription,
-            KM: t.distanceKm,
-            Rate: t.ratePerKm,
-            Total: t.totalAmount,
-            Payment: t.paymentStatus,
-            Status: t.deliveryStatus
-        })));
+        const totalTrips = filteredTrips.length;
+        const totalKm = filteredTrips.reduce((acc, curr) => acc + (curr.distanceKm || 0), 0);
+        const totalGross = filteredTrips.reduce((acc, curr) => acc + (curr.grossAmount || 0), 0);
+        const totalAdvances = filteredTrips.reduce((acc, curr) => acc + (curr.advanceAmount || 0), 0);
+        const totalRemaining = filteredTrips.reduce((acc, curr) => acc + (curr.remainingBalance || 0), 0);
+
+        let periodLabel = 'ALL TIME';
+        if (timeFilter === 'DAY') periodLabel = 'DAILY';
+        else if (timeFilter === 'WEEK') periodLabel = 'WEEKLY';
+        else if (timeFilter === 'MONTH') periodLabel = 'MONTHLY';
+
+        const reportData = [
+            ["ENGLABS LOGISTICS - PORTER LEDGER REPORT"],
+            [`Report Period: ${periodLabel} (${new Date().toLocaleDateString('en-IN')})`],
+            [],
+            ["SUMMARY METRICS"],
+            ["Total Missions", totalTrips, "", "Total Distance (KM)", `${totalKm} KM`],
+            ["Total Gross Earnings", `Rs. ${totalGross.toLocaleString()}`, "", "Total Advances Received", `Rs. ${totalAdvances.toLocaleString()}`],
+            ["Net Outstanding Due", `Rs. ${totalRemaining.toLocaleString()}`],
+            [],
+            ["MISSION DETAILS LEDGER"],
+            [
+                "Mission ID", 
+                "Date", 
+                "Time", 
+                "Porter Name", 
+                "Vehicle Number", 
+                "From", 
+                "To", 
+                "Distance (KM)", 
+                "Rate/KM", 
+                "Gross Amt", 
+                "Advance Amt", 
+                "Remaining Due", 
+                "Payment Status", 
+                "Delivery Status"
+            ]
+        ];
+
+        filteredTrips.forEach(t => {
+            reportData.push([
+                t.id,
+                t.date,
+                t.time,
+                t.porterName,
+                t.vehicleNumber,
+                t.fromLocation,
+                t.toLocation,
+                t.distanceKm,
+                t.ratePerKm,
+                t.grossAmount,
+                t.advanceAmount || 0,
+                t.remainingBalance,
+                t.paymentStatus,
+                t.deliveryStatus
+            ]);
+        });
+
+        const ws = XLSX.utils.aoa_to_sheet(reportData);
+        
+        const wscols = [
+            { wch: 15 }, // ID
+            { wch: 12 }, // Date
+            { wch: 10 }, // Time
+            { wch: 20 }, // Porter Name
+            { wch: 15 }, // Vehicle Number
+            { wch: 20 }, // From
+            { wch: 20 }, // To
+            { wch: 15 }, // Distance (KM)
+            { wch: 10 }, // Rate/KM
+            { wch: 12 }, // Gross Amt
+            { wch: 12 }, // Advance Amt
+            { wch: 15 }, // Remaining Due
+            { wch: 15 }, // Payment Status
+            { wch: 15 }  // Delivery Status
+        ];
+        ws['!cols'] = wscols;
+
         const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Porter Trips");
-        XLSX.writeFile(wb, `Porter_Report_${new Date().toISOString().split('T')[0]}.xlsx`);
+        XLSX.utils.book_append_sheet(wb, ws, "Porter Report");
+        XLSX.writeFile(wb, `Englabs_Porter_Report_${periodLabel}_${new Date().toISOString().split('T')[0]}.xlsx`);
     };
 
     const shareOnWhatsApp = (trip: PorterTrip) => {

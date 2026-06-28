@@ -647,21 +647,22 @@ export const HRDocuments: React.FC = () => {
         : 'May 14, 2026';
 
     const shareOnWhatsApp = (type: 'appointment' | 'joining') => {
+        const origin = window.location.origin;
         let text = '';
         if (type === 'appointment') {
             text = `*Englabs India Private Limited - Appointment Letter*\n\n` +
                    `• *Employee Name:* ${profile.personalDetails.fullName}\n` +
                    `• *Designation:* Logistics Associate (Porter Team)\n` +
-                   `• *Compensation:* ₹${profile.salary}/month + ₹${profile.ratePerKm}/km Allowance\n` +
+                   `• *Compensation:* Rs. ${profile.salary}/month + Rs. ${profile.ratePerKm}/km Allowance\n` +
                    `• *Date of Joining:* ${joiningFormatted}\n\n` +
-                   `View / Download PDF Letter: http://localhost:3001/api/staff/pdf?type=appointment`;
+                   `View / Download PDF Letter: ${origin}/api/staff/pdf?type=appointment`;
         } else {
             text = `*Englabs India Private Limited - Joining Report*\n\n` +
                    `• *Employee Name:* ${profile.personalDetails.fullName}\n` +
                    `• *Designation:* Logistics Associate (Porter Team)\n` +
                    `• *Reporting Date:* ${joiningFormatted} (Forenoon)\n` +
                    `• *Status:* Verified & Joined\n\n` +
-                   `View / Download PDF Report: http://localhost:3001/api/staff/pdf?type=joining`;
+                   `View / Download PDF Report: ${origin}/api/staff/pdf?type=joining`;
         }
         
         const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
