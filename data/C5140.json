@@ -60,6 +60,9 @@
         "totalCost": 43335,
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "P2100-EL12-PO-16862"
+        "poNumber": "QT-18140"
+    },
+    "invoiceRelease": {
+        "invoiceNumber": "QT-18140"
     }
 }

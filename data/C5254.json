@@ -1,6 +1,6 @@
 {
     "projectId": "C5254",
-    "client": "ITL (SONALIKA)",
+    "client": "Sonalika",
     "planning": {
         "startDate": "2026-06-06",
         "poConfirmed": false,
@@ -54,26 +54,27 @@
         "materialConsumption": "MJF Black Paint"
     },
     "financials": {
-        "vendorName": "Excel Repid TECH",
+        "vendorName": "Half frm PlastiPack; Half from Rapid Proto",
         "vendorLocation": "Delhi",
         "dispatchBudget": 0,
         "totalCost": null,
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": null
+        "poNumber": "QT-18254"
     },
     "dailyStandup": {
         "routeTo": "Englabs",
         "porterPayments": 0,
         "srNo": "=1+A5",
         "routeFrom": "Faridabad",
-        "discussingNotes": "Out of a total of 36 parts, 09 parts have been completed and are ready for dispatch.",
-        "preparingPartsDate": "Accordind to shubham dispatch go ahed",
-        "inputsRequired": "NO"
+        "discussingNotes": "36 | Half frm PlastiPack; Half from Rapid Proto | QC: 9 have reached; 27 will be sent to EngLabs on Friday ; PO Awaited",
+        "preparingPartsDate": "2026-06-23",
+        "inputsRequired": "NO",
+        "supervisor": "Shubham"
     },
     "poRelease": {
         "customerSalePrice": 374716,
-        "vendorName": "Excel Repid TECH",
+        "vendorName": "Half frm PlastiPack; Half from Rapid Proto",
         "vendorLocation": "Delhi",
         "poVendorSent": "N/A",
         "vendorCost": 0,
@@ -84,7 +85,7 @@
         "gstValue": 67449,
         "totalInvoiceAmount": 442165,
         "paymentTerms": "30 days",
-        "invoiceNumber": "QTN-5254",
+        "invoiceNumber": "QT-18254",
         "paymentStatus": "Pending"
     }
 }

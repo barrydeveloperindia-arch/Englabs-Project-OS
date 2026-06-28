@@ -60,6 +60,9 @@
         "totalCost": null,
         "profitLoss": -455,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "P2100-EL12-PO-74523"
+        "poNumber": "QT-18176"
+    },
+    "invoiceRelease": {
+        "invoiceNumber": "QT-18176"
     }
 }

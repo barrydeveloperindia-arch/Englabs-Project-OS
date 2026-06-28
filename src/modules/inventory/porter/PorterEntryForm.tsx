@@ -17,6 +17,44 @@ import {
 import { PorterTrip, calculatePorterAmount, PorterPaymentStatus } from '@shared/services/porter_system';
 import { extractPorterData } from '@services/extraction_service';
 
+const convertTo24Hour = (timeStr: string | undefined): string => {
+    if (!timeStr) {
+        return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+    }
+    if (/^\d{2}:\d{2}$/.test(timeStr)) {
+        return timeStr;
+    }
+    const match = timeStr.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+    if (match) {
+        let hours = parseInt(match[1]);
+        const minutes = match[2];
+        const ampm = match[3].toUpperCase();
+        
+        if (ampm === 'PM' && hours < 12) {
+            hours += 12;
+        } else if (ampm === 'AM' && hours === 12) {
+            hours = 0;
+        }
+        
+        return `${hours.toString().padStart(2, '0')}:${minutes}`;
+    }
+    return timeStr;
+};
+
+const convertTo12Hour = (time24: string | undefined): string => {
+    if (!time24) return "";
+    const match = time24.match(/^(\d{2}):(\d{2})$/);
+    if (match) {
+        let hours = parseInt(match[1]);
+        const minutes = match[2];
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        return `${hours.toString().padStart(2, '0')}:${minutes} ${ampm}`;
+    }
+    return time24;
+};
+
 interface Props {
     onClose: () => void;
     onSave: (trip: PorterTrip) => void;
@@ -27,25 +65,33 @@ interface Props {
 const PorterEntryForm: React.FC<Props> = ({ onClose, onSave, currentCount, initialData }) => {
     const [isExtracting, setIsExtracting] = useState(false);
     const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
-    const [formData, setFormData] = useState<Partial<PorterTrip>>(initialData || {
-        date: new Date().toISOString().split('T')[0],
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-        paymentStatus: 'PENDING',
-        deliveryStatus: 'ACCEPTED',
-        customerName: '',
-        customerMobile: '',
-        deliveryAddress: '',
-        ratePerKm: 15,
-        distanceKm: 0,
-        fuelCharge: 0,
-        serviceCharge: 0,
-        repairCharge: 0,
-        extraExpense: 0,
-        advanceAmount: 0,
-        grossAmount: 0,
-        remainingBalance: 0,
-        totalAmount: 0,
-        timeline: []
+    const [formData, setFormData] = useState<Partial<PorterTrip>>(() => {
+        if (initialData) {
+            return {
+                ...initialData,
+                time: convertTo24Hour(initialData.time)
+            };
+        }
+        return {
+            date: new Date().toISOString().split('T')[0],
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+            paymentStatus: 'PENDING',
+            deliveryStatus: 'ACCEPTED',
+            customerName: '',
+            customerMobile: '',
+            deliveryAddress: '',
+            ratePerKm: 15,
+            distanceKm: 0,
+            fuelCharge: 0,
+            serviceCharge: 0,
+            repairCharge: 0,
+            extraExpense: 0,
+            advanceAmount: 0,
+            grossAmount: 0,
+            remainingBalance: 0,
+            totalAmount: 0,
+            timeline: []
+        };
     });
 
     const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,6 +168,7 @@ const PorterEntryForm: React.FC<Props> = ({ onClose, onSave, currentCount, initi
         e.preventDefault();
         const trip: PorterTrip = {
             ...formData,
+            time: convertTo12Hour(formData.time),
             id: initialData?.id || `PTR-2026-${(currentCount + 1).toString().padStart(4, '0')}`,
             timestamp: initialData?.timestamp || new Date().toISOString(),
             timeline: initialData?.timeline || [{

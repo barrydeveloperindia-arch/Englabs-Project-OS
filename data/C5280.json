@@ -1,6 +1,6 @@
 {
     "projectId": "C5280",
-    "client": "ITL (SONALIKA)",
+    "client": "Sonalika",
     "planning": {
         "value": 103425,
         "budget": 72398,
@@ -48,32 +48,34 @@
     },
     "metrics": {
         "totalComponents": 15,
-        "materialConsumption": "VC Rubber",
+        "materialConsumption": "VC",
         "workforce": [
-            "Anurag"
+            "Anurag",
+            "Devyanshu"
         ]
     },
     "financials": {
-        "vendorName": "Excel Repid TECH",
+        "vendorName": "excel Rapid Tech",
         "vendorLocation": "Delhi",
         "dispatchBudget": 0,
         "totalCost": null,
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": null
+        "poNumber": "QT-18280"
     },
     "dailyStandup": {
         "srNo": "=1+A9",
-        "discussingNotes": "No updates recorded.",
-        "preparingPartsDate": "Not Confrim",
+        "discussingNotes": "15 | excel Rapid Tech | QC: Will come on Monday from the vendor; Visual QC to be done and sent on Tuesday; PO awaited",
+        "preparingPartsDate": "2026-06-29",
         "routeFrom": "Noida",
         "routeTo": "Englabs",
         "porterPayments": 0,
-        "inputsRequired": "NO"
+        "inputsRequired": "NO",
+        "supervisor": "Devyanshu"
     },
     "poRelease": {
         "customerSalePrice": 103425,
-        "vendorName": "Excel Repid TECH",
+        "vendorName": "excel Rapid Tech",
         "vendorLocation": "Delhi",
         "poVendorSent": "16944",
         "vendorCost": 85494,
@@ -84,7 +86,7 @@
         "gstValue": 18616,
         "totalInvoiceAmount": 122042,
         "paymentTerms": "30 days",
-        "invoiceNumber": "QTN-5280",
+        "invoiceNumber": "QT-18280",
         "paymentStatus": "Pending"
     }
 }

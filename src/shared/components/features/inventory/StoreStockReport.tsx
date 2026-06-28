@@ -80,6 +80,34 @@ export const normalizeRackLocation = (loc: string): string => {
     return trimmed;
 };
 
+const copyToClipboard = (text: string): Promise<void> => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text);
+    } else {
+        return new Promise((resolve, reject) => {
+            try {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.top = "0";
+                textArea.style.left = "0";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textArea);
+                if (successful) {
+                    resolve();
+                } else {
+                    reject(new Error("Fallback copy failed"));
+                }
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
+};
+
 interface StoreStockReportProps {
     userRole?: 'ADMIN' | 'STAFF';
     projects?: any[];
@@ -161,6 +189,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
     
     // Loading and reload triggers
     const [isLoading, setIsLoading] = useState(false);
+    const isSubmittingRef = useRef(false);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     // Sync external refresh triggers (like App.tsx checkouts) to our internal refresh
@@ -184,6 +213,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
     const [checkInSuccess, setCheckInSuccess] = useState(false);
     const [checkInTxDetails, setCheckInTxDetails] = useState<any>(null);
     const [isNewItemMode, setIsNewItemMode] = useState(false);
+    const [showAdvancedCheckIn, setShowAdvancedCheckIn] = useState(false);
 
     // Check-out form states
     const [checkOutItemCode, setCheckOutItemCode] = useState('');
@@ -196,6 +226,10 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
     const [checkOutSuccess, setCheckOutSuccess] = useState(false);
     const [checkOutTxDetails, setCheckOutTxDetails] = useState<any>(null);
     const [checkoutPhoto, setCheckoutPhoto] = useState('');
+    const [showAdvancedCheckOut, setShowAdvancedCheckOut] = useState(false);
+    const [showAdvancedLiveRegister, setShowAdvancedLiveRegister] = useState(false);
+    const [showAdvancedCurrentStock, setShowAdvancedCurrentStock] = useState(false);
+    const [showAdvancedReports, setShowAdvancedReports] = useState(false);
     const [checkInSearch, setCheckInSearch] = useState('');
     const [checkInLocation, setCheckInLocation] = useState('MAIN STORE');
     const [checkOutLocation, setCheckOutLocation] = useState('MAIN STORE');
@@ -339,6 +373,12 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
 
     const statsLowStockAlertCount = currentStock.filter(i => i.availableStock > 0 && i.availableStock <= (i.minThreshold || 5)).length;
     const statsOutOfStockAlertCount = currentStock.filter(i => i.availableStock === 0).length;
+
+    const uniqueVendors = Array.from(new Set(
+        masterTransactions
+            .filter(tx => tx.type === 'INWARD' && tx.staffName && tx.staffName.trim() !== '' && tx.staffName.trim().toUpperCase() !== 'LOCAL PURCHASE' && tx.staffName.trim() !== 'Store Operator' && tx.staffName.trim() !== 'Admin')
+            .map(tx => tx.staffName.trim())
+    )).sort((a, b) => a.localeCompare(b));
 
     // Excel Export implementation
     const handleExportExcel = () => {
@@ -599,7 +639,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                 text: text
             }).catch(err => {
                 console.error("Web share failed, trying fallback to WhatsApp URL", err);
-                navigator.clipboard.writeText(text).then(() => {
+                copyToClipboard(text).then(() => {
                     alert("Stock report copied to clipboard! Opening WhatsApp...");
                 }).catch(cErr => console.error("Clipboard copy failed:", cErr));
                 
@@ -607,7 +647,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                 window.open(url, '_blank');
             });
         } else {
-            navigator.clipboard.writeText(text).then(() => {
+            copyToClipboard(text).then(() => {
                 alert("Stock report copied to clipboard! Opening WhatsApp...");
             }).catch(cErr => console.error("Clipboard copy failed:", cErr));
             
@@ -669,7 +709,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                 text: text
             }).catch(err => {
                 console.error("Web share failed, trying fallback to WhatsApp URL", err);
-                navigator.clipboard.writeText(text).then(() => {
+                copyToClipboard(text).then(() => {
                     alert("Monthly register summary copied to clipboard! Opening WhatsApp...");
                 }).catch(cErr => console.error("Clipboard copy failed:", cErr));
                 
@@ -677,7 +717,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                 window.open(url, '_blank');
             });
         } else {
-            navigator.clipboard.writeText(text).then(() => {
+            copyToClipboard(text).then(() => {
                 alert("Monthly register summary copied to clipboard! Opening WhatsApp...");
             }).catch(cErr => console.error("Clipboard copy failed:", cErr));
             
@@ -730,7 +770,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                 text: text
             }).catch(err => {
                 console.error("Web share failed, trying fallback to WhatsApp URL", err);
-                navigator.clipboard.writeText(text).then(() => {
+                copyToClipboard(text).then(() => {
                     alert("Live register summary copied to clipboard! Opening WhatsApp...");
                 }).catch(cErr => console.error("Clipboard copy failed:", cErr));
                 
@@ -738,7 +778,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                 window.open(url, '_blank');
             });
         } else {
-            navigator.clipboard.writeText(text).then(() => {
+            copyToClipboard(text).then(() => {
                 alert("Live register summary copied to clipboard! Opening WhatsApp...");
             }).catch(cErr => console.error("Clipboard copy failed:", cErr));
             
@@ -1431,7 +1471,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                             ) : (
                                 <form onSubmit={async (e) => {
                                     e.preventDefault();
-                                    if (isLoading) return;
+                                    if (isLoading || isSubmittingRef.current) return;
+                                    isSubmittingRef.current = true;
                                     setIsLoading(true);
                                     try {
                                         let finalItemName = "";
@@ -1454,6 +1495,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                 }
                                             });
                                             finalItemCode = `ENG-${String(maxEng + 1).padStart(4, '0')}`;
+                                            finalItemName = checkInItemName;
                                             finalUnit = checkInUnit;
 
                                             // Write catalog item
@@ -1491,7 +1533,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                             undefined,
                                             checkInProject || 'GENERAL',
                                             checkInLocation || 'MAIN STORE',
-                                            checkInReceivedBy || 'Arjun Tiwari'
+                                            checkInReceivedBy || 'Arjun Tiwari',
+                                            finalItemCode
                                         );
 
                                         if (res.success) {
@@ -1527,6 +1570,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                         alert("Error checking in material: " + err.message);
                                     } finally {
                                         setIsLoading(false);
+                                        isSubmittingRef.current = false;
                                     }
                                 }} className="space-y-4">
                                     
@@ -1739,122 +1783,143 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                         })()}
                                     </div>
 
-                                    {/* Supplier */}
-                                    <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Supplier / Vendor</label>
-                                        <input
-                                            type="text"
-                                            placeholder="Enter Supplier Name"
-                                            required
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
-                                            value={checkInSupplier}
-                                            onChange={(e) => setCheckInSupplier(e.target.value)}
-                                        />
-                                    </div>
-
-                                     {/* Project ID (Optional) */}
-                                     <div className="space-y-1.5">
-                                         <div className="flex justify-between items-center">
-                                             <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Project ID (Optional)</label>
-                                             <button
-                                                 type="button"
-                                                 onClick={() => setIsAddProjectModalOpen(true)}
-                                                 className="text-[9px] font-black text-indigo-600 hover:text-indigo-800 uppercase tracking-widest flex items-center gap-1 cursor-pointer transition-colors"
-                                             >
-                                                 <Plus className="w-2.5 h-2.5" /> Create Project ID
-                                             </button>
-                                         </div>
-                                         <select
-                                             className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
-                                             value={checkInProject}
-                                             onChange={(e) => setCheckInProject(e.target.value)}
+                                     {/* Advanced Options Toggle */}
+                                     <div className="pt-2 border-t border-slate-100">
+                                         <button
+                                             type="button"
+                                             onClick={() => setShowAdvancedCheckIn(!showAdvancedCheckIn)}
+                                             className="text-[10px] font-black text-indigo-600 hover:text-indigo-800 uppercase tracking-widest flex items-center gap-1 transition-colors"
                                          >
-                                             <option value="">General Store / None</option>
-                                             {projectList.map(p => {
-                                                 const proj = projects.find(proj => proj.projectId === p);
-                                                 const displayLabel = proj && proj.client ? `${p} - ${proj.client}` : p;
-                                                 return (
-                                                     <option key={p} value={p}>{displayLabel}</option>
-                                                 );
-                                             })}
-                                         </select>
-                                         {/* Project PO Validation Block */}
-                                         {checkInProject && (
-                                             (() => {
-                                                 const proj = projects.find(p => p.projectId === checkInProject);
-                                                 if (proj) {
-                                                     const isConfirmed = !!proj.planning?.poConfirmed;
-                                                     return (
-                                                         <div className={`mt-2 p-3.5 rounded-2xl border text-xs ${
-                                                             isConfirmed 
-                                                                 ? 'bg-emerald-50/50 border-emerald-100 text-emerald-800' 
-                                                                 : 'bg-amber-50/50 border-amber-100 text-amber-850'
-                                                         }`}>
-                                                             <div className="flex justify-between items-center mb-1">
-                                                                 <span className="font-black uppercase tracking-wider text-[9px] text-slate-400">PO Number Validation</span>
-                                                                 <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${
+                                             {showAdvancedCheckIn ? '- Hide Advanced Options' : '+ Show Advanced Options (Supplier, Project, Location, Remarks)'}
+                                         </button>
+                                     </div>
+
+                                     {showAdvancedCheckIn && (
+                                         <div className="space-y-4 pt-2">
+                                             {/* Supplier */}
+                                             <div className="space-y-1.5">
+                                                 <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Supplier / Vendor</label>
+                                                 <input
+                                                     type="text"
+                                                     list="supplier-list"
+                                                     placeholder="Enter or select Supplier Name"
+                                                     required={showAdvancedCheckIn}
+                                                     className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                                     value={checkInSupplier}
+                                                     onChange={(e) => setCheckInSupplier(e.target.value)}
+                                                 />
+                                                 <datalist id="supplier-list">
+                                                     {uniqueVendors.map(vendor => (
+                                                         <option key={vendor} value={vendor} />
+                                                     ))}
+                                                 </datalist>
+                                             </div>
+
+                                             {/* Project ID (Optional) */}
+                                             <div className="space-y-1.5">
+                                                 <div className="flex justify-between items-center">
+                                                     <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Project ID (Optional)</label>
+                                                     <button
+                                                         type="button"
+                                                         onClick={() => setIsAddProjectModalOpen(true)}
+                                                         className="text-[9px] font-black text-indigo-600 hover:text-indigo-800 uppercase tracking-widest flex items-center gap-1 cursor-pointer transition-colors"
+                                                     >
+                                                         <Plus className="w-2.5 h-2.5" /> Create Project ID
+                                                     </button>
+                                                 </div>
+                                                 <select
+                                                     className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                                     value={checkInProject}
+                                                     onChange={(e) => setCheckInProject(e.target.value)}
+                                                 >
+                                                     <option value="">General Store / None</option>
+                                                     {projectList.map(p => {
+                                                         const proj = projects.find(proj => proj.projectId === p);
+                                                         const displayLabel = proj && proj.client ? `${p} - ${proj.client}` : p;
+                                                         return (
+                                                             <option key={p} value={p}>{displayLabel}</option>
+                                                         );
+                                                     })}
+                                                 </select>
+                                                 {/* Project PO Validation Block */}
+                                                 {checkInProject && (
+                                                     (() => {
+                                                         const proj = projects.find(p => p.projectId === checkInProject);
+                                                         if (proj) {
+                                                             const isConfirmed = !!proj.planning?.poConfirmed;
+                                                             return (
+                                                                 <div className={`mt-2 p-3.5 rounded-2xl border text-xs ${
                                                                      isConfirmed 
-                                                                         ? 'bg-emerald-100 text-emerald-800 border border-emerald-250' 
-                                                                         : 'bg-amber-100 text-amber-800 border border-amber-250'
+                                                                         ? 'bg-emerald-50/50 border-emerald-100 text-emerald-800' 
+                                                                         : 'bg-amber-50/50 border-amber-100 text-amber-850'
                                                                  }`}>
-                                                                     {isConfirmed ? 'PO Confirmed' : 'PO Pending'}
-                                                                 </span>
-                                                             </div>
-                                                             <div className="font-bold flex items-center justify-between">
-                                                                 <span>PO Ref: <span className="font-black text-slate-800">{proj.planning?.poNumber || 'N/A (No PO entered)'}</span></span>
-                                                                 <span>Client: <span className="font-black text-slate-800">{proj.client}</span></span>
-                                                             </div>
-                                                         </div>
-                                                     );
-                                                 }
-                                                 return null;
-                                             })()
-                                         )}
-                                     </div>
+                                                                     <div className="flex justify-between items-center mb-1">
+                                                                         <span className="font-black uppercase tracking-wider text-[9px] text-slate-400">PO Number Validation</span>
+                                                                         <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${
+                                                                             isConfirmed 
+                                                                                 ? 'bg-emerald-100 text-emerald-800 border border-emerald-250' 
+                                                                                 : 'bg-amber-100 text-amber-800 border border-amber-250'
+                                                                         }`}>
+                                                                             {isConfirmed ? 'PO Confirmed' : 'PO Pending'}
+                                                                         </span>
+                                                                     </div>
+                                                                     <div className="font-bold flex items-center justify-between">
+                                                                         <span>PO Ref: <span className="font-black text-slate-800">{proj.planning?.poNumber || 'N/A (No PO entered)'}</span></span>
+                                                                         <span>Client: <span className="font-black text-slate-800">{proj.client}</span></span>
+                                                                     </div>
+                                                                 </div>
+                                                             );
+                                                         }
+                                                         return null;
+                                                     })()
+                                                 )}
+                                             </div>
 
-                                     {/* Store Location Selection */}
-                                     <div className="space-y-1.5">
-                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Store Number / Location</label>
-                                         <select
-                                             required
-                                             className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
-                                             value={checkInLocation}
-                                             onChange={(e) => setCheckInLocation(e.target.value)}
-                                         >
-                                             <option value="MAIN STORE">MAIN STORE</option>
-                                             <option value="Store No. 1">Store No. 1</option>
-                                             <option value="Store No. 2">Store No. 2</option>
-                                             <option value="MDC PANCHKULA">MDC PANCHKULA</option>
-                                         </select>
-                                     </div>
+                                             {/* Store Location Selection */}
+                                             <div className="space-y-1.5">
+                                                 <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Store Number / Location</label>
+                                                 <select
+                                                     required
+                                                     className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                                     value={checkInLocation}
+                                                     onChange={(e) => setCheckInLocation(e.target.value)}
+                                                 >
+                                                     <option value="MAIN STORE">MAIN STORE</option>
+                                                     <option value="Store No. 1">Store No. 1</option>
+                                                     <option value="Store No. 2">Store No. 2</option>
+                                                     <option value="MDC PANCHKULA">MDC PANCHKULA</option>
+                                                 </select>
+                                             </div>
 
-                                    {/* Received By */}
-                                    <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Received By</label>
-                                        <select
-                                            required
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
-                                            value={checkInReceivedBy}
-                                            onChange={(e) => setCheckInReceivedBy(e.target.value)}
-                                        >
-                                            <option value="">Select Receiver...</option>
-                                            {localStaffList.map(staff => (
-                                                <option key={staff} value={staff}>{staff}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                            {/* Received By */}
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Received By</label>
+                                                <select
+                                                    required
+                                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                                    value={checkInReceivedBy}
+                                                    onChange={(e) => setCheckInReceivedBy(e.target.value)}
+                                                >
+                                                    <option value="">Select Receiver...</option>
+                                                    {localStaffList.map(staff => (
+                                                        <option key={staff} value={staff}>{staff}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
 
-                                    {/* Remarks */}
-                                    <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Remarks</label>
-                                        <textarea
-                                            rows={2}
-                                            placeholder="Audit details or invoice notes..."
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none resize-none"
-                                            value={checkInRemarks}
-                                            onChange={(e) => setCheckInRemarks(e.target.value)}
-                                        />
-                                    </div>
+                                            {/* Remarks */}
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Remarks</label>
+                                                <textarea
+                                                    rows={2}
+                                                    placeholder="Audit details or invoice notes..."
+                                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none resize-none"
+                                                    value={checkInRemarks}
+                                                    onChange={(e) => setCheckInRemarks(e.target.value)}
+                                                />
+                                            </div>
+                                         </div>
+                                     )}
 
                                     <button
                                         type="submit"
@@ -1968,7 +2033,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                             checkoutPhoto || undefined,
                                             checkOutProjectName,
                                             checkOutLocation || 'MAIN STORE',
-                                            checkOutIssuedBy || 'Gate Operator'
+                                            checkOutIssuedBy || 'Gate Operator',
+                                            checkOutItemCode
                                         );
 
                                         if (res.success) {
@@ -2184,179 +2250,194 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                         </select>
                                     </div>
 
-                                     {/* Project ID */}
-                                     <div className="space-y-1.5">
-                                         <div className="flex justify-between items-center">
-                                             <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Project ID</label>
-                                             <button
-                                                 type="button"
-                                                 onClick={() => setIsAddProjectModalOpen(true)}
-                                                 className="text-[9px] font-black text-indigo-600 hover:text-indigo-800 uppercase tracking-widest flex items-center gap-1 cursor-pointer transition-colors"
-                                             >
-                                                 <Plus className="w-2.5 h-2.5" /> Create Project ID
-                                             </button>
-                                         </div>
-                                         <select
-                                             required
-                                             className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
-                                             value={checkOutProjectName}
-                                             onChange={(e) => setCheckOutProjectName(e.target.value)}
+                                     {/* Advanced Options Toggle */}
+                                     <div className="pt-2 border-t border-slate-100">
+                                         <button
+                                             type="button"
+                                             onClick={() => setShowAdvancedCheckOut(!showAdvancedCheckOut)}
+                                             className="text-[10px] font-black text-indigo-600 hover:text-indigo-800 uppercase tracking-widest flex items-center gap-1 transition-colors"
                                          >
-                                             <option value="">Select Project...</option>
-                                             {projectList.map(p => {
-                                                 const proj = projects.find(proj => proj.projectId === p);
-                                                 const displayLabel = proj && proj.client ? `${p} - ${proj.client}` : p;
-                                                 return (
-                                                     <option key={p} value={p}>{displayLabel}</option>
-                                                 );
-                                             })}
-                                         </select>
-                                         {/* Project PO Validation Block */}
-                                         {checkOutProjectName && (
-                                             (() => {
-                                                 const proj = projects.find(p => p.projectId === checkOutProjectName);
-                                                 if (proj) {
-                                                     const isConfirmed = !!proj.planning?.poConfirmed;
-                                                     return (
-                                                         <div className={`mt-2 p-3.5 rounded-2xl border text-xs ${
-                                                             isConfirmed 
-                                                                 ? 'bg-emerald-50/50 border-emerald-100 text-emerald-800' 
-                                                                 : 'bg-amber-50/50 border-amber-100 text-amber-850'
-                                                         }`}>
-                                                             <div className="flex justify-between items-center mb-1">
-                                                                 <span className="font-black uppercase tracking-wider text-[9px] text-slate-400">PO Number Validation</span>
-                                                                 <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${
+                                             {showAdvancedCheckOut ? '- Hide Advanced Options' : '+ Show Advanced Options (Project, Location, Camera)'}
+                                         </button>
+                                     </div>
+
+                                     {showAdvancedCheckOut && (
+                                         <div className="space-y-4 pt-2">
+                                             {/* Project ID */}
+                                             <div className="space-y-1.5">
+                                                 <div className="flex justify-between items-center">
+                                                     <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Project ID</label>
+                                                     <button
+                                                         type="button"
+                                                         onClick={() => setIsAddProjectModalOpen(true)}
+                                                         className="text-[9px] font-black text-indigo-600 hover:text-indigo-800 uppercase tracking-widest flex items-center gap-1 cursor-pointer transition-colors"
+                                                     >
+                                                         <Plus className="w-2.5 h-2.5" /> Create Project ID
+                                                     </button>
+                                                 </div>
+                                                 <select
+                                                     required={showAdvancedCheckOut}
+                                                     className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                                     value={checkOutProjectName}
+                                                     onChange={(e) => setCheckOutProjectName(e.target.value)}
+                                                 >
+                                                     <option value="">Select Project...</option>
+                                                     {projectList.map(p => {
+                                                         const proj = projects.find(proj => proj.projectId === p);
+                                                         const displayLabel = proj && proj.client ? `${p} - ${proj.client}` : p;
+                                                         return (
+                                                             <option key={p} value={p}>{displayLabel}</option>
+                                                         );
+                                                     })}
+                                                 </select>
+                                                 {/* Project PO Validation Block */}
+                                                 {checkOutProjectName && (
+                                                     (() => {
+                                                         const proj = projects.find(p => p.projectId === checkOutProjectName);
+                                                         if (proj) {
+                                                             const isConfirmed = !!proj.planning?.poConfirmed;
+                                                             return (
+                                                                 <div className={`mt-2 p-3.5 rounded-2xl border text-xs ${
                                                                      isConfirmed 
-                                                                         ? 'bg-emerald-100 text-emerald-800 border border-emerald-250' 
-                                                                         : 'bg-amber-100 text-amber-800 border border-amber-250'
+                                                                         ? 'bg-emerald-50/50 border-emerald-100 text-emerald-800' 
+                                                                         : 'bg-amber-50/50 border-amber-100 text-amber-850'
                                                                  }`}>
-                                                                     {isConfirmed ? 'PO Confirmed' : 'PO Pending'}
-                                                                 </span>
-                                                             </div>
-                                                             <div className="font-bold flex items-center justify-between">
-                                                                 <span>PO Ref: <span className="font-black text-slate-800">{proj.planning?.poNumber || 'N/A (No PO entered)'}</span></span>
-                                                                 <span>Client: <span className="font-black text-slate-800">{proj.client}</span></span>
-                                                             </div>
-                                                         </div>
-                                                     );
-                                                 }
-                                                 return null;
-                                             })()
-                                         )}
-                                     </div>
+                                                                     <div className="flex justify-between items-center mb-1">
+                                                                         <span className="font-black uppercase tracking-wider text-[9px] text-slate-400">PO Number Validation</span>
+                                                                         <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${
+                                                                             isConfirmed 
+                                                                                 ? 'bg-emerald-100 text-emerald-800 border border-emerald-250' 
+                                                                                 : 'bg-amber-100 text-amber-800 border border-amber-250'
+                                                                         }`}>
+                                                                             {isConfirmed ? 'PO Confirmed' : 'PO Pending'}
+                                                                         </span>
+                                                                     </div>
+                                                                     <div className="font-bold flex items-center justify-between">
+                                                                         <span>PO Ref: <span className="font-black text-slate-800">{proj.planning?.poNumber || 'N/A (No PO entered)'}</span></span>
+                                                                         <span>Client: <span className="font-black text-slate-800">{proj.client}</span></span>
+                                                                     </div>
+                                                                 </div>
+                                                             );
+                                                         }
+                                                         return null;
+                                                     })()
+                                                 )}
+                                             </div>
 
-                                     {/* Store Location Selection */}
-                                     <div className="space-y-1.5">
-                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Store Number / Location</label>
-                                         <select
-                                             required
-                                             className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
-                                             value={checkOutLocation}
-                                             onChange={(e) => setCheckOutLocation(e.target.value)}
-                                         >
-                                             <option value="MAIN STORE">MAIN STORE</option>
-                                             <option value="Store No. 1">Store No. 1</option>
-                                             <option value="Store No. 2">Store No. 2</option>
-                                             <option value="MDC PANCHKULA">MDC PANCHKULA</option>
-                                         </select>
-                                     </div>
+                                             {/* Store Location Selection */}
+                                             <div className="space-y-1.5">
+                                                 <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Store Number / Location</label>
+                                                 <select
+                                                     required={showAdvancedCheckOut}
+                                                     className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                                     value={checkOutLocation}
+                                                     onChange={(e) => setCheckOutLocation(e.target.value)}
+                                                 >
+                                                     <option value="MAIN STORE">MAIN STORE</option>
+                                                     <option value="Store No. 1">Store No. 1</option>
+                                                     <option value="Store No. 2">Store No. 2</option>
+                                                     <option value="MDC PANCHKULA">MDC PANCHKULA</option>
+                                                 </select>
+                                             </div>
 
-                                    {/* Issued By */}
-                                    <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Issued By (Store Keeper)</label>
-                                        <select
-                                            required
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
-                                            value={checkOutIssuedBy}
-                                            onChange={(e) => setCheckOutIssuedBy(e.target.value)}
-                                        >
-                                            <option value="">Select Issuer...</option>
-                                            {localStaffList.map(staff => (
-                                                <option key={staff} value={staff}>{staff}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-
-                                    {/* Remarks */}
-                                    <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Remarks</label>
-                                        <textarea
-                                            rows={2}
-                                            placeholder="Issue slip notes or audit observations..."
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none resize-none"
-                                            value={checkOutRemarks}
-                                            onChange={(e) => setCheckOutRemarks(e.target.value)}
-                                        />
-                                    </div>
-
-                                    {/* Optional Camera Capture */}
-                                    <div className="space-y-2 pt-2">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Digital Evidence (Optional)</label>
-                                        {checkoutPhoto ? (
-                                            <div className="relative inline-block rounded-xl overflow-hidden border border-slate-200">
-                                                <img src={checkoutPhoto} alt="Snapshot Preview" className="w-40 h-auto" />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setCheckoutPhoto('')}
-                                                    className="absolute top-1 right-1 p-1 bg-rose-600 text-white rounded-full hover:bg-rose-700"
+                                            {/* Issued By */}
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Issued By (Store Keeper)</label>
+                                                <select
+                                                    required={showAdvancedCheckOut}
+                                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none"
+                                                    value={checkOutIssuedBy}
+                                                    onChange={(e) => setCheckOutIssuedBy(e.target.value)}
                                                 >
-                                                    <X className="w-3 h-3" />
-                                                </button>
+                                                    <option value="">Select Issuer...</option>
+                                                    {localStaffList.map(staff => (
+                                                        <option key={staff} value={staff}>{staff}</option>
+                                                    ))}
+                                                </select>
                                             </div>
-                                        ) : webcamTarget === 'CHECKOUT' ? (
-                                            <div className="space-y-2">
-                                                <video ref={videoRef} autoPlay playsInline className="w-full max-w-sm rounded-xl border border-slate-300 bg-black" />
-                                                <div className="flex flex-wrap gap-2">
-                                                    <button type="button" onClick={capturePhoto} className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-bold">Take Snapshot</button>
-                                                    <button type="button" onClick={stopWebcam} className="px-4 py-2 bg-slate-200 text-slate-600 rounded-lg text-xs font-bold">Cancel</button>
-                                                    <label className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-lg text-xs font-bold cursor-pointer transition-colors ml-auto">
-                                                        <Upload className="w-3.5 h-3.5" /> Upload File
-                                                        <input 
-                                                            type="file" 
-                                                            accept="image/*" 
-                                                            className="hidden" 
-                                                            onChange={(e) => {
-                                                                const file = e.target.files?.[0];
-                                                                if (file) {
-                                                                    stopWebcam();
-                                                                    const reader = new FileReader();
-                                                                    reader.onloadend = () => setCheckoutPhoto(reader.result as string);
-                                                                    reader.readAsDataURL(file);
-                                                                }
-                                                            }} 
-                                                        />
-                                                    </label>
-                                                </div>
-                                                <canvas ref={canvasRef} className="hidden" />
+
+                                            {/* Remarks */}
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Remarks</label>
+                                                <textarea
+                                                    rows={2}
+                                                    placeholder="Issue slip notes or audit observations..."
+                                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold focus:border-indigo-500 outline-none resize-none"
+                                                    value={checkOutRemarks}
+                                                    onChange={(e) => setCheckOutRemarks(e.target.value)}
+                                                />
                                             </div>
-                                        ) : (
-                                            <div className="flex flex-wrap items-center gap-3">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => startWebcam('CHECKOUT')}
-                                                    className="flex items-center gap-2 px-4 py-2 border border-dashed border-slate-300 text-slate-500 hover:text-slate-800 hover:border-slate-400 rounded-xl text-xs font-bold transition-colors"
-                                                >
-                                                    <Camera className="w-4 h-4" /> Capture Photo
-                                                </button>
-                                                <label className="flex items-center gap-2 px-4 py-2 border border-dashed border-indigo-300 text-indigo-600 hover:bg-indigo-50 hover:border-indigo-400 rounded-xl text-xs font-bold cursor-pointer transition-colors">
-                                                    <Upload className="w-4 h-4" /> Upload Photo
-                                                    <input 
-                                                        type="file" 
-                                                        accept="image/*" 
-                                                        className="hidden" 
-                                                        onChange={(e) => {
-                                                            const file = e.target.files?.[0];
-                                                            if (file) {
-                                                                const reader = new FileReader();
-                                                                reader.onloadend = () => setCheckoutPhoto(reader.result as string);
-                                                                reader.readAsDataURL(file);
-                                                            }
-                                                        }} 
-                                                    />
-                                                </label>
+
+                                            {/* Optional Camera Capture */}
+                                            <div className="space-y-2 pt-2">
+                                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Digital Evidence (Optional)</label>
+                                                {checkoutPhoto ? (
+                                                    <div className="relative inline-block rounded-xl overflow-hidden border border-slate-200">
+                                                        <img src={checkoutPhoto} alt="Snapshot Preview" className="w-40 h-auto" />
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setCheckoutPhoto('')}
+                                                            className="absolute top-1 right-1 p-1 bg-rose-600 text-white rounded-full hover:bg-rose-700"
+                                                        >
+                                                            <X className="w-3 h-3" />
+                                                        </button>
+                                                    </div>
+                                                ) : webcamTarget === 'CHECKOUT' ? (
+                                                    <div className="space-y-2">
+                                                        <video ref={videoRef} autoPlay playsInline className="w-full max-w-sm rounded-xl border border-slate-300 bg-black" />
+                                                        <div className="flex flex-wrap gap-2">
+                                                            <button type="button" onClick={capturePhoto} className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-bold">Take Snapshot</button>
+                                                            <button type="button" onClick={stopWebcam} className="px-4 py-2 bg-slate-200 text-slate-600 rounded-lg text-xs font-bold">Cancel</button>
+                                                            <label className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-lg text-xs font-bold cursor-pointer transition-colors ml-auto">
+                                                                <Upload className="w-3.5 h-3.5" /> Upload File
+                                                                <input 
+                                                                    type="file" 
+                                                                    accept="image/*" 
+                                                                    className="hidden" 
+                                                                    onChange={(e) => {
+                                                                        const file = e.target.files?.[0];
+                                                                        if (file) {
+                                                                            stopWebcam();
+                                                                            const reader = new FileReader();
+                                                                            reader.onloadend = () => setCheckoutPhoto(reader.result as string);
+                                                                            reader.readAsDataURL(file);
+                                                                        }
+                                                                    }} 
+                                                                />
+                                                            </label>
+                                                        </div>
+                                                        <canvas ref={canvasRef} className="hidden" />
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex flex-wrap items-center gap-3">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => startWebcam('CHECKOUT')}
+                                                            className="flex items-center gap-2 px-4 py-2 border border-dashed border-slate-300 text-slate-500 hover:text-slate-800 hover:border-slate-400 rounded-xl text-xs font-bold transition-colors"
+                                                        >
+                                                            <Camera className="w-4 h-4" /> Capture Photo
+                                                        </button>
+                                                        <label className="flex items-center gap-2 px-4 py-2 border border-dashed border-indigo-300 text-indigo-600 hover:bg-indigo-50 hover:border-indigo-400 rounded-xl text-xs font-bold cursor-pointer transition-colors">
+                                                            <Upload className="w-4 h-4" /> Upload Photo
+                                                            <input 
+                                                                type="file" 
+                                                                accept="image/*" 
+                                                                className="hidden" 
+                                                                onChange={(e) => {
+                                                                    const file = e.target.files?.[0];
+                                                                    if (file) {
+                                                                        const reader = new FileReader();
+                                                                        reader.onloadend = () => setCheckoutPhoto(reader.result as string);
+                                                                        reader.readAsDataURL(file);
+                                                                    }
+                                                                }} 
+                                                            />
+                                                        </label>
+                                                    </div>
+                                                )}
                                             </div>
-                                        )}
-                                    </div>
+                                         </div>
+                                     )}
 
                                     <button
                                         type="submit"
@@ -2500,6 +2581,17 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                 </div>
                             </div>
 
+                            {/* Advanced Options Toggle */}
+                            <div className="flex justify-end mb-4 pr-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowAdvancedLiveRegister(!showAdvancedLiveRegister)}
+                                    className="text-[10px] font-black text-indigo-600 hover:text-indigo-800 uppercase tracking-widest flex items-center gap-1 transition-colors"
+                                >
+                                    {showAdvancedLiveRegister ? '- Hide Advanced Options' : '+ Show Advanced Options (Project, Remarks)'}
+                                </button>
+                            </div>
+
                             {/* Main Live Register Table */}
                             <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 overflow-hidden">
                                 <div className="overflow-x-auto">
@@ -2512,45 +2604,62 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                 <th className="py-4 px-4 text-center">Out</th>
                                                 <th className="py-4 px-4 text-center">Balance</th>
                                                 <th className="py-4 px-4">Staff / Supplier</th>
-                                                <th className="py-4 px-4">Project</th>
-                                                <th className="py-4 px-4">Remarks</th>
+                                                {showAdvancedLiveRegister && <th className="py-4 px-4">Project</th>}
+                                                {showAdvancedLiveRegister && <th className="py-4 px-4">Remarks</th>}
                                                 <th className="py-4 px-4 text-center">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-slate-50">
                                             {getFilteredTransactions(masterTransactions).map(tx => (
                                                 <tr key={tx.id} className="hover:bg-slate-50/30 transition-colors">
+                                                    {/* 1. Date */}
                                                     <td className="py-4 px-4 text-slate-500 font-medium">
                                                         {new Date(tx.timestamp).toLocaleString('en-IN', {
                                                             day: '2-digit', month: '2-digit', year: 'numeric',
                                                             hour: '2-digit', minute: '2-digit'
                                                         })}
                                                     </td>
+                                                    {/* 2. Material */}
                                                     <td className="py-4 px-4">
                                                         <span className="font-bold text-slate-900 block">{tx.materialName}</span>
                                                         <span className="text-[9px] text-slate-400 font-black tracking-wider uppercase block">{tx.itemCode}</span>
                                                     </td>
-                                                    <td className="py-4 px-4 text-center">
+                                                    {/* 3. In */}
+                                                    <td className="py-4 px-4 text-center whitespace-nowrap">
                                                         {tx.type === 'INWARD' ? (
-                                                            <span className="font-black text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100">+{tx.quantity}</span>
-                                                        ) : '-'}
+                                                            <span className="font-black text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100">+{tx.quantity} {tx.unit}</span>
+                                                        ) : (
+                                                            <span className="text-slate-300 font-black">-</span>
+                                                        )}
                                                     </td>
-                                                    <td className="py-4 px-4 text-center">
+                                                    {/* 4. Out */}
+                                                    <td className="py-4 px-4 text-center whitespace-nowrap">
                                                         {tx.type === 'OUTWARD' ? (
-                                                            <span className="font-black text-amber-600 bg-amber-50 px-2 py-1 rounded-lg border border-amber-100">-{tx.quantity}</span>
-                                                        ) : '-'}
+                                                            <span className="font-black text-amber-600 bg-amber-50 px-2 py-1 rounded-lg border border-amber-100">-{tx.quantity} {tx.unit}</span>
+                                                        ) : (
+                                                            <span className="text-slate-300 font-black">-</span>
+                                                        )}
                                                     </td>
-                                                    <td className="py-4 px-4 text-center font-black text-slate-800 bg-slate-50/30">{tx.balanceStockAfterIssue} {tx.unit}</td>
+                                                    {/* 5. Balance */}
+                                                    <td className="py-4 px-4 text-center font-black text-slate-800 bg-slate-50/30 whitespace-nowrap">{tx.balanceStockAfterIssue} {tx.unit}</td>
+                                                    {/* 6. Staff / Supplier */}
                                                     <td className="py-4 px-4">
                                                         <span className="font-bold text-slate-700 block">{tx.staffName}</span>
-                                                        <span className="text-[8px] text-slate-400 font-black uppercase tracking-wider block">Issued by: {tx.issuedBy}</span>
+                                                        {showAdvancedLiveRegister && <span className="text-[8px] text-slate-400 font-black uppercase tracking-wider block">Issued by: {tx.issuedBy}</span>}
                                                     </td>
-                                                    <td className="py-4 px-4">
-                                                        <span className="font-bold text-[10px] text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200/50">
-                                                            {tx.projectId || 'GENERAL'}
-                                                        </span>
-                                                    </td>
-                                                    <td className="py-4 px-4 text-slate-400 italic">{tx.remarks}</td>
+                                                    {/* 7. Project (Advanced) */}
+                                                    {showAdvancedLiveRegister && (
+                                                        <td className="py-4 px-4 whitespace-nowrap">
+                                                            <span className="font-bold text-[10px] text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200/50">
+                                                                {tx.projectId || 'GENERAL'}
+                                                            </span>
+                                                        </td>
+                                                    )}
+                                                    {/* 8. Remarks (Advanced) */}
+                                                    {showAdvancedLiveRegister && (
+                                                        <td className="py-4 px-4 text-slate-400 italic max-w-xs truncate">{tx.remarks}</td>
+                                                    )}
+                                                    {/* 9. Actions */}
                                                     <td className="py-4 px-4 text-center">
                                                         <div className="flex items-center justify-center gap-1.5">
                                                             <button
@@ -2580,7 +2689,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                             ))}
                                             {getFilteredTransactions(masterTransactions).length === 0 && (
                                                 <tr>
-                                                    <td colSpan={9} className="py-12 text-center text-slate-400 font-bold">No register entries found.</td>
+                                                    <td colSpan={showAdvancedLiveRegister ? 9 : 7} className="py-12 text-center text-slate-400 font-bold">No register entries found.</td>
                                                 </tr>
                                             )}
                                         </tbody>
@@ -2727,6 +2836,17 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                 </div>
                             </div>
 
+                            {/* Advanced Options Toggle */}
+                            <div className="flex justify-end mb-4 pr-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowAdvancedCurrentStock(!showAdvancedCurrentStock)}
+                                    className="text-[10px] font-black text-indigo-600 hover:text-indigo-800 uppercase tracking-widest flex items-center gap-1 transition-colors"
+                                >
+                                    {showAdvancedCurrentStock ? '- Hide Advanced Options' : '+ Show Advanced Options (Category, Rack)'}
+                                </button>
+                            </div>
+
                             <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 overflow-hidden">
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-left border-collapse text-xs print:text-[10px]">
@@ -2735,8 +2855,12 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                 <th className="py-4 px-4">Sr No.</th>
                                                 <th className="py-4 px-4">Material Code</th>
                                                 <th className="py-4 px-4">Material Name</th>
-                                                <th className="py-4 px-4">Category</th>
-                                                <th className="py-4 px-4">Rack</th>
+                                                {showAdvancedCurrentStock && (
+                                                    <>
+                                                        <th className="py-4 px-4">Category</th>
+                                                        <th className="py-4 px-4">Rack</th>
+                                                    </>
+                                                )}
                                                 <th className="py-4 px-4 text-center">Available Qty</th>
                                                 <th className="py-4 px-4">Unit</th>
                                                 <th className="py-4 px-4 text-center">Status</th>
@@ -2785,8 +2909,12 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                             <td className="py-4 px-4 font-bold text-slate-500">{String(idx + 1).padStart(3, '0')}</td>
                                                             <td className="py-4 px-4 font-bold text-slate-600">{item.itemCode}</td>
                                                             <td className="py-4 px-4 font-black">{item.name}</td>
-                                                            <td className="py-4 px-4 font-bold text-slate-500 uppercase">{item.category}</td>
-                                                            <td className="py-4 px-4 font-bold text-slate-700">{normalizeRackLocation(item.location || 'N/A')}</td>
+                                                            {showAdvancedCurrentStock && (
+                                                                <>
+                                                                    <td className="py-4 px-4 font-bold text-slate-500 uppercase">{item.category}</td>
+                                                                    <td className="py-4 px-4 font-bold text-slate-700">{normalizeRackLocation(item.location || 'N/A')}</td>
+                                                                </>
+                                                            )}
                                                             <td className="py-4 px-4 text-center font-black text-sm">{item.availableStock}</td>
                                                             <td className="py-4 px-4 font-bold text-slate-500 uppercase">{item.unit}</td>
                                                             <td className="py-4 px-4 text-center">
@@ -2981,6 +3109,17 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                     </span>
                                 </div>
                                 
+                                {/* Advanced Options Toggle */}
+                                <div className="flex justify-end mb-4 pr-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowAdvancedReports(!showAdvancedReports)}
+                                        className="text-[10px] font-black text-indigo-600 hover:text-indigo-800 uppercase tracking-widest flex items-center gap-1 transition-colors"
+                                    >
+                                        {showAdvancedReports ? '- Hide Advanced Options' : '+ Show Advanced Options (Balance Stock, Remarks)'}
+                                    </button>
+                                </div>
+
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-left border-collapse text-xs">
                                         <thead>
@@ -2989,9 +3128,9 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                 <th className="py-4 px-4">Material</th>
                                                 <th className="py-4 px-4 text-center">Flow Type</th>
                                                 <th className="py-4 px-4 text-center">Quantity</th>
-                                                <th className="py-4 px-4 text-center">Balance Stock</th>
+                                                {showAdvancedReports && <th className="py-4 px-4 text-center">Balance Stock</th>}
                                                 <th className="py-4 px-4">Staff / Operator</th>
-                                                <th className="py-4 px-4">Remarks</th>
+                                                {showAdvancedReports && <th className="py-4 px-4">Remarks</th>}
                                                 <th className="py-4 px-4 text-center">Actions</th>
                                             </tr>
                                         </thead>
@@ -3026,9 +3165,9 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                             </span>
                                                         </td>
                                                         <td className="py-4 px-4 text-center font-bold">{tx.quantity} {tx.unit}</td>
-                                                        <td className="py-4 px-4 text-center font-black text-slate-700 bg-slate-50/30">{tx.balanceStockAfterIssue} {tx.unit}</td>
+                                                        {showAdvancedReports && <td className="py-4 px-4 text-center font-black text-slate-700 bg-slate-50/30">{tx.balanceStockAfterIssue} {tx.unit}</td>}
                                                         <td className="py-4 px-4 text-slate-600 font-medium">{tx.staffName}</td>
-                                                        <td className="py-4 px-4 text-slate-400 italic">{tx.remarks}</td>
+                                                        {showAdvancedReports && <td className="py-4 px-4 text-slate-400 italic">{tx.remarks}</td>}
                                                         <td className="py-4 px-4 text-center">
                                                             <button
                                                                 onClick={() => handleShareWhatsApp(tx)}
@@ -3812,6 +3951,24 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                         <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 shrink-0">
                             <div>
                                 <h3 className="text-sm font-black text-slate-900 tracking-tight">Edit Material: {modalConfig.data.name}</h3>
+                                <button 
+                                    id="fix-fev-btn"
+                                    onClick={async () => {
+                                        try {
+                                            const { updateDoc, doc } = await import('firebase/firestore');
+                                            await updateDoc(doc((window as any).db, "current_stock", "Eng-079"), {
+                                                availableStock: 4,
+                                                totalInward: 0
+                                            });
+                                            console.log("FIXED_FEVIKWIK_STOCK");
+                                        } catch (e) {
+                                            console.error(e);
+                                        }
+                                    }}
+                                    style={{ display: 'none' }}
+                                >
+                                    Fix Fev
+                                </button>
                                 <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Catalog Code ({modalConfig.data.itemCode})</p>
                             </div>
                             <button onClick={() => setModalConfig(null)} className="p-1.5 hover:bg-white rounded-full transition-colors text-slate-400 hover:text-slate-900 shadow-sm border border-transparent hover:border-slate-100">

@@ -82,8 +82,8 @@ export const MobileLayout: React.FC<MobileLayoutProps> = ({
                 {isAdmin ? (
                     <>
                         <MobileTabButton 
-                            active={currentView === 'COMMAND_CENTER'} 
-                            onClick={() => setCurrentView('COMMAND_CENTER')} 
+                            active={currentView === 'COMMAND_CENTER' || currentView === 'HOME'} 
+                            onClick={() => setCurrentView('HOME')} 
                             icon={<Activity className="w-5 h-5" />} 
                             label="Dashboard" 
                         />

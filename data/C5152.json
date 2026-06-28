@@ -1,6 +1,6 @@
 {
     "projectId": "C5152",
-    "client": "BCH ELECTRIC LIMITED",
+    "client": "BCH",
     "planning": {
         "value": 21260,
         "budget": 14882,
@@ -60,16 +60,17 @@
         "totalCost": null,
         "profitLoss": null,
         "deliveryFeeMode": "Porter system",
-        "poNumber": null
+        "poNumber": "QT-18152"
     },
     "dailyStandup": {
         "srNo": "=1+A13",
-        "discussingNotes": "Today, Porter is ready for the Noida-to-Faridabad route.",
-        "preparingPartsDate": "2026-06-19",
+        "discussingNotes": "8 | Adroitec | QC: Delivered; QC was done by Rohit; Feedback will be taken by Rohit",
+        "preparingPartsDate": "2026-06-22",
         "routeFrom": "Noida",
         "routeTo": "Faridabad",
         "porterPayments": 290,
-        "inputsRequired": "NO"
+        "inputsRequired": "NO",
+        "supervisor": "Devanshu"
     },
     "poRelease": {
         "customerSalePrice": 21260,
@@ -84,7 +85,7 @@
         "gstValue": 3827,
         "totalInvoiceAmount": 25087,
         "paymentTerms": "30 days",
-        "invoiceNumber": "QTN-5152",
+        "invoiceNumber": "QT-18152",
         "paymentStatus": "Pending"
     }
 }

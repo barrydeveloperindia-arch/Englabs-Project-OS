@@ -1,0 +1,57 @@
+[
+  {
+    "porterName": "Gurpreet Singh",
+    "joiningDate": "2026-05-14",
+    "salary": 15000,
+    "ratePerKm": 10,
+    "photo": "data/gurpreet_singh_photo.jpg",
+    "personalDetails": {
+      "fullName": "GURPREET SINGH",
+      "fatherName": "BALVIR SINGH",
+      "dob": "1993-10-24",
+      "gender": "Male",
+      "mobile": "+91-8894-825152",
+      "email": "gst2363@gmail.com",
+      "maritalStatus": "Married",
+      "bloodGroup": "B+VE",
+      "organDonor": "N",
+      "permanentAddress": "Village Khundiala, 621, Bham Naur, Hoshiarpur, Punjab, 144224",
+      "currentAddress": "H. No. 1436, Sector 29-B, Chandigarh - 160030"
+    },
+    "documents": {
+      "aadhaarNumber": "3567 4014 8204",
+      "panCardNumber": "JJEPS4927Q",
+      "drivingLicenseNumber": "PB07 20240000982",
+      "drivingLicenseValidity": "2034-01-14",
+      "drivingLicenseClasses": ["MCWG", "MVSD"]
+    },
+    "bankDetails": {
+      "accountNumber": "110299480504",
+      "ifscCode": "CNRB0005136",
+      "bankName": "Canara Bank",
+      "micrCode": "174015103",
+      "swiftCode": "CNRBINBBBBD",
+      "accountType": "SAVINGS (BSBDA)"
+    },
+    "education": [
+      {
+        "qualification": "Matriculation (10th)",
+        "board": "PSEB",
+        "passingYear": 2013,
+        "school": "Govt. Sr. Sec. School, Ramgarh Sikri, Hoshiarpur",
+        "grade": "C"
+      },
+      {
+        "qualification": "Senior Secondary (12th)",
+        "board": "PSEB",
+        "passingYear": 2015,
+        "school": "Govt. Sr. Sec. School, Ramgarh Sikri, Hoshiarpur",
+        "grade": "C"
+      }
+    ],
+    "experience": [
+      "2 years as Electrician at Elante Mall, Chandigarh",
+      "1 year in Luminous Inverter Assembly"
+    ]
+  }
+]

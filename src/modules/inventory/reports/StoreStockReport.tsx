@@ -80,6 +80,34 @@ export const normalizeRackLocation = (loc: string): string => {
     return trimmed;
 };
 
+const copyToClipboard = (text: string): Promise<void> => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text);
+    } else {
+        return new Promise((resolve, reject) => {
+            try {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.top = "0";
+                textArea.style.left = "0";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textArea);
+                if (successful) {
+                    resolve();
+                } else {
+                    reject(new Error("Fallback copy failed"));
+                }
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
+};
+
 interface StoreStockReportProps {
     userRole?: 'ADMIN' | 'STAFF';
     projects?: any[];
@@ -611,7 +639,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                 text: text
             }).catch(err => {
                 console.error("Web share failed, trying fallback to WhatsApp URL", err);
-                navigator.clipboard.writeText(text).then(() => {
+                copyToClipboard(text).then(() => {
                     alert("Stock report copied to clipboard! Opening WhatsApp...");
                 }).catch(cErr => console.error("Clipboard copy failed:", cErr));
                 
@@ -619,7 +647,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                 window.open(url, '_blank');
             });
         } else {
-            navigator.clipboard.writeText(text).then(() => {
+            copyToClipboard(text).then(() => {
                 alert("Stock report copied to clipboard! Opening WhatsApp...");
             }).catch(cErr => console.error("Clipboard copy failed:", cErr));
             
@@ -681,7 +709,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                 text: text
             }).catch(err => {
                 console.error("Web share failed, trying fallback to WhatsApp URL", err);
-                navigator.clipboard.writeText(text).then(() => {
+                copyToClipboard(text).then(() => {
                     alert("Monthly register summary copied to clipboard! Opening WhatsApp...");
                 }).catch(cErr => console.error("Clipboard copy failed:", cErr));
                 
@@ -689,7 +717,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                 window.open(url, '_blank');
             });
         } else {
-            navigator.clipboard.writeText(text).then(() => {
+            copyToClipboard(text).then(() => {
                 alert("Monthly register summary copied to clipboard! Opening WhatsApp...");
             }).catch(cErr => console.error("Clipboard copy failed:", cErr));
             
@@ -742,7 +770,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                 text: text
             }).catch(err => {
                 console.error("Web share failed, trying fallback to WhatsApp URL", err);
-                navigator.clipboard.writeText(text).then(() => {
+                copyToClipboard(text).then(() => {
                     alert("Live register summary copied to clipboard! Opening WhatsApp...");
                 }).catch(cErr => console.error("Clipboard copy failed:", cErr));
                 
@@ -750,7 +778,7 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                 window.open(url, '_blank');
             });
         } else {
-            navigator.clipboard.writeText(text).then(() => {
+            copyToClipboard(text).then(() => {
                 alert("Live register summary copied to clipboard! Opening WhatsApp...");
             }).catch(cErr => console.error("Clipboard copy failed:", cErr));
             

@@ -68,7 +68,7 @@
         "totalCost": 19372,
         "profitLoss": 5526,
         "deliveryFeeMode": "Porter system",
-        "poNumber": null
+        "poNumber": "QT-18288"
     },
     "dailyStandup": {
         "inputsRequired": "NO",
@@ -92,7 +92,7 @@
         "gstValue": 3487,
         "totalInvoiceAmount": 22859,
         "paymentTerms": "30 days",
-        "invoiceNumber": "QTN-5288",
+        "invoiceNumber": "QT-18288",
         "paymentStatus": "Paid"
     }
 }

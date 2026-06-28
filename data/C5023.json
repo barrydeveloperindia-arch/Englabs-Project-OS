@@ -1,6 +1,6 @@
 {
     "projectId": "C5023",
-    "client": "AV MACHINING",
+    "client": "AV Machining",
     "planning": {
         "value": 41320,
         "poConfirmed": true,
@@ -48,33 +48,38 @@
         ]
     },
     "metrics": {
-        "materialConsumption": "VC P.P. Inserts",
+        "materialConsumption": "MJF + VC PP",
         "workforce": [
-            "Devanshu"
+            "Devanshu",
+            "QC",
+            "Anurag",
+            "Done",
+            "Shubham"
         ],
-        "totalComponents": 90
+        "totalComponents": 225
     },
     "financials": {
-        "vendorName": "Excel",
+        "vendorName": "Rapid Proto; / excel Rapid Tech",
         "vendorLocation": "Delhi",
         "dispatchBudget": 0,
         "totalCost": null,
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "P2100-EL-12-PO-16911"
+        "poNumber": "QT-18023"
     },
     "dailyStandup": {
-        "discussingNotes": "(Vaccume Casting @Ratnesh ) Shubham to Rohit",
-        "preparingPartsDate": "2026-06-20",
+        "discussingNotes": "135 | Rapid Proto; | QC: Joining still going on // 90 | excel Rapid Tech | QC: Completed; QC done visually; Packaging checked by Shubham; Thursday feedback",
+        "preparingPartsDate": "2026-06-29",
         "inputsRequired": "NO",
         "porterPayments": 0,
         "routeTo": "pune",
         "srNo": "=1+A15",
-        "routeFrom": "Noida"
+        "routeFrom": "Noida",
+        "supervisor": "Shubham"
     },
     "poRelease": {
         "customerSalePrice": 41320,
-        "vendorName": "Excel",
+        "vendorName": "Rapid Proto; / excel Rapid Tech",
         "vendorLocation": "Delhi",
         "poVendorSent": "P2100-EL-12-PO-16911",
         "vendorCost": 0,
@@ -85,7 +90,7 @@
         "gstValue": 7438,
         "totalInvoiceAmount": 48758,
         "paymentTerms": "Bharat sir",
-        "invoiceNumber": "INV-5023",
+        "invoiceNumber": "QT-18023",
         "paymentStatus": "Pending"
     }
 }

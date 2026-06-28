@@ -60,6 +60,9 @@
         "totalCost": null,
         "profitLoss": -260,
         "deliveryFeeMode": "Charged Separately in invoice",
-        "poNumber": "Missing"
+        "poNumber": "QT-18172"
+    },
+    "invoiceRelease": {
+        "invoiceNumber": "QT-18172"
     }
 }

@@ -1,6 +1,6 @@
 {
     "projectId": "C5262",
-    "client": "ITL (SONALIKA)",
+    "client": "Sonalika",
     "planning": {
         "value": 14840,
         "budget": 10388,
@@ -48,32 +48,35 @@
     },
     "metrics": {
         "totalComponents": 4,
-        "materialConsumption": "MJF Orange Paint",
+        "materialConsumption": "MJF Black Paint",
         "workforce": [
-            "Shubham"
+            "Shubham",
+            "Needs",
+            "Anurag"
         ]
     },
     "financials": {
-        "vendorName": "Excel Repid TECH",
+        "vendorName": "Excel;",
         "vendorLocation": "Delhi",
         "dispatchBudget": 0,
         "totalCost": null,
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": null
+        "poNumber": "QT-18262"
     },
     "dailyStandup": {
         "srNo": "=1+A6",
-        "discussingNotes": "No updates recorded.",
-        "preparingPartsDate": "2026-06-23",
+        "discussingNotes": "4 | Excel; | QC: Sent on Saturday; Delivered; Feedback pending",
+        "preparingPartsDate": "2026-06-26",
         "routeFrom": "Noida",
         "routeTo": "Faridabad",
         "porterPayments": 0,
-        "inputsRequired": "NO"
+        "inputsRequired": "NO",
+        "supervisor": "Shubham"
     },
     "poRelease": {
         "customerSalePrice": 14840,
-        "vendorName": "Excel Repid TECH",
+        "vendorName": "Excel;",
         "vendorLocation": "Delhi",
         "poVendorSent": "N/A",
         "vendorCost": 0,
@@ -84,7 +87,7 @@
         "gstValue": 2671,
         "totalInvoiceAmount": 17511,
         "paymentTerms": "30 days",
-        "invoiceNumber": "QTN-5262",
+        "invoiceNumber": "QT-18262",
         "paymentStatus": "Pending"
     }
 }

@@ -57,7 +57,7 @@ export const ProjectListGrid: React.FC<ProjectListGridProps> = ({
                 <div className="max-w-[1400px] mx-auto flex flex-col gap-6">
                     
                     {/* Controls Row */}
-                    <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white p-4 rounded-3xl border border-slate-100 shadow-sm">
+                    <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white p-4 rounded-3xl border-t border-l border-slate-100 border-b-[5px] border-r-[5px] border-slate-200/80 shadow-sm">
                         <div className="relative w-full md:w-96 shrink-0">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                             <input 
@@ -69,16 +69,16 @@ export const ProjectListGrid: React.FC<ProjectListGridProps> = ({
                             />
                         </div>
 
-                        <div className="flex gap-1 bg-slate-50 p-1 rounded-2xl border border-slate-200 w-full md:w-auto">
+                        <div className="flex gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-200 w-full md:w-auto">
                             {(['ALL', 'ACTIVE', 'UPCOMING'] as const).map(f => (
                                 <button
                                     key={f}
                                     type="button"
                                     onClick={() => setProjectFilter(f)}
-                                    className={`flex-1 md:w-32 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all select-none ${
+                                    className={`flex-1 md:w-32 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-75 select-none ${
                                         projectFilter === f
-                                        ? 'bg-emerald-500 text-white shadow-md'
-                                        : 'text-slate-500 hover:text-slate-900 hover:bg-slate-200/50'
+                                        ? 'bg-emerald-500 text-[#092a42] border-t border-l border-emerald-300 border-b-[3px] border-r-[3px] border-emerald-800 shadow-md font-extrabold'
+                                        : 'text-slate-500 hover:text-slate-900 bg-slate-100 border-t border-l border-slate-50 border-b-[3px] border-r-[3px] border-slate-300/80 active:translate-y-[2px] active:translate-x-[2px] active:border-b-[1px] active:border-r-[1px]'
                                     }`}
                                 >
                                     {f}
@@ -98,36 +98,36 @@ export const ProjectListGrid: React.FC<ProjectListGridProps> = ({
                                 <button 
                                     key={project.projectId}
                                     onClick={() => onSelectProject(project)}
-                                    className="group text-left bg-white p-6 rounded-[2rem] border border-slate-100 hover:border-emerald-500/30 hover:shadow-xl hover:shadow-emerald-900/5 transition-all flex flex-col gap-5 relative overflow-hidden"
+                                    className="group text-left p-6 rounded-[2rem] console-card-3d flex flex-col gap-5 relative overflow-hidden select-none cursor-pointer"
                                 >
                                     {/* Top info */}
                                     <div className="flex justify-between items-start">
                                         <div>
-                                            <span className="bg-emerald-50 text-emerald-600 border border-emerald-100 text-[10px] font-black px-2.5 py-1 rounded-lg tracking-widest uppercase inline-block mb-3">
+                                            <span className="bg-emerald-55 text-emerald-650 border border-emerald-100 text-[10px] font-black px-2.5 py-1 rounded-lg tracking-widest uppercase inline-block mb-3 border-t border-l border-b-[2px] border-r-[2px] shadow-sm">
                                                 {project.projectId}
                                             </span>
-                                            <h3 className="text-xl font-black text-slate-900 leading-tight">{project.client}</h3>
+                                            <h3 className="text-xl font-black text-slate-900 leading-tight font-outfit">{project.client}</h3>
                                         </div>
-                                        <div className="w-10 h-10 rounded-full bg-slate-50 group-hover:bg-emerald-50 flex items-center justify-center transition-colors">
+                                        <div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-200/60 shadow-sm group-hover:bg-emerald-50 flex items-center justify-center transition-colors">
                                             <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-emerald-500" />
                                         </div>
                                     </div>
 
                                     {/* Stats */}
                                     <div className="grid grid-cols-2 gap-4 mt-auto">
-                                        <div className="bg-slate-50 rounded-2xl p-4">
-                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 flex items-center gap-1.5"><DollarSign className="w-3 h-3" /> Valuation</p>
-                                            <p className="text-base font-black text-slate-900">₹{(project.planning.value).toLocaleString('en-IN')}</p>
+                                        <div className="bg-slate-50/50 rounded-2xl p-4 border-t border-l border-slate-200/50 border-b-[3px] border-r-[3px] border-slate-300/40 shadow-[inset_1px_1px_4px_rgba(0,0,0,0.02)]">
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 flex items-center gap-1.5 font-mono"><DollarSign className="w-3 h-3" /> Valuation</p>
+                                            <p className="text-base font-black text-slate-900 font-outfit">₹{(project.planning.value).toLocaleString('en-IN')}</p>
                                         </div>
-                                        <div className="bg-slate-50 rounded-2xl p-4">
-                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 flex items-center gap-1.5"><Activity className="w-3 h-3" /> Progress</p>
-                                            <p className="text-base font-black text-emerald-600">{progress}% Done</p>
+                                        <div className="bg-slate-50/50 rounded-2xl p-4 border-t border-l border-slate-200/50 border-b-[3px] border-r-[3px] border-slate-300/40 shadow-[inset_1px_1px_4px_rgba(0,0,0,0.02)]">
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 flex items-center gap-1.5 font-mono"><Activity className="w-3 h-3" /> Progress</p>
+                                            <p className="text-base font-black text-emerald-600 font-outfit">{progress}% Done</p>
                                         </div>
                                     </div>
 
                                     {/* Progress bar */}
-                                    <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                                        <div className="h-full bg-emerald-500 transition-all duration-500" style={{ width: `${progress}%` }}></div>
+                                    <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200/55 p-[1px]">
+                                        <div className="h-full bg-emerald-500 rounded-full transition-all duration-500" style={{ width: `${progress}%` }}></div>
                                     </div>
                                 </button>
                             );

@@ -34,7 +34,7 @@ import {
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import PorterEntryForm from '@modules/inventory/porter/PorterEntryForm';
-import { PorterTrip, PorterPaymentStatus, DeliveryStatus } from '@shared/services/porter_system';
+import { PorterTrip, PorterPaymentStatus, DeliveryStatus, PorterAdvance } from '@shared/services/porter_system';
 import { PorterProtectionAgent } from '@shared/services/porter_protection';
 import { logAction } from '@shared/services/system_guard';
 import { db } from '@services/firebase';
@@ -43,14 +43,18 @@ import logo from '@/assets/englabs_logo.png';
 
 interface Props {
     trips: PorterTrip[];
+    advances?: PorterAdvance[];
     onNewTrip: (trip: PorterTrip) => void;
     onUpdateTrip: (trip: PorterTrip) => void;
     onDeleteTrip: (id: string) => void;
+    onNewAdvance?: (advance: PorterAdvance) => void;
+    onUpdateAdvance?: (advance: PorterAdvance) => void;
+    onDeleteAdvance?: (id: string) => void;
     onLogout?: () => void;
 }
 
-const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDeleteTrip, onLogout }) => {
-    const [view, setView] = useState<'DASHBOARD' | 'LOGBOOK' | 'PAYMENTS' | 'REPORTS'>('DASHBOARD');
+const PorterRegister: React.FC<Props> = ({ trips, advances = [], onNewTrip, onUpdateTrip, onDeleteTrip, onNewAdvance, onUpdateAdvance, onDeleteAdvance, onLogout }) => {
+    const [view, setView] = useState<'DASHBOARD' | 'LOGBOOK' | 'PAYMENTS' | 'REPORTS' | 'ADVANCES'>('DASHBOARD');
     const [reportsSubView, setReportsSubView] = useState<'WEEKLY' | 'MONTHLY'>('WEEKLY');
     const [expandedKey, setExpandedKey] = useState<string | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
@@ -307,8 +311,8 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
         totalKm: (trips || []).reduce((acc, curr) => acc + (curr.distanceKm || 0), 0),
         pendingPayments: (trips || []).filter(t => t.paymentStatus !== 'COMPLETED').length,
         totalGross: (trips || []).reduce((acc, curr) => acc + (curr.grossAmount || 0), 0),
-        totalRemaining: (trips || []).reduce((acc, curr) => acc + (curr.remainingBalance || 0), 0),
-        totalAdvances: (trips || []).reduce((acc, curr) => acc + (curr.advanceAmount || 0), 0),
+        totalRemaining: (trips || []).reduce((acc, curr) => acc + (curr.grossAmount || 0), 0) - (advances || []).reduce((acc, curr) => acc + (curr.amount || 0), 0),
+        totalAdvances: (advances || []).reduce((acc, curr) => acc + (curr.amount || 0), 0),
         totalBikeExpenses: (trips || []).reduce((acc, curr) => 
             acc + (curr.fuelCharge || 0) + (curr.serviceCharge || 0) + (curr.repairCharge || 0) + (curr.extraExpense || 0), 0),
         deliveredCount: (trips || []).filter(t => t.deliveryStatus === 'DELIVERED').length
@@ -398,22 +402,39 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
     };
 
     const shareMonthlySummary = () => {
-        const month = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
-        const recentMissions = trips.slice(0, 5).map(t => 
+        const now = new Date();
+        const currentYearMonth = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}`;
+        const currentMonthTrips = (trips || []).filter(t => t.date.startsWith(currentYearMonth));
+        const currentMonthAdvances = (advances || []).filter(a => a.date.startsWith(currentYearMonth));
+        
+        const monthLabel = now.toLocaleString('default', { month: 'long', year: 'numeric' }).toUpperCase();
+        
+        const mStats = {
+            totalTrips: currentMonthTrips.length,
+            totalKm: currentMonthTrips.reduce((acc, curr) => acc + (curr.distanceKm || 0), 0),
+            totalGross: currentMonthTrips.reduce((acc, curr) => acc + (curr.grossAmount || 0), 0),
+            totalAdvances: currentMonthAdvances.reduce((acc, curr) => acc + (curr.amount || 0), 0),
+            totalBikeExpenses: currentMonthTrips.reduce((acc, curr) => 
+                acc + (curr.fuelCharge || 0) + (curr.serviceCharge || 0) + (curr.repairCharge || 0) + (curr.extraExpense || 0), 0),
+            pendingPayments: currentMonthTrips.filter(t => t.paymentStatus !== 'COMPLETED').length
+        };
+        const totalRemaining = mStats.totalGross - mStats.totalAdvances;
+
+        const recentMissions = currentMonthTrips.slice(0, 5).map(t => 
             `• ${t.id}: ${t.fromLocation}➔${t.toLocation} (${t.distanceKm}KM)`
         ).join('\n');
 
         const text = encodeURIComponent(
-            `📊 *ENGLABS PORTER AUDIT - ${month.toUpperCase()}*\n` +
+            `📊 *ENGLABS PORTER AUDIT - ${monthLabel}*\n` +
             `━━━━━━━━━━━━━━━━━━━━\n` +
-            `📈 *Total Missions:* ${stats.totalTrips}\n` +
-            `🛣️ *Total Distance:* ${stats.totalKm} KM\n` +
-            `💵 *Gross Value:* ₹${stats.totalGross.toLocaleString()}\n` +
-            `💳 *Total Advances:* ₹${stats.totalAdvances.toLocaleString()}\n` +
-            `🛠️ *Bike Expenses:* ₹${stats.totalBikeExpenses.toLocaleString()}\n` +
-            `🧾 *Outstanding Balance:* ₹${stats.totalRemaining.toLocaleString()}\n\n` +
-            `🚚 *RECENT MISSIONS:*\n${recentMissions}\n\n` +
-            `🚨 *Pending Closures:* ${stats.pendingPayments}\n` +
+            `📈 *Total Missions:* ${mStats.totalTrips}\n` +
+            `🛣️ *Total Distance:* ${mStats.totalKm} KM\n` +
+            `💵 *Gross Value:* ₹${mStats.totalGross.toLocaleString()}\n` +
+            `💳 *Total Advances:* ₹${mStats.totalAdvances.toLocaleString()}\n` +
+            `🛠️ *Bike Expenses:* ₹${mStats.totalBikeExpenses.toLocaleString()}\n` +
+            `🧾 *Outstanding Balance:* ₹${totalRemaining.toLocaleString()}\n\n` +
+            `🚚 *RECENT MISSIONS:*\n${recentMissions || 'None'}\n\n` +
+            `🚨 *Pending Closures:* ${mStats.pendingPayments}\n` +
             `━━━━━━━━━━━━━━━━━━━━\n` +
             `🛡️ _Verified by Porter Protection Agent_`
         );
@@ -585,6 +606,12 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                             Logbook
                         </button>
                         <button 
+                            onClick={() => setView('ADVANCES')}
+                            className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${view === 'ADVANCES' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                        >
+                            Advances
+                        </button>
+                        <button 
                             onClick={() => setView('REPORTS')}
                             className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${view === 'REPORTS' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                         >
@@ -621,11 +648,11 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                     <div className="max-w-[1400px] mx-auto space-y-10">
                         {/* MISSION STATS */}
                         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                            <DashboardCard icon={<Truck />} label="Total Missions" value={stats.totalTrips} color="emerald" subValue={`${stats.deliveredCount} Delivered`} />
-                            <DashboardCard icon={<MapPin />} label="Total Distance" value={`${stats.totalKm} KM`} color="purple" subValue="Total Covered" />
-                            <DashboardCard icon={<IndianRupee />} label="Total Advances" value={`₹${stats.totalAdvances.toLocaleString()}`} color="blue" subValue="Advance Payouts" />
-                            <DashboardCard icon={<Activity />} label="Bike Expenses" value={`₹${stats.totalBikeExpenses.toLocaleString()}`} color="amber" subValue="Service & Maint." />
-                            <DashboardCard icon={<Clock />} label="Remaining Due" value={`₹${stats.totalRemaining.toLocaleString()}`} color="emerald" subValue="Unpaid Balance" />
+                            <DashboardCard icon={<Truck />} label="Total Missions" value={stats.totalTrips} color="emerald" subValue={`${stats.deliveredCount} Delivered`} onClick={() => setView('LOGBOOK')} />
+                            <DashboardCard icon={<MapPin />} label="Total Distance" value={`${stats.totalKm} KM`} color="purple" subValue="Total Covered" onClick={() => setView('LOGBOOK')} />
+                            <DashboardCard icon={<IndianRupee />} label="Total Advances" value={`₹${stats.totalAdvances.toLocaleString()}`} color="blue" subValue="Advance Payouts" onClick={() => setView('ADVANCES')} />
+                            <DashboardCard icon={<Activity />} label="Bike Expenses" value={`₹${stats.totalBikeExpenses.toLocaleString()}`} color="amber" subValue="Service & Maint." onClick={() => setView('LOGBOOK')} />
+                            <DashboardCard icon={<Clock />} label="Remaining Due" value={`₹${stats.totalRemaining.toLocaleString()}`} color="emerald" subValue="Unpaid Balance" onClick={() => setView('LOGBOOK')} />
                         </div>
 
                         <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
@@ -877,6 +904,157 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
                                         })}
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                    </div>
+                ) : view === 'ADVANCES' ? (
+                    <div className="max-w-[1400px] mx-auto space-y-8 animate-fade-in">
+                        {/* Summary Header */}
+                        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6 print:hidden">
+                            <div>
+                                <h2 className="text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+                                    <IndianRupee className="w-6 h-6 text-emerald-500" /> Porter Advances & Payments Ledger
+                                </h2>
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Track advance payments, final payments, and UPI transaction confirmations</p>
+                            </div>
+                            <div className="flex bg-[#0e4368] text-white p-4 rounded-2xl shrink-0 shadow-md">
+                                <div className="text-right">
+                                    <span className="text-[9px] font-black uppercase tracking-wider block opacity-70">Total Advances Paid</span>
+                                    <span className="text-2xl font-black">₹{stats.totalAdvances.toLocaleString()}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                            {/* LOG ADVANCE FORM */}
+                            <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-8 h-fit">
+                                <h3 className="text-md font-black text-slate-900 mb-6 flex items-center gap-2 uppercase tracking-wide">
+                                    <Plus className="w-4 h-4 text-emerald-500" /> Log Advance Payment
+                                </h3>
+                                <form onSubmit={(e) => {
+                                    e.preventDefault();
+                                    const target = e.target as any;
+                                    const amount = parseFloat(target.amount.value);
+                                    if (isNaN(amount) || amount <= 0) return;
+                                    
+                                    const numericIds = (advances || []).map((a: any) => {
+                                        const match = a.id?.match(/ADV-2026-(\d+)/);
+                                        return match ? parseInt(match[1], 10) : 0;
+                                    });
+                                    const maxId = numericIds.length > 0 ? Math.max(...numericIds) : 0;
+                                    const nextId = `ADV-2026-${(maxId + 1).toString().padStart(4, '0')}`;
+
+                                    const newAdv = {
+                                        id: nextId,
+                                        timestamp: new Date().toISOString(),
+                                        date: target.date.value || new Date().toISOString().split('T')[0],
+                                        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }),
+                                        porterName: target.porterName.value || 'Gurpreet Singh',
+                                        amount,
+                                        paymentMode: target.paymentMode.value || 'UPI',
+                                        transactionId: target.transactionId.value || '',
+                                        remarks: target.remarks.value || ''
+                                    };
+                                    
+                                    if (onNewAdvance) onNewAdvance(newAdv);
+                                    target.reset();
+                                }} className="space-y-4">
+                                    <div className="space-y-1">
+                                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider block ml-1">Payment Date</label>
+                                        <input type="date" name="date" required defaultValue={new Date().toISOString().split('T')[0]} className="w-full bg-slate-50 border border-slate-100 rounded-xl p-3 text-xs font-bold focus:border-indigo-500 outline-none" />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider block ml-1">Porter Name</label>
+                                        <input type="text" name="porterName" required defaultValue="Gurpreet Singh" className="w-full bg-slate-50 border border-slate-100 rounded-xl p-3 text-xs font-bold focus:border-indigo-500 outline-none" />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider block ml-1">Amount (INR)</label>
+                                        <input type="number" name="amount" required step="0.01" className="w-full bg-slate-50 border border-slate-100 rounded-xl p-3 text-xs font-bold focus:border-indigo-500 outline-none" placeholder="Enter amount..." />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider block ml-1">Payment Mode</label>
+                                        <select name="paymentMode" required defaultValue="UPI" className="w-full bg-slate-50 border border-slate-100 rounded-xl p-3 text-xs font-bold focus:border-indigo-500 outline-none">
+                                            <option value="UPI">UPI</option>
+                                            <option value="CASH">CASH</option>
+                                            <option value="BANK TRANSFER">BANK TRANSFER</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider block ml-1">UPI Transaction ID</label>
+                                        <input type="text" name="transactionId" className="w-full bg-slate-50 border border-slate-100 rounded-xl p-3 text-xs font-bold focus:border-indigo-500 outline-none" placeholder="e.g. 130053039997" />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider block ml-1">Remarks</label>
+                                        <textarea name="remarks" className="w-full bg-slate-50 border border-slate-100 rounded-xl p-3 text-xs font-bold focus:border-indigo-500 outline-none h-20" placeholder="e.g. final payment 27 June 2026"></textarea>
+                                    </div>
+                                    <button type="submit" className="w-full bg-[#0e4368] hover:bg-slate-900 text-white font-black py-3 rounded-xl text-[10px] uppercase tracking-widest shadow-md transition-all cursor-pointer">
+                                        Record Payment
+                                    </button>
+                                </form>
+                            </div>
+
+                            {/* ADVANCES TABLE */}
+                            <div className="xl:col-span-2 bg-white rounded-3xl border border-slate-100 shadow-sm p-8">
+                                <h3 className="text-md font-black text-slate-900 mb-6 uppercase tracking-wide">Advances History</h3>
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left border-collapse">
+                                        <thead>
+                                            <tr className="border-b border-slate-100 text-slate-400 text-[9px] font-black uppercase tracking-wider">
+                                                <th className="py-4 px-2">ID</th>
+                                                <th className="py-4 px-2">Date / Time</th>
+                                                <th className="py-4 px-2">Porter</th>
+                                                <th className="py-4 px-2 text-right">Amount</th>
+                                                <th className="py-4 px-2 text-center">Mode</th>
+                                                <th className="py-4 px-2">Transaction ID</th>
+                                                <th className="py-4 px-2">Remarks</th>
+                                                <th className="py-4 px-2 text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-slate-50">
+                                            {advances.map(adv => (
+                                                <tr key={adv.id} className="text-xs text-slate-700 hover:bg-slate-50/50 transition-colors">
+                                                    <td className="py-4 px-2 font-bold text-slate-900">{adv.id}</td>
+                                                    <td className="py-4 px-2">
+                                                        <div className="font-bold">{adv.date}</div>
+                                                        <div className="text-[9px] text-slate-400 font-bold uppercase">{adv.time}</div>
+                                                    </td>
+                                                    <td className="py-4 px-2 font-bold">{adv.porterName}</td>
+                                                    <td className="py-4 px-2 text-right font-black text-[#0e4368]">₹{adv.amount.toLocaleString()}</td>
+                                                    <td className="py-4 px-2 text-center">
+                                                        <span className={`inline-block px-2 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-wider border ${
+                                                            adv.paymentMode === 'CASH'
+                                                            ? 'bg-amber-50 text-amber-600 border-amber-200/50'
+                                                            : adv.paymentMode === 'BANK TRANSFER'
+                                                            ? 'bg-blue-50 text-blue-600 border-blue-200/50'
+                                                            : 'bg-emerald-50 text-emerald-600 border-emerald-200/50'
+                                                        }`}>
+                                                            {adv.paymentMode || 'UPI'}
+                                                        </span>
+                                                    </td>
+                                                    <td className="py-4 px-2 font-mono text-[10px]">{adv.transactionId || '—'}</td>
+                                                    <td className="py-4 px-2 text-slate-500 font-medium">{adv.remarks || '—'}</td>
+                                                    <td className="py-4 px-2 text-center">
+                                                        <button 
+                                                            onClick={() => {
+                                                                if (onDeleteAdvance && confirm(`Are you sure you want to delete advance entry ${adv.id}?`)) {
+                                                                    onDeleteAdvance(adv.id);
+                                                                }
+                                                            }}
+                                                            className="p-2 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition-all text-slate-400 cursor-pointer"
+                                                        >
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                            {advances.length === 0 && (
+                                                <tr>
+                                                    <td colSpan={7} className="py-8 text-center text-slate-400 font-bold uppercase text-[10px]">No advance payments recorded.</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1360,24 +1538,27 @@ const PorterRegister: React.FC<Props> = ({ trips, onNewTrip, onUpdateTrip, onDel
     );
 };
 
-const DashboardCard = ({ icon, label, value, color, subValue }: any) => {
+const DashboardCard = ({ icon, label, value, color, subValue, onClick }: any) => {
     const colors: any = {
-        emerald: "text-emerald-500 bg-emerald-50 border-emerald-100 shadow-emerald-500/5",
-        blue: "text-blue-500 bg-blue-50 border-blue-100 shadow-blue-500/5",
-        amber: "text-amber-500 bg-amber-50 border-amber-100 shadow-amber-500/5",
-        purple: "text-purple-500 bg-purple-50 border-purple-100 shadow-purple-500/5"
+        emerald: "text-emerald-600 bg-emerald-50/50 border-t border-l border-emerald-100 border-b-[3px] border-r-[3px] border-emerald-200/90 shadow-emerald-500/5",
+        blue: "text-blue-600 bg-blue-50/50 border-t border-l border-blue-100 border-b-[3px] border-r-[3px] border-blue-200/90 shadow-blue-500/5",
+        amber: "text-amber-600 bg-amber-50/50 border-t border-l border-amber-100 border-b-[3px] border-r-[3px] border-amber-200/90 shadow-amber-500/5",
+        purple: "text-purple-600 bg-purple-50/50 border-t border-l border-purple-100 border-b-[3px] border-r-[3px] border-purple-200/90 shadow-purple-500/5"
     };
     return (
-        <div className="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all group relative overflow-hidden">
-            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-8 transition-transform group-hover:scale-110 ${colors[color]} border shadow-lg`}>
+        <div 
+            onClick={onClick}
+            className={`bg-white p-10 rounded-[2.5rem] border-t border-l border-slate-100 border-b-[6px] border-r-[6px] border-slate-200/80 shadow-[0_10px_20px_rgba(0,0,0,0.03)] transition-all duration-100 group relative overflow-hidden select-none ${onClick ? 'cursor-pointer active:translate-y-[4px] active:translate-x-[4px] active:border-b-[2px] active:border-r-[2px] hover:border-slate-200 hover:shadow-[0_15px_30px_rgba(0,0,0,0.06)]' : ''}`}
+        >
+            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-8 transition-transform group-hover:scale-105 ${colors[color]} shadow-md`}>
                 {React.cloneElement(icon, { className: "w-7 h-7" })}
             </div>
-            <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">{label}</p>
-            <p className="text-4xl font-black text-slate-900 tracking-tighter">{value}</p>
-            <p className="text-[10px] font-bold text-slate-400 uppercase mt-4 flex items-center gap-2">
+            <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 font-mono">{label}</p>
+            <p className="text-4xl font-black text-slate-900 tracking-tighter font-outfit">{value}</p>
+            <p className="text-[10px] font-bold text-slate-400 uppercase mt-4 flex items-center gap-2 font-mono">
                 <Activity className="w-3 h-3 text-emerald-500" /> {subValue}
             </p>
-            <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity">
+            <div className="absolute top-0 right-0 p-8 opacity-[0.02] group-hover:opacity-[0.06] transition-opacity pointer-events-none">
                 {React.cloneElement(icon, { className: "w-32 h-32" })}
             </div>
         </div>

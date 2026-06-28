@@ -1,6 +1,6 @@
 {
     "projectId": "C5230",
-    "client": "ENERTICS",
+    "client": "Enertics",
     "planning": {
         "value": 25430,
         "poConfirmed": true,
@@ -55,20 +55,20 @@
         ]
     },
     "metrics": {
-        "materialConsumption": "NYLON GF",
+        "materialConsumption": "MJF",
         "workforce": [
             "Anurag"
         ],
-        "totalComponents": 1000
+        "totalComponents": 0
     },
     "financials": {
-        "vendorName": "SK Techno",
+        "vendorName": "PlastoFur",
         "vendorLocation": "Mohali",
         "dispatchBudget": 0,
         "totalCost": null,
         "profitLoss": null,
         "deliveryFeeMode": "Porter system",
-        "poNumber": "P2100-EL12-PO-74523"
+        "poNumber": "QT-18230"
     },
     "dailyStandup": {
         "routeFrom": "Chandigarh",
@@ -76,12 +76,13 @@
         "routeTo": "Englabs",
         "porterPayments": 0,
         "inputsRequired": "Part Feed Back",
-        "preparingPartsDate": "Porter Time 11:30am ",
-        "discussingNotes": "1,000 pieces are arriving today, and the target is to dispatch them today itself; Anurag will handle this."
+        "preparingPartsDate": "2026-06-24",
+        "discussingNotes": "0 | PlastoFur | QC: 220 are being sent today",
+        "supervisor": "Anurag"
     },
     "poRelease": {
         "customerSalePrice": 25430,
-        "vendorName": "SK Techno",
+        "vendorName": "PlastoFur",
         "vendorLocation": "Mohali",
         "poVendorSent": "N/A",
         "vendorCost": 0,
@@ -92,7 +93,7 @@
         "gstValue": 4577,
         "totalInvoiceAmount": 30007,
         "paymentTerms": "30 days",
-        "invoiceNumber": "INV-5230",
+        "invoiceNumber": "QT-18230",
         "paymentStatus": "Pending"
     }
 }

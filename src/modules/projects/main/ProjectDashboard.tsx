@@ -10,7 +10,8 @@ import {
     Box, 
     ArrowDownRight,
     ArrowLeft,
-    Plus
+    Plus,
+    Edit3
 } from 'lucide-react';
 import logo from '@/assets/englabs_logo.png';
 
@@ -31,6 +32,7 @@ interface ProjectDashboardProps {
     staffList: string[];
     setIsAddStaffModalOpen: (isOpen: boolean) => void;
     checkoutLoading: boolean;
+    onEditProject?: () => void;
 }
 
 export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
@@ -49,7 +51,8 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
     setCheckoutStaffName,
     staffList,
     setIsAddStaffModalOpen,
-    checkoutLoading
+    checkoutLoading,
+    onEditProject
 }) => {
     return (
         <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-[#F8FAFC]">
@@ -101,7 +104,18 @@ export const ProjectDashboard: React.FC<ProjectDashboardProps> = ({
                                 <span className="bg-[#0e4368] text-emerald-500 text-[8px] md:text-[10px] font-black px-2.5 py-1.5 rounded-lg tracking-widest uppercase">{selectedProject.projectId}</span>
                                 <span className="text-slate-400 font-black text-[8px] md:text-[10px] uppercase tracking-widest">In-Orbit Dynamics</span>
                             </div>
-                            <h2 className="text-xl md:text-5xl font-black text-slate-900 tracking-tighter leading-tight md:leading-none">{selectedProject.client}</h2>
+                            <h2 className="text-xl md:text-5xl font-black text-slate-900 tracking-tighter leading-tight md:leading-none flex items-center gap-3">
+                                {selectedProject.client}
+                                {onEditProject && (
+                                    <button 
+                                        onClick={onEditProject}
+                                        className="p-2 bg-slate-50 border border-slate-200 rounded-full flex items-center justify-center text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 hover:border-emerald-250 transition-all shadow-sm cursor-pointer"
+                                        title="Edit Project Details"
+                                    >
+                                        <Edit3 className="w-4.5 h-4.5" />
+                                    </button>
+                                )}
+                            </h2>
                         </div>
                         <div className="text-left md:text-right">
                             <p className="text-[8px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Contract Valuation</p>

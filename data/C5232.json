@@ -1,6 +1,6 @@
 {
     "projectId": "C5232",
-    "client": "ITL (SONALIKA)",
+    "client": "Sonalika",
     "planning": {
         "value": 29766,
         "budget": 20836,
@@ -57,30 +57,33 @@
         "totalComponents": 5,
         "materialConsumption": "MJF Black Paint",
         "workforce": [
-            "Devanshu"
+            "Devanshu",
+            "Anurag",
+            "Devyanshu"
         ]
     },
     "financials": {
-        "vendorName": "Excel Repid TECH",
+        "vendorName": "excel Rapid Tech",
         "vendorLocation": "Delhi",
         "dispatchBudget": 0,
         "totalCost": null,
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": null
+        "poNumber": "QT-18232"
     },
     "dailyStandup": {
         "srNo": "=1+A11",
-        "discussingNotes": "\nThis part is currently with staff member Denanshu; it still needs to be painted, and only then can it be sent to the client.",
-        "preparingPartsDate": "2026-06-20",
+        "discussingNotes": "5 | excel Rapid Tech | QC: Dispatched to customer; Feedback on Thursday",
+        "preparingPartsDate": "2026-06-26",
         "routeFrom": "Delhi",
         "routeTo": "Englabs",
         "porterPayments": 168,
-        "inputsRequired": "NO"
+        "inputsRequired": "NO",
+        "supervisor": "Devyanshu"
     },
     "poRelease": {
         "customerSalePrice": 29766,
-        "vendorName": "Excel Repid TECH",
+        "vendorName": "excel Rapid Tech",
         "vendorLocation": "Delhi",
         "poVendorSent": "N/A",
         "vendorCost": 168,
@@ -91,7 +94,7 @@
         "gstValue": 5358,
         "totalInvoiceAmount": 35124,
         "paymentTerms": "30 days",
-        "invoiceNumber": "QTN-5232",
+        "invoiceNumber": "QT-18232",
         "paymentStatus": "Pending"
     }
 }

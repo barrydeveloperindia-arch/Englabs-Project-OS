@@ -1,6 +1,6 @@
 {
     "projectId": "C5190",
-    "client": "UNO MINDA",
+    "client": "Uno Minda",
     "planning": {
         "deliveryTerms": "ToPay",
         "poNumber": "P2100-EL12-PO-17453",
@@ -47,11 +47,11 @@
         ]
     },
     "metrics": {
-        "materialConsumption": "Tracking active...",
+        "materialConsumption": "Metal = 11+11; ABS = 1+1",
         "workforce": [
             "TBD"
         ],
-        "totalComponents": 0
+        "totalComponents": 24
     },
     "financials": {
         "vendorName": "Talekar",
@@ -60,6 +60,12 @@
         "totalCost": null,
         "profitLoss": -170,
         "deliveryFeeMode": null,
-        "poNumber": "P2100-EL12-PO-17453"
+        "poNumber": "QT-18190"
+    },
+    "dailyStandup": {
+        "discussingNotes": "24 | QC: Packed but waiting for the PO "
+    },
+    "invoiceRelease": {
+        "invoiceNumber": "QT-18190"
     }
 }

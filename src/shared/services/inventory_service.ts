@@ -134,6 +134,17 @@ if (Array.isArray(masterInventory)) {
         }
     });
 }
+nameToCodeMap.set("hand gloves", "Eng-136");
+nameToCodeMap.set("gloves (industrial)", "Eng-136");
+nameToCodeMap.set("surgical blade", "Eng-055");
+nameToCodeMap.set("sbl pu fast drying primer surfacer grey 4 ltr", "Eng-004");
+nameToCodeMap.set("eng04", "Eng-004");
+nameToCodeMap.set("palmatt patti", "Eng-147");
+nameToCodeMap.set("patti", "Eng-147");
+nameToCodeMap.set("screws 1/2\" gyp", "Eng-148");
+nameToCodeMap.set("screws [pcs] 1/2\" gyp", "Eng-148");
+nameToCodeMap.set("screws gyp 1.5\"", "Eng-149");
+nameToCodeMap.set("screws [pcs] gyp 1.5\"", "Eng-149");
 
 const STOCK_COLLECTION = "inventory_stock";
 const LOG_COLLECTION = "inventory_logs";

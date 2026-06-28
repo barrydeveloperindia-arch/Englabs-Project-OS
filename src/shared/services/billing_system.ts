@@ -37,10 +37,10 @@ export interface BillingDocument {
 
 export const COMPANY_DETAILS = {
     name: "ENGLABS INDIA PRIVATE LIMITED",
-    address: "2nd FLOOR, UNIT NO. 1021-1022, DISHA ARCAHE, SECTOR 4, MANSA DEVI COMPLEX, PANCHKULA, HARYANA – 134114",
+    address: "1021-1022, Second Floor, Disha Arcade, Mansa Devi Complex, Bhainsa Tibba, MDC Sector 4, Panchkula, Haryana 134114",
     mobile: "09876457934",
     gstin: "06AAFCE5136K1ZL",
-    mapLink: "https://maps.app.goo.gl/NoPy8ogss2618CFQ6"
+    mapLink: "https://maps.app.goo.gl/vybmfwXtu8edZZQ48"
 };
 
 export const generateDocId = (type: DocumentType, count: number): string => {

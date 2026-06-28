@@ -1,6 +1,6 @@
 {
     "projectId": "C5273",
-    "client": "HC ROBOTIC",
+    "client": "HC Robotics",
     "planning": {
         "startDate": "2026-06-12",
         "value": 128352,
@@ -48,20 +48,21 @@
         ]
     },
     "metrics": {
-        "totalComponents": 48,
+        "totalComponents": 64,
         "workforce": [
-            "Anurag"
+            "Anurag",
+            "Devyanshu"
         ],
-        "materialConsumption": "MJF Black Paint"
+        "materialConsumption": "MJF"
     },
     "financials": {
-        "vendorName": "Excel",
+        "vendorName": "excel Rapid Tech",
         "vendorLocation": "Delhi",
         "dispatchBudget": 0,
         "totalCost": null,
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": null
+        "poNumber": "QT-18273"
     },
     "dailyStandup": {
         "routeFrom": "Delhi",
@@ -69,12 +70,13 @@
         "routeTo": "Englabs",
         "srNo": "=1+A7",
         "inputsRequired": "NO",
-        "preparingPartsDate": "2026-06-22",
-        "discussingNotes": "Part coming today"
+        "preparingPartsDate": "2026-06-26",
+        "discussingNotes": "64 | excel Rapid Tech | QC: 2 parts are pending; should get delivered today",
+        "supervisor": "Devyanshu"
     },
     "poRelease": {
         "customerSalePrice": 128352,
-        "vendorName": "Excel",
+        "vendorName": "excel Rapid Tech",
         "vendorLocation": "Delhi",
         "poVendorSent": "N/A",
         "vendorCost": 0,
@@ -85,7 +87,7 @@
         "gstValue": 23103,
         "totalInvoiceAmount": 151455,
         "paymentTerms": "30 days",
-        "invoiceNumber": "QTN-5273",
+        "invoiceNumber": "QT-18273",
         "paymentStatus": "Pending"
     }
 }

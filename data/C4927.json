@@ -60,6 +60,9 @@
         "totalCost": 152300,
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "P2100-EL12-PO-16750"
+        "poNumber": "QT-17927"
+    },
+    "invoiceRelease": {
+        "invoiceNumber": "QT-17927"
     }
 }

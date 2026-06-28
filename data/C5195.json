@@ -1,6 +1,6 @@
 {
     "projectId": "C5195",
-    "client": "LABAT ASIA",
+    "client": "Labat Asia",
     "planning": {
         "deliveryTerms": "ToPay",
         "poNumber": "P2100-EL12-PO-74404",
@@ -49,10 +49,12 @@
     },
     "metrics": {
         "workforce": [
-            "TBD"
+            "TBD",
+            "Needs",
+            "Shubham/Anurag"
         ],
-        "materialConsumption": "Tracking active...",
-        "totalComponents": 0
+        "materialConsumption": "VC ABS Grey Painting",
+        "totalComponents": 150
     },
     "financials": {
         "vendorName": "Excel",
@@ -61,7 +63,7 @@
         "totalCost": null,
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "P2100-EL12-PO-74404"
+        "poNumber": "QT-18195"
     },
     "poRelease": {
         "customerSalePrice": 110100,
@@ -76,10 +78,13 @@
         "gstValue": 19818,
         "totalInvoiceAmount": 129918,
         "paymentTerms": "30 days",
-        "invoiceNumber": "INV-5195",
+        "invoiceNumber": "QT-18195",
         "paymentStatus": "Pending"
     },
     "dailyStandup": {
-        "inputsRequired": "NO"
+        "inputsRequired": "NO",
+        "discussingNotes": "150 | Excel | QC: It is not urgent as per the customer so kept on hold; Inserting is pending which will be done by Arjun after other projects are completed",
+        "supervisor": "Shubham/Anurag",
+        "preparingPartsDate": "Delayed as per conversation with the customer"
     }
 }

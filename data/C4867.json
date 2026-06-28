@@ -63,5 +63,11 @@
             "Sandeep"
         ],
         "materialConsumption": "Aluminum 6061, MS Sheet"
+    },
+    "invoiceRelease": {
+        "invoiceNumber": "QT-17867"
+    },
+    "financials": {
+        "poNumber": "QT-17867"
     }
 }

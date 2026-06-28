@@ -1,6 +1,6 @@
 {
     "projectId": "C5224",
-    "client": "VIBRACOUSTIC",
+    "client": "Vibracoustic",
     "planning": {
         "budget": 0,
         "poNumber": "",
@@ -47,11 +47,11 @@
         ]
     },
     "metrics": {
-        "materialConsumption": "Tracking active...",
+        "materialConsumption": "Machining 6063 T6",
         "workforce": [
             "TBD"
         ],
-        "totalComponents": 0
+        "totalComponents": 18
     },
     "financials": {
         "vendorName": "SK Techno",
@@ -60,6 +60,12 @@
         "totalCost": null,
         "profitLoss": null,
         "deliveryFeeMode": null,
-        "poNumber": "Missing"
+        "poNumber": "QT-18224"
+    },
+    "dailyStandup": {
+        "discussingNotes": "18 | QC: Done on Saturday; "
+    },
+    "invoiceRelease": {
+        "invoiceNumber": "QT-18224"
     }
 }

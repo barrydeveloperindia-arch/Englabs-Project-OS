@@ -60,6 +60,9 @@
         "totalCost": null,
         "profitLoss": -280,
         "deliveryFeeMode": null,
-        "poNumber": "Missing"
+        "poNumber": "QT-17465"
+    },
+    "invoiceRelease": {
+        "invoiceNumber": "QT-17465"
     }
 }

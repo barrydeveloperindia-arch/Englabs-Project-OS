@@ -1,6 +1,6 @@
 {
     "projectId": "C5237",
-    "client": "BAJAJ",
+    "client": "Bajaj",
     "planning": {
         "value": 4850,
         "budget": 3395,
@@ -54,33 +54,35 @@
         ]
     },
     "metrics": {
-        "totalComponents": 9,
-        "materialConsumption": "SLA / ABS",
+        "totalComponents": 17,
+        "materialConsumption": "Machining !! SIA ABS",
         "workforce": [
-            "Shubham"
+            "Shubham",
+            "Visual"
         ]
     },
     "financials": {
-        "vendorName": "RSD (WORKAAD)",
+        "vendorName": "SK Techno",
         "vendorLocation": "NOIDA",
         "dispatchBudget": 0,
         "totalCost": 4850,
         "profitLoss": 1325,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": null
+        "poNumber": "QT-18237"
     },
     "dailyStandup": {
         "srNo": "",
-        "discussingNotes": "Delivered. Project Closed.",
-        "preparingPartsDate": "2026-06-23",
+        "discussingNotes": "17 | SK Techno | QC: Delivered on 17th; Feedback will be sent by customer next week; Formal email request to be sent for testimonial",
+        "preparingPartsDate": "2026-06-26",
         "routeFrom": "Noida",
         "routeTo": "Faridabad",
         "porterPayments": 0,
-        "inputsRequired": "NO"
+        "inputsRequired": "NO",
+        "supervisor": "Shubham"
     },
     "poRelease": {
         "customerSalePrice": 4850,
-        "vendorName": "RSD (WORKAAD)",
+        "vendorName": "SK Techno",
         "vendorLocation": "NOIDA",
         "poVendorSent": "16945",
         "vendorCost": 3525,
@@ -91,7 +93,7 @@
         "gstValue": 873,
         "totalInvoiceAmount": 5723,
         "paymentTerms": "30 days",
-        "invoiceNumber": "QTN-5237",
+        "invoiceNumber": "QT-18237",
         "paymentStatus": "Paid"
     }
 }

@@ -896,10 +896,10 @@
         "distanceKm": 45,
         "ratePerKm": 10,
         "grossAmount": 450.0,
-        "advanceAmount": 0.0,
-        "remainingBalance": 450.0,
+        "advanceAmount": 1169.0,
+        "remainingBalance": -719.0,
         "totalAmount": 450.0,
-        "paymentStatus": "PARTIAL",
+        "paymentStatus": "COMPLETED",
         "deliveryStatus": "DELIVERED",
         "timeline": [
             {
@@ -910,6 +910,40 @@
             {
                 "status": "DELIVERED",
                 "timestamp": "2026-06-22T12:00:00Z",
+                "remarks": "Completed"
+            }
+        ]
+    },
+    {
+        "id": "PTR-2026-0026",
+        "timestamp": "2026-06-26T10:00:00Z",
+        "date": "2026-06-26",
+        "time": "10:00 AM",
+        "porterName": "Gurpreet Singh",
+        "vehicleNumber": "CH01AB5781",
+        "customerName": "Gaurav",
+        "customerMobile": "918894825152",
+        "fromLocation": "Englabs",
+        "toLocation": "Manimajra",
+        "deliveryAddress": "Manimajra",
+        "materialDescription": "Photo Frame",
+        "distanceKm": 2.5,
+        "ratePerKm": 10,
+        "grossAmount": 25.0,
+        "advanceAmount": 0.0,
+        "remainingBalance": 25.0,
+        "totalAmount": 25.0,
+        "paymentStatus": "PENDING",
+        "deliveryStatus": "DELIVERED",
+        "timeline": [
+            {
+                "status": "ACCEPTED",
+                "timestamp": "2026-06-26T09:30:00Z",
+                "remarks": "Mission Initialized"
+            },
+            {
+                "status": "DELIVERED",
+                "timestamp": "2026-06-26T12:00:00Z",
                 "remarks": "Completed"
             }
         ]

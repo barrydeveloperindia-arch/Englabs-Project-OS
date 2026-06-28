@@ -1,6 +1,6 @@
 {
     "projectId": "C5296",
-    "client": "AEBOCODE",
+    "client": "Aebocode",
     "planning": {
         "poConfirmed": true,
         "value": 48800,
@@ -57,31 +57,33 @@
     "metrics": {
         "totalComponents": 14,
         "workforce": [
-            "Devanshu"
+            "Devanshu",
+            "Anurag"
         ],
-        "materialConsumption": "PA12"
+        "materialConsumption": "MJF"
     },
     "financials": {
-        "vendorName": "Adroitec Information System Pvt Ltd (Noida)",
+        "vendorName": "Adroitec",
         "vendorLocation": "Noida",
         "dispatchBudget": 0,
         "totalCost": null,
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "P2100-EL12-PO-74523"
+        "poNumber": "QT-18296"
     },
     "dailyStandup": {
-        "discussingNotes": "TO QTY, 14  NOIDA TO ENGLABS COMING TODAY",
-        "preparingPartsDate": "TODAY IS COMING ",
+        "discussingNotes": "14 | Adroitec | QC: Delivered yesterday; Feedback taken; Anurag has to send documented feedback",
+        "preparingPartsDate": "2026-06-24",
         "inputsRequired": "NO",
         "porterPayments": 0,
         "routeTo": "Englabs",
         "srNo": "=1+A25",
-        "routeFrom": "NOIDA"
+        "routeFrom": "NOIDA",
+        "supervisor": "Devanshu"
     },
     "poRelease": {
         "customerSalePrice": 48800,
-        "vendorName": "Adroitec Information System Pvt Ltd (Noida)",
+        "vendorName": "Adroitec",
         "vendorLocation": "Noida",
         "poVendorSent": "N/A",
         "vendorCost": 42280,
@@ -92,7 +94,7 @@
         "gstValue": 8784,
         "totalInvoiceAmount": 57584,
         "paymentTerms": "NO IDEA",
-        "invoiceNumber": "INV-5296",
+        "invoiceNumber": "QT-18296",
         "paymentStatus": "Pending"
     }
 }

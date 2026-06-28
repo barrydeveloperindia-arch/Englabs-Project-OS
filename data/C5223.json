@@ -1,6 +1,6 @@
 {
     "projectId": "C5223",
-    "client": "HENKEL",
+    "client": "Henkel",
     "planning": {
         "deliveryTerms": "ToPay",
         "poNumber": "P2100-EL12-PO-40085",
@@ -47,11 +47,11 @@
         ]
     },
     "metrics": {
-        "materialConsumption": "Tracking active...",
+        "materialConsumption": "Nylon; GF",
         "workforce": [
             "TBD"
         ],
-        "totalComponents": 0
+        "totalComponents": 10
     },
     "financials": {
         "vendorName": "Talekar",
@@ -60,6 +60,12 @@
         "totalCost": null,
         "profitLoss": 0,
         "deliveryFeeMode": null,
-        "poNumber": "P2100-EL12-PO-40085"
+        "poNumber": "QT-18223"
+    },
+    "dailyStandup": {
+        "discussingNotes": "8 | QC: Friday; Visual QC and Dispatch "
+    },
+    "invoiceRelease": {
+        "invoiceNumber": "QT-18223"
     }
 }

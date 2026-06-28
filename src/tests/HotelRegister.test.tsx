@@ -34,15 +34,17 @@ const mockProjects: ProjectData[] = [
         projectId: 'C5023',
         client: 'Aura Tech',
         planning: { value: 100000, budget: 60000, startDate: '2026-06-01', deliveryTerms: 'Porter', poNumber: 'PO-123', poConfirmed: true },
-        production: { stages: [], components: [] },
-        dailyStandup: { lead: 'Anurag', lastUpdate: '', status: 'Healthy', blockers: 'None' }
+        production: { currentStage: 'Sanding', stages: [] },
+        metrics: { totalComponents: 10, materialConsumption: 'PLA', workforce: ['Anurag'] },
+        dailyStandup: { discussingNotes: 'Healthy' }
     },
     {
         projectId: 'C5124',
         client: 'Brahmos Ltd',
         planning: { value: 250000, budget: 150000, startDate: '2026-06-10', deliveryTerms: 'ToPay', poNumber: 'PO-456', poConfirmed: true },
-        production: { stages: [], components: [] },
-        dailyStandup: { lead: 'Shubham', lastUpdate: '', status: 'Blocked', blockers: 'Material Delay' }
+        production: { currentStage: 'Painting', stages: [] },
+        metrics: { totalComponents: 20, materialConsumption: 'ABS', workforce: ['Shubham'] },
+        dailyStandup: { discussingNotes: 'Material Delay' }
     }
 ];
 

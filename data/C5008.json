@@ -60,6 +60,9 @@
         "totalCost": 1091040,
         "profitLoss": 22700,
         "deliveryFeeMode": "included",
-        "poNumber": "P2100-EL12-PO-16803"
+        "poNumber": "QT-18008"
+    },
+    "invoiceRelease": {
+        "invoiceNumber": "QT-18008"
     }
 }

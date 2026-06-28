@@ -60,6 +60,9 @@
         "totalCost": null,
         "profitLoss": 0,
         "deliveryFeeMode": null,
-        "poNumber": "P2100-EL-12-PO-16899"
+        "poNumber": "QT-18179"
+    },
+    "invoiceRelease": {
+        "invoiceNumber": "QT-18179"
     }
 }

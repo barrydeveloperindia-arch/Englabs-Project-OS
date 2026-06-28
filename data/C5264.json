@@ -1,0 +1,83 @@
+{
+    "projectId": "C5264",
+    "client": "Bajaj",
+    "planning": {
+        "value": 286754,
+        "poConfirmed": true,
+        "startDate": "2026-06-25",
+        "poNumber": "YES",
+        "budget": 286754,
+        "deliveryTerms": "ToPay"
+    },
+    "production": {
+        "currentStage": "Engineering Design",
+        "stages": [
+            {
+                "name": "Engineering Design",
+                "status": "Pending",
+                "lead": "Shubham"
+            },
+            {
+                "name": "Machine Processing",
+                "status": "Pending"
+            },
+            {
+                "name": "Workshop Fabrication",
+                "status": "Pending"
+            },
+            {
+                "name": "Sanding",
+                "status": "Pending"
+            },
+            {
+                "name": "Painting",
+                "status": "Pending"
+            },
+            {
+                "name": "Drying",
+                "status": "Pending"
+            },
+            {
+                "name": "Finishing",
+                "status": "Pending"
+            },
+            {
+                "name": "Final Packaging",
+                "status": "Pending"
+            }
+        ]
+    },
+    "metrics": {
+        "materialConsumption": "MJF+SLA; Glass Filled, Transparent",
+        "workforce": [
+            "Shubham",
+            "Devanshu"
+        ],
+        "totalComponents": 73
+    },
+    "dailyStandup": {
+        "discussingNotes": "73 | Objectify | QC: Vendor will send on Monday; Inserts and painting has to be done",
+        "preparingPartsDate": "2026-06-29",
+        "inputsRequired": "NO",
+        "porterPayments": 0,
+        "routeTo": "",
+        "srNo": "29",
+        "routeFrom": "",
+        "supervisor": "Devanshu"
+    },
+    "poRelease": {
+        "customerSalePrice": 286754,
+        "vendorName": "Objectify",
+        "vendorLocation": "",
+        "poVendorSent": "",
+        "vendorCost": 286754,
+        "releaseDate": "2026-06-25"
+    },
+    "invoiceRelease": {
+        "invoiceNumber": "QT-18264"
+    },
+    "financials": {
+        "poNumber": "QT-18264",
+        "vendorName": "Objectify"
+    }
+}

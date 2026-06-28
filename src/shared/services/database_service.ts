@@ -104,3 +104,31 @@ export const fetchProjectsFromFirebase = async () => {
     const querySnapshot = await getDocs(collection(db, "projects"));
     return querySnapshot.docs.map(doc => doc.data());
 };
+
+export const savePorterEntry = async (entry: any) => {
+    if (!db) return { success: false, error: "Database not initialized" };
+    try {
+        const cleanEntry = JSON.parse(JSON.stringify(entry));
+        const docRef = doc(db, "porter_ledger", entry.id);
+        await setDoc(docRef, {
+            ...cleanEntry,
+            syncedAt: new Date().toISOString()
+        });
+        return { success: true };
+    } catch (e) {
+        console.error("Error saving porter entry to Firebase:", e);
+        return { success: false, error: e };
+    }
+};
+
+export const fetchPorterLedger = async () => {
+    if (!db) return [];
+    try {
+        const querySnapshot = await getDocs(collection(db, "porter_ledger"));
+        return querySnapshot.docs.map(doc => doc.data());
+    } catch (e) {
+        console.error("Error fetching porter ledger from Firebase:", e);
+        return [];
+    }
+};
+

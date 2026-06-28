@@ -64,7 +64,7 @@ export const ProjectManagementDashboard: React.FC<ProjectManagementDashboardProp
                     if (isPastDue) pdCount++;
                     
                     tasks.push({
-                        id: `TSK-${p.projectId}-${sIdx}`,
+                        id: `TSK-${p.projectId}-${sIdx}-${idx}`,
                         projectId: p.projectId,
                         client: p.client,
                         title: `${stage.name} Execution`,
@@ -78,7 +78,7 @@ export const ProjectManagementDashboard: React.FC<ProjectManagementDashboardProp
             // Generate some mock feedback
             if (idx % 2 === 0) {
                 feedbacks.push({
-                    id: `FB-${p.projectId}`,
+                    id: `FB-${p.projectId}-${idx}`,
                     projectId: p.projectId,
                     client: p.client,
                     message: `Please prioritize the ${p.production.stages[0]?.name || 'initial'} phase for early review.`,
@@ -125,7 +125,7 @@ export const ProjectManagementDashboard: React.FC<ProjectManagementDashboardProp
                     </div>
                 </div>
                 <button 
-                    className="flex items-center gap-2 bg-slate-900 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition-all shadow-md"
+                    className="flex items-center gap-2 bg-slate-900 text-white px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 border-t border-l border-slate-700 border-b-[4px] border-r-[4px] border-slate-950 active:translate-x-[2px] active:translate-y-[2px] active:border-b-[1px] active:border-r-[1px] transition-all shadow-md duration-75 select-none cursor-pointer"
                     onClick={() => onSelectProject(projects[0])} // Just a fallback action for now
                 >
                     <Briefcase className="w-3.5 h-3.5" /> View Project Grid
@@ -137,7 +137,14 @@ export const ProjectManagementDashboard: React.FC<ProjectManagementDashboardProp
                     
                     {/* 1. TOP METRICS ROW */}
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                        <div className="bg-white p-5 md:p-6 rounded-3xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden group">
+                        <div 
+                            onClick={() => setFilterStatus(filterStatus === 'Completed' ? 'All' : 'Completed')}
+                            className={`p-5 md:p-6 rounded-3xl relative overflow-hidden group cursor-pointer transition-all duration-100 select-none ${
+                                filterStatus === 'Completed' 
+                                    ? 'bg-emerald-50/50 border-t border-l border-emerald-250 border-b-[2px] border-r-[2px] border-emerald-500 shadow-[inset_2px_2px_5px_rgba(0,0,0,0.05)] translate-x-[4px] translate-y-[4px]' 
+                                    : 'bg-white border-t border-l border-slate-100 border-b-[6px] border-r-[6px] border-slate-200 shadow-sm active:translate-x-[4px] active:translate-y-[4px] active:border-b-[2px] active:border-r-[2px] hover:border-emerald-300'
+                            }`}
+                        >
                             <div className="absolute -right-6 -top-6 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all" />
                             <div className="flex justify-between items-start mb-4">
                                 <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl border border-emerald-100">
@@ -149,7 +156,14 @@ export const ProjectManagementDashboard: React.FC<ProjectManagementDashboardProp
                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Successfully Delivered</p>
                         </div>
 
-                        <div className="bg-white p-5 md:p-6 rounded-3xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden group">
+                        <div 
+                            onClick={() => setFilterStatus(filterStatus === 'In Progress' ? 'All' : 'In Progress')}
+                            className={`p-5 md:p-6 rounded-3xl relative overflow-hidden group cursor-pointer transition-all duration-100 select-none ${
+                                filterStatus === 'In Progress' 
+                                    ? 'bg-blue-50/50 border-t border-l border-blue-250 border-b-[2px] border-r-[2px] border-blue-500 shadow-[inset_2px_2px_5px_rgba(0,0,0,0.05)] translate-x-[4px] translate-y-[4px]' 
+                                    : 'bg-white border-t border-l border-slate-100 border-b-[6px] border-r-[6px] border-slate-200 shadow-sm active:translate-x-[4px] active:translate-y-[4px] active:border-b-[2px] active:border-r-[2px] hover:border-blue-300'
+                            }`}
+                        >
                             <div className="absolute -right-6 -top-6 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all" />
                             <div className="flex justify-between items-start mb-4">
                                 <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl border border-blue-100">
@@ -161,7 +175,14 @@ export const ProjectManagementDashboard: React.FC<ProjectManagementDashboardProp
                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active / Incomplete</p>
                         </div>
 
-                        <div className="bg-white p-5 md:p-6 rounded-3xl border border-rose-100 shadow-[0_8px_30px_rgb(225,29,72,0.04)] relative overflow-hidden group">
+                        <div 
+                            onClick={() => setFilterStatus(filterStatus === 'Past Due' ? 'All' : 'Past Due')}
+                            className={`p-5 md:p-6 rounded-3xl relative overflow-hidden group cursor-pointer transition-all duration-100 select-none ${
+                                filterStatus === 'Past Due' 
+                                    ? 'bg-rose-50/50 border-t border-l border-rose-250 border-b-[2px] border-r-[2px] border-rose-500 shadow-[inset_2px_2px_5px_rgba(0,0,0,0.05)] translate-x-[4px] translate-y-[4px]' 
+                                    : 'bg-white border-t border-l border-slate-100 border-b-[6px] border-r-[6px] border-slate-200 shadow-sm active:translate-x-[4px] active:translate-y-[4px] active:border-b-[2px] active:border-r-[2px] hover:border-rose-300'
+                            }`}
+                        >
                             <div className="absolute -right-6 -top-6 w-24 h-24 bg-rose-500/10 rounded-full blur-2xl group-hover:bg-rose-500/20 transition-all" />
                             <div className="flex justify-between items-start mb-4">
                                 <div className="p-2.5 bg-rose-50 text-rose-600 rounded-xl border border-rose-100">
@@ -173,7 +194,14 @@ export const ProjectManagementDashboard: React.FC<ProjectManagementDashboardProp
                             <p className="text-[10px] font-bold text-rose-400 uppercase tracking-widest">Pending Past Due</p>
                         </div>
 
-                        <div className="bg-slate-900 p-5 md:p-6 rounded-3xl border border-slate-800 shadow-[0_8px_30px_rgb(0,0,0,0.1)] relative overflow-hidden group">
+                        <div 
+                            onClick={() => setFilterStatus('All')}
+                            className={`p-5 md:p-6 rounded-3xl relative overflow-hidden group cursor-pointer transition-all duration-100 select-none ${
+                                filterStatus === 'All' 
+                                    ? 'bg-[#092233] border-t border-l border-slate-900 border-b-[2px] border-r-[2px] border-indigo-500 shadow-[inset_2px_2px_5px_rgba(0,0,0,0.6)] translate-x-[4px] translate-y-[4px]' 
+                                    : 'bg-slate-900 border-t border-l border-slate-800 border-b-[6px] border-r-[6px] border-slate-950 shadow-sm active:translate-x-[4px] active:translate-y-[4px] active:border-b-[2px] active:border-r-[2px] hover:border-slate-700'
+                            }`}
+                        >
                             <div className="absolute -right-6 -top-6 w-24 h-24 bg-indigo-500/20 rounded-full blur-2xl group-hover:bg-indigo-500/30 transition-all" />
                             <div className="flex justify-between items-start mb-4">
                                 <div className="p-2.5 bg-slate-800 text-indigo-400 rounded-xl border border-slate-700">

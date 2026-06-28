@@ -64,16 +64,18 @@ import { PORelease } from '@modules/projects/main/PORelease';
 import { InvoiceRelease } from '@modules/projects/main/InvoiceRelease';
 import { ProjectData, STAGES, ProjectStage } from '@domain/project';
 import { logAction, AuditLog } from '@domain/system_guard';
-import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry, deleteGateEntryFromFirebase, saveProjectToFirebase, fetchProjectsFromFirebase } from '@services/database_service';
+import { fetchGateEntries, syncLocalToFirebase, syncAllProjectsToFirebase, saveGateEntry, deleteGateEntryFromFirebase, saveProjectToFirebase, fetchProjectsFromFirebase, savePorterEntry, fetchPorterLedger } from '@services/database_service';
 import { processInventoryUpdate, fetchInventoryMaster, fetchStockMovement, recordManualTransaction } from '@domain/inventory_service';
 import forensicRegistry from '@data/forensic_gate_registry.json';
 import porterForensic from '@data/porter_missions_forensic.json';
+import porterAdvancesForensic from '@data/porter_advances_forensic.json';
 import { PlaceholderModule } from '@components/common/PlaceholderModule';
 import { DesktopSidebar } from '@components/layout/DesktopSidebar';
 import { MobileLayout } from '@components/layout/MobileLayout';
 import { ProjectListGrid } from '@modules/projects/main/ProjectListGrid';
 import { ProjectDashboard } from '@modules/projects/main/ProjectDashboard';
 import { ProjectManagementDashboard } from '@modules/projects/main/ProjectManagementDashboard';
+import EditProjectModal from '@components/common/EditProjectModal';
 
 
 const staticProjects: ProjectData[] = [];
@@ -166,6 +168,42 @@ const App: React.FC = () => {
     const [authInitializing, setAuthInitializing] = useState(true);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
 
+    const speak = (text: string) => {
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            const voices = window.speechSynthesis.getVoices();
+            const preferred = voices.find(v => v.lang.includes('GB') || v.lang.includes('US')) || voices[0];
+            if (preferred) utterance.voice = preferred;
+            window.speechSynthesis.speak(utterance);
+        }
+    };
+
+    useEffect(() => {
+        const handleFirstGesture = () => {
+            if (!(window as any).__hasWelcomedEnglabs) {
+                (window as any).__hasWelcomedEnglabs = true;
+                speak("Welcome Englabs Team");
+            }
+            document.removeEventListener('click', handleFirstGesture);
+            document.removeEventListener('touchstart', handleFirstGesture);
+            document.removeEventListener('keydown', handleFirstGesture);
+        };
+
+        if (!(window as any).__hasWelcomedEnglabs) {
+            document.addEventListener('click', handleFirstGesture);
+            document.addEventListener('touchstart', handleFirstGesture);
+            document.addEventListener('keydown', handleFirstGesture);
+        }
+
+        return () => {
+            document.removeEventListener('click', handleFirstGesture);
+            document.removeEventListener('touchstart', handleFirstGesture);
+            document.removeEventListener('keydown', handleFirstGesture);
+        };
+    }, []);
+
     useEffect(() => {
         AuthService.init((user) => {
             setCurrentUser(user);
@@ -179,6 +217,7 @@ const App: React.FC = () => {
 
     const [projects, setProjects] = useState<ProjectData[]>(staticProjects);
     const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
+    const [isEditProjectModalOpen, setIsEditProjectModalOpen] = useState(false);
     const handleSelectProject = (project: ProjectData | null) => {
         setSelectedProject(project);
         if (project) {
@@ -233,14 +272,56 @@ const App: React.FC = () => {
             let trips = saved && saved !== 'undefined' ? JSON.parse(saved) : [];
             trips = trips.filter((t: any) => !deletedSet.has(t.id) && !(t.id === 'PTR-2026-0022' && t.grossAmount > 1000));
             
-            const forensicMap = new Map(forensic.map(f => [f.id, f]));
-            const userTrips = trips.filter((t: any) => !forensicMap.has(t.id));
-            const merged = [...forensic, ...userTrips];
+            const entryMap = new Map();
+            forensic.forEach(f => entryMap.set(f.id, f));
+            trips.forEach((t: any) => {
+                const existing = entryMap.get(t.id);
+                entryMap.set(t.id, existing ? { ...existing, ...t } : t);
+            });
+            const merged = Array.from(entryMap.values());
             
             return merged.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
         } catch (e) {
             console.error("Porter initialization failed:", e);
             return porterForensic as any[];
+        }
+    });
+    const [porterAdvances, setPorterAdvances] = useState<any[]>(() => {
+        try {
+            const saved = localStorage.getItem('englabs_porter_advances_v1');
+            const deletedSaved = localStorage.getItem('englabs_porter_advances_deleted_ids');
+            let deletedIds = deletedSaved ? JSON.parse(deletedSaved) : [];
+            
+            // Auto-restore ADV-2026-0002 if it was accidentally deleted
+            if (deletedIds.includes('ADV-2026-0002')) {
+                deletedIds = deletedIds.filter((id: string) => id !== 'ADV-2026-0002');
+                localStorage.setItem('englabs_porter_advances_deleted_ids', JSON.stringify(deletedIds));
+            }
+            
+            const deletedSet = new Set(deletedIds);
+
+            const forensic = (porterAdvancesForensic as any[]).filter((a: any) => !deletedSet.has(a.id));
+            let advances = saved && saved !== 'undefined' ? JSON.parse(saved) : [];
+            advances = advances.filter((a: any) => !deletedSet.has(a.id));
+
+            const entryMap = new Map();
+            forensic.forEach(f => entryMap.set(f.id, f));
+            advances.forEach((a: any) => {
+                const existing = entryMap.get(a.id);
+                entryMap.set(a.id, existing ? { ...existing, ...a } : a);
+            });
+            const merged = Array.from(entryMap.values());
+
+            // Make sure ADV-2026-0002 is explicitly in the returned array
+            if (!merged.some((a: any) => a.id === 'ADV-2026-0002')) {
+                const item2 = (porterAdvancesForensic as any[]).find((a: any) => a.id === 'ADV-2026-0002');
+                if (item2) merged.push(item2);
+            }
+
+            return merged.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+        } catch (e) {
+            console.error("Porter advances initialization failed:", e);
+            return porterAdvancesForensic as any[];
         }
     });
     const [gateEntries, setGateEntries] = useState<any[]>(() => {
@@ -286,8 +367,12 @@ const App: React.FC = () => {
 
             const forensic = (porterForensic as any[]).filter((t: any) => !deletedSet.has(t.id));
             const entryMap = new Map();
-            prev.filter((t: any) => !deletedSet.has(t.id)).forEach(e => entryMap.set(e.id, e));
-            forensic.forEach(e => entryMap.set(e.id, e)); // Forensic takes priority for matched IDs
+            forensic.forEach(e => entryMap.set(e.id, e)); // Forensic is baseline
+            prev.filter((t: any) => !deletedSet.has(t.id)).forEach(e => {
+                const existing = entryMap.get(e.id);
+                entryMap.set(e.id, existing ? { ...existing, ...e } : e); // State edits take priority
+            });
+            
             const old22 = Array.from(entryMap.values()).find((t: any) => t.id === 'PTR-2026-0022' && t.grossAmount > 1000);
             if (old22) {
                 entryMap.delete('PTR-2026-0022');
@@ -381,6 +466,13 @@ const App: React.FC = () => {
                 const localSaved = localStorage.getItem('englabs_project_overrides');
                 if (localSaved) {
                     const localOverrides = JSON.parse(localSaved);
+                    if (localOverrides['C5295']) {
+                        delete localOverrides['C5295'];
+                        localStorage.setItem('englabs_project_overrides', JSON.stringify(localOverrides));
+                    }
+                    if (localStorage.getItem('englabs_last_project_id') === 'C5295') {
+                        localStorage.removeItem('englabs_last_project_id');
+                    }
                     
                     // Apply override overlays to existing list
                     finalProjects = finalProjects.map(proj => {
@@ -504,12 +596,103 @@ const App: React.FC = () => {
     }, []);
 
     useEffect(() => {
+        const syncPorterFromCloud = async () => {
+            try {
+                const cloudLedger = await fetchPorterLedger();
+                const forensicTrips = (porterForensic as any[]);
+                const forensicAdvances = (porterAdvancesForensic as any[]);
+                
+                // Separate cloud trips and advances
+                const cloudTrips = cloudLedger.filter((item: any) => item.id && item.id.startsWith('PTR-'));
+                const cloudAdvances = cloudLedger.filter((item: any) => item.id && item.id.startsWith('ADV-'));
+                
+                setPorterTrips(prev => {
+                    const deletedSaved = localStorage.getItem('englabs_porter_deleted_ids');
+                    const deletedIds = deletedSaved ? JSON.parse(deletedSaved) : [];
+                    const deletedSet = new Set(deletedIds);
+
+                    const forensic = forensicTrips.filter((t: any) => !deletedSet.has(t.id));
+                    const entryMap = new Map();
+                    
+                    // 1. Baseline forensic
+                    forensic.forEach(e => entryMap.set(e.id, e));
+                    // 2. Overlay Cloud
+                    cloudTrips.forEach(e => {
+                        const existing = entryMap.get(e.id);
+                        entryMap.set(e.id, existing ? { ...existing, ...e } : e);
+                    });
+                    // 3. Merge local
+                    prev.filter((t: any) => !deletedSet.has(t.id)).forEach(e => {
+                        const existing = entryMap.get(e.id);
+                        entryMap.set(e.id, existing ? { ...existing, ...e } : e);
+                    });
+                    
+                    const old22 = Array.from(entryMap.values()).find((t: any) => t.id === 'PTR-2026-0022' && t.grossAmount > 1000);
+                    if (old22) {
+                        entryMap.delete('PTR-2026-0022');
+                    }
+                    
+                    return Array.from(entryMap.values()).sort((a: any, b: any) => 
+                        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+                    );
+                });
+
+                setPorterAdvances(prev => {
+                    const deletedSaved = localStorage.getItem('englabs_porter_advances_deleted_ids');
+                    let deletedIds = deletedSaved ? JSON.parse(deletedSaved) : [];
+                    
+                    // Auto-restore ADV-2026-0002
+                    if (deletedIds.includes('ADV-2026-0002')) {
+                        deletedIds = deletedIds.filter((id: string) => id !== 'ADV-2026-0002');
+                        localStorage.setItem('englabs_porter_advances_deleted_ids', JSON.stringify(deletedIds));
+                    }
+                    const deletedSet = new Set(deletedIds);
+
+                    const forensic = forensicAdvances.filter((a: any) => !deletedSet.has(a.id));
+                    const entryMap = new Map();
+                    
+                    // 1. Baseline forensic
+                    forensic.forEach(e => entryMap.set(e.id, e));
+                    // 2. Overlay Cloud
+                    cloudAdvances.forEach(e => {
+                        const existing = entryMap.get(e.id);
+                        entryMap.set(e.id, existing ? { ...existing, ...e } : e);
+                    });
+                    // 3. Merge local
+                    prev.filter((a: any) => !deletedSet.has(a.id)).forEach(e => {
+                        const existing = entryMap.get(e.id);
+                        entryMap.set(e.id, existing ? { ...existing, ...e } : e);
+                    });
+                    
+                    const merged = Array.from(entryMap.values());
+                    if (!merged.some((a: any) => a.id === 'ADV-2026-0002')) {
+                        const item2 = forensicAdvances.find((a: any) => a.id === 'ADV-2026-0002');
+                        if (item2) merged.push(item2);
+                    }
+
+                    return merged.sort((a: any, b: any) => 
+                        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+                    );
+                });
+
+            } catch (e) {
+                console.error("Porter cloud hydration failed:", e);
+            }
+        };
+        syncPorterFromCloud();
+    }, []);
+
+    useEffect(() => {
         localStorage.setItem('englabs_gate_v2', JSON.stringify(gateEntries));
     }, [gateEntries]);
 
     useEffect(() => {
         localStorage.setItem('englabs_porter_v1', JSON.stringify(porterTrips));
     }, [porterTrips]);
+
+    useEffect(() => {
+        localStorage.setItem('englabs_porter_advances_v1', JSON.stringify(porterAdvances));
+    }, [porterAdvances]);
 
     // One-time startup cleanup of old, invalid PTR-2026-0022 (₹5,400) from localStorage
     useEffect(() => {
@@ -663,7 +846,7 @@ const App: React.FC = () => {
 
 
     return (
-        <div className="flex h-screen w-screen bg-[#F8FAFC] overflow-hidden text-slate-900 font-sans print:h-auto print:w-auto print:overflow-visible print:bg-white">
+        <div className="flex h-screen w-screen bg-[#f1f5f9] digital-console-room overflow-hidden text-slate-900 font-sans print:h-auto print:w-auto print:overflow-visible print:bg-white">
             <DesktopSidebar 
                 currentView={currentView}
                 setCurrentView={setCurrentView}
@@ -673,7 +856,7 @@ const App: React.FC = () => {
                 appMode={import.meta.env.VITE_APP_MODE || 'PROJECTS'}
             />
 
-            <div className="flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden pb-16 md:pb-0">
+            <div className="flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden pb-16 md:pb-0 md:m-4 md:rounded-[2.5rem] console-bezel-recessed relative">
                 {dbSyncError && (
                     <div className="bg-amber-500/10 border-b border-amber-500/20 text-amber-400 px-4 py-2.5 flex items-center justify-between text-xs font-bold gap-3 flex-shrink-0 animate-in slide-in-from-top duration-300">
                         <div className="flex items-center gap-2">
@@ -796,6 +979,7 @@ const App: React.FC = () => {
                             staffList={staffList}
                             setIsAddStaffModalOpen={setIsAddStaffModalOpen}
                             checkoutLoading={checkoutLoading}
+                            onEditProject={() => setIsEditProjectModalOpen(true)}
                         />
                     )
                 ) : currentView === 'PROJECT_LOOKUP' ? (
@@ -813,9 +997,9 @@ const App: React.FC = () => {
                     />
                 ) : (currentView === 'FOOD_REGISTER' || currentView === 'FOOD_MEALS') ? (
                     <FoodRegister onLog={(log) => setAuditLogs(prev => [log, ...prev])} />
-                ) : (currentView === 'ATTENDANCE' || currentView === 'HR_MASTER' || currentView === 'HR_LEAVE' || currentView === 'HR_PERFORMANCE' || currentView === 'HR_IDCARD' || currentView === 'HR_ALLOCATION' || currentView === 'HR_LOGS') ? (
+                ) : (currentView === 'ATTENDANCE' || currentView === 'HR_MASTER' || currentView === 'HR_DOCUMENTS' || currentView === 'HR_LEAVE' || currentView === 'HR_PERFORMANCE' || currentView === 'HR_IDCARD' || currentView === 'HR_ALLOCATION' || currentView === 'HR_LOGS') ? (
                     <RequireRole allowedRoles={['ADMIN', 'HR'] as any}>
-                        <HRDashboard />
+                        <HRDashboard currentView={currentView} setCurrentView={setCurrentView} />
                     </RequireRole>
                 ) : (currentView === 'PAYROLL' || currentView === 'HR_PAYROLL') ? (
                     <RequireRole allowedRoles={['ADMIN', 'HR'] as any}>
@@ -852,8 +1036,15 @@ const App: React.FC = () => {
                 ) : (currentView === 'PORTER_SERVICE' || currentView.startsWith('PORTER_')) ? (
                     <PorterRegister 
                         trips={porterTrips}
-                        onNewTrip={(trip) => setPorterTrips(prev => [trip, ...prev])}
-                        onUpdateTrip={(updated) => setPorterTrips(prev => prev.map(t => t.id === updated.id ? updated : t))}
+                        advances={porterAdvances}
+                        onNewTrip={async (trip) => {
+                            setPorterTrips(prev => [trip, ...prev]);
+                            await savePorterEntry(trip);
+                        }}
+                        onUpdateTrip={async (updated) => {
+                            setPorterTrips(prev => prev.map(t => t.id === updated.id ? updated : t));
+                            await savePorterEntry(updated);
+                        }}
                         onDeleteTrip={(id) => {
                             setPorterTrips(prev => prev.filter(t => t.id !== id));
                             try {
@@ -865,6 +1056,27 @@ const App: React.FC = () => {
                                 }
                             } catch (e) {
                                 console.error("Failed to save deleted ID:", e);
+                            }
+                        }}
+                        onNewAdvance={async (adv) => {
+                            setPorterAdvances(prev => [adv, ...prev]);
+                            await savePorterEntry(adv);
+                        }}
+                        onUpdateAdvance={async (updated) => {
+                            setPorterAdvances(prev => prev.map(a => a.id === updated.id ? updated : a));
+                            await savePorterEntry(updated);
+                        }}
+                        onDeleteAdvance={(id) => {
+                            setPorterAdvances(prev => prev.filter(a => a.id !== id));
+                            try {
+                                const deletedSaved = localStorage.getItem('englabs_porter_advances_deleted_ids');
+                                const deletedIds = deletedSaved ? JSON.parse(deletedSaved) : [];
+                                if (!deletedIds.includes(id)) {
+                                    deletedIds.push(id);
+                                    localStorage.setItem('englabs_porter_advances_deleted_ids', JSON.stringify(deletedIds));
+                                }
+                            } catch (e) {
+                                console.error("Failed to save deleted advance ID:", e);
                             }
                         }}
                     />
@@ -913,6 +1125,15 @@ const App: React.FC = () => {
                 existingProjects={projects.map(p => p.projectId)}
             />
             <AddStaffModal isOpen={isAddStaffModalOpen} onClose={() => setIsAddStaffModalOpen(false)} onAdd={handleAddStaff} existingStaff={staffList} />
+            <EditProjectModal 
+                isOpen={isEditProjectModalOpen}
+                onClose={() => setIsEditProjectModalOpen(false)}
+                project={selectedProject}
+                onUpdate={(updatedProject) => {
+                    setSelectedProject(updatedProject);
+                    setProjects(prev => prev.map(p => p.projectId === updatedProject.projectId ? updatedProject : p));
+                }}
+            />
         </div>
     );
 };

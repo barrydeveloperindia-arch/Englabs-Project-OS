@@ -51,7 +51,7 @@ test.describe('Englabs Projects OS - Core Workflow', () => {
     if (!isMobile) {
       await expect(newMissionBtn).toBeVisible({ timeout: 15000 });
       await newMissionBtn.click({ force: true });
-      await expect(page.getByText('Initialize Mission')).toBeVisible({ timeout: 15000 });
+      await expect(page.getByText('Initialize Project')).toBeVisible({ timeout: 15000 });
       await expect(page.locator('input[placeholder="e.g. C001"]')).toBeVisible({ timeout: 15000 });
     }
   });

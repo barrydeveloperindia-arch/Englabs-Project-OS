@@ -1,6 +1,6 @@
 {
     "projectId": "C5229",
-    "client": "ENDUREAIR",
+    "client": "EndureAir",
     "planning": {
         "poConfirmed": true,
         "value": 0,
@@ -47,8 +47,8 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
+        "totalComponents": 110,
+        "materialConsumption": "PA12=30; TPV = 40; PETG = 40",
         "workforce": [
             "TBD"
         ]
@@ -60,6 +60,12 @@
         "totalCost": null,
         "profitLoss": null,
         "deliveryFeeMode": null,
-        "poNumber": "P2100-EL12-PO-61000"
+        "poNumber": "QT-18229"
+    },
+    "dailyStandup": {
+        "discussingNotes": "110 | QC: Courier will be sent today Visual QC was done and photos shared on the group   "
+    },
+    "invoiceRelease": {
+        "invoiceNumber": "QT-18229"
     }
 }

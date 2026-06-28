@@ -1,6 +1,6 @@
 {
     "projectId": "C5239",
-    "client": "SARK INDUSTRIES",
+    "client": "SARK",
     "planning": {
         "value": 33650,
         "budget": 23555,
@@ -47,33 +47,34 @@
         ]
     },
     "metrics": {
-        "totalComponents": 5,
-        "materialConsumption": "Scanning & Modelling",
+        "totalComponents": 7,
+        "materialConsumption": "Scanning Modelling",
         "workforce": [
             "Shubham"
         ]
     },
     "financials": {
-        "vendorName": "Bharat sir",
+        "vendorName": "CICU;",
         "vendorLocation": "nil",
         "dispatchBudget": 0,
         "totalCost": null,
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": null
+        "poNumber": "QT-18239"
     },
     "dailyStandup": {
         "srNo": "=1+A19",
-        "discussingNotes": "design only",
-        "preparingPartsDate": "2026-06-22",
+        "discussingNotes": "7 | CICU; | QC: Design final; Sampling will be done by WorkEd",
+        "preparingPartsDate": "2026-06-26",
         "routeFrom": "nil",
         "routeTo": "nil",
         "porterPayments": 0,
-        "inputsRequired": "NO"
+        "inputsRequired": "NO",
+        "supervisor": "Shubham"
     },
     "poRelease": {
         "customerSalePrice": 33650,
-        "vendorName": "Bharat sir",
+        "vendorName": "CICU;",
         "vendorLocation": "nil",
         "poVendorSent": "N/A",
         "vendorCost": 0,
@@ -84,7 +85,7 @@
         "gstValue": 6057,
         "totalInvoiceAmount": 39707,
         "paymentTerms": "Bharat sir",
-        "invoiceNumber": "QTN-5239",
+        "invoiceNumber": "QT-18239",
         "paymentStatus": "Pending"
     }
 }

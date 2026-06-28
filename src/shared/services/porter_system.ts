@@ -76,3 +76,16 @@ export const calculatePorterAmount = (
         balance: Number(balance.toFixed(2))
     };
 };
+
+export interface PorterAdvance {
+    id: string;
+    timestamp: string;
+    date: string;
+    time: string;
+    porterName: string;
+    amount: number;
+    paymentMode?: string;
+    transactionId?: string;
+    remarks?: string;
+    proofUrl?: string;
+}

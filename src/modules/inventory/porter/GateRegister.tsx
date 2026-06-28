@@ -29,6 +29,25 @@ import { GateEntry, generateId, generateGatePassId, UNITS, DELIVERY_TYPES } from
 import { syncLocalToFirebase } from '@services/database_service';
 import { AuditLog } from '@shared/services/system_guard';
 import { isInterState } from '@shared/services/billing_system';
+import masterInventory from '@data/master_inventory_may_2026.json';
+
+const nameToCodeMap = new Map<string, string>();
+if (Array.isArray(masterInventory)) {
+    masterInventory.forEach((report: any) => {
+        if (report && Array.isArray(report.items)) {
+            report.items.forEach((item: any) => {
+                if (item && item.name && item.itemCode) {
+                    nameToCodeMap.set(item.name.trim().toLowerCase(), item.itemCode.trim());
+                }
+            });
+        }
+    });
+}
+nameToCodeMap.set("hand gloves", "Eng-136");
+nameToCodeMap.set("gloves (industrial)", "Eng-136");
+nameToCodeMap.set("surgical blade", "Eng-055");
+nameToCodeMap.set("seven black gloss paint", "Eng-005");
+nameToCodeMap.set("h.c. robotic aircraft gray paint", "Eng-012");
 
 interface Props {
     entries: GateEntry[];
@@ -116,7 +135,9 @@ const GateRegister: React.FC<Props> = ({ entries, onNewEntry, onUpdateEntry, onD
             itemsDetail = '\n*ITEMIZED BREAKDOWN:*\n';
             entryAny.items.forEach((item: any, idx: number) => {
                 const hsn = item.hsnCode ? ` [HSN: ${item.hsnCode}]` : '';
-                itemsDetail += `${idx + 1}. ${item.name}${hsn} | ${item.quantity} ${item.unit} @ ₹${item.rate || 0} = ₹${(item.amount || 0).toLocaleString()}\n`;
+                const codeVal = item.itemCode || nameToCodeMap.get(item.name.trim().toLowerCase()) || item.name.toUpperCase().replace(/\s+/g, '_');
+                const code = codeVal ? ` [${codeVal}]` : '';
+                itemsDetail += `${idx + 1}. ${item.name}${code}${hsn} | ${item.quantity} ${item.unit} @ ₹${item.rate || 0} = ₹${(item.amount || 0).toLocaleString()}\n`;
             });
             itemsDetail += `--------------------------------\n`;
         }

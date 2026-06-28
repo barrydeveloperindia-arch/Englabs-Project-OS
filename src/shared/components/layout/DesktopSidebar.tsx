@@ -13,16 +13,17 @@ interface SidebarButtonProps {
 }
 
 const SidebarButton: React.FC<SidebarButtonProps> = ({ active, onClick, icon, label, color = 'emerald' }) => {
-    const activeClass = color === 'emerald' 
-        ? 'bg-white/10 text-white border border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.25)] scale-[1.01] relative before:content-[""] before:absolute before:left-0 before:top-3 before:bottom-3 before:w-[3px] before:bg-emerald-400 before:rounded-r-full' 
-        : 'bg-white/10 text-white border border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.25)] scale-[1.01] relative before:content-[""] before:absolute before:left-0 before:top-3 before:bottom-3 before:w-[3px] before:bg-amber-400 before:rounded-r-full';
-        
+    const activeColor = color === 'emerald' ? 'before:bg-emerald-400' : 'before:bg-amber-400';
     return (
         <button 
             type="button"
             onClick={onClick}
             data-testid={`sidebar-btn-${label.toLowerCase().replace(/\s+/g, '-')}`}
-            className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11px] transition-all duration-300 w-full text-left ${active ? activeClass : 'text-slate-500 hover:text-white hover:bg-white/5 border border-transparent'}`}
+            className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-black text-[11.5px] tracking-wide transition-all duration-100 w-full text-left relative cursor-pointer select-none ${
+                active 
+                    ? `bg-[#071926] text-white border-t border-l border-slate-900 border-b border-r border-slate-950/40 shadow-[inset_3px_3px_8px_rgba(0,0,0,0.8)] translate-y-[2px] translate-x-[2px] scale-[0.98] before:content-[""] before:absolute before:left-2 before:top-4 before:bottom-4 before:w-[3.5px] ${activeColor} before:rounded-r-full` 
+                    : 'bg-slate-950/20 text-slate-400 hover:text-white hover:bg-slate-950/40 border-t border-l border-slate-800/60 border-b-[3.5px] border-r-[3.5px] border-slate-950 shadow-sm active:translate-y-[2px] active:translate-x-[2px] active:border-b-[1px] active:border-r-[1px]'
+            }`}
         >
             {React.cloneElement(icon as React.ReactElement, { className: 'w-4.5 h-4.5' })}
             {label}
@@ -100,7 +101,7 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
 
     return (
         <aside 
-            className="bg-[#0e4368] hidden md:flex flex-col shadow-2xl shrink-0 border-r border-slate-800 print:hidden pt-safe"
+            className="bg-[#0e4368] hidden md:flex flex-col console-sidebar-bezel shrink-0 print:hidden pt-safe"
             style={{ width: '320px', minWidth: '320px', maxWidth: '320px', zIndex: 50 }}
         >
             <div className="p-8 pb-4">
@@ -160,10 +161,10 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
                                                     setCurrentView(menu.subItems[0].id);
                                                 }
                                             }}
-                                            className={`flex items-center justify-between px-4 py-3 rounded-2xl font-black text-[11px] transition-all duration-300 w-full text-left cursor-pointer border border-transparent ${
+                                            className={`flex items-center justify-between px-4 py-3 rounded-2xl font-black text-[11px] tracking-wide transition-all duration-100 w-full text-left cursor-pointer border border-transparent select-none ${
                                                 hasActiveSub 
-                                                    ? 'bg-white/10 text-white border-white/10 shadow-md' 
-                                                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                                    ? 'bg-[#092233] text-white border-t border-l border-slate-900 border-b border-r border-slate-950/40 shadow-[inset_2px_2px_5px_rgba(0,0,0,0.6)] translate-y-[1.5px] translate-x-[1.5px] scale-[0.99]' 
+                                                    : 'bg-slate-950/20 text-slate-400 hover:text-white hover:bg-slate-950/40 border-t border-l border-slate-800/60 border-b-[3px] border-r-[3px] border-slate-950 shadow-sm active:translate-y-[1.5px] active:translate-x-[1.5px] active:border-b-[1px] active:border-r-[1px]'
                                             }`}
                                         >
                                             <div className="flex items-center gap-3">
@@ -211,14 +212,14 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
                     <button 
                         onClick={() => setIsModalOpen(true)}
                         data-testid="btn-new-mission"
-                        className="w-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-emerald-950/20 cursor-pointer"
+                        className="w-full bg-emerald-500 hover:bg-emerald-400 text-[#092a42] border-t border-l border-emerald-300 border-b-[4.5px] border-r-[4.5px] border-emerald-800/80 font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all duration-75 active:translate-y-[3.5px] active:translate-x-[3.5px] active:border-b-[1px] active:border-r-[1px] shadow-md cursor-pointer select-none"
                     >
-                        <Plus className="w-5 h-5" /> NEW MISSION
+                        <Plus className="w-5 h-5" /> NEW PROJECT
                     </button>
                 )}
                 <button 
                     onClick={handleLogout}
-                    className="w-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 font-black py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg cursor-pointer text-xs"
+                    className="w-full bg-rose-600 hover:bg-rose-500 text-white border-t border-l border-rose-450 border-b-[4.5px] border-r-[4.5px] border-rose-900 font-black py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all duration-75 active:translate-y-[3.5px] active:translate-x-[3.5px] active:border-b-[1px] active:border-r-[1px] shadow-md cursor-pointer text-xs select-none"
                 >
                     <Lock className="w-4 h-4" /> LOCK SYSTEM
                 </button>

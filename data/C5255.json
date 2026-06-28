@@ -1,6 +1,6 @@
 {
     "projectId": "C5255",
-    "client": "BAJAJ",
+    "client": "Bajaj",
     "planning": {
         "deliveryTerms": "30 days",
         "budget": 5699.6,
@@ -46,30 +46,34 @@
         ]
     },
     "metrics": {
-        "materialConsumption": "handle_gasket-C5255",
-        "totalComponents": 20
+        "materialConsumption": "VC Rubber",
+        "totalComponents": 20,
+        "workforce": [
+            "Devanshu"
+        ]
     },
     "financials": {
-        "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED",
+        "vendorName": "Excel",
         "vendorLocation": "Delhi",
         "dispatchBudget": 0,
         "totalCost": 6725,
         "profitLoss": 2310.4,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "P2100-EL12-PO-16953"
+        "poNumber": "QT-18255"
     },
     "dailyStandup": {
         "routeFrom": "Delhi",
         "porterPayments": 0,
         "routeTo": "Englabs",
         "srNo": "24",
-        "preparingPartsDate": "2026-06-23",
+        "preparingPartsDate": "2026-07-04",
         "inputsRequired": "NO",
-        "discussingNotes": "All 20 parts have been completed and are ready for dispatch."
+        "discussingNotes": "20 | Excel | QC: Started; Delivery expected next week",
+        "supervisor": "Devanshu"
     },
     "poRelease": {
         "customerSalePrice": 9010,
-        "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED",
+        "vendorName": "Excel",
         "vendorLocation": "Delhi",
         "poVendorSent": "P2100-EL12-PO-16953",
         "vendorCost": 6725,
@@ -80,7 +84,7 @@
         "gstValue": 1621.8,
         "totalInvoiceAmount": 10631.8,
         "paymentTerms": "30 days",
-        "invoiceNumber": "QTN-5255",
+        "invoiceNumber": "QT-18255",
         "paymentStatus": "Pending"
     }
 }

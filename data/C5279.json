@@ -1,6 +1,6 @@
 {
     "projectId": "C5279",
-    "client": "MENTHOSA",
+    "client": "Menthosa",
     "planning": {
         "value": 21500,
         "budget": 15050,
@@ -55,10 +55,11 @@
         ]
     },
     "metrics": {
-        "totalComponents": 1,
-        "materialConsumption": "PU MENTHOSA",
+        "totalComponents": 4,
+        "materialConsumption": "Machining",
         "workforce": [
-            "Anurag"
+            "Anurag",
+            "Shubham"
         ]
     },
     "financials": {
@@ -68,16 +69,17 @@
         "totalCost": 21500,
         "profitLoss": 21500,
         "deliveryFeeMode": "Porter system",
-        "poNumber": "P2100-EL12-PO-74478"
+        "poNumber": "QT-18279"
     },
     "dailyStandup": {
         "srNo": "1",
-        "discussingNotes": "Project Closed According to Anurag",
-        "preparingPartsDate": "2026-06-17",
+        "discussingNotes": "4 | SK Techno | QC: Delivered on 17th; Machine so no painting; Feedback will have to be taken; No PO is needed; Payment done",
+        "preparingPartsDate": "2026-06-26",
         "routeFrom": "SKTECHNO MOHALI",
         "routeTo": "Englabs",
         "porterPayments": 0,
-        "inputsRequired": "NO"
+        "inputsRequired": "NO",
+        "supervisor": "Shubham"
     },
     "poRelease": {
         "customerSalePrice": 21500,
@@ -92,7 +94,7 @@
         "gstValue": 3870,
         "totalInvoiceAmount": 25370,
         "paymentTerms": "ADVANCE DONE",
-        "invoiceNumber": "INV-5279",
+        "invoiceNumber": "QT-18279",
         "paymentStatus": "Paid"
     }
 }

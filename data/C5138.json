@@ -60,6 +60,9 @@
         "totalCost": null,
         "profitLoss": -167,
         "deliveryFeeMode": "Charged Separately in invoice",
-        "poNumber": "P2100-EL12-PO-56766"
+        "poNumber": "QT-18138"
+    },
+    "invoiceRelease": {
+        "invoiceNumber": "QT-18138"
     }
 }

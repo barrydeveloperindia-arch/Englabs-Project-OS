@@ -220,7 +220,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({ isOpen, onClose, onAd
             <div className={`relative w-full ${mode === 'single' ? 'max-w-lg' : 'max-w-3xl'} bg-white rounded-[2.5rem] shadow-2xl overflow-hidden transition-all duration-300 animate-in fade-in zoom-in duration-300`}>
                 <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                     <div>
-                        <h2 className="text-2xl font-black text-slate-900 tracking-tight">Initialize Mission</h2>
+                        <h2 className="text-2xl font-black text-slate-900 tracking-tight">Initialize Project</h2>
                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Project Command Registration</p>
                     </div>
                     <button onClick={handleClose} className="p-2 hover:bg-white rounded-full transition-colors text-slate-400 hover:text-slate-900 shadow-sm">

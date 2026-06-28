@@ -1,6 +1,7 @@
 import React from 'react';
 import { Activity, Box, Truck, CheckCircle2, AlertCircle, ArrowUpRight, ArrowDownRight, Package } from 'lucide-react';
 import { ProjectData } from '@shared/services/project';
+import logo from '@/assets/englabs_logo.png';
 
 interface MobileDashboardProps {
     projects: ProjectData[];
@@ -26,79 +27,90 @@ export const MobileDashboard: React.FC<MobileDashboardProps> = ({
     
     return (
         <div className="flex flex-col h-full bg-[#F8FAFC] pb-24 overflow-y-auto custom-scrollbar pt-safe">
-            {/* Top Branding / Header */}
-            <div className="bg-[#0e4368] px-6 pt-10 pb-16 rounded-b-[2.5rem] relative overflow-hidden shrink-0">
+            {/* Top Branding / Header with 3D Digital Grid */}
+            <div 
+                className="bg-[#0e4368] px-6 pt-10 pb-16 rounded-b-[2.5rem] relative overflow-hidden shrink-0 shadow-[0_15px_30px_rgba(14,67,104,0.15)]"
+                style={{ 
+                    backgroundImage: 'linear-gradient(rgba(14, 67, 104, 0.95), rgba(14, 67, 104, 0.95)), linear-gradient(0deg, transparent 24%, rgba(82, 204, 163, 0.04) 25%, rgba(82, 204, 163, 0.04) 26%, transparent 27%, transparent), linear-gradient(90deg, transparent 24%, rgba(82, 204, 163, 0.04) 25%, rgba(82, 204, 163, 0.04) 26%, transparent 27%, transparent)', 
+                    backgroundSize: '100% 100%, 20px 20px, 20px 20px' 
+                }}
+            >
                 <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
                 
                 <div className="flex justify-between items-center relative z-10 mb-6">
-                    <div>
-                        <h1 className="text-2xl font-black text-white tracking-tighter">Command Center</h1>
-                        <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest mt-1">Live Operations Overview</p>
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg border border-white/20">
+                            <img src={logo} alt="Englabs Logo" className="w-7 h-7 object-contain" />
+                        </div>
+                        <div>
+                            <h1 className="text-xl font-black text-white tracking-tighter uppercase font-outfit">Command Center</h1>
+                            <p className="text-[9px] font-black text-[#52cca3] uppercase tracking-widest mt-0.5">Live Operations Overview</p>
+                        </div>
                     </div>
                     <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shadow-inner">
-                        <Activity className="w-5 h-5 text-emerald-400 animate-pulse" />
+                        <Activity className="w-5 h-5 text-[#52cca3] animate-pulse" />
                     </div>
                 </div>
 
-                {/* KPI Cards Carousel */}
+                {/* KPI Cards Carousel - 3D Glassmorphic Bevel Blocks */}
                 <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory dark-scrollbar hide-scroll-bar">
-                    <div className="snap-center shrink-0 w-[140px] bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
+                    <div className="snap-center shrink-0 w-[140px] bg-[#0e4368]/45 backdrop-blur-md border-t border-l border-white/20 border-b-[4px] border-r-[4px] border-slate-950/80 rounded-2xl p-4 shadow-[0_12px_24px_rgba(0,0,0,0.25),_0_0_15px_rgba(82,204,163,0.05)]">
                         <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center mb-3">
                             <Box className="w-4 h-4 text-emerald-400" />
                         </div>
-                        <p className="text-3xl font-black text-white">{activeProjects}</p>
+                        <p className="text-3xl font-black text-white tracking-tight font-outfit">{activeProjects}</p>
                         <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest mt-1">Active Projects</p>
                     </div>
                     
-                    <div className="snap-center shrink-0 w-[140px] bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
+                    <div className="snap-center shrink-0 w-[140px] bg-[#0e4368]/45 backdrop-blur-md border-t border-l border-white/20 border-b-[4px] border-r-[4px] border-slate-950/80 rounded-2xl p-4 shadow-[0_12px_24px_rgba(0,0,0,0.25),_0_0_15px_rgba(245,158,11,0.05)]">
                         <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center mb-3">
                             <Truck className="w-4 h-4 text-amber-400" />
                         </div>
-                        <p className="text-3xl font-black text-white">{todaysGateEntries}</p>
+                        <p className="text-3xl font-black text-white tracking-tight font-outfit">{todaysGateEntries}</p>
                         <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest mt-1">Today's Gate Log</p>
                     </div>
 
-                    <div className="snap-center shrink-0 w-[140px] bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
+                    <div className="snap-center shrink-0 w-[140px] bg-[#0e4368]/45 backdrop-blur-md border-t border-l border-white/20 border-b-[4px] border-r-[4px] border-slate-950/80 rounded-2xl p-4 shadow-[0_12px_24px_rgba(0,0,0,0.25),_0_0_15px_rgba(244,63,94,0.05)]">
                         <div className="w-8 h-8 rounded-full bg-rose-500/20 flex items-center justify-center mb-3">
                             <Package className="w-4 h-4 text-rose-400" />
                         </div>
-                        <p className="text-3xl font-black text-white">{todaysCheckouts.length}</p>
+                        <p className="text-3xl font-black text-white tracking-tight font-outfit">{todaysCheckouts.length}</p>
                         <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest mt-1">Items Released</p>
                     </div>
                 </div>
             </div>
 
-            {/* Quick Actions Grid */}
+            {/* Quick Actions Grid - 3D Tactile Buttons */}
             <div className="px-5 -mt-8 relative z-20">
-                <div className="bg-white rounded-3xl p-5 shadow-[0_20px_40px_rgba(0,0,0,0.04)] border border-slate-100">
-                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Quick Deployment</h3>
+                <div className="bg-white rounded-3xl p-5 shadow-[0_20px_40px_rgba(0,0,0,0.06)] border border-slate-100">
+                    <h3 className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-4 font-mono">Quick Deployment</h3>
                     <div className="grid grid-cols-4 gap-3">
-                        <button data-testid="quick-action-gate" onClick={() => onQuickAction('GATE_ENTRY')} className="flex flex-col items-center gap-2 group active:scale-95 transition-all">
-                            <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+                        <button data-testid="quick-action-gate" onClick={() => onQuickAction('GATE_ENTRY')} className="flex flex-col items-center gap-2 group transition-all duration-100">
+                            <div className="w-12 h-12 rounded-2xl bg-amber-50 border-t border-l border-amber-100 border-b-[4px] border-r-[4px] border-amber-300 flex items-center justify-center transition-all duration-100 hover:shadow-[0_0_15px_rgba(245,158,11,0.25)] group-active:translate-y-[3px] group-active:translate-x-[2px] group-active:border-b-[1px] group-active:border-r-[1px] group-active:border-amber-200">
                                 <Truck className="w-5 h-5 text-amber-600" />
                             </div>
-                            <span className="text-[9px] font-black text-slate-600 uppercase">Gate</span>
+                            <span className="text-[9px] font-black text-slate-500 group-hover:text-slate-800 transition-colors uppercase mt-0.5">Gate</span>
                         </button>
                         
-                        <button data-testid="quick-action-inventory" onClick={() => onQuickAction('CHECKOUT')} className="flex flex-col items-center gap-2 group active:scale-95 transition-all">
-                            <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
+                        <button data-testid="quick-action-inventory" onClick={() => onQuickAction('CHECKOUT')} className="flex flex-col items-center gap-2 group transition-all duration-100">
+                            <div className="w-12 h-12 rounded-2xl bg-emerald-50 border-t border-l border-emerald-100 border-b-[4px] border-r-[4px] border-emerald-300 flex items-center justify-center transition-all duration-100 hover:shadow-[0_0_15px_rgba(16,185,129,0.25)] group-active:translate-y-[3px] group-active:translate-x-[2px] group-active:border-b-[1px] group-active:border-r-[1px] group-active:border-emerald-200">
                                 <ArrowUpRight className="w-5 h-5 text-emerald-600" />
                             </div>
-                            <span className="text-[9px] font-black text-slate-600 uppercase">Release</span>
+                            <span className="text-[9px] font-black text-slate-500 group-hover:text-slate-800 transition-colors uppercase mt-0.5">Release</span>
                         </button>
 
-                        <button data-testid="quick-action-porter" onClick={() => onQuickAction('PORTER')} className="flex flex-col items-center gap-2 group active:scale-95 transition-all">
-                            <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center group-hover:bg-indigo-100 transition-colors">
+                        <button data-testid="quick-action-porter" onClick={() => onQuickAction('PORTER')} className="flex flex-col items-center gap-2 group transition-all duration-100">
+                            <div className="w-12 h-12 rounded-2xl bg-indigo-50 border-t border-l border-indigo-100 border-b-[4px] border-r-[4px] border-indigo-300 flex items-center justify-center transition-all duration-100 hover:shadow-[0_0_15px_rgba(99,102,241,0.25)] group-active:translate-y-[3px] group-active:translate-x-[2px] group-active:border-b-[1px] group-active:border-r-[1px] group-active:border-indigo-200">
                                 <Package className="w-5 h-5 text-indigo-600" />
                             </div>
-                            <span className="text-[9px] font-black text-slate-600 uppercase">Porter</span>
+                            <span className="text-[9px] font-black text-slate-500 group-hover:text-slate-800 transition-colors uppercase mt-0.5">Porter</span>
                         </button>
 
-                        <button data-testid="quick-action-update" onClick={() => onQuickAction('PROJECT_UPDATE')} className="flex flex-col items-center gap-2 group active:scale-95 transition-all">
-                            <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                        <button data-testid="quick-action-update" onClick={() => onQuickAction('PROJECT_UPDATE')} className="flex flex-col items-center gap-2 group transition-all duration-100">
+                            <div className="w-12 h-12 rounded-2xl bg-blue-50 border-t border-l border-blue-100 border-b-[4px] border-r-[4px] border-blue-300 flex items-center justify-center transition-all duration-100 hover:shadow-[0_0_15px_rgba(59,130,246,0.25)] group-active:translate-y-[3px] group-active:translate-x-[2px] group-active:border-b-[1px] group-active:border-r-[1px] group-active:border-blue-200">
                                 <CheckCircle2 className="w-5 h-5 text-blue-600" />
                             </div>
-                            <span className="text-[9px] font-black text-slate-600 uppercase">Update</span>
+                            <span className="text-[9px] font-black text-slate-500 group-hover:text-slate-800 transition-colors uppercase mt-0.5">Update</span>
                         </button>
                     </div>
                 </div>

@@ -60,6 +60,9 @@
         "totalCost": 242880,
         "profitLoss": 5376,
         "deliveryFeeMode": "included",
-        "poNumber": "P2100-EL12-PO-89833"
+        "poNumber": "QT-18092"
+    },
+    "invoiceRelease": {
+        "invoiceNumber": "QT-18092"
     }
 }

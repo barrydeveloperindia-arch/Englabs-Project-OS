@@ -1,6 +1,6 @@
 {
     "projectId": "C5283",
-    "client": "AUTO DYNAMICS",
+    "client": "AutoDyanamics",
     "planning": {
         "value": 215000,
         "budget": 150500,
@@ -48,33 +48,35 @@
         ]
     },
     "metrics": {
-        "totalComponents": 9,
-        "materialConsumption": "Nylon GF Black Paint",
+        "totalComponents": 0,
+        "materialConsumption": "Machining",
         "workforce": [
-            "Shubham"
+            "Shubham",
+            "Anurag"
         ]
     },
     "financials": {
-        "vendorName": "Marco Polo",
+        "vendorName": "Talekar",
         "vendorLocation": "Pune",
         "dispatchBudget": 0,
         "totalCost": null,
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "P2100-EL12-PO-74483"
+        "poNumber": "QT-18283"
     },
     "dailyStandup": {
         "srNo": "=1+A23",
-        "discussingNotes": "Talekar cross check shubham",
-        "preparingPartsDate": "2026-06-23",
+        "discussingNotes": "0 | Talekar | QC: 11 will be taken by Pandhurinathis; Others will be sent on Monday",
+        "preparingPartsDate": "Expected 26-06-2026",
         "routeFrom": "Pune",
         "routeTo": "Englabs",
         "porterPayments": 0,
-        "inputsRequired": "Cad File"
+        "inputsRequired": "Cad File",
+        "supervisor": "Shubham"
     },
     "poRelease": {
         "customerSalePrice": 215000,
-        "vendorName": "Marco Polo",
+        "vendorName": "Talekar",
         "vendorLocation": "Pune",
         "poVendorSent": "N/A",
         "vendorCost": 187100,
@@ -85,7 +87,7 @@
         "gstValue": 38700,
         "totalInvoiceAmount": 253700,
         "paymentTerms": "30 days",
-        "invoiceNumber": "INV-5283",
+        "invoiceNumber": "QT-18283",
         "paymentStatus": "Pending"
     }
 }

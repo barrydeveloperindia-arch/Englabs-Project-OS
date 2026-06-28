@@ -1,0 +1,86 @@
+{
+    "projectId": "C5233",
+    "client": "Labat Asia",
+    "planning": {
+        "value": 0,
+        "poConfirmed": true,
+        "startDate": "2025-11-01",
+        "deliveryTerms": "ToPay",
+        "poNumber": "YES",
+        "budget": 0
+    },
+    "production": {
+        "currentStage": "Engineering Design",
+        "stages": [
+            {
+                "name": "Engineering Design",
+                "status": "In Progress"
+            },
+            {
+                "name": "Machine Processing",
+                "status": "Pending"
+            },
+            {
+                "name": "Workshop Fabrication",
+                "status": "Pending"
+            },
+            {
+                "name": "Sanding",
+                "status": "Pending"
+            },
+            {
+                "name": "Painting",
+                "status": "Pending"
+            },
+            {
+                "name": "Drying",
+                "status": "Pending"
+            },
+            {
+                "name": "Finishing",
+                "status": "Pending"
+            },
+            {
+                "name": "Final Packaging",
+                "status": "Pending"
+            }
+        ]
+    },
+    "metrics": {
+        "totalComponents": 0,
+        "materialConsumption": "ABS",
+        "workforce": [
+            "Anurag"
+        ]
+    },
+    "financials": {
+        "vendorName": "China",
+        "vendorLocation": "",
+        "dispatchBudget": null,
+        "totalCost": null,
+        "profitLoss": null,
+        "deliveryFeeMode": null,
+        "poNumber": ""
+    },
+    "dailyStandup": {
+        "discussingNotes": "0 | China | QC: Parts are there; Painting on hold. Payment has not been done",
+        "preparingPartsDate": "2026-06-26",
+        "inputsRequired": "NO",
+        "porterPayments": 0,
+        "routeTo": "",
+        "srNo": "",
+        "routeFrom": "",
+        "supervisor": "Anurag"
+    },
+    "poRelease": {
+        "customerSalePrice": 0,
+        "vendorName": "China",
+        "vendorLocation": "",
+        "poVendorSent": "",
+        "vendorCost": 0,
+        "releaseDate": "2025-11-01"
+    },
+    "invoiceRelease": {
+        "invoiceNumber": ""
+    }
+}

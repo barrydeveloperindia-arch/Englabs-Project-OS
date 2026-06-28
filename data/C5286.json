@@ -1,6 +1,6 @@
 {
     "projectId": "C5286",
-    "client": "ITL (SONALIKA)",
+    "client": "Sonalika",
     "planning": {
         "value": 0,
         "budget": 0,
@@ -48,32 +48,35 @@
     },
     "metrics": {
         "totalComponents": 10,
-        "materialConsumption": "MJF Painted",
+        "materialConsumption": "MJF",
         "workforce": [
-            "Devanshu"
+            "Devanshu",
+            "Anurag",
+            "Shubham"
         ]
     },
     "financials": {
-        "vendorName": "Excel Repid TECH",
+        "vendorName": "idemi",
         "vendorLocation": "Delhi",
         "dispatchBudget": 0,
         "totalCost": null,
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": null
+        "poNumber": "QT-18286"
     },
     "dailyStandup": {
         "srNo": "=1+A8",
-        "discussingNotes": "No updates recorded.",
-        "preparingPartsDate": " ",
+        "discussingNotes": "10 | idemi | QC: Primer being done right now; Painting will be done after that; PO Awaited",
+        "preparingPartsDate": "2026-06-27",
         "routeFrom": "Noida",
         "routeTo": "Faridabad",
         "porterPayments": 0,
-        "inputsRequired": "NO"
+        "inputsRequired": "NO",
+        "supervisor": "Shubham"
     },
     "poRelease": {
         "customerSalePrice": 0,
-        "vendorName": "Excel Repid TECH",
+        "vendorName": "idemi",
         "vendorLocation": "Delhi",
         "poVendorSent": "N/A",
         "vendorCost": 0,
@@ -84,7 +87,7 @@
         "gstValue": 0,
         "totalInvoiceAmount": 0,
         "paymentTerms": "30 days",
-        "invoiceNumber": "QTN-5286",
+        "invoiceNumber": "QT-18286",
         "paymentStatus": "Pending"
     }
 }

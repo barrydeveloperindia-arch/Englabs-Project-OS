@@ -84,7 +84,9 @@ vi.mock('@services/database_service', () => ({
     fetchGateEntries: vi.fn(() => Promise.resolve([])),
     saveGateEntry: vi.fn(() => Promise.resolve({ success: true })),
     syncLocalToFirebase: vi.fn(() => Promise.resolve(true)),
-    syncAllProjectsToFirebase: vi.fn(() => Promise.resolve(true))
+    syncAllProjectsToFirebase: vi.fn(() => Promise.resolve(true)),
+    fetchPorterLedger: vi.fn(() => Promise.resolve([])),
+    savePorterEntry: vi.fn(() => Promise.resolve({ success: true }))
 }));
 
 vi.mock('@shared/services/inventory_service', () => ({
@@ -157,9 +159,9 @@ describe('Antigravity Dashboard UI', () => {
             const initBtn = await screen.findByText('Initialize Workday', {}, { timeout: 1000 });
             if (initBtn) fireEvent.click(initBtn);
         } catch (e) {}
-        const newProjectBtn = await screen.findByText('NEW MISSION');
+        const newProjectBtn = await screen.findByText('NEW PROJECT');
         fireEvent.click(newProjectBtn);
-        expect(await screen.findByText('Initialize Mission')).toBeDefined();
+        expect(await screen.findByText('Initialize Project')).toBeDefined();
     });
 
     it.skip('filters projects based on search query', async () => {
