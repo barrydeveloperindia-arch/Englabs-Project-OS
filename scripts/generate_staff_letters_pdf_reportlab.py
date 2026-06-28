@@ -17,45 +17,41 @@ APPOINTMENT_PDF = os.path.join(LETTERS_DIR, "Appointment_Letter_Gurpreet_Singh.p
 JOINING_MD      = os.path.join(LETTERS_DIR, "Joining_Letter_Gurpreet_Singh.md")
 JOINING_PDF     = os.path.join(LETTERS_DIR, "Joining_Letter_Gurpreet_Singh.pdf")
 
-def get_masked_canvas_class(hide_signature_always):
-    class MaskedCanvas(canvas.Canvas):
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.pages = []
+class PageNumCanvas(canvas.Canvas):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.pages = []
 
-        def showPage(self):
-            self.pages.append(dict(self.__dict__))
-            self._startPage()
+    def showPage(self):
+        self.pages.append(dict(self.__dict__))
+        self._startPage()
 
-        def save(self):
-            page_count = len(self.pages)
-            for page in self.pages:
-                self.__dict__.update(page)
-                self.draw_mask_and_page_number(page_count)
-                super().showPage()
-            super().save()
+    def save(self):
+        page_count = len(self.pages)
+        for page in self.pages:
+            self.__dict__.update(page)
+            self.draw_page_number(page_count)
+            super().showPage()
+        super().save()
 
-        def draw_mask_and_page_number(self, page_count):
-            page_num = self._pageNumber
-            
-            # Mask out the background signature block (y=80 to y=195)
-            # - For Joining Letter: Hide always.
-            # - For Appointment Letter: Hide on all pages EXCEPT the last page.
-            if hide_signature_always or (page_num < page_count):
-                self.saveState()
-                self.setFillColor(colors.white)
-                self.setStrokeColor(colors.white)
-                self.rect(0, 80, 595.27, 115, fill=1, stroke=0)
-                self.restoreState()
-                
-            # Draw professional footer page number
-            self.saveState()
-            self.setFont("Helvetica", 9)
-            self.setFillColor(colors.HexColor("#64748b"))
-            self.drawRightString(541.27, 54, f"Page {page_num} of {page_count}")
-            self.restoreState()
-            
-    return MaskedCanvas
+    def draw_page_number(self, page_count):
+        page_num = self._pageNumber
+        print(f"Canvas drawing page number: Page {page_num} of {page_count}")
+        self.saveState()
+        self.setFont("Helvetica", 9)
+        self.setFillColor(colors.HexColor("#475569"))
+        # Move page numbers to top-right, clearing the logo area
+        self.drawRightString(541.27, 810, f"Page {page_num} of {page_count}")
+        self.restoreState()
+
+def generate_mask_pdf(mask_path, y, height):
+    from reportlab.pdfgen import canvas as pdf_canvas
+    c = pdf_canvas.Canvas(mask_path, pagesize=A4)
+    c.setFillColor(colors.white)
+    c.setStrokeColor(colors.white)
+    c.rect(0, y, 595.27, height, fill=1, stroke=0)
+    c.showPage()
+    c.save()
 
 def md_to_pdf_reportlab(md_path, pdf_path, hide_signature_always=False):
     print(f"Reading {md_path}...")
@@ -68,14 +64,16 @@ def md_to_pdf_reportlab(md_path, pdf_path, hide_signature_always=False):
         
     temp_pdf = pdf_path.replace(".pdf", "_content.pdf")
     
-    # We increase margins to prevent text from printing on the header and footer graphic of the letterhead
+    # We increase margins:
+    # - topMargin=150 to completely clear the logo on all pages
+    # - bottomMargin=95 to completely clear the footer address block on all pages
     doc = SimpleDocTemplate(
         temp_pdf,
         pagesize=A4,
         rightMargin=54,
         leftMargin=54,
-        topMargin=108,   # 1.5 inches to clear top letterhead logo & header
-        bottomMargin=80  # ~1.1 inches to clear bottom office address & page numbers
+        topMargin=150,   # Increased from 108 to 150 to clear top letterhead logo & header
+        bottomMargin=95  # Increased from 80 to 95 to clear bottom office address & page numbers
     )
     
     styles = getSampleStyleSheet()
@@ -170,13 +168,13 @@ def md_to_pdf_reportlab(md_path, pdf_path, hide_signature_always=False):
             
         if line.startswith('# '):
             text = line[2:]
-            text = re.sub(r'\*\fr(.*?)\*\*', r'<b>\1</b>', text)
             text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', text)
             story.append(Paragraph(text, title_style))
             continue
             
         if line.startswith('### ') or line.startswith('#### '):
             text = line.lstrip('#').strip()
+            # We let ReportLab handle page breaks naturally now, no forced PageBreak
             text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', text)
             story.append(Paragraph(text, h3_style))
             continue
@@ -192,33 +190,52 @@ def md_to_pdf_reportlab(md_path, pdf_path, hide_signature_always=False):
         text = text.replace('  ', '<br/>')
         story.append(Paragraph(text, body_style))
         
-    doc.build(story, canvasmaker=get_masked_canvas_class(hide_signature_always))
+    doc.build(story, canvasmaker=PageNumCanvas)
     print(f"  Generated temporary content PDF: {temp_pdf}")
     
     # Merge with letterhead background PDF
     if os.path.exists(LETTERHEAD_PDF):
-        print(f"  Merging with letterhead: {LETTERHEAD_PDF}...")
-        bg_reader = PdfReader(LETTERHEAD_PDF)
-        bg_page = bg_reader.pages[0]
+        # Generate the temporary mask PDF
+        mask_temp_path = pdf_path.replace(".pdf", "_mask.pdf")
+        # Mask covers y=85 to y=320 (height = 235) which hides the director signature and For M/s Englabs... text
+        generate_mask_pdf(mask_temp_path, 85, 235)
+        
+        mask_reader = PdfReader(mask_temp_path)
+        mask_page = mask_reader.pages[0]
         
         content_reader = PdfReader(temp_pdf)
         writer = PdfWriter()
         
-        for page in content_reader.pages:
-            # Create a copy of the background page to overlay on
-            page_copy = copy.copy(bg_page)
-            page_copy.merge_page(page)
-            writer.add_page(page_copy)
+        page_count = len(content_reader.pages)
+        for i, page in enumerate(content_reader.pages):
+            page_num = i + 1
+            
+            # Freshly read the letterhead PDF for each page to prevent shared state corruption
+            bg_reader = PdfReader(LETTERHEAD_PDF)
+            bg_page = bg_reader.pages[0]
+            
+            # Hide signature if requested globally, or if this is not the last page
+            hide_sig = hide_signature_always or (page_num < page_count)
+            
+            if hide_sig:
+                # Merge mask first
+                bg_page.merge_page(mask_page)
+                
+            # Then merge the content page on top
+            bg_page.merge_page(page)
+            writer.add_page(bg_page)
             
         with open(pdf_path, "wb") as f:
             writer.write(f)
         print(f"  [OK] Generated Merged PDF: {pdf_path}")
         
-        # Clean up temporary file
-        try:
-            os.remove(temp_pdf)
-        except Exception as e:
-            print(f"  Warning: Could not remove temporary file {temp_pdf}: {e}")
+        # Clean up temporary files
+        for p in [temp_pdf, mask_temp_path]:
+            if os.path.exists(p):
+                try:
+                    os.remove(p)
+                except Exception as e:
+                    print(f"  Warning: Could not remove {p}: {e}")
     else:
         # Fallback: rename temporary PDF to final path
         print(f"  [WARNING] Letterhead not found at {LETTERHEAD_PDF}. Using content PDF directly.")
