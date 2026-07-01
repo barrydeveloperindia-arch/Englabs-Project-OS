@@ -344,6 +344,56 @@ export const SIMCardLedger: React.FC = () => {
         doc.save('Englabs_SIM_Ledger_Report.pdf');
     };
 
+    const getOperatorLogo = (operator: string) => {
+        switch (operator.toUpperCase()) {
+            case 'JIO':
+                return (
+                    <div className="flex items-center gap-2 select-none">
+                        <div className="w-7 h-7 rounded-full bg-[#0F3E99] flex items-center justify-center text-[10px] font-black text-white shadow-sm border border-[#1d55c2] leading-none shrink-0">
+                            Jio
+                        </div>
+                        <span className="text-xs font-bold text-slate-800">JIO</span>
+                    </div>
+                );
+            case 'AIRTEL':
+                return (
+                    <div className="flex items-center gap-2 select-none">
+                        <div className="w-7 h-7 rounded-full bg-[#E11D48] flex items-center justify-center text-[10px] font-black text-white shadow-sm border border-[#f43f5e] leading-none shrink-0">
+                            airtel
+                        </div>
+                        <span className="text-xs font-bold text-slate-800">Airtel</span>
+                    </div>
+                );
+            case 'VI':
+                return (
+                    <div className="flex items-center gap-2 select-none">
+                        <div className="w-7 h-7 rounded-lg bg-[#E60000] flex items-center justify-center text-[10px] font-black text-[#FFCC00] shadow-sm border border-[#ff3333] leading-none shrink-0">
+                            Vi
+                        </div>
+                        <span className="text-xs font-bold text-slate-800">VI</span>
+                    </div>
+                );
+            case 'BSNL':
+                return (
+                    <div className="flex items-center gap-2 select-none">
+                        <div className="w-7 h-7 rounded-full bg-[#0052B4] flex items-center justify-center text-[9px] font-black text-[#FFCC00] shadow-sm border border-[#3385ff] leading-none shrink-0">
+                            BSNL
+                        </div>
+                        <span className="text-xs font-bold text-slate-800">BSNL</span>
+                    </div>
+                );
+            default:
+                return (
+                    <div className="flex items-center gap-2 select-none">
+                        <div className="w-7 h-7 rounded-full bg-[#059669] flex items-center justify-center text-[9px] font-black text-white shadow-sm border border-emerald-400 leading-none shrink-0">
+                            {operator.substring(0, 3)}
+                        </div>
+                        <span className="text-xs font-bold text-slate-800">{operator}</span>
+                    </div>
+                );
+        }
+    };
+
     return (
         <div className="space-y-10">
             {/* STATS STRIP */}
@@ -566,14 +616,7 @@ export const SIMCardLedger: React.FC = () => {
                                         <td className="py-5 px-6 font-mono">{sim.mobileNumber}</td>
                                         <td className="py-5 px-6 text-slate-500">{sim.department}</td>
                                         <td className="py-5 px-6">
-                                            <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider ${
-                                                sim.operator === 'Airtel' ? 'bg-red-50 text-red-600' :
-                                                sim.operator === 'JIO' ? 'bg-blue-50 text-blue-600' :
-                                                sim.operator === 'BSNL' ? 'bg-green-50 text-green-600' :
-                                                'bg-purple-50 text-purple-600'
-                                            }`}>
-                                                {sim.operator}
-                                            </span>
+                                            {getOperatorLogo(sim.operator)}
                                         </td>
                                         <td className="py-5 px-6 text-slate-600">{sim.plan || '—'}</td>
                                         <td className="py-5 px-6 font-mono text-xs text-slate-600">{sim.expiryDate || '—'}</td>
