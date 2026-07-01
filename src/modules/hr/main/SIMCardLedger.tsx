@@ -45,7 +45,7 @@ const DEFAULT_SIM_DATA: SIMRecord[] = [
     { simId: 'SIM014', assignedTo: 'Anurag', mobileNumber: '6284953120', department: 'Machine Room', operator: 'JIO', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '2026-06-04', plan: 'Monthly', amount: '346', validityDays: 28, expiryDate: '2026-07-02', doneBy: '', remarks: '' },
     { simId: 'SIM017', assignedTo: 'Ratnesh', mobileNumber: '7589277985', department: 'Accounts', operator: 'BSNL', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '', plan: '', amount: '', validityDays: 0, expiryDate: '', doneBy: '', remarks: '' },
     { simId: 'SIM018', assignedTo: 'Kusum Didi', mobileNumber: '7380139684', department: 'House Keeping', operator: 'BSNL', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '', plan: '', amount: '', validityDays: 0, expiryDate: '', doneBy: '', remarks: '' },
-    { simId: 'SIM019', assignedTo: 'Arjun Tiwari', mobileNumber: '7837484439', department: 'Store', operator: 'VI', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '', plan: '', amount: '', validityDays: 0, expiryDate: '', doneBy: '', remarks: '' },
+    { simId: 'SIM019', assignedTo: 'Arjun Tiwari', mobileNumber: '7837484439', department: 'Store', operator: 'VI', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '2026-05-25', plan: 'Expired Plan', amount: '—', validityDays: 30, expiryDate: '2026-06-25', doneBy: '', remarks: 'Outgoing & Incoming Stopped' },
     { simId: 'SIM019_Sky', assignedTo: 'KEVEL / Reception', mobileNumber: '8146407934', department: 'SKY5', operator: 'SKY5', deviceType: 'Sky5 Hotal', usageType: 'Official', rechargeDate: '', plan: '', amount: '', validityDays: 0, expiryDate: '', doneBy: '', remarks: '' },
     { simId: 'SIM020', assignedTo: 'School Van', mobileNumber: '8901084836', department: 'School Van', operator: 'BSNL', deviceType: 'Bright Kids School', usageType: 'Official', rechargeDate: '2025-11-18', plan: 'yearly', amount: '1499', validityDays: 365, expiryDate: '2026-11-18', doneBy: '', remarks: '' },
     { simId: 'SIM021', assignedTo: 'Sunny / Reception', mobileNumber: '9876049652', department: 'School', operator: 'Airtel', deviceType: 'Bright Kids School', usageType: 'Official', rechargeDate: '2026-04-05', plan: 'yearly', amount: '2249', validityDays: 365, expiryDate: '2027-04-05', doneBy: '', remarks: '' }
@@ -63,7 +63,7 @@ export const SIMCardLedger: React.FC = () => {
     const currentDate = new Date(currentDateStr);
 
     useEffect(() => {
-        const stored = localStorage.getItem('englabs_sim_ledger_v1');
+        const stored = localStorage.getItem('englabs_sim_ledger_v2');
         if (stored) {
             try {
                 setSims(JSON.parse(stored));
@@ -72,13 +72,13 @@ export const SIMCardLedger: React.FC = () => {
             }
         } else {
             setSims(DEFAULT_SIM_DATA);
-            localStorage.setItem('englabs_sim_ledger_v1', JSON.stringify(DEFAULT_SIM_DATA));
+            localStorage.setItem('englabs_sim_ledger_v2', JSON.stringify(DEFAULT_SIM_DATA));
         }
     }, []);
 
     const saveSims = (newSims: SIMRecord[]) => {
         setSims(newSims);
-        localStorage.setItem('englabs_sim_ledger_v1', JSON.stringify(newSims));
+        localStorage.setItem('englabs_sim_ledger_v2', JSON.stringify(newSims));
     };
 
     // Calculate SIM Status details
