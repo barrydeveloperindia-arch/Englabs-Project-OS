@@ -168,23 +168,35 @@ export const SIMCardLedger: React.FC = () => {
         let message = '';
         if (sim) {
             const status = getSimStatus(sim);
-            message = `*Englabs SIM Expiry Alert* 🚨\n\n` +
-                      `*Name:* ${sim.assignedTo}\n` +
-                      `*Mobile:* ${sim.mobileNumber}\n` +
-                      `*Operator:* ${sim.operator}\n` +
-                      `*Department:* ${sim.department}\n` +
-                      `*Status:* ${status.label.toUpperCase()} ${sim.expiryDate ? `(Exp: ${sim.expiryDate})` : ''}\n` +
-                      `${sim.remarks ? `*Remarks:* ${sim.remarks}\n` : ''}\n` +
-                      `Please recharge immediately!`;
+            const daysText = status.daysLeft !== null 
+                ? (status.daysLeft < 0 ? `(Expired ${Math.abs(status.daysLeft)} days ago)` : `(${status.daysLeft} days remaining)`)
+                : '';
+            message = `*Englabs SIM Recharge Details* 📱\n\n` +
+                      `• *SIM ID:* ${sim.simId}\n` +
+                      `• *Name:* ${sim.assignedTo}\n` +
+                      `• *Mobile:* ${sim.mobileNumber}\n` +
+                      `• *Operator:* ${sim.operator}\n` +
+                      `• *Department:* ${sim.department}\n` +
+                      `• *Plan:* ${sim.plan || '—'}\n` +
+                      `• *Recharge Date:* ${sim.rechargeDate || '—'}\n` +
+                      `• *Expiry Date:* ${sim.expiryDate || '—'}\n` +
+                      `• *Device Type:* ${sim.deviceType || '—'}\n` +
+                      `• *Usage Type:* ${sim.usageType || '—'}\n` +
+                      `• *Status:* ${status.label.toUpperCase()} ${daysText}\n` +
+                      `${sim.remarks ? `• *Remarks:* ${sim.remarks}\n` : ''}\n` +
+                      `Please take action to recharge outstanding numbers.`;
         } else if (type === 'filtered') {
             message = `*Englabs SIM Filtered Registry* 📋\n` +
                       `*Active Filters:* Operator: ${operatorFilter}, Status: ${statusFilter}\n` +
                       `*Count:* ${filteredSims.length} SIMs\n\n` +
                       filteredSims.map(s => {
                           const status = getSimStatus(s);
+                          const daysText = status.daysLeft !== null 
+                              ? (status.daysLeft < 0 ? `(Expired ${Math.abs(status.daysLeft)} days ago)` : `(${status.daysLeft} days left)`)
+                              : '';
                           return `• *${s.assignedTo}* (${s.mobileNumber})\n` +
-                                 `  Operator: ${s.operator} | Exp: ${s.expiryDate || 'N/A'}\n` +
-                                 `  Status: ${status.label}`;
+                                 `  Operator: ${s.operator} | Plan: ${s.plan || '—'}\n` +
+                                 `  Exp: ${s.expiryDate || '—'} | Status: ${status.label} ${daysText}`;
                       }).join('\n\n');
         } else {
             // General Expiry summary
