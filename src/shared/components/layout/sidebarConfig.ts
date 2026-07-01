@@ -135,6 +135,7 @@ export const sidebarConfig: MenuGroup[] = [
                 subItems: [
                     { id: "HR_MASTER", label: "Employee Master" },
                     { id: "ATTENDANCE", label: "Attendance Management" },
+                    { id: "SIM_LEDGER", label: "SIM Card Ledger" },
                     { id: "HR_PAYROLL", label: "Payroll Terminal" },
                     { id: "HR_DOCUMENTS", label: "HR Documents" }
                 ]

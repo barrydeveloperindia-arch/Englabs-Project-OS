@@ -1013,7 +1013,7 @@ const App: React.FC = () => {
                     />
                 ) : (currentView === 'FOOD_REGISTER' || currentView === 'FOOD_MEALS') ? (
                     <FoodRegister onLog={(log) => setAuditLogs(prev => [log, ...prev])} />
-                ) : (currentView === 'ATTENDANCE' || currentView === 'HR_MASTER' || currentView === 'HR_DOCUMENTS' || currentView === 'HR_LEAVE' || currentView === 'HR_PERFORMANCE' || currentView === 'HR_IDCARD' || currentView === 'HR_ALLOCATION' || currentView === 'HR_LOGS') ? (
+                ) : (currentView === 'ATTENDANCE' || currentView === 'HR_MASTER' || currentView === 'HR_DOCUMENTS' || currentView === 'HR_LEAVE' || currentView === 'HR_PERFORMANCE' || currentView === 'HR_IDCARD' || currentView === 'HR_ALLOCATION' || currentView === 'HR_LOGS' || currentView === 'SIM_LEDGER') ? (
                     <RequireRole allowedRoles={['ADMIN', 'HR'] as any}>
                         <HRDashboard currentView={currentView} setCurrentView={setCurrentView} />
                     </RequireRole>
