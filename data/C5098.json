@@ -2,23 +2,22 @@
     "projectId": "C5098",
     "client": "ENDUREAIR",
     "planning": {
-        "startDate": "2026-06-02",
-        "poConfirmed": true,
-        "value": 32047.8,
+        "deliveryTerms": "ToPay",
         "budget": 22433,
         "poNumber": "P2100-EL12-PO-16843",
-        "deliveryTerms": "ToPay"
+        "poConfirmed": true,
+        "startDate": "2026-06-02",
+        "value": 32047.8
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
                 "name": "Workshop Fabrication",
@@ -41,26 +40,27 @@
                 "status": "Pending"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
-        "materialConsumption": "Tracking active...",
+        "totalComponents": 0,
         "workforce": [
             "TBD"
         ],
-        "totalComponents": 0
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
         "vendorName": "M/s. Amuse",
-        "vendorLocation": "Survey No 139/A, Plot 3 & 4, Oragadam, Panruti, Sriperumbudur Tk",
+        "profitLoss": 1440,
         "dispatchBudget": 1700,
         "totalCost": 32047.8,
-        "profitLoss": 1440,
-        "deliveryFeeMode": "Charged Separately in invoice",
-        "poNumber": "QT-18098"
+        "vendorLocation": "Survey No 139/A, Plot 3 & 4, Oragadam, Panruti, Sriperumbudur Tk",
+        "poNumber": "QT-18098",
+        "deliveryFeeMode": "Charged Separately in invoice"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18098"

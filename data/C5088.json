@@ -2,27 +2,26 @@
     "projectId": "C5088",
     "client": "Orient",
     "planning": {
-        "value": 0,
         "poConfirmed": true,
+        "value": 0,
         "startDate": "2026-06-10",
-        "deliveryTerms": "ToPay",
         "poNumber": "YES",
+        "deliveryTerms": "ToPay",
         "budget": 0
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
@@ -44,40 +43,41 @@
                 "name": "Final Packaging",
                 "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
-        "totalComponents": 11,
         "materialConsumption": "SLS ABS",
+        "totalComponents": 11,
         "workforce": [
             "Devanshu"
         ]
     },
     "financials": {
-        "vendorName": "CADQUA",
-        "vendorLocation": "",
         "dispatchBudget": null,
         "totalCost": null,
+        "vendorName": "CADQUA",
         "profitLoss": null,
         "deliveryFeeMode": null,
+        "vendorLocation": "",
         "poNumber": ""
     },
     "dailyStandup": {
-        "discussingNotes": "11 | CADQUA | QC: Rohit has delivered today; QC was done by Rohit; Feedback will be taken by Rohit",
+        "porterPayments": 0,
+        "routeFrom": "",
+        "supervisor": "Devanshu",
         "preparingPartsDate": "2026-06-18",
         "inputsRequired": "NO",
-        "porterPayments": 0,
         "routeTo": "",
         "srNo": "",
-        "routeFrom": "",
-        "supervisor": "Devanshu"
+        "discussingNotes": "11 | CADQUA | QC: Rohit has delivered today; QC was done by Rohit; Feedback will be taken by Rohit"
     },
     "poRelease": {
-        "customerSalePrice": 0,
         "vendorName": "CADQUA",
-        "vendorLocation": "",
+        "customerSalePrice": 0,
         "poVendorSent": "",
         "vendorCost": 0,
+        "vendorLocation": "",
         "releaseDate": "2026-06-10"
     },
     "invoiceRelease": {

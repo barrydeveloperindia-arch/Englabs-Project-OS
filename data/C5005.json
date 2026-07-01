@@ -2,12 +2,12 @@
     "projectId": "C5005",
     "client": "BAJAJ",
     "planning": {
-        "poNumber": "P2100-EL12-PO-16795",
-        "budget": 13475,
         "deliveryTerms": "ToPay",
-        "startDate": "2026-06-02",
+        "budget": 13475,
         "value": 19250,
-        "poConfirmed": true
+        "startDate": "2026-06-02",
+        "poConfirmed": true,
+        "poNumber": "P2100-EL12-PO-16795"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -21,16 +21,16 @@
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
                 "status": "Pending"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
@@ -47,20 +47,20 @@
         ]
     },
     "metrics": {
+        "totalComponents": 0,
         "workforce": [
             "TBD"
         ],
-        "materialConsumption": "Tracking active...",
-        "totalComponents": 0
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "MARCO POLO PRODUCTS P LTD",
+        "deliveryFeeMode": "To pay basis",
         "vendorLocation": "Pune",
+        "poNumber": "QT-18005",
         "dispatchBudget": null,
         "totalCost": 19250,
-        "profitLoss": null,
-        "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18005"
+        "vendorName": "MARCO POLO PRODUCTS P LTD",
+        "profitLoss": null
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18005"

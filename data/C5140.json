@@ -3,11 +3,11 @@
     "client": "AEBOCODE",
     "planning": {
         "budget": 30334,
-        "poNumber": "P2100-EL12-PO-16862",
         "deliveryTerms": "ToPay",
+        "value": 43335,
         "startDate": "2026-06-02",
         "poConfirmed": true,
-        "value": 43335
+        "poNumber": "P2100-EL12-PO-16862"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -33,34 +33,34 @@
                 "status": "Pending"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
                 "status": "Pending"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
         ]
     },
     "metrics": {
+        "totalComponents": 0,
         "workforce": [
             "TBD"
         ],
-        "materialConsumption": "Tracking active...",
-        "totalComponents": 0
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "ADROITEC INFORMATION SYSTEMS PVT LTD",
-        "vendorLocation": "Noida",
-        "dispatchBudget": null,
         "totalCost": 43335,
+        "dispatchBudget": null,
         "profitLoss": null,
+        "vendorName": "ADROITEC INFORMATION SYSTEMS PVT LTD",
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18140"
+        "poNumber": "QT-18140",
+        "vendorLocation": "Noida"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18140"

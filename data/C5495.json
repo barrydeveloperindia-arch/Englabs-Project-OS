@@ -1,19 +1,26 @@
 {
-    "projectId": "C2718",
-    "client": "THROTTLE AEROSPACE",
     "planning": {
-        "poNumber": "",
-        "value": 5605,
-        "startDate": "2022-09-05",
-        "poConfirmed": false,
         "deliveryTerms": "ToPay",
-        "budget": 3923
+        "budget": 50000,
+        "value": 100000,
+        "startDate": "2026-06-24",
+        "poConfirmed": true
     },
+    "dailyStandup": {},
+    "metrics": {
+        "totalComponents": 0,
+        "materialConsumption": "Pending Ingestion",
+        "workforce": [
+            "TBD"
+        ]
+    },
+    "client": "Lodge Client Test 2",
+    "projectId": "C5495",
     "production": {
         "stages": [
             {
                 "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "Pending"
             },
             {
                 "status": "Pending",
@@ -24,8 +31,8 @@
                 "status": "Pending"
             },
             {
-                "status": "Pending",
-                "name": "Sanding"
+                "name": "Sanding",
+                "status": "Pending"
             },
             {
                 "name": "Painting",
@@ -36,27 +43,14 @@
                 "name": "Drying"
             },
             {
-                "status": "Pending",
-                "name": "Finishing"
+                "name": "Finishing",
+                "status": "Pending"
             },
             {
-                "status": "Pending",
-                "name": "Final Packaging"
+                "name": "Final Packaging",
+                "status": "Pending"
             }
         ],
         "currentStage": "Engineering Design"
-    },
-    "metrics": {
-        "totalComponents": 0,
-        "workforce": [
-            "TBD"
-        ],
-        "materialConsumption": "Tracking active..."
-    },
-    "invoiceRelease": {
-        "invoiceNumber": "QT-15718"
-    },
-    "financials": {
-        "poNumber": "QT-15718"
     }
 }

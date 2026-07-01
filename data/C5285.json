@@ -2,20 +2,20 @@
     "projectId": "C5285",
     "client": "AutoDyanamics",
     "planning": {
-        "value": 140000,
         "budget": 98000,
         "deliveryTerms": "ToPay",
-        "poConfirmed": false,
+        "poNumber": "P2100-EL12-PO-21175",
+        "value": 140000,
         "startDate": "2026-06-17",
-        "poNumber": "P2100-EL12-PO-21175"
+        "poConfirmed": false
     },
     "production": {
         "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
+                "lead": "Shubham",
                 "status": "In Progress",
-                "lead": "Shubham"
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
@@ -26,68 +26,68 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
                 "status": "Pending"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
                 "status": "Pending"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
         ]
     },
     "metrics": {
-        "totalComponents": 0,
         "materialConsumption": "Machining",
+        "totalComponents": 0,
         "workforce": [
             "Shubham",
             "Anurag"
         ]
     },
     "financials": {
-        "vendorName": "Talekar",
+        "deliveryFeeMode": "To pay basis",
         "vendorLocation": "Pune",
+        "poNumber": "QT-18285",
         "dispatchBudget": 0,
         "totalCost": null,
-        "profitLoss": null,
-        "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18285"
+        "vendorName": "Talekar",
+        "profitLoss": null
     },
     "dailyStandup": {
-        "srNo": "=1+A24",
-        "discussingNotes": "0 | Talekar | QC: 11 will be taken by Pandhurinathis; Others will be sent on Monday",
-        "preparingPartsDate": "Expected 26-06-2026",
-        "routeFrom": "Pune",
-        "routeTo": "Englabs",
         "porterPayments": 0,
+        "routeFrom": "Pune",
+        "preparingPartsDate": "Expected 26-06-2026",
+        "supervisor": "Shubham",
+        "discussingNotes": "0 | Talekar | QC: 11 will be taken by Pandhurinathis; Others will be sent on Monday",
+        "srNo": "=1+A24",
         "inputsRequired": "Cad File",
-        "supervisor": "Shubham"
+        "routeTo": "Englabs"
     },
     "poRelease": {
+        "releaseDate": "2026-06-17",
+        "vendorCost": 106000,
+        "vendorLocation": "Pune",
         "customerSalePrice": 140000,
         "vendorName": "Talekar",
-        "vendorLocation": "Pune",
-        "poVendorSent": "N/A",
-        "vendorCost": 106000,
-        "releaseDate": "2026-06-17"
+        "poVendorSent": "N/A"
     },
     "invoiceRelease": {
         "gstRate": 18,
-        "gstValue": 25200,
         "totalInvoiceAmount": 165200,
-        "paymentTerms": "30 days",
         "invoiceNumber": "QT-18285",
-        "paymentStatus": "Pending"
+        "paymentStatus": "Pending",
+        "gstValue": 25200,
+        "paymentTerms": "30 days"
     }
 }

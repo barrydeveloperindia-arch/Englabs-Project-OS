@@ -2,19 +2,19 @@
     "projectId": "C5286",
     "client": "Sonalika",
     "planning": {
+        "startDate": "2026-06-23",
         "value": 0,
-        "budget": 0,
-        "deliveryTerms": "ToPay",
         "poConfirmed": false,
-        "startDate": "2026-06-23"
+        "budget": 0,
+        "deliveryTerms": "ToPay"
     },
     "production": {
         "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
+                "lead": "Devanshu",
                 "status": "In Progress",
-                "lead": "Devanshu"
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
@@ -25,69 +25,69 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
                 "status": "Pending"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
         ]
     },
     "metrics": {
         "totalComponents": 10,
-        "materialConsumption": "MJF",
         "workforce": [
             "Devanshu",
             "Anurag",
             "Shubham"
-        ]
+        ],
+        "materialConsumption": "MJF"
     },
     "financials": {
         "vendorName": "idemi",
-        "vendorLocation": "Delhi",
+        "profitLoss": null,
         "dispatchBudget": 0,
         "totalCost": null,
-        "profitLoss": null,
-        "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18286"
+        "vendorLocation": "Delhi",
+        "poNumber": "QT-18286",
+        "deliveryFeeMode": "To pay basis"
     },
     "dailyStandup": {
-        "srNo": "=1+A8",
-        "discussingNotes": "10 | idemi | QC: Primer being done right now; Painting will be done after that; PO Awaited",
-        "preparingPartsDate": "2026-06-27",
         "routeFrom": "Noida",
-        "routeTo": "Faridabad",
         "porterPayments": 0,
+        "discussingNotes": "10 | idemi | QC: Primer being done right now; Painting will be done after that; PO Awaited",
+        "srNo": "=1+A8",
         "inputsRequired": "NO",
-        "supervisor": "Shubham"
+        "routeTo": "Faridabad",
+        "supervisor": "Shubham",
+        "preparingPartsDate": "2026-06-27"
     },
     "poRelease": {
-        "customerSalePrice": 0,
-        "vendorName": "idemi",
-        "vendorLocation": "Delhi",
         "poVendorSent": "N/A",
+        "vendorName": "idemi",
+        "customerSalePrice": 0,
+        "vendorLocation": "Delhi",
         "vendorCost": 0,
         "releaseDate": "2026-06-23"
     },
     "invoiceRelease": {
-        "gstRate": 18,
-        "gstValue": 0,
-        "totalInvoiceAmount": 0,
-        "paymentTerms": "30 days",
         "invoiceNumber": "QT-18286",
-        "paymentStatus": "Pending"
+        "totalInvoiceAmount": 0,
+        "gstRate": 18,
+        "paymentStatus": "Pending",
+        "paymentTerms": "30 days",
+        "gstValue": 0
     }
 }

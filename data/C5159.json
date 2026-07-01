@@ -2,15 +2,14 @@
     "projectId": "C5159",
     "client": "KYOCERA",
     "planning": {
+        "deliveryTerms": "Included",
         "budget": 0,
         "poNumber": "P2100-EL12-PO-20933",
-        "deliveryTerms": "Included",
-        "poConfirmed": true,
         "value": 0,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poConfirmed": true
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
@@ -25,8 +24,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
@@ -44,23 +43,24 @@
                 "name": "Final Packaging",
                 "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
+        "totalComponents": 0,
+        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ],
-        "materialConsumption": "Tracking active...",
-        "totalComponents": 0
+        ]
     },
     "financials": {
-        "vendorName": "Plastipack",
-        "vendorLocation": "Faridabad",
-        "dispatchBudget": 0,
-        "totalCost": null,
-        "profitLoss": -703,
         "deliveryFeeMode": "included in invoice",
-        "poNumber": "QT-18159"
+        "poNumber": "QT-18159",
+        "vendorLocation": "Faridabad",
+        "totalCost": null,
+        "dispatchBudget": 0,
+        "profitLoss": -703,
+        "vendorName": "Plastipack"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18159"

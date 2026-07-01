@@ -1,16 +1,15 @@
 {
     "projectId": "C5296",
-    "client": "Aebocode",
+    "client": "AEBOCODE",
     "planning": {
-        "poConfirmed": true,
+        "deliveryTerms": "ToPay",
+        "budget": 34160,
         "value": 48800,
         "startDate": "2026-06-22",
-        "poNumber": "P2100-EL12-PO-74523",
-        "budget": 34160,
-        "deliveryTerms": "ToPay"
+        "poConfirmed": true,
+        "poNumber": "P2100-EL12-PO-74523"
     },
     "production": {
-        "currentStage": "Workshop Fabrication",
         "stages": [
             {
                 "name": "Engineering Design",
@@ -18,83 +17,82 @@
                 "lead": "Devanshu"
             },
             {
-                "name": "Machine Processing",
+                "lead": "Paras",
                 "status": "Completed",
-                "lead": "Paras"
+                "name": "Machine Processing"
             },
             {
                 "name": "Workshop Fabrication",
                 "status": "In Progress",
-                "lead": "Parth"
+                "lead": "Anurag"
             },
             {
-                "name": "Sanding",
+                "lead": "Parth",
                 "status": "Pending",
-                "lead": "Parth"
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
-                "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Pending"
             },
             {
-                "name": "Drying",
                 "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
-                "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Pending"
             },
             {
                 "name": "Final Packaging",
-                "status": "Pending",
-                "lead": "Devanshu"
+                "lead": "Devanshu",
+                "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Final Packaging"
     },
     "metrics": {
-        "totalComponents": 14,
         "workforce": [
-            "Devanshu",
-            "Anurag"
+            "Devanshu"
         ],
-        "materialConsumption": "MJF"
+        "totalComponents": 14,
+        "materialConsumption": "PA12"
     },
     "financials": {
-        "vendorName": "Adroitec",
-        "vendorLocation": "Noida",
+        "vendorName": "Adroitec Information System Pvt Ltd (Noida)",
+        "profitLoss": null,
         "dispatchBudget": 0,
         "totalCost": null,
-        "profitLoss": null,
-        "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18296"
+        "vendorLocation": "Noida",
+        "poNumber": "P2100-EL12-PO-74523",
+        "deliveryFeeMode": "To pay basis"
     },
     "dailyStandup": {
-        "discussingNotes": "14 | Adroitec | QC: Delivered yesterday; Feedback taken; Anurag has to send documented feedback",
-        "preparingPartsDate": "2026-06-24",
-        "inputsRequired": "NO",
-        "porterPayments": 0,
-        "routeTo": "Englabs",
         "srNo": "=1+A25",
-        "routeFrom": "NOIDA",
-        "supervisor": "Devanshu"
+        "discussingNotes": "14 parts are being sent to the client Aebocode as full and final settlement.",
+        "inputsRequired": "NO",
+        "routeTo": "Phase 2, Plot no. 347, Industrial Area Phase 2, Panchkula, Haryana 134113",
+        "preparingPartsDate": "2026-06-24",
+        "routeFrom": "Englabs ",
+        "porterPayments": 147
     },
     "poRelease": {
-        "customerSalePrice": 48800,
-        "vendorName": "Adroitec",
-        "vendorLocation": "Noida",
         "poVendorSent": "N/A",
+        "customerSalePrice": 48800,
+        "vendorName": "Adroitec Information System Pvt Ltd (Noida)",
+        "releaseDate": "2026-06-22",
         "vendorCost": 42280,
-        "releaseDate": "2026-06-22"
+        "vendorLocation": "Noida"
     },
     "invoiceRelease": {
+        "invoiceNumber": "INV-5296",
+        "totalInvoiceAmount": 57584,
         "gstRate": 18,
         "gstValue": 8784,
-        "totalInvoiceAmount": 57584,
-        "paymentTerms": "NO IDEA",
-        "invoiceNumber": "QT-18296",
-        "paymentStatus": "Pending"
+        "paymentStatus": "Pending",
+        "paymentTerms": "NO IDEA"
     }
 }

@@ -2,35 +2,34 @@
     "projectId": "C5124",
     "client": "MICROTEK ( ARVIND )",
     "planning": {
+        "value": 7910,
         "startDate": "2026-04-28",
         "poConfirmed": true,
-        "value": 7910,
-        "budget": 5537,
         "poNumber": "P2100-EL12-PO-16870",
+        "budget": 5537,
         "deliveryTerms": "ToPay"
     },
     "production": {
-        "currentStage": "Workshop Fabrication",
         "stages": [
             {
-                "name": "Engineering Design",
+                "lead": "Gaurav Panchal",
                 "status": "Completed",
-                "lead": "Gaurav Panchal"
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
-                "status": "Completed",
-                "lead": "Paras"
+                "lead": "Paras",
+                "status": "Completed"
             },
             {
                 "name": "Workshop Fabrication",
-                "status": "Completed",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Completed"
             },
             {
-                "name": "Sanding",
+                "lead": "Parth",
                 "status": "In Progress",
-                "lead": "Parth"
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
@@ -39,20 +38,21 @@
             },
             {
                 "name": "Drying",
-                "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Pending"
             },
             {
                 "name": "Finishing",
-                "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Pending"
             },
             {
                 "name": "Final Packaging",
                 "status": "Pending",
                 "lead": "Parth"
             }
-        ]
+        ],
+        "currentStage": "Workshop Fabrication"
     },
     "metrics": {
         "totalComponents": 37,
@@ -65,13 +65,13 @@
         "materialConsumption": "Aluminum 6061, MS Sheet"
     },
     "financials": {
-        "vendorName": "ADROITEC INFORMATION SYSTEMS PVT LTD",
+        "deliveryFeeMode": "To pay basis",
         "vendorLocation": "Noida",
+        "poNumber": "QT-18124",
         "dispatchBudget": null,
         "totalCost": 7910,
-        "profitLoss": null,
-        "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18124"
+        "vendorName": "ADROITEC INFORMATION SYSTEMS PVT LTD",
+        "profitLoss": null
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18124"

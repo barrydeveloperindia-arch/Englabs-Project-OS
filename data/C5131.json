@@ -2,15 +2,14 @@
     "projectId": "C5131",
     "client": "Sonalika RepeAT Order 12 Nos",
     "planning": {
-        "startDate": "2026-06-02",
-        "value": 37775.62,
-        "poConfirmed": true,
         "deliveryTerms": "Included",
         "budget": 26443,
-        "poNumber": "P2100-EL12-PO-16857"
+        "poNumber": "P2100-EL12-PO-16857",
+        "poConfirmed": true,
+        "value": 37775.62,
+        "startDate": "2026-06-02"
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
@@ -25,42 +24,43 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
         "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED",
+        "deliveryFeeMode": "included",
         "vendorLocation": "D - 58, 1st floor, Okhla Industrial Area Phase - 1",
+        "poNumber": "QT-18131",
         "dispatchBudget": 1500,
         "totalCost": 37775.62,
-        "profitLoss": 1150,
-        "deliveryFeeMode": "included",
-        "poNumber": "QT-18131"
+        "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED",
+        "profitLoss": 1150
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18131"

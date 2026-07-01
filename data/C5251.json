@@ -2,23 +2,23 @@
     "projectId": "C5251",
     "client": "Sonalika",
     "planning": {
-        "value": 66920,
         "budget": 46844,
         "deliveryTerms": "ToPay",
-        "poConfirmed": false,
-        "startDate": "2026-06-05"
+        "startDate": "2026-06-05",
+        "value": 66920,
+        "poConfirmed": false
     },
     "production": {
         "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
                 "status": "In Progress",
-                "lead": "Shubham"
+                "lead": "Shubham",
+                "name": "Engineering Design"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
                 "name": "Workshop Fabrication",
@@ -47,47 +47,47 @@
         ]
     },
     "metrics": {
-        "totalComponents": 32,
-        "materialConsumption": "MJF Black Paint",
         "workforce": [
             "Shubham",
             "Needs",
             "Anurag"
-        ]
+        ],
+        "totalComponents": 32,
+        "materialConsumption": "MJF Black Paint"
     },
     "financials": {
-        "vendorName": "Rapid Proto;",
-        "vendorLocation": "Delhi",
-        "dispatchBudget": 0,
-        "totalCost": null,
         "profitLoss": null,
-        "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18251"
+        "vendorName": "Rapid Proto;",
+        "totalCost": null,
+        "dispatchBudget": 0,
+        "poNumber": "QT-18251",
+        "vendorLocation": "Delhi",
+        "deliveryFeeMode": "To pay basis"
     },
     "dailyStandup": {
+        "porterPayments": 0,
+        "routeFrom": "",
+        "preparingPartsDate": "2026-06-27",
+        "supervisor": "Anurag",
         "srNo": "=1+A4",
         "discussingNotes": "32 | Rapid Proto; | QC: 11 are ready to be given; Gaurav will visit around 11 am and take these parts; QC has to be done; Rest of the parts can be taken up by Monday",
-        "preparingPartsDate": "2026-06-27",
-        "routeFrom": "",
         "routeTo": "Faridabad",
-        "porterPayments": 0,
-        "inputsRequired": "NO",
-        "supervisor": "Anurag"
+        "inputsRequired": "NO"
     },
     "poRelease": {
+        "releaseDate": "2026-06-05",
+        "vendorLocation": "Delhi",
+        "vendorCost": 0,
         "customerSalePrice": 66920,
         "vendorName": "Rapid Proto;",
-        "vendorLocation": "Delhi",
-        "poVendorSent": "N/A",
-        "vendorCost": 0,
-        "releaseDate": "2026-06-05"
+        "poVendorSent": "N/A"
     },
     "invoiceRelease": {
-        "gstRate": 18,
         "gstValue": 12046,
-        "totalInvoiceAmount": 78966,
+        "paymentStatus": "Pending",
         "paymentTerms": "30 days",
+        "totalInvoiceAmount": 78966,
         "invoiceNumber": "QT-18251",
-        "paymentStatus": "Pending"
+        "gstRate": 18
     }
 }

@@ -2,11 +2,11 @@
     "projectId": "C5255",
     "client": "Bajaj",
     "planning": {
-        "deliveryTerms": "30 days",
         "budget": 5699.6,
+        "deliveryTerms": "30 days",
         "value": 9010,
-        "poConfirmed": true,
-        "startDate": "2026-06-23"
+        "startDate": "2026-06-23",
+        "poConfirmed": true
     },
     "production": {
         "currentStage": "Final Packaging",
@@ -16,8 +16,8 @@
                 "status": "Completed"
             },
             {
-                "name": "Machine Processing",
-                "status": "Completed"
+                "status": "Completed",
+                "name": "Machine Processing"
             },
             {
                 "name": "Workshop Fabrication",
@@ -32,8 +32,8 @@
                 "status": "Completed"
             },
             {
-                "name": "Drying",
-                "status": "Completed"
+                "status": "Completed",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
@@ -46,45 +46,45 @@
         ]
     },
     "metrics": {
-        "materialConsumption": "VC Rubber",
-        "totalComponents": 20,
         "workforce": [
             "Devanshu"
-        ]
+        ],
+        "totalComponents": 20,
+        "materialConsumption": "VC Rubber"
     },
     "financials": {
-        "vendorName": "Excel",
+        "poNumber": "QT-18255",
         "vendorLocation": "Delhi",
-        "dispatchBudget": 0,
-        "totalCost": 6725,
-        "profitLoss": 2310.4,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18255"
+        "profitLoss": 2310.4,
+        "vendorName": "Excel",
+        "totalCost": 6725,
+        "dispatchBudget": 0
     },
     "dailyStandup": {
-        "routeFrom": "Delhi",
-        "porterPayments": 0,
+        "inputsRequired": "NO",
         "routeTo": "Englabs",
         "srNo": "24",
-        "preparingPartsDate": "2026-07-04",
-        "inputsRequired": "NO",
         "discussingNotes": "20 | Excel | QC: Started; Delivery expected next week",
-        "supervisor": "Devanshu"
+        "supervisor": "Devanshu",
+        "preparingPartsDate": "2026-07-04",
+        "routeFrom": "Delhi",
+        "porterPayments": 0
     },
     "poRelease": {
+        "poVendorSent": "P2100-EL12-PO-16953",
         "customerSalePrice": 9010,
         "vendorName": "Excel",
+        "releaseDate": "2026-06-23",
         "vendorLocation": "Delhi",
-        "poVendorSent": "P2100-EL12-PO-16953",
-        "vendorCost": 6725,
-        "releaseDate": "2026-06-23"
+        "vendorCost": 6725
     },
     "invoiceRelease": {
-        "gstRate": 18,
         "gstValue": 1621.8,
-        "totalInvoiceAmount": 10631.8,
         "paymentTerms": "30 days",
+        "paymentStatus": "Pending",
+        "gstRate": 18,
         "invoiceNumber": "QT-18255",
-        "paymentStatus": "Pending"
+        "totalInvoiceAmount": 10631.8
     }
 }

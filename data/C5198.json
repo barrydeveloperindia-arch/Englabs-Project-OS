@@ -2,12 +2,12 @@
     "projectId": "C5198",
     "client": "MODERN MANUFACTURER",
     "planning": {
-        "poNumber": "",
-        "budget": 0,
-        "deliveryTerms": "ToPay",
-        "startDate": "2026-06-02",
         "value": 0,
-        "poConfirmed": false
+        "startDate": "2026-06-02",
+        "poConfirmed": false,
+        "poNumber": "",
+        "deliveryTerms": "ToPay",
+        "budget": 0
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -21,12 +21,12 @@
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
@@ -37,8 +37,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
@@ -47,20 +47,20 @@
         ]
     },
     "metrics": {
+        "totalComponents": 0,
         "workforce": [
             "TBD"
         ],
-        "materialConsumption": "Tracking active...",
-        "totalComponents": 0
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "Adroitec",
-        "vendorLocation": "Noida",
-        "dispatchBudget": null,
-        "totalCost": null,
-        "profitLoss": 0,
         "deliveryFeeMode": null,
-        "poNumber": "QT-18198"
+        "poNumber": "QT-18198",
+        "vendorLocation": "Noida",
+        "totalCost": null,
+        "dispatchBudget": null,
+        "profitLoss": 0,
+        "vendorName": "Adroitec"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18198"

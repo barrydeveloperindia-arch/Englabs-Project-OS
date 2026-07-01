@@ -3,18 +3,18 @@
     "client": "HELLA",
     "planning": {
         "deliveryTerms": "Included",
-        "poNumber": "P2100-EL-12-PO-16880",
         "budget": 0,
         "startDate": "2026-06-02",
+        "value": 0,
         "poConfirmed": true,
-        "value": 0
+        "poNumber": "P2100-EL-12-PO-16880"
     },
     "production": {
         "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
@@ -25,8 +25,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
@@ -41,8 +41,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
         ]
     },
@@ -54,13 +54,13 @@
         "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "Plastipack",
+        "deliveryFeeMode": "included",
         "vendorLocation": "Faridabad",
+        "poNumber": "QT-18075",
         "dispatchBudget": 0,
         "totalCost": null,
-        "profitLoss": -1477,
-        "deliveryFeeMode": "included",
-        "poNumber": "QT-18075"
+        "vendorName": "Plastipack",
+        "profitLoss": -1477
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18075"

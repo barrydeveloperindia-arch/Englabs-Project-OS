@@ -2,19 +2,19 @@
     "projectId": "C5069",
     "client": "NIPA",
     "planning": {
-        "poConfirmed": true,
+        "poNumber": "P2100-EL12-PO-16822",
         "value": 3920,
         "startDate": "2026-06-02",
+        "poConfirmed": true,
         "deliveryTerms": "ToPay",
-        "budget": 2744,
-        "poNumber": "P2100-EL12-PO-16822"
+        "budget": 2744
     },
     "production": {
         "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
@@ -25,16 +25,16 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
@@ -47,20 +47,20 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
         "workforce": [
             "TBD"
         ],
+        "totalComponents": 0,
         "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "RSD ENTERPRISES",
         "vendorLocation": "Faridabad",
-        "dispatchBudget": null,
-        "totalCost": 3920,
-        "profitLoss": null,
+        "poNumber": "QT-18069",
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18069"
+        "vendorName": "RSD ENTERPRISES",
+        "profitLoss": null,
+        "dispatchBudget": null,
+        "totalCost": 3920
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18069"

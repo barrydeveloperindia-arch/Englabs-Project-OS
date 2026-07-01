@@ -2,15 +2,14 @@
     "projectId": "C4963",
     "client": "MSL INDIA",
     "planning": {
-        "poNumber": "P2100-EL12-PO-16773",
-        "budget": 15960,
         "deliveryTerms": "ToPay",
-        "startDate": "2026-06-02",
+        "budget": 15960,
+        "poNumber": "P2100-EL12-PO-16773",
         "poConfirmed": true,
-        "value": 22800
+        "value": 22800,
+        "startDate": "2026-06-02"
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
@@ -25,8 +24,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
@@ -44,23 +43,24 @@
                 "name": "Final Packaging",
                 "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
         ],
-        "totalComponents": 0
+        "totalComponents": 0,
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
         "vendorName": "CHAMBER OF INDUSTRIAL AND COMMERCIAL UNDERTAKINGS",
-        "vendorLocation": "Ludhiana",
+        "profitLoss": null,
         "dispatchBudget": null,
         "totalCost": 22800,
-        "profitLoss": null,
-        "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-17963"
+        "vendorLocation": "Ludhiana",
+        "poNumber": "QT-17963",
+        "deliveryFeeMode": "To pay basis"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-17963"

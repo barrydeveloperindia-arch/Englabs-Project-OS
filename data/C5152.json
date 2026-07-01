@@ -2,90 +2,90 @@
     "projectId": "C5152",
     "client": "BCH",
     "planning": {
-        "value": 21260,
-        "budget": 14882,
-        "deliveryTerms": "Porter",
         "poConfirmed": true,
-        "startDate": "2026-06-15"
+        "value": 21260,
+        "startDate": "2026-06-15",
+        "deliveryTerms": "Porter",
+        "budget": 14882
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
-                "status": "In Progress",
-                "lead": "Devanshu"
+                "lead": "Devanshu",
+                "status": "In Progress"
             },
             {
                 "name": "Machine Processing",
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
                 "status": "Pending"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
-        "totalComponents": 8,
-        "materialConsumption": "SLS Raw",
         "workforce": [
             "Devanshu"
-        ]
+        ],
+        "totalComponents": 8,
+        "materialConsumption": "SLS Raw"
     },
     "financials": {
-        "vendorName": "Adroitec",
-        "vendorLocation": "Noida",
         "dispatchBudget": 0,
         "totalCost": null,
+        "vendorName": "Adroitec",
         "profitLoss": null,
         "deliveryFeeMode": "Porter system",
+        "vendorLocation": "Noida",
         "poNumber": "QT-18152"
     },
     "dailyStandup": {
         "srNo": "=1+A13",
         "discussingNotes": "8 | Adroitec | QC: Delivered; QC was done by Rohit; Feedback will be taken by Rohit",
+        "inputsRequired": "NO",
+        "routeTo": "Faridabad",
+        "supervisor": "Devanshu",
         "preparingPartsDate": "2026-06-22",
         "routeFrom": "Noida",
-        "routeTo": "Faridabad",
-        "porterPayments": 290,
-        "inputsRequired": "NO",
-        "supervisor": "Devanshu"
+        "porterPayments": 290
     },
     "poRelease": {
-        "customerSalePrice": 21260,
         "vendorName": "Adroitec",
-        "vendorLocation": "Noida",
+        "customerSalePrice": 21260,
         "poVendorSent": "16947",
         "vendorCost": 18445,
+        "vendorLocation": "Noida",
         "releaseDate": "2026-06-15"
     },
     "invoiceRelease": {
+        "invoiceNumber": "QT-18152",
+        "totalInvoiceAmount": 25087,
         "gstRate": 18,
         "gstValue": 3827,
-        "totalInvoiceAmount": 25087,
-        "paymentTerms": "30 days",
-        "invoiceNumber": "QT-18152",
-        "paymentStatus": "Pending"
+        "paymentStatus": "Pending",
+        "paymentTerms": "30 days"
     }
 }

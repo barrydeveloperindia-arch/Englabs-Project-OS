@@ -2,12 +2,12 @@
     "projectId": "C4851",
     "client": "ENERTICS",
     "planning": {
-        "value": 88500,
+        "deliveryTerms": "ToPay",
+        "budget": 61950,
         "poConfirmed": true,
         "startDate": "2026-06-02",
-        "poNumber": "P2100-EL12-PO-10000",
-        "budget": 61950,
-        "deliveryTerms": "ToPay"
+        "value": 88500,
+        "poNumber": "P2100-EL12-PO-10000"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -17,8 +17,8 @@
                 "status": "In Progress"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
                 "name": "Workshop Fabrication",
@@ -29,12 +29,12 @@
                 "status": "Pending"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
@@ -48,19 +48,19 @@
     },
     "metrics": {
         "materialConsumption": "Tracking active...",
+        "totalComponents": 0,
         "workforce": [
             "TBD"
-        ],
-        "totalComponents": 0
+        ]
     },
     "financials": {
-        "vendorName": "ultra spark/plastofurs",
-        "vendorLocation": "industrial area chd",
-        "dispatchBudget": 0,
-        "totalCost": null,
-        "profitLoss": -1950,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-17851"
+        "poNumber": "QT-17851",
+        "vendorLocation": "industrial area chd",
+        "totalCost": null,
+        "dispatchBudget": 0,
+        "profitLoss": -1950,
+        "vendorName": "ultra spark/plastofurs"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-17851"

@@ -2,57 +2,57 @@
     "projectId": "C3020",
     "client": "IDEAFORGE",
     "planning": {
-        "poNumber": "",
-        "budget": 51994,
         "deliveryTerms": "ToPay",
+        "budget": 51994,
+        "poNumber": "",
         "poConfirmed": true,
-        "value": 74276.88,
-        "startDate": "2023-06-12"
+        "startDate": "2023-06-12",
+        "value": 74276.88
     },
     "production": {
-        "currentStage": "Workshop Fabrication",
         "stages": [
             {
                 "name": "Engineering Design",
-                "status": "Completed",
-                "lead": "Gaurav Panchal"
+                "lead": "Gaurav Panchal",
+                "status": "Completed"
             },
             {
-                "name": "Machine Processing",
+                "lead": "Paras",
                 "status": "Completed",
-                "lead": "Paras"
+                "name": "Machine Processing"
             },
             {
-                "name": "Workshop Fabrication",
                 "status": "Completed",
-                "lead": "Parth"
+                "lead": "Parth",
+                "name": "Workshop Fabrication"
             },
             {
-                "name": "Sanding",
                 "status": "In Progress",
-                "lead": "Parth"
+                "lead": "Parth",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
-                "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Pending"
             },
             {
-                "name": "Drying",
+                "lead": "Parth",
                 "status": "Pending",
-                "lead": "Parth"
+                "name": "Drying"
             },
             {
-                "name": "Finishing",
+                "lead": "Parth",
                 "status": "Pending",
-                "lead": "Parth"
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
-                "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Workshop Fabrication"
     },
     "metrics": {
         "totalComponents": 32,

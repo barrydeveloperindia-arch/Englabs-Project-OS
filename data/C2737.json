@@ -2,12 +2,12 @@
     "projectId": "C2737",
     "client": "Rukman Udyog",
     "planning": {
+        "poNumber": "",
         "startDate": "2022-09-23",
         "value": 8000,
         "poConfirmed": true,
-        "deliveryTerms": "ToPay",
-        "poNumber": "",
-        "budget": 5600
+        "budget": 5600,
+        "deliveryTerms": "ToPay"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -21,16 +21,16 @@
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
@@ -41,8 +41,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
         ]
     },

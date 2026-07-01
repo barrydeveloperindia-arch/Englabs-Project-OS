@@ -3,26 +3,26 @@
     "client": "HENKEL 2 SETS REPEAT",
     "planning": {
         "budget": 21773,
-        "poNumber": "P2100-EL12-PO-16863",
         "deliveryTerms": "Included",
+        "poNumber": "P2100-EL12-PO-16863",
+        "startDate": "2026-06-02",
         "value": 31104,
-        "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "poConfirmed": true
     },
     "production": {
         "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
@@ -33,12 +33,12 @@
                 "status": "Pending"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
@@ -47,20 +47,20 @@
         ]
     },
     "metrics": {
+        "totalComponents": 0,
         "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ],
-        "totalComponents": 0
+        ]
     },
     "financials": {
-        "vendorName": "PLASTIPACK INDUSTRIES",
-        "vendorLocation": "Plot No. 5, New Dif Industrial Area, Faridabad",
-        "dispatchBudget": 0,
-        "totalCost": 31104,
         "profitLoss": -400,
-        "deliveryFeeMode": "included",
-        "poNumber": "QT-18133"
+        "vendorName": "PLASTIPACK INDUSTRIES",
+        "totalCost": 31104,
+        "dispatchBudget": 0,
+        "poNumber": "QT-18133",
+        "vendorLocation": "Plot No. 5, New Dif Industrial Area, Faridabad",
+        "deliveryFeeMode": "included"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18133"

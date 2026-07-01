@@ -2,29 +2,28 @@
     "projectId": "C5232",
     "client": "Sonalika",
     "planning": {
+        "startDate": "2026-06-12",
         "value": 29766,
-        "budget": 20836,
-        "deliveryTerms": "ToPay",
         "poConfirmed": false,
-        "startDate": "2026-06-12"
+        "deliveryTerms": "ToPay",
+        "budget": 20836
     },
     "production": {
-        "currentStage": "Workshop Fabrication",
         "stages": [
             {
-                "name": "Engineering Design",
+                "lead": "Devanshu",
                 "status": "Completed",
-                "lead": "Devanshu"
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
-                "status": "Completed",
-                "lead": "Paras"
+                "lead": "Paras",
+                "status": "Completed"
             },
             {
-                "name": "Workshop Fabrication",
                 "status": "In Progress",
-                "lead": "Parth"
+                "lead": "Parth",
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
@@ -32,69 +31,70 @@
                 "lead": "Parth"
             },
             {
-                "name": "Painting",
+                "lead": "Parth",
                 "status": "Pending",
-                "lead": "Parth"
+                "name": "Painting"
             },
             {
-                "name": "Drying",
+                "lead": "Parth",
                 "status": "Pending",
-                "lead": "Parth"
+                "name": "Drying"
             },
             {
-                "name": "Finishing",
+                "lead": "Parth",
                 "status": "Pending",
-                "lead": "Parth"
+                "name": "Finishing"
             },
             {
-                "name": "Final Packaging",
+                "lead": "Devanshu",
                 "status": "Pending",
-                "lead": "Devanshu"
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Workshop Fabrication"
     },
     "metrics": {
         "totalComponents": 5,
-        "materialConsumption": "MJF Black Paint",
         "workforce": [
             "Devanshu",
             "Anurag",
             "Devyanshu"
-        ]
+        ],
+        "materialConsumption": "MJF Black Paint"
     },
     "financials": {
-        "vendorName": "excel Rapid Tech",
-        "vendorLocation": "Delhi",
-        "dispatchBudget": 0,
-        "totalCost": null,
         "profitLoss": null,
-        "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18232"
+        "vendorName": "excel Rapid Tech",
+        "totalCost": null,
+        "dispatchBudget": 0,
+        "poNumber": "QT-18232",
+        "vendorLocation": "Delhi",
+        "deliveryFeeMode": "To pay basis"
     },
     "dailyStandup": {
+        "preparingPartsDate": "2026-06-26",
+        "supervisor": "Devyanshu",
         "srNo": "=1+A11",
         "discussingNotes": "5 | excel Rapid Tech | QC: Dispatched to customer; Feedback on Thursday",
-        "preparingPartsDate": "2026-06-26",
-        "routeFrom": "Delhi",
+        "inputsRequired": "NO",
         "routeTo": "Englabs",
         "porterPayments": 168,
-        "inputsRequired": "NO",
-        "supervisor": "Devyanshu"
+        "routeFrom": "Delhi"
     },
     "poRelease": {
-        "customerSalePrice": 29766,
-        "vendorName": "excel Rapid Tech",
-        "vendorLocation": "Delhi",
-        "poVendorSent": "N/A",
         "vendorCost": 168,
-        "releaseDate": "2026-06-12"
+        "vendorLocation": "Delhi",
+        "releaseDate": "2026-06-12",
+        "vendorName": "excel Rapid Tech",
+        "customerSalePrice": 29766,
+        "poVendorSent": "N/A"
     },
     "invoiceRelease": {
-        "gstRate": 18,
         "gstValue": 5358,
-        "totalInvoiceAmount": 35124,
+        "paymentStatus": "Pending",
         "paymentTerms": "30 days",
+        "gstRate": 18,
         "invoiceNumber": "QT-18232",
-        "paymentStatus": "Pending"
+        "totalInvoiceAmount": 35124
     }
 }

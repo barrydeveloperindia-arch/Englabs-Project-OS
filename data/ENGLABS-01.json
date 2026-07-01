@@ -1,44 +1,44 @@
 {
     "projectId": "ENGLABS-01",
     "metrics": {
+        "materialConsumption": "INITIALIZING...",
+        "totalComponents": 0,
         "workforce": [
             "SAM",
             "Gaurav Panchal"
-        ],
-        "materialConsumption": "INITIALIZING...",
-        "totalComponents": 0
+        ]
     },
     "planning": {
-        "budget": 7500000,
         "deliveryTerms": "Ex-Works",
-        "startDate": "2026-05-04",
+        "budget": 7500000,
         "poConfirmed": true,
+        "startDate": "2026-05-04",
         "value": 10000000
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
-                "status": "In Progress",
-                "lead": "Devanshu Madke"
+                "lead": "Devanshu Madke",
+                "status": "In Progress"
             },
             {
-                "lead": "Shubham Rohilla",
+                "name": "Material Sourcing",
                 "status": "Pending",
-                "name": "Material Sourcing"
+                "lead": "Shubham Rohilla"
             },
             {
-                "status": "Pending",
                 "name": "Machining & Fab",
+                "status": "Pending",
                 "lead": "Anurag Sahani"
             },
             {
+                "name": "QA & Testing",
                 "lead": "Shiv Kumar",
-                "status": "Pending",
-                "name": "QA & Testing"
+                "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "client": "ENGLABS INDIA PVT LTD"
 }

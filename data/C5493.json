@@ -1,20 +1,26 @@
 {
-    "projectId": "C5103",
-    "client": "MSL INDIA",
     "planning": {
-        "budget": 29260,
-        "deliveryTerms": "ToPay",
-        "startDate": "2026-06-02",
-        "value": 41800,
         "poConfirmed": true,
-        "poNumber": "P2100-EL12-PO-16840"
+        "value": 125000,
+        "startDate": "2026-06-24",
+        "deliveryTerms": "ToPay",
+        "budget": 75000
     },
+    "dailyStandup": {},
+    "metrics": {
+        "materialConsumption": "Pending Ingestion",
+        "totalComponents": 0,
+        "workforce": [
+            "TBD"
+        ]
+    },
+    "client": "SpaceX",
+    "projectId": "C5493",
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
-                "status": "In Progress",
-                "name": "Engineering Design"
+                "name": "Engineering Design",
+                "status": "Pending"
             },
             {
                 "name": "Machine Processing",
@@ -44,25 +50,7 @@
                 "status": "Pending",
                 "name": "Final Packaging"
             }
-        ]
-    },
-    "metrics": {
-        "totalComponents": 0,
-        "workforce": [
-            "TBD"
         ],
-        "materialConsumption": "Tracking active..."
-    },
-    "financials": {
-        "totalCost": 41800,
-        "dispatchBudget": null,
-        "profitLoss": null,
-        "vendorName": "CHAMBER OF INDUSTRIAL AND COMMERCIAL UNDERTAKINGS",
-        "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18103",
-        "vendorLocation": "Ludhiana"
-    },
-    "invoiceRelease": {
-        "invoiceNumber": "QT-18103"
+        "currentStage": "Engineering Design"
     }
 }

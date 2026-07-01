@@ -2,12 +2,12 @@
     "projectId": "C5212",
     "client": "HC ROBOTICS",
     "planning": {
-        "startDate": "2026-06-02",
-        "poConfirmed": false,
-        "value": 0,
+        "budget": 0,
         "deliveryTerms": "ToPay",
         "poNumber": "",
-        "budget": 0
+        "startDate": "2026-06-02",
+        "value": 0,
+        "poConfirmed": false
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -17,16 +17,16 @@
                 "status": "In Progress"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
                 "name": "Workshop Fabrication",
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
@@ -37,8 +37,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
@@ -47,20 +47,20 @@
         ]
     },
     "metrics": {
-        "materialConsumption": "Tracking active...",
+        "totalComponents": 0,
         "workforce": [
             "TBD"
         ],
-        "totalComponents": 0
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "Excel",
+        "poNumber": "QT-18212",
         "vendorLocation": "Faridabad",
-        "dispatchBudget": null,
-        "totalCost": null,
-        "profitLoss": 0,
         "deliveryFeeMode": null,
-        "poNumber": "QT-18212"
+        "profitLoss": 0,
+        "vendorName": "Excel",
+        "totalCost": null,
+        "dispatchBudget": null
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18212"

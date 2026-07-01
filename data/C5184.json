@@ -2,15 +2,14 @@
     "projectId": "C5184",
     "client": "SG ENGINEERING WORKS",
     "planning": {
-        "budget": 0,
-        "poNumber": "P2100-EL-12-PO-16890",
-        "deliveryTerms": "ToPay",
-        "value": 0,
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "value": 0,
+        "poNumber": "P2100-EL-12-PO-16890",
+        "budget": 0,
+        "deliveryTerms": "ToPay"
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
@@ -21,46 +20,47 @@
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
                 "status": "Pending"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
-        "totalComponents": 0,
         "materialConsumption": "Tracking active...",
+        "totalComponents": 0,
         "workforce": [
             "TBD"
         ]
     },
     "financials": {
-        "vendorName": "SG Engineering Works",
         "vendorLocation": "Hoshiarpur",
-        "dispatchBudget": 0,
-        "totalCost": null,
-        "profitLoss": -184,
+        "poNumber": "QT-18184",
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18184"
+        "vendorName": "SG Engineering Works",
+        "profitLoss": -184,
+        "dispatchBudget": 0,
+        "totalCost": null
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18184"

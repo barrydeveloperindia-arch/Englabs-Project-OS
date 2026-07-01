@@ -2,10 +2,10 @@
     "projectId": "C5489",
     "client": "Aebocode",
     "planning": {
-        "value": 0,
         "budget": 0,
         "deliveryTerms": "TBD",
         "poConfirmed": false,
+        "value": 0,
         "startDate": "2026-06-17",
         "poNumber": "PENDING"
     },
@@ -13,8 +13,8 @@
         "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
@@ -25,8 +25,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
@@ -37,8 +37,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
@@ -47,19 +47,19 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "totalComponents": 0,
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "TBD",
+        "poNumber": "PENDING",
         "vendorLocation": "TBD",
-        "dispatchBudget": null,
-        "totalCost": 0,
-        "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "PENDING"
+        "profitLoss": null,
+        "vendorName": "TBD",
+        "totalCost": 0,
+        "dispatchBudget": null
     }
 }

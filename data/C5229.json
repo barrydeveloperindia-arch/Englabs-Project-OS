@@ -2,49 +2,49 @@
     "projectId": "C5229",
     "client": "EndureAir",
     "planning": {
-        "poConfirmed": true,
+        "deliveryTerms": "ToPay",
+        "budget": 0,
         "value": 0,
         "startDate": "2026-06-02",
-        "deliveryTerms": "ToPay",
-        "poNumber": "P2100-EL12-PO-61000",
-        "budget": 0
+        "poConfirmed": true,
+        "poNumber": "P2100-EL12-PO-61000"
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
                 "status": "Pending"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
         "totalComponents": 110,
@@ -54,13 +54,13 @@
         ]
     },
     "financials": {
-        "vendorName": "Adroitec",
+        "poNumber": "QT-18229",
         "vendorLocation": "Noida",
-        "dispatchBudget": null,
-        "totalCost": null,
-        "profitLoss": null,
         "deliveryFeeMode": null,
-        "poNumber": "QT-18229"
+        "profitLoss": null,
+        "vendorName": "Adroitec",
+        "totalCost": null,
+        "dispatchBudget": null
     },
     "dailyStandup": {
         "discussingNotes": "110 | QC: Courier will be sent today Visual QC was done and photos shared on the group   "

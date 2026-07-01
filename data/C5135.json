@@ -2,20 +2,19 @@
     "projectId": "C5135",
     "client": "ORIENT",
     "planning": {
+        "deliveryTerms": "Included",
+        "budget": 8462,
         "startDate": "2026-04-28",
         "value": 12089,
         "poConfirmed": true,
-        "poNumber": "P2100-EL12-PO-16859",
-        "budget": 8462,
-        "deliveryTerms": "Included"
+        "poNumber": "P2100-EL12-PO-16859"
     },
     "production": {
-        "currentStage": "Workshop Fabrication",
         "stages": [
             {
                 "name": "Engineering Design",
-                "status": "Completed",
-                "lead": "Gaurav Panchal"
+                "lead": "Gaurav Panchal",
+                "status": "Completed"
             },
             {
                 "name": "Machine Processing",
@@ -24,8 +23,8 @@
             },
             {
                 "name": "Workshop Fabrication",
-                "status": "Completed",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Completed"
             },
             {
                 "name": "Sanding",
@@ -33,45 +32,46 @@
                 "lead": "Parth"
             },
             {
-                "name": "Painting",
+                "lead": "Parth",
                 "status": "Pending",
-                "lead": "Parth"
+                "name": "Painting"
             },
             {
                 "name": "Drying",
-                "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Pending"
             },
             {
-                "name": "Finishing",
+                "lead": "Parth",
                 "status": "Pending",
-                "lead": "Parth"
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
-                "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Workshop Fabrication"
     },
     "metrics": {
+        "materialConsumption": "Aluminum 6061, MS Sheet",
         "totalComponents": 24,
         "workforce": [
             "Gaurav Panchal",
             "Paras",
             "Parth",
             "Sandeep"
-        ],
-        "materialConsumption": "Aluminum 6061, MS Sheet"
+        ]
     },
     "financials": {
-        "vendorName": "CADQUA 3D LLP",
-        "vendorLocation": "49/94 SITE IV, GHAZIABAD, Uttar Pradesh, India -, 201010",
-        "dispatchBudget": 0,
         "totalCost": 12089,
+        "dispatchBudget": 0,
         "profitLoss": -130,
+        "vendorName": "CADQUA 3D LLP",
         "deliveryFeeMode": "included",
-        "poNumber": "QT-18135"
+        "poNumber": "QT-18135",
+        "vendorLocation": "49/94 SITE IV, GHAZIABAD, Uttar Pradesh, India -, 201010"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18135"

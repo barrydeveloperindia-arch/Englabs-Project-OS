@@ -2,29 +2,29 @@
     "projectId": "C5486",
     "client": "ITL (SONALIKA)",
     "planning": {
-        "value": 51975,
-        "budget": 36382,
         "deliveryTerms": "ToPay",
+        "budget": 36382,
+        "value": 51975,
+        "startDate": "2026-06-13",
         "poConfirmed": false,
-        "startDate": "2026-06-13"
+        "poNumber": ""
     },
     "production": {
-        "currentStage": "Workshop Fabrication",
         "stages": [
             {
-                "name": "Engineering Design",
+                "lead": "Shubham",
                 "status": "Completed",
-                "lead": "Shubham"
+                "name": "Engineering Design"
             },
             {
-                "name": "Machine Processing",
                 "status": "Completed",
-                "lead": "Paras"
+                "lead": "Paras",
+                "name": "Machine Processing"
             },
             {
                 "name": "Workshop Fabrication",
-                "status": "In Progress",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "In Progress"
             },
             {
                 "name": "Sanding",
@@ -32,66 +32,67 @@
                 "lead": "Parth"
             },
             {
-                "name": "Painting",
                 "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "name": "Painting"
             },
             {
-                "name": "Drying",
                 "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "name": "Drying"
             },
             {
-                "name": "Finishing",
+                "lead": "Parth",
                 "status": "Pending",
-                "lead": "Parth"
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
-                "status": "Pending",
-                "lead": "Shubham"
+                "lead": "Shubham",
+                "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Workshop Fabrication"
     },
     "metrics": {
-        "totalComponents": 10,
-        "materialConsumption": "MJF / SLS",
         "workforce": [
             "Shubham"
-        ]
+        ],
+        "totalComponents": 10,
+        "materialConsumption": "MJF / SLS"
     },
     "financials": {
-        "vendorName": "Idemi",
-        "vendorLocation": "Mumbai",
-        "dispatchBudget": 0,
         "totalCost": null,
+        "dispatchBudget": 0,
         "profitLoss": null,
+        "vendorName": "Idemi",
         "deliveryFeeMode": "To pay basis",
-        "poNumber": null
+        "poNumber": null,
+        "vendorLocation": "Mumbai"
     },
     "dailyStandup": {
-        "srNo": "",
+        "routeTo": "Faridabad",
+        "inputsRequired": "NO",
         "discussingNotes": "Under execution. MJF parts ready.",
+        "srNo": "",
         "preparingPartsDate": "2026-06-23",
         "routeFrom": "Noida",
-        "routeTo": "Faridabad",
-        "porterPayments": 0,
-        "inputsRequired": "NO"
+        "porterPayments": 0
     },
     "poRelease": {
-        "customerSalePrice": 51975,
         "vendorName": "Idemi",
-        "vendorLocation": "Mumbai",
+        "customerSalePrice": 51975,
         "poVendorSent": "16946",
+        "vendorLocation": "Mumbai",
         "vendorCost": 45000,
         "releaseDate": "2026-06-13"
     },
     "invoiceRelease": {
         "gstRate": 18,
-        "gstValue": 9356,
-        "totalInvoiceAmount": 61330,
-        "paymentTerms": "30 days",
         "invoiceNumber": "QTN-5486",
+        "totalInvoiceAmount": 61330,
+        "gstValue": 9356,
+        "paymentTerms": "30 days",
         "paymentStatus": "Pending"
     }
 }

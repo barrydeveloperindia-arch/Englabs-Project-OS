@@ -2,23 +2,22 @@
     "projectId": "C5223",
     "client": "Henkel",
     "planning": {
-        "deliveryTerms": "ToPay",
         "poNumber": "P2100-EL12-PO-40085",
-        "budget": 0,
         "poConfirmed": true,
         "value": 0,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "budget": 0,
+        "deliveryTerms": "ToPay"
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
                 "name": "Workshop Fabrication",
@@ -44,22 +43,23 @@
                 "name": "Final Packaging",
                 "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
-        "materialConsumption": "Nylon; GF",
         "workforce": [
             "TBD"
         ],
-        "totalComponents": 10
+        "totalComponents": 10,
+        "materialConsumption": "Nylon; GF"
     },
     "financials": {
-        "vendorName": "Talekar",
-        "vendorLocation": "Pune",
         "dispatchBudget": null,
         "totalCost": null,
+        "vendorName": "Talekar",
         "profitLoss": 0,
         "deliveryFeeMode": null,
+        "vendorLocation": "Pune",
         "poNumber": "QT-18223"
     },
     "dailyStandup": {

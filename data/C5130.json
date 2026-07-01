@@ -2,19 +2,19 @@
     "projectId": "C5130",
     "client": "BAJAJ",
     "planning": {
-        "poNumber": "P2100-EL12-PO-40085",
         "budget": 0,
         "deliveryTerms": "Included",
-        "poConfirmed": true,
+        "startDate": "2026-06-02",
         "value": 0,
-        "startDate": "2026-06-02"
+        "poConfirmed": true,
+        "poNumber": "P2100-EL12-PO-40085"
     },
     "production": {
         "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
@@ -25,42 +25,42 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
         ]
     },
     "metrics": {
         "totalComponents": 0,
+        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ],
-        "materialConsumption": "Tracking active..."
+        ]
     },
     "financials": {
-        "vendorName": "SK Techno",
+        "deliveryFeeMode": "included",
         "vendorLocation": "Faridabad",
+        "poNumber": "QT-18130",
         "dispatchBudget": 0,
         "totalCost": null,
-        "profitLoss": -161,
-        "deliveryFeeMode": "included",
-        "poNumber": "QT-18130"
+        "vendorName": "SK Techno",
+        "profitLoss": -161
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18130"

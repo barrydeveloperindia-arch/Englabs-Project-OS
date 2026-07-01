@@ -2,19 +2,19 @@
     "projectId": "C5033",
     "client": "BAJAJ",
     "planning": {
-        "value": 0,
         "poConfirmed": true,
+        "value": 0,
         "startDate": "2026-06-02",
-        "deliveryTerms": "Included",
+        "poNumber": "P2100-EL12-PO-16809",
         "budget": 0,
-        "poNumber": "P2100-EL12-PO-16809"
+        "deliveryTerms": "Included"
     },
     "production": {
         "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
@@ -25,16 +25,16 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
                 "status": "Pending"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
@@ -47,20 +47,20 @@
         ]
     },
     "metrics": {
+        "totalComponents": 0,
+        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ],
-        "materialConsumption": "Tracking active...",
-        "totalComponents": 0
+        ]
     },
     "financials": {
-        "vendorName": "Plastipack",
+        "deliveryFeeMode": "included",
         "vendorLocation": "Faridabad",
+        "poNumber": "QT-18033",
         "dispatchBudget": 3000,
         "totalCost": null,
-        "profitLoss": 2850,
-        "deliveryFeeMode": "included",
-        "poNumber": "QT-18033"
+        "vendorName": "Plastipack",
+        "profitLoss": 2850
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18033"

@@ -2,15 +2,14 @@
     "projectId": "C5213",
     "client": "ATOMBERG",
     "planning": {
-        "budget": 0,
         "poNumber": "P2100-EL-12-PO-16909",
-        "deliveryTerms": "ToPay",
-        "startDate": "2026-06-02",
         "poConfirmed": true,
-        "value": 0
+        "startDate": "2026-06-02",
+        "value": 0,
+        "deliveryTerms": "ToPay",
+        "budget": 0
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
@@ -21,30 +20,31 @@
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
                 "status": "Pending"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
         "totalComponents": 0,
@@ -54,13 +54,13 @@
         "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "Talekar",
         "vendorLocation": "Pune",
-        "dispatchBudget": null,
-        "totalCost": null,
-        "profitLoss": 0,
+        "poNumber": "QT-18213",
         "deliveryFeeMode": null,
-        "poNumber": "QT-18213"
+        "vendorName": "Talekar",
+        "profitLoss": 0,
+        "dispatchBudget": null,
+        "totalCost": null
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18213"

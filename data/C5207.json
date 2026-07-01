@@ -2,15 +2,14 @@
     "projectId": "C5207",
     "client": "HC ROBOTICS",
     "planning": {
-        "value": 0,
-        "poConfirmed": true,
-        "startDate": "2026-06-02",
         "deliveryTerms": "ToPay",
+        "budget": 0,
         "poNumber": "P2100-EL-12-PO-16904",
-        "budget": 0
+        "startDate": "2026-06-02",
+        "value": 0,
+        "poConfirmed": true
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
@@ -21,8 +20,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
@@ -44,23 +43,24 @@
                 "name": "Final Packaging",
                 "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
-        "materialConsumption": "Tracking active...",
+        "totalComponents": 0,
         "workforce": [
             "TBD"
         ],
-        "totalComponents": 0
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "Excel",
-        "vendorLocation": "Faridabad",
-        "dispatchBudget": null,
         "totalCost": null,
+        "dispatchBudget": null,
         "profitLoss": 0,
+        "vendorName": "Excel",
         "deliveryFeeMode": null,
-        "poNumber": "QT-18207"
+        "poNumber": "QT-18207",
+        "vendorLocation": "Faridabad"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18207"

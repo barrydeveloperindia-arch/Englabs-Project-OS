@@ -2,28 +2,28 @@
     "projectId": "C5248",
     "client": "Bajaj",
     "planning": {
-        "value": 155950,
-        "budget": 109165,
-        "deliveryTerms": "Porter",
+        "poNumber": "P2100-EL12-PO-74483",
         "poConfirmed": true,
         "startDate": "2026-06-08",
-        "poNumber": "P2100-EL12-PO-74483"
+        "value": 155950,
+        "deliveryTerms": "Porter",
+        "budget": 109165
     },
     "production": {
         "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
                 "status": "In Progress",
-                "lead": "Devanshu"
+                "lead": "Devanshu",
+                "name": "Engineering Design"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
@@ -34,12 +34,12 @@
                 "status": "Pending"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
@@ -49,45 +49,45 @@
     },
     "metrics": {
         "totalComponents": 10,
-        "materialConsumption": "MS Machining",
         "workforce": [
             "Devanshu",
             "Shubham"
-        ]
+        ],
+        "materialConsumption": "MS Machining"
     },
     "financials": {
-        "vendorName": "SK Techno",
-        "vendorLocation": "Mohali",
-        "dispatchBudget": 0,
-        "totalCost": null,
         "profitLoss": null,
-        "deliveryFeeMode": "Porter system",
-        "poNumber": "QT-18248"
+        "vendorName": "SK Techno",
+        "totalCost": null,
+        "dispatchBudget": 0,
+        "poNumber": "QT-18248",
+        "vendorLocation": "Mohali",
+        "deliveryFeeMode": "Porter system"
     },
     "dailyStandup": {
         "srNo": "=1+A22",
         "discussingNotes": "10 | SK Techno | QC: Processing has to be done; Arjun has to do today",
-        "preparingPartsDate": "2026-06-24",
-        "routeFrom": "Talekar pune",
         "routeTo": "mumbai",
-        "porterPayments": 0,
         "inputsRequired": "Cad File",
-        "supervisor": "Shubham"
+        "preparingPartsDate": "2026-06-24",
+        "supervisor": "Shubham",
+        "routeFrom": "Talekar pune",
+        "porterPayments": 0
     },
     "poRelease": {
-        "customerSalePrice": 155950,
-        "vendorName": "SK Techno",
         "vendorLocation": "Mohali",
-        "poVendorSent": "N/A",
         "vendorCost": 68000,
-        "releaseDate": "2026-06-08"
+        "releaseDate": "2026-06-08",
+        "vendorName": "SK Techno",
+        "customerSalePrice": 155950,
+        "poVendorSent": "N/A"
     },
     "invoiceRelease": {
-        "gstRate": 18,
+        "paymentStatus": "Pending",
         "gstValue": 28071,
-        "totalInvoiceAmount": 184021,
         "paymentTerms": "30 days",
-        "invoiceNumber": "QT-18248",
-        "paymentStatus": "Pending"
+        "gstRate": 18,
+        "totalInvoiceAmount": 184021,
+        "invoiceNumber": "QT-18248"
     }
 }

@@ -2,12 +2,12 @@
     "projectId": "C4925",
     "client": "ORIENT",
     "planning": {
-        "poConfirmed": true,
         "value": 4784,
         "startDate": "2026-06-02",
-        "deliveryTerms": "Included",
+        "poConfirmed": true,
         "poNumber": "P2100-EL12-PO-16752",
-        "budget": 3349
+        "budget": 3349,
+        "deliveryTerms": "Included"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -21,12 +21,12 @@
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
@@ -37,8 +37,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
@@ -47,20 +47,20 @@
         ]
     },
     "metrics": {
+        "totalComponents": 0,
         "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ],
-        "totalComponents": 0
+        ]
     },
     "financials": {
-        "vendorName": "Excel",
+        "deliveryFeeMode": "Included",
         "vendorLocation": "Faridabad",
+        "poNumber": "QT-17925",
         "dispatchBudget": 0,
         "totalCost": 4784,
-        "profitLoss": -72,
-        "deliveryFeeMode": "Included",
-        "poNumber": "QT-17925"
+        "vendorName": "Excel",
+        "profitLoss": -72
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-17925"

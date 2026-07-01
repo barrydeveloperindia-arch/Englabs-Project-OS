@@ -2,19 +2,18 @@
     "projectId": "C5108",
     "client": "3D PARADISE",
     "planning": {
+        "poConfirmed": true,
         "startDate": "2026-06-02",
         "value": 22560,
-        "poConfirmed": true,
+        "poNumber": "P2100-EL12-PO-16844",
         "deliveryTerms": "ToPay",
-        "budget": 15792,
-        "poNumber": "P2100-EL12-PO-16844"
+        "budget": 15792
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
@@ -25,42 +24,43 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
                 "status": "Pending"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
                 "status": "Pending"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
-        "totalComponents": 0,
         "materialConsumption": "Tracking active...",
+        "totalComponents": 0,
         "workforce": [
             "TBD"
         ]
     },
     "financials": {
-        "vendorName": "PLASTIPACK INDUSTRIES",
-        "vendorLocation": "Plot No. 5, New Dif Industrial Area, Faridabad",
-        "dispatchBudget": 0,
         "totalCost": 22560,
+        "dispatchBudget": 0,
         "profitLoss": -192,
+        "vendorName": "PLASTIPACK INDUSTRIES",
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18108"
+        "poNumber": "QT-18108",
+        "vendorLocation": "Plot No. 5, New Dif Industrial Area, Faridabad"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18108"

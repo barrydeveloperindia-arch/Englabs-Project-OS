@@ -2,27 +2,27 @@
     "projectId": "C4985",
     "client": "MARELLI",
     "planning": {
-        "deliveryTerms": "ToPay",
         "poNumber": "P2100-EL12-PO-16849",
-        "budget": 9712,
-        "value": 13873.96,
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "value": 13873.96,
+        "startDate": "2026-06-02",
+        "budget": 9712,
+        "deliveryTerms": "ToPay"
     },
     "production": {
         "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
@@ -47,20 +47,20 @@
         ]
     },
     "metrics": {
+        "materialConsumption": "Tracking active...",
+        "totalComponents": 0,
         "workforce": [
             "TBD"
-        ],
-        "materialConsumption": "Tracking active...",
-        "totalComponents": 0
+        ]
     },
     "financials": {
-        "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED",
-        "vendorLocation": "Faridabad",
-        "dispatchBudget": null,
-        "totalCost": 13873.96,
-        "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-17985"
+        "poNumber": "QT-17985",
+        "vendorLocation": "Faridabad",
+        "totalCost": 13873.96,
+        "dispatchBudget": null,
+        "profitLoss": null,
+        "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-17985"

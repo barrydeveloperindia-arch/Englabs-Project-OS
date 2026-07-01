@@ -2,30 +2,29 @@
     "projectId": "C5178",
     "client": "Aebocode Technologies",
     "planning": {
+        "deliveryTerms": "ToPay",
         "budget": 70000,
         "poNumber": "P2100-EL12-PO-16854",
-        "deliveryTerms": "ToPay",
-        "poConfirmed": true,
+        "startDate": "2026-04-28",
         "value": 100000,
-        "startDate": "2026-04-28"
+        "poConfirmed": true
     },
     "production": {
-        "currentStage": "Workshop Fabrication",
         "stages": [
             {
                 "name": "Engineering Design",
-                "status": "Completed",
-                "lead": "Gaurav Panchal"
+                "lead": "Gaurav Panchal",
+                "status": "Completed"
             },
             {
-                "name": "Machine Processing",
+                "lead": "Paras",
                 "status": "Completed",
-                "lead": "Paras"
+                "name": "Machine Processing"
             },
             {
-                "name": "Workshop Fabrication",
+                "lead": "Parth",
                 "status": "Completed",
-                "lead": "Parth"
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
@@ -34,35 +33,36 @@
             },
             {
                 "name": "Painting",
-                "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Pending"
             },
             {
                 "name": "Drying",
-                "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Pending"
             },
             {
-                "name": "Finishing",
+                "lead": "Parth",
                 "status": "Pending",
-                "lead": "Parth"
+                "name": "Finishing"
             },
             {
-                "name": "Final Packaging",
+                "lead": "Parth",
                 "status": "Pending",
-                "lead": "Parth"
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Workshop Fabrication"
     },
     "metrics": {
-        "totalComponents": 28,
-        "materialConsumption": "Aluminum 6061, MS Sheet",
         "workforce": [
             "Gaurav Panchal",
             "Paras",
             "Parth",
             "Sandeep"
-        ]
+        ],
+        "totalComponents": 28,
+        "materialConsumption": "Aluminum 6061, MS Sheet"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18178"

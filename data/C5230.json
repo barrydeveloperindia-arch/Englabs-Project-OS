@@ -1,16 +1,15 @@
 {
     "projectId": "C5230",
-    "client": "Enertics",
+    "client": "ENERTICS",
     "planning": {
-        "value": 25430,
         "poConfirmed": true,
+        "value": 25430,
         "startDate": "2026-06-23",
-        "deliveryTerms": "Porter",
+        "poNumber": "P2100-EL12-PO-74523",
         "budget": 17801,
-        "poNumber": "P2100-EL12-PO-74523"
+        "deliveryTerms": "Porter"
     },
     "production": {
-        "currentStage": "Workshop Fabrication",
         "stages": [
             {
                 "name": "Engineering Design",
@@ -23,24 +22,24 @@
                 "lead": "Paras"
             },
             {
-                "name": "Workshop Fabrication",
                 "status": "In Progress",
-                "lead": "Parth"
+                "lead": "Anurag ",
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
-                "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Pending"
             },
             {
                 "name": "Painting",
-                "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Pending"
             },
             {
                 "name": "Drying",
-                "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Pending"
             },
             {
                 "name": "Finishing",
@@ -48,52 +47,52 @@
                 "lead": "Parth"
             },
             {
-                "name": "Final Packaging",
+                "lead": "Anurag",
                 "status": "Pending",
-                "lead": "Anurag"
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Workshop Fabrication"
     },
     "metrics": {
-        "materialConsumption": "MJF",
+        "materialConsumption": "NYLON GF",
+        "totalComponents": 1000,
         "workforce": [
             "Anurag"
-        ],
-        "totalComponents": 0
+        ]
     },
     "financials": {
-        "vendorName": "PlastoFur",
-        "vendorLocation": "Mohali",
-        "dispatchBudget": 0,
-        "totalCost": null,
-        "profitLoss": null,
         "deliveryFeeMode": "Porter system",
-        "poNumber": "QT-18230"
+        "poNumber": "P2100-EL12-PO-74523",
+        "vendorLocation": "Mohali",
+        "totalCost": null,
+        "dispatchBudget": 0,
+        "profitLoss": null,
+        "vendorName": "SK Techno"
     },
     "dailyStandup": {
-        "routeFrom": "Chandigarh",
-        "srNo": "=1+A21",
-        "routeTo": "Englabs",
         "porterPayments": 0,
-        "inputsRequired": "Part Feed Back",
+        "routeFrom": "Chandigarh",
         "preparingPartsDate": "2026-06-24",
-        "discussingNotes": "0 | PlastoFur | QC: 220 are being sent today",
-        "supervisor": "Anurag"
+        "srNo": "=1+A21",
+        "discussingNotes": "320 Sets balance ready. Dispatch on hold due to pending payment.",
+        "inputsRequired": "320 Sets are ready and available in balance stock. Dispatch is currently on hold due to pending payment. Material will be dispatched once the payment is received.",
+        "routeTo": "Englabs"
     },
     "poRelease": {
-        "customerSalePrice": 25430,
-        "vendorName": "PlastoFur",
+        "releaseDate": "2026-06-23",
+        "vendorCost": 0,
         "vendorLocation": "Mohali",
         "poVendorSent": "N/A",
-        "vendorCost": 0,
-        "releaseDate": "2026-06-23"
+        "customerSalePrice": 25430,
+        "vendorName": "SK Techno"
     },
     "invoiceRelease": {
-        "gstRate": 18,
         "gstValue": 4577,
-        "totalInvoiceAmount": 30007,
         "paymentTerms": "30 days",
-        "invoiceNumber": "QT-18230",
-        "paymentStatus": "Pending"
+        "paymentStatus": "Pending",
+        "gstRate": 18,
+        "invoiceNumber": "INV-5230",
+        "totalInvoiceAmount": 30007
     }
 }

@@ -2,35 +2,34 @@
     "projectId": "C5288",
     "client": "ORIENT",
     "planning": {
-        "deliveryTerms": "Porter",
         "poNumber": "PO-98213",
-        "budget": 13560,
         "startDate": "2026-06-10",
         "value": 19372,
-        "poConfirmed": true
+        "poConfirmed": true,
+        "deliveryTerms": "Porter",
+        "budget": 13560
     },
     "production": {
-        "currentStage": "Final Packaging",
         "stages": [
             {
-                "name": "Engineering Design",
+                "lead": "Devanshu",
                 "status": "Completed",
-                "lead": "Devanshu"
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
-                "status": "Completed",
-                "lead": "Paras"
+                "lead": "Paras",
+                "status": "Completed"
             },
             {
-                "name": "Workshop Fabrication",
                 "status": "Completed",
-                "lead": "Parth"
+                "lead": "Parth",
+                "name": "Workshop Fabrication"
             },
             {
-                "name": "Sanding",
                 "status": "Completed",
-                "lead": "Parth"
+                "lead": "Parth",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
@@ -43,56 +42,57 @@
                 "lead": "Parth"
             },
             {
-                "name": "Finishing",
                 "status": "Completed",
-                "lead": "Parth"
+                "lead": "Parth",
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
                 "status": "Completed",
                 "lead": "Devanshu"
             }
-        ]
+        ],
+        "currentStage": "Final Packaging"
     },
     "metrics": {
         "workforce": [
             "Devanshu"
         ],
-        "materialConsumption": "Steel Plate 8mm",
-        "totalComponents": 150
+        "totalComponents": 150,
+        "materialConsumption": "Steel Plate 8mm"
     },
     "financials": {
         "vendorName": "Cadqua",
-        "vendorLocation": "Ghaziabad",
+        "profitLoss": 5526,
         "dispatchBudget": 0,
         "totalCost": 19372,
-        "profitLoss": 5526,
-        "deliveryFeeMode": "Porter system",
-        "poNumber": "QT-18288"
+        "vendorLocation": "Ghaziabad",
+        "poNumber": "QT-18288",
+        "deliveryFeeMode": "Porter system"
     },
     "dailyStandup": {
-        "inputsRequired": "NO",
-        "preparingPartsDate": "2026-06-18",
-        "discussingNotes": "Under Process Porter Service",
-        "routeFrom": "Ghaziabad",
         "srNo": "=1+A14",
-        "porterPayments": 450,
-        "routeTo": "Faridabad"
+        "discussingNotes": "Under Process Porter Service",
+        "inputsRequired": "NO",
+        "routeTo": "Faridabad",
+        "preparingPartsDate": "2026-06-18",
+        "routeFrom": "Ghaziabad",
+        "porterPayments": 450
     },
     "poRelease": {
+        "releaseDate": "2026-06-10",
+        "vendorCost": 13846,
+        "vendorLocation": "Ghaziabad",
         "customerSalePrice": 19372,
         "vendorName": "Cadqua",
-        "vendorLocation": "Ghaziabad",
-        "poVendorSent": "16948",
-        "vendorCost": 13846,
-        "releaseDate": "2026-06-10"
+        "poVendorSent": "16948"
     },
     "invoiceRelease": {
         "gstRate": 18,
-        "gstValue": 3487,
         "totalInvoiceAmount": 22859,
-        "paymentTerms": "30 days",
         "invoiceNumber": "QT-18288",
+        "paymentTerms": "30 days",
+        "gstValue": 3487,
         "paymentStatus": "Paid"
     }
 }

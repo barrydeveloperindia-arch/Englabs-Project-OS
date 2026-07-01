@@ -2,19 +2,19 @@
     "projectId": "C4811",
     "client": "AEBOCODE",
     "planning": {
-        "budget": 24696,
         "poNumber": "P2100-EL12-PO-16742",
-        "deliveryTerms": "ToPay",
         "startDate": "2026-06-02",
         "value": 35280,
-        "poConfirmed": true
+        "poConfirmed": true,
+        "deliveryTerms": "ToPay",
+        "budget": 24696
     },
     "production": {
         "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
@@ -25,8 +25,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
@@ -37,8 +37,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
@@ -47,20 +47,20 @@
         ]
     },
     "metrics": {
+        "totalComponents": 0,
         "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ],
-        "totalComponents": 0
+        ]
     },
     "financials": {
         "vendorName": "Rapid Proto Tech India Private Limited",
-        "vendorLocation": "Coimbatore",
+        "profitLoss": null,
         "dispatchBudget": null,
         "totalCost": 35280,
-        "profitLoss": null,
-        "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-17811"
+        "vendorLocation": "Coimbatore",
+        "poNumber": "QT-17811",
+        "deliveryFeeMode": "To pay basis"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-17811"

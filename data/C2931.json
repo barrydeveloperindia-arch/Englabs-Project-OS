@@ -3,18 +3,17 @@
     "client": "(Free from Dirt,  Damages, pit lines, porosity and Flash)",
     "planning": {
         "poNumber": "",
-        "budget": 0,
-        "deliveryTerms": "ToPay",
-        "startDate": "2026-05-03",
         "poConfirmed": true,
-        "value": 0
+        "value": 0,
+        "startDate": "2026-05-03",
+        "deliveryTerms": "ToPay",
+        "budget": 0
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
@@ -25,8 +24,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
@@ -44,13 +43,14 @@
                 "name": "Final Packaging",
                 "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
-        "totalComponents": 0,
         "workforce": [
             "TBD"
         ],
+        "totalComponents": 0,
         "materialConsumption": "Tracking active..."
     },
     "invoiceRelease": {

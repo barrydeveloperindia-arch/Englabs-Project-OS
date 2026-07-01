@@ -2,15 +2,14 @@
     "projectId": "C4235",
     "client": "ORIENT",
     "planning": {
-        "startDate": "2026-06-02",
-        "poConfirmed": true,
-        "value": 9204,
         "poNumber": "P2100-EL12-PO-33117",
+        "startDate": "2026-06-02",
+        "value": 9204,
+        "poConfirmed": true,
         "budget": 6443,
         "deliveryTerms": "ToPay"
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
@@ -21,46 +20,47 @@
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
-        "materialConsumption": "Tracking active...",
+        "totalComponents": 0,
         "workforce": [
             "TBD"
         ],
-        "totalComponents": 0
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "Excel",
-        "vendorLocation": "Faridabad",
-        "dispatchBudget": null,
         "totalCost": null,
+        "dispatchBudget": null,
         "profitLoss": 0,
+        "vendorName": "Excel",
         "deliveryFeeMode": null,
-        "poNumber": "QT-17235"
+        "poNumber": "QT-17235",
+        "vendorLocation": "Faridabad"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-17235"

@@ -2,19 +2,19 @@
     "projectId": "C5120",
     "client": "YASH APPLIANCES",
     "planning": {
-        "startDate": "2026-06-02",
-        "value": 1749,
-        "poConfirmed": true,
+        "budget": 1224,
         "deliveryTerms": "ToPay",
         "poNumber": "P2100-EL12-PO-16850",
-        "budget": 1224
+        "value": 1749,
+        "startDate": "2026-06-02",
+        "poConfirmed": true
     },
     "production": {
         "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
@@ -25,20 +25,20 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
@@ -47,19 +47,19 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "totalComponents": 0,
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "PLASTIPACK INDUSTRIES",
-        "vendorLocation": "Faridabad",
         "dispatchBudget": null,
         "totalCost": 1749,
+        "vendorName": "PLASTIPACK INDUSTRIES",
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
+        "vendorLocation": "Faridabad",
         "poNumber": "QT-18120"
     },
     "invoiceRelease": {

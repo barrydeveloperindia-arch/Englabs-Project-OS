@@ -2,19 +2,18 @@
     "projectId": "C5142",
     "client": "MENTHOSA",
     "planning": {
-        "startDate": "2026-06-02",
+        "deliveryTerms": "ToPay",
+        "budget": 0,
         "poConfirmed": true,
         "value": 0,
-        "poNumber": "P2100-EL12-PO-25138",
-        "budget": 0,
-        "deliveryTerms": "ToPay"
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL12-PO-25138"
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
@@ -25,12 +24,12 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
@@ -41,10 +40,11 @@
                 "status": "Pending"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
         "totalComponents": 0,
@@ -54,13 +54,13 @@
         "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "SK Techno",
+        "deliveryFeeMode": "Charged Separately in invoice",
         "vendorLocation": "Faridabad",
+        "poNumber": "QT-18142",
         "dispatchBudget": 0,
         "totalCost": null,
-        "profitLoss": -320,
-        "deliveryFeeMode": "Charged Separately in invoice",
-        "poNumber": "QT-18142"
+        "vendorName": "SK Techno",
+        "profitLoss": -320
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18142"

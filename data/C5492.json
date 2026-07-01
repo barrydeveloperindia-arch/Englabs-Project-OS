@@ -1,19 +1,12 @@
 {
-    "projectId": "C5491",
-    "client": "Orient Electric 2",
-    "planning": {
-        "deliveryTerms": "TBD",
-        "budget": 0,
-        "poConfirmed": false,
-        "value": 0,
-        "startDate": "2026-06-17",
-        "poNumber": "PENDING"
-    },
+    "client": "Google India",
+    "projectId": "C5492",
     "production": {
+        "currentStage": "Engineering Design",
         "stages": [
             {
-                "status": "In Progress",
-                "name": "Engineering Design"
+                "name": "Engineering Design",
+                "status": "Pending"
             },
             {
                 "name": "Machine Processing",
@@ -32,8 +25,8 @@
                 "name": "Painting"
             },
             {
-                "status": "Pending",
-                "name": "Drying"
+                "name": "Drying",
+                "status": "Pending"
             },
             {
                 "name": "Finishing",
@@ -43,23 +36,21 @@
                 "status": "Pending",
                 "name": "Final Packaging"
             }
-        ],
-        "currentStage": "Engineering Design"
+        ]
     },
+    "planning": {
+        "poConfirmed": true,
+        "value": 125000,
+        "startDate": "2026-06-24",
+        "deliveryTerms": "ToPay",
+        "budget": 75000
+    },
+    "dailyStandup": {},
     "metrics": {
-        "totalComponents": 0,
         "workforce": [
             "TBD"
         ],
-        "materialConsumption": "Tracking active..."
-    },
-    "financials": {
-        "totalCost": 0,
-        "dispatchBudget": null,
-        "profitLoss": null,
-        "vendorName": "TBD",
-        "deliveryFeeMode": "To pay basis",
-        "poNumber": "PENDING",
-        "vendorLocation": "TBD"
+        "totalComponents": 0,
+        "materialConsumption": "Pending Ingestion"
     }
 }

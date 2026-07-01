@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
@@ -15,10 +16,14 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 async function pullAndMerge() {
-    console.log("Fetching projects from Firestore...");
+    console.log("Authenticating as admin...");
     try {
+        await signInWithEmailAndPassword(auth, "englabscivilteam@gmail.com", "Ram@2026");
+        console.log("Authentication successful! Fetching projects from Firestore...");
+        
         const querySnapshot = await getDocs(collection(db, "projects"));
         let updatedCount = 0;
         let createdCount = 0;
@@ -69,6 +74,41 @@ async function pullAndMerge() {
                 if (JSON.stringify(localData.metrics || {}) !== JSON.stringify(fbData.metrics || {})) {
                     console.log(`   Metrics diff for ${projectId}: merging Firebase metrics...`);
                     localData.metrics = fbData.metrics;
+                    diffCount++;
+                }
+
+                // Check and merge client
+                if (localData.client !== fbData.client) {
+                    console.log(`   Client diff for ${projectId}: merging Firebase client...`);
+                    localData.client = fbData.client;
+                    diffCount++;
+                }
+
+                // Check and merge production
+                if (JSON.stringify(localData.production || {}) !== JSON.stringify(fbData.production || {})) {
+                    console.log(`   Production diff for ${projectId}: merging Firebase production...`);
+                    localData.production = fbData.production;
+                    diffCount++;
+                }
+
+                // Check and merge financials
+                if (JSON.stringify(localData.financials || {}) !== JSON.stringify(fbData.financials || {})) {
+                    console.log(`   Financials diff for ${projectId}: merging Firebase financials...`);
+                    localData.financials = fbData.financials;
+                    diffCount++;
+                }
+
+                // Check and merge poRelease
+                if (JSON.stringify(localData.poRelease || {}) !== JSON.stringify(fbData.poRelease || {})) {
+                    console.log(`   poRelease diff for ${projectId}: merging Firebase poRelease...`);
+                    localData.poRelease = fbData.poRelease;
+                    diffCount++;
+                }
+
+                // Check and merge invoiceRelease
+                if (JSON.stringify(localData.invoiceRelease || {}) !== JSON.stringify(fbData.invoiceRelease || {})) {
+                    console.log(`   invoiceRelease diff for ${projectId}: merging Firebase invoiceRelease...`);
+                    localData.invoiceRelease = fbData.invoiceRelease;
                     diffCount++;
                 }
 

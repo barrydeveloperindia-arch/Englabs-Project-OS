@@ -2,15 +2,14 @@
     "projectId": "C5092",
     "client": "Henkel 4 sets",
     "planning": {
-        "value": 242880,
         "poConfirmed": true,
+        "value": 242880,
         "startDate": "2026-06-02",
         "poNumber": "P2100-EL12-PO-89833",
-        "budget": 170016,
-        "deliveryTerms": "Included"
+        "deliveryTerms": "Included",
+        "budget": 170016
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
@@ -21,20 +20,20 @@
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
@@ -44,23 +43,24 @@
                 "name": "Final Packaging",
                 "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
         "materialConsumption": "Tracking active...",
+        "totalComponents": 0,
         "workforce": [
             "TBD"
-        ],
-        "totalComponents": 0
+        ]
     },
     "financials": {
-        "vendorName": "Talekar Group Of Company",
-        "vendorLocation": "GAT no 1419, Shiv Shankar Housing Society 1, , Mhetre wasti, Chikhali, Pimpri Chinchwad, Pune",
-        "dispatchBudget": 5600,
         "totalCost": 242880,
+        "dispatchBudget": 5600,
         "profitLoss": 5376,
+        "vendorName": "Talekar Group Of Company",
         "deliveryFeeMode": "included",
-        "poNumber": "QT-18092"
+        "poNumber": "QT-18092",
+        "vendorLocation": "GAT no 1419, Shiv Shankar Housing Society 1, , Mhetre wasti, Chikhali, Pimpri Chinchwad, Pune"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18092"

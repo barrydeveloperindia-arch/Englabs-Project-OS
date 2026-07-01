@@ -3,8 +3,8 @@
     "client": "Unknown Client",
     "planning": {
         "startDate": "2026-06-02",
-        "poConfirmed": true,
         "value": 59020.55,
+        "poConfirmed": true,
         "poNumber": "P2100-EL12-PO-16758",
         "budget": 41314,
         "deliveryTerms": "ToPay"
@@ -37,12 +37,12 @@
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
         ]
     },
@@ -54,13 +54,13 @@
         "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED",
+        "poNumber": "QT-17940",
         "vendorLocation": "Delhi",
-        "dispatchBudget": null,
-        "totalCost": 59020.55,
-        "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-17940"
+        "profitLoss": null,
+        "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED",
+        "totalCost": 59020.55,
+        "dispatchBudget": null
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-17940"

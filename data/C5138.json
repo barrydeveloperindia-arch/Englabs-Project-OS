@@ -2,12 +2,12 @@
     "projectId": "C5138",
     "client": "HC ROBOTICS",
     "planning": {
-        "deliveryTerms": "ToPay",
-        "poNumber": "P2100-EL12-PO-56766",
-        "budget": 0,
+        "startDate": "2026-06-02",
         "value": 0,
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "poNumber": "P2100-EL12-PO-56766",
+        "deliveryTerms": "ToPay",
+        "budget": 0
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -21,46 +21,46 @@
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
                 "status": "Pending"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
         ]
     },
     "metrics": {
-        "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "totalComponents": 0,
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "Excel",
-        "vendorLocation": "Faridabad",
-        "dispatchBudget": 0,
-        "totalCost": null,
         "profitLoss": -167,
-        "deliveryFeeMode": "Charged Separately in invoice",
-        "poNumber": "QT-18138"
+        "vendorName": "Excel",
+        "totalCost": null,
+        "dispatchBudget": 0,
+        "poNumber": "QT-18138",
+        "vendorLocation": "Faridabad",
+        "deliveryFeeMode": "Charged Separately in invoice"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18138"

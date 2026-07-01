@@ -2,15 +2,14 @@
     "projectId": "C4958",
     "client": "SIMSUN INNOTECH",
     "planning": {
+        "budget": 1155,
         "deliveryTerms": "ToPay",
         "poNumber": "P2100-EL12-PO-16769",
-        "budget": 1155,
+        "startDate": "2026-06-02",
         "value": 1650,
-        "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "poConfirmed": true
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
@@ -33,34 +32,35 @@
                 "status": "Pending"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
                 "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
+        "materialConsumption": "Tracking active...",
         "totalComponents": 0,
         "workforce": [
             "TBD"
-        ],
-        "materialConsumption": "Tracking active..."
+        ]
     },
     "financials": {
-        "vendorName": "Pacific Labs .",
-        "vendorLocation": "Mohali",
-        "dispatchBudget": null,
         "totalCost": 1650,
+        "dispatchBudget": null,
         "profitLoss": null,
+        "vendorName": "Pacific Labs .",
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-17958"
+        "poNumber": "QT-17958",
+        "vendorLocation": "Mohali"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-17958"

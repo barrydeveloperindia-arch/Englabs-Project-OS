@@ -2,12 +2,12 @@
     "projectId": "C5179",
     "client": "HC ROBOTICS",
     "planning": {
-        "budget": 0,
-        "poNumber": "P2100-EL-12-PO-16899",
         "deliveryTerms": "ToPay",
-        "value": 0,
+        "budget": 0,
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "value": 0,
+        "startDate": "2026-06-02",
+        "poNumber": "P2100-EL-12-PO-16899"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -17,8 +17,8 @@
                 "status": "In Progress"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
                 "name": "Workshop Fabrication",
@@ -29,16 +29,16 @@
                 "status": "Pending"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
@@ -47,20 +47,20 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
         "workforce": [
             "TBD"
         ],
+        "totalComponents": 0,
         "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "Excel",
-        "vendorLocation": "Faridabad",
-        "dispatchBudget": null,
         "totalCost": null,
+        "dispatchBudget": null,
         "profitLoss": 0,
+        "vendorName": "Excel",
         "deliveryFeeMode": null,
-        "poNumber": "QT-18179"
+        "poNumber": "QT-18179",
+        "vendorLocation": "Faridabad"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18179"

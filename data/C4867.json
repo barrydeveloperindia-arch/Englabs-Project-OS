@@ -2,67 +2,67 @@
     "projectId": "C4867",
     "client": "BAJAJ ELECTRICALS",
     "planning": {
-        "budget": 8012,
         "poNumber": "P2100-EL40-INV-17380",
-        "deliveryTerms": "ToPay",
-        "startDate": "2026-06-01",
         "poConfirmed": true,
-        "value": 11446
+        "value": 11446,
+        "startDate": "2026-06-01",
+        "budget": 8012,
+        "deliveryTerms": "ToPay"
     },
     "production": {
         "currentStage": "Workshop Fabrication",
         "stages": [
             {
-                "name": "Engineering Design",
                 "status": "Completed",
-                "lead": "Gaurav Panchal"
+                "lead": "Gaurav Panchal",
+                "name": "Engineering Design"
             },
             {
-                "name": "Machine Processing",
                 "status": "Completed",
-                "lead": "Paras"
+                "lead": "Paras",
+                "name": "Machine Processing"
             },
             {
                 "name": "Workshop Fabrication",
-                "status": "Completed",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Completed"
             },
             {
-                "name": "Sanding",
+                "lead": "Parth",
                 "status": "In Progress",
-                "lead": "Parth"
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
-                "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Pending"
             },
             {
-                "name": "Drying",
                 "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "name": "Drying"
             },
             {
-                "name": "Finishing",
                 "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
-                "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Pending"
             }
         ]
     },
     "metrics": {
+        "materialConsumption": "Aluminum 6061, MS Sheet",
         "totalComponents": 44,
         "workforce": [
             "Gaurav Panchal",
             "Paras",
             "Parth",
             "Sandeep"
-        ],
-        "materialConsumption": "Aluminum 6061, MS Sheet"
+        ]
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-17867"

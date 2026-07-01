@@ -3,11 +3,11 @@
     "client": "AVEER INDUSTRIES",
     "planning": {
         "poConfirmed": true,
-        "value": 2450,
         "startDate": "2026-06-02",
-        "deliveryTerms": "ToPay",
+        "value": 2450,
         "poNumber": "P2100-EL12-PO-16886",
-        "budget": 1715
+        "budget": 1715,
+        "deliveryTerms": "ToPay"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -17,8 +17,8 @@
                 "status": "In Progress"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
                 "name": "Workshop Fabrication",
@@ -37,30 +37,30 @@
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
         ]
     },
     "metrics": {
         "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "ADROITEC INFORMATION SYSTEMS PVT LTD",
-        "vendorLocation": "Noida",
-        "dispatchBudget": null,
         "totalCost": 2450,
+        "dispatchBudget": null,
         "profitLoss": null,
+        "vendorName": "ADROITEC INFORMATION SYSTEMS PVT LTD",
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18187"
+        "poNumber": "QT-18187",
+        "vendorLocation": "Noida"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18187"

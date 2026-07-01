@@ -2,12 +2,12 @@
     "projectId": "C5487",
     "client": "EndureAir",
     "planning": {
+        "poNumber": "PENDING",
         "value": 0,
-        "budget": 0,
-        "deliveryTerms": "TBD",
-        "poConfirmed": false,
         "startDate": "2026-06-17",
-        "poNumber": "PENDING"
+        "poConfirmed": false,
+        "budget": 0,
+        "deliveryTerms": "TBD"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -17,12 +17,12 @@
                 "status": "In Progress"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
@@ -33,12 +33,12 @@
                 "status": "Pending"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
@@ -48,18 +48,18 @@
     },
     "metrics": {
         "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "TBD",
-        "vendorLocation": "TBD",
-        "dispatchBudget": null,
-        "totalCost": 0,
-        "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "PENDING"
+        "poNumber": "PENDING",
+        "vendorLocation": "TBD",
+        "totalCost": 0,
+        "dispatchBudget": null,
+        "profitLoss": null,
+        "vendorName": "TBD"
     }
 }

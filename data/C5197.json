@@ -2,23 +2,22 @@
     "projectId": "C5197",
     "client": "NIPA",
     "planning": {
+        "value": 0,
         "startDate": "2026-06-02",
         "poConfirmed": true,
-        "value": 0,
         "poNumber": "P2100-EL-12-PO-16894",
-        "budget": 0,
-        "deliveryTerms": "ToPay"
+        "deliveryTerms": "ToPay",
+        "budget": 0
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
                 "status": "In Progress"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
                 "name": "Workshop Fabrication",
@@ -29,37 +28,38 @@
                 "status": "Pending"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
                 "status": "Pending"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
-        "materialConsumption": "Tracking active...",
+        "totalComponents": 0,
         "workforce": [
             "TBD"
         ],
-        "totalComponents": 0
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "Excel",
-        "vendorLocation": "Faridabad",
         "dispatchBudget": 0,
         "totalCost": null,
+        "vendorName": "Excel",
         "profitLoss": -320,
         "deliveryFeeMode": null,
+        "vendorLocation": "Faridabad",
         "poNumber": "QT-18197"
     },
     "invoiceRelease": {

@@ -2,23 +2,22 @@
     "projectId": "C4929",
     "client": "GOEL ENTERPRISES SCANNING",
     "planning": {
-        "deliveryTerms": "Included",
-        "budget": 793,
         "poNumber": "P2100-EL12-PO-16835",
+        "startDate": "2026-06-02",
         "value": 1133,
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "deliveryTerms": "Included",
+        "budget": 793
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
                 "status": "In Progress"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
                 "name": "Workshop Fabrication",
@@ -29,8 +28,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
@@ -44,22 +43,23 @@
                 "name": "Final Packaging",
                 "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
-        "totalComponents": 0,
         "workforce": [
             "TBD"
         ],
+        "totalComponents": 0,
         "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "PLASTIPACK INDUSTRIES",
-        "vendorLocation": "Plot No. 5, New Dlf Industrial Area,Faridabad",
         "dispatchBudget": 500,
         "totalCost": 1133,
+        "vendorName": "PLASTIPACK INDUSTRIES",
         "profitLoss": 0,
         "deliveryFeeMode": "Included",
+        "vendorLocation": "Plot No. 5, New Dlf Industrial Area,Faridabad",
         "poNumber": "QT-17929"
     },
     "invoiceRelease": {

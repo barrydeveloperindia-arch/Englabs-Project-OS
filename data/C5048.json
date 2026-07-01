@@ -2,15 +2,14 @@
     "projectId": "C5048",
     "client": "MSL INDIA",
     "planning": {
-        "poNumber": "P2100-EL12-PO-16802",
-        "budget": 17640,
         "deliveryTerms": "ToPay",
-        "startDate": "2026-06-02",
+        "budget": 17640,
+        "poNumber": "P2100-EL12-PO-16802",
         "poConfirmed": true,
-        "value": 25200
+        "value": 25200,
+        "startDate": "2026-06-02"
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
@@ -25,16 +24,16 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
                 "status": "Pending"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
@@ -44,23 +43,24 @@
                 "name": "Final Packaging",
                 "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
         "materialConsumption": "Tracking active...",
+        "totalComponents": 0,
         "workforce": [
             "TBD"
-        ],
-        "totalComponents": 0
+        ]
     },
     "financials": {
-        "vendorName": "CHAMBER OF INDUSTRIAL AND COMMERCIAL UNDERTAKINGS",
+        "deliveryFeeMode": "To pay basis",
         "vendorLocation": "Ludhiana",
+        "poNumber": "QT-18048",
         "dispatchBudget": null,
         "totalCost": 25200,
-        "profitLoss": null,
-        "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18048"
+        "vendorName": "CHAMBER OF INDUSTRIAL AND COMMERCIAL UNDERTAKINGS",
+        "profitLoss": null
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18048"

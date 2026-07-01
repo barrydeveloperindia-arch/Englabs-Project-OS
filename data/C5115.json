@@ -2,27 +2,26 @@
     "projectId": "C5115",
     "client": "SONALIKA",
     "planning": {
-        "poNumber": "P2100-EL-12-PO-16878",
-        "budget": 0,
         "deliveryTerms": "Included",
+        "budget": 0,
+        "poConfirmed": true,
         "startDate": "2026-06-02",
         "value": 0,
-        "poConfirmed": true
+        "poNumber": "P2100-EL-12-PO-16878"
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
@@ -33,34 +32,35 @@
                 "status": "Pending"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
                 "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
         "totalComponents": 0,
+        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ],
-        "materialConsumption": "Tracking active..."
+        ]
     },
     "financials": {
-        "vendorName": "Plastipack",
+        "poNumber": "QT-18115",
         "vendorLocation": "Faridabad",
-        "dispatchBudget": 0,
-        "totalCost": null,
-        "profitLoss": -2607,
         "deliveryFeeMode": "included",
-        "poNumber": "QT-18115"
+        "profitLoss": -2607,
+        "vendorName": "Plastipack",
+        "totalCost": null,
+        "dispatchBudget": 0
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18115"

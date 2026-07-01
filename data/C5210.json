@@ -2,19 +2,18 @@
     "projectId": "C5210",
     "client": "ORIENT",
     "planning": {
-        "value": 16000,
+        "deliveryTerms": "ToPay",
+        "budget": 11200,
         "poConfirmed": true,
         "startDate": "2026-06-02",
-        "budget": 11200,
-        "poNumber": "P2100-EL12-PO-62000",
-        "deliveryTerms": "ToPay"
+        "value": 16000,
+        "poNumber": "P2100-EL12-PO-62000"
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
@@ -29,8 +28,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
@@ -44,23 +43,24 @@
                 "name": "Final Packaging",
                 "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
         ],
-        "totalComponents": 0
+        "totalComponents": 0,
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "CADQUA 3D LLP",
         "vendorLocation": "49/94 SITE IV, GHAZIABAD, Uttar Pradesh, India -, 201010",
-        "dispatchBudget": 0,
-        "totalCost": 16000,
-        "profitLoss": -550,
+        "poNumber": "QT-18210",
         "deliveryFeeMode": null,
-        "poNumber": "QT-18210"
+        "vendorName": "CADQUA 3D LLP",
+        "profitLoss": -550,
+        "dispatchBudget": 0,
+        "totalCost": 16000
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18210"

@@ -3,14 +3,13 @@
     "client": "Aebocode Technologies",
     "planning": {
         "budget": 0,
-        "poNumber": "P2100-EL12-PO-41407",
         "deliveryTerms": "ToPay",
-        "poConfirmed": true,
+        "poNumber": "P2100-EL12-PO-41407",
         "value": 0,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poConfirmed": true
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
@@ -21,46 +20,47 @@
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
                 "status": "Pending"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
         "totalComponents": 0,
+        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ],
-        "materialConsumption": "Tracking active..."
+        ]
     },
     "financials": {
-        "vendorName": "Aebocode",
         "vendorLocation": "Panchkula",
-        "dispatchBudget": 0,
-        "totalCost": null,
-        "profitLoss": -55,
+        "poNumber": "QT-18192",
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18192"
+        "vendorName": "Aebocode",
+        "profitLoss": -55,
+        "dispatchBudget": 0,
+        "totalCost": null
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18192"

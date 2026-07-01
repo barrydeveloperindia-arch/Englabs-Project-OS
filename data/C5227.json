@@ -2,15 +2,14 @@
     "projectId": "C5227",
     "client": "LOTUS DEFENCE",
     "planning": {
+        "poNumber": "P2100-EL12-PO-61000",
         "startDate": "2026-06-02",
         "value": 0,
         "poConfirmed": true,
-        "poNumber": "P2100-EL12-PO-61000",
-        "budget": 0,
-        "deliveryTerms": "ToPay"
+        "deliveryTerms": "ToPay",
+        "budget": 0
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
@@ -21,12 +20,12 @@
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
@@ -37,14 +36,15 @@
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
                 "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
         "totalComponents": 0,
@@ -54,13 +54,13 @@
         "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "Lotus Defence",
         "vendorLocation": "Panchkula",
-        "dispatchBudget": null,
-        "totalCost": null,
-        "profitLoss": null,
+        "poNumber": "QT-18227",
         "deliveryFeeMode": null,
-        "poNumber": "QT-18227"
+        "vendorName": "Lotus Defence",
+        "profitLoss": null,
+        "dispatchBudget": null,
+        "totalCost": null
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18227"

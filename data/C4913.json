@@ -2,12 +2,12 @@
     "projectId": "C4913",
     "client": "HELLA",
     "planning": {
-        "deliveryTerms": "ToPay",
         "budget": 27048,
+        "deliveryTerms": "ToPay",
         "poNumber": "P2100-EL12-PO-16743",
         "value": 38640,
-        "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poConfirmed": true
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -21,46 +21,46 @@
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
                 "status": "Pending"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
         ]
     },
     "metrics": {
+        "materialConsumption": "Tracking active...",
+        "totalComponents": 0,
         "workforce": [
             "TBD"
-        ],
-        "materialConsumption": "Tracking active...",
-        "totalComponents": 0
+        ]
     },
     "financials": {
-        "vendorName": "Rapid Proto Tech India Private Limited",
-        "vendorLocation": "Coimbatore",
-        "dispatchBudget": null,
-        "totalCost": 38640,
         "profitLoss": null,
-        "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-17913"
+        "vendorName": "Rapid Proto Tech India Private Limited",
+        "totalCost": 38640,
+        "dispatchBudget": null,
+        "poNumber": "QT-17913",
+        "vendorLocation": "Coimbatore",
+        "deliveryFeeMode": "To pay basis"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-17913"

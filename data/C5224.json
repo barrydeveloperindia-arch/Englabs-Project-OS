@@ -3,18 +3,18 @@
     "client": "Vibracoustic",
     "planning": {
         "budget": 0,
-        "poNumber": "",
         "deliveryTerms": "ToPay",
+        "poNumber": "",
         "poConfirmed": false,
-        "value": 0,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "value": 0
     },
     "production": {
         "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
@@ -25,16 +25,16 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
                 "status": "Pending"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
@@ -48,19 +48,19 @@
     },
     "metrics": {
         "materialConsumption": "Machining 6063 T6",
+        "totalComponents": 18,
         "workforce": [
             "TBD"
-        ],
-        "totalComponents": 18
+        ]
     },
     "financials": {
-        "vendorName": "SK Techno",
-        "vendorLocation": "Faridabad",
-        "dispatchBudget": null,
-        "totalCost": null,
-        "profitLoss": null,
         "deliveryFeeMode": null,
-        "poNumber": "QT-18224"
+        "poNumber": "QT-18224",
+        "vendorLocation": "Faridabad",
+        "totalCost": null,
+        "dispatchBudget": null,
+        "profitLoss": null,
+        "vendorName": "SK Techno"
     },
     "dailyStandup": {
         "discussingNotes": "18 | QC: Done on Saturday; "

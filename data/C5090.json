@@ -3,14 +3,13 @@
     "client": "SONALIKA",
     "planning": {
         "deliveryTerms": "Included",
-        "poNumber": "P2100-EL12-PO-16833",
         "budget": 1864,
+        "poNumber": "P2100-EL12-PO-16833",
         "value": 2662.48,
-        "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poConfirmed": true
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
@@ -29,12 +28,12 @@
                 "status": "Pending"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
@@ -44,23 +43,24 @@
                 "name": "Final Packaging",
                 "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
+        "totalComponents": 0,
         "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ],
-        "totalComponents": 0
+        ]
     },
     "financials": {
-        "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED",
-        "vendorLocation": "D - 58, 1st floor, Okhla Industrial Area Phase - 1",
-        "dispatchBudget": 0,
-        "totalCost": 2662.48,
         "profitLoss": -290,
-        "deliveryFeeMode": "Included",
-        "poNumber": "QT-18090"
+        "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED",
+        "totalCost": 2662.48,
+        "dispatchBudget": 0,
+        "poNumber": "QT-18090",
+        "vendorLocation": "D - 58, 1st floor, Okhla Industrial Area Phase - 1",
+        "deliveryFeeMode": "Included"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18090"

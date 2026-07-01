@@ -2,14 +2,13 @@
     "projectId": "C5231",
     "client": "Sonalika",
     "planning": {
+        "startDate": "2026-06-12",
         "value": 17220,
-        "budget": 12054,
-        "deliveryTerms": "ToPay",
         "poConfirmed": false,
-        "startDate": "2026-06-12"
+        "budget": 12054,
+        "deliveryTerms": "ToPay"
     },
     "production": {
-        "currentStage": "Workshop Fabrication",
         "stages": [
             {
                 "name": "Engineering Design",
@@ -22,40 +21,41 @@
                 "lead": "Paras"
             },
             {
-                "name": "Workshop Fabrication",
+                "lead": "Parth",
                 "status": "In Progress",
-                "lead": "Parth"
+                "name": "Workshop Fabrication"
             },
             {
-                "name": "Sanding",
                 "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "name": "Sanding"
             },
             {
-                "name": "Painting",
                 "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "name": "Painting"
             },
             {
-                "name": "Drying",
                 "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
-                "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Pending"
             },
             {
                 "name": "Final Packaging",
                 "status": "Pending",
                 "lead": "Devanshu"
             }
-        ]
+        ],
+        "currentStage": "Workshop Fabrication"
     },
     "metrics": {
-        "totalComponents": 2,
         "materialConsumption": "MJF Black Paint",
+        "totalComponents": 2,
         "workforce": [
             "Devanshu",
             "Anurag",
@@ -63,38 +63,38 @@
         ]
     },
     "financials": {
-        "vendorName": "excel Rapid Tech",
         "vendorLocation": "Delhi",
-        "dispatchBudget": 0,
-        "totalCost": null,
-        "profitLoss": null,
+        "poNumber": "QT-18231",
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18231"
+        "vendorName": "excel Rapid Tech",
+        "profitLoss": null,
+        "dispatchBudget": 0,
+        "totalCost": null
     },
     "dailyStandup": {
-        "srNo": "=1+A12",
-        "discussingNotes": "2 | excel Rapid Tech | QC: Dispatched to customer; Feedback on Thursday",
         "preparingPartsDate": "2026-06-26",
-        "routeFrom": "Delhi",
-        "routeTo": "Englabs",
-        "porterPayments": 168,
+        "supervisor": "Devyanshu",
         "inputsRequired": "NO",
-        "supervisor": "Devyanshu"
+        "routeTo": "Englabs",
+        "discussingNotes": "2 | excel Rapid Tech | QC: Dispatched to customer; Feedback on Thursday",
+        "srNo": "=1+A12",
+        "porterPayments": 168,
+        "routeFrom": "Delhi"
     },
     "poRelease": {
-        "customerSalePrice": 17220,
         "vendorName": "excel Rapid Tech",
-        "vendorLocation": "Delhi",
+        "customerSalePrice": 17220,
         "poVendorSent": "N/A",
+        "vendorLocation": "Delhi",
         "vendorCost": 168,
         "releaseDate": "2026-06-12"
     },
     "invoiceRelease": {
-        "gstRate": 18,
-        "gstValue": 3100,
-        "totalInvoiceAmount": 20320,
+        "paymentStatus": "Pending",
         "paymentTerms": "30 days",
+        "gstValue": 3100,
+        "gstRate": 18,
         "invoiceNumber": "QT-18231",
-        "paymentStatus": "Pending"
+        "totalInvoiceAmount": 20320
     }
 }

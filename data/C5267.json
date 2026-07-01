@@ -1,37 +1,37 @@
 {
     "projectId": "C5267",
-    "client": "ITL Sonalika",
+    "client": "ITL (SONALIKA)",
     "planning": {
-        "poNumber": "",
         "budget": 72926,
         "deliveryTerms": "ToPay",
-        "startDate": "2026-06-13",
+        "poConfirmed": false,
         "value": 104180,
-        "poConfirmed": false
+        "startDate": "2026-06-13",
+        "poNumber": ""
     },
     "production": {
-        "currentStage": "Engineering Design",
+        "currentStage": "Machine Processing",
         "stages": [
             {
-                "name": "Engineering Design",
+                "lead": "Devanshu",
                 "status": "In Progress",
-                "lead": "Devanshu"
+                "name": "Engineering Design"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
                 "status": "Pending"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
@@ -42,53 +42,53 @@
                 "status": "Pending"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
         ]
     },
     "metrics": {
-        "totalComponents": 14,
         "materialConsumption": "VC",
         "workforce": [
             "Devanshu",
             "Anurag",
             "Devyanshu"
-        ]
+        ],
+        "totalComponents": 14
     },
     "financials": {
-        "vendorName": "excel Rapid Tech",
-        "vendorLocation": "Delhi",
         "dispatchBudget": 0,
         "totalCost": null,
+        "vendorName": "excel Rapid Tech",
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
+        "vendorLocation": "Delhi",
         "poNumber": "QT-18267"
     },
     "dailyStandup": {
-        "routeFrom": "Delhi",
-        "srNo": "=1+A10",
         "routeTo": "Englabs",
-        "porterPayments": 0,
         "inputsRequired": "NO",
-        "preparingPartsDate": "2026-06-29",
-        "discussingNotes": "14 | excel Rapid Tech | QC: Will come on Monday from the vendor; Visual QC to be done and sent on Tuesday; PO awaited",
-        "supervisor": "Devyanshu"
+        "discussingNotes": "All the parts are ready; they will be dispatched from Delhi today and should reach us by around 11:00 AM tomorrow.",
+        "srNo": "=1+A10",
+        "supervisor": "Devyanshu",
+        "preparingPartsDate": "2026-07-01",
+        "routeFrom": "Noida",
+        "porterPayments": 0
     },
     "poRelease": {
-        "customerSalePrice": 104180,
-        "vendorName": "excel Rapid Tech",
+        "releaseDate": "2026-06-13",
+        "vendorCost": 1000,
         "vendorLocation": "Delhi",
-        "poVendorSent": "N/A",
-        "vendorCost": 0,
-        "releaseDate": "2026-06-13"
+        "customerSalePrice": 1000,
+        "vendorName": "excel Rapid Tech",
+        "poVendorSent": "N/A"
     },
     "invoiceRelease": {
         "gstRate": 18,
-        "gstValue": 18752,
         "totalInvoiceAmount": 122932,
-        "paymentTerms": "30 days",
         "invoiceNumber": "QT-18267",
+        "gstValue": 18752,
+        "paymentTerms": "30 days",
         "paymentStatus": "Pending"
     }
 }

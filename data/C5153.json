@@ -2,12 +2,12 @@
     "projectId": "C5153",
     "client": "HELLA",
     "planning": {
-        "value": 0,
-        "poConfirmed": true,
-        "startDate": "2026-06-02",
         "deliveryTerms": "ToPay",
         "budget": 0,
-        "poNumber": "P2100-EL12-PO-08851"
+        "poNumber": "P2100-EL12-PO-08851",
+        "poConfirmed": true,
+        "startDate": "2026-06-02",
+        "value": 0
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -17,8 +17,8 @@
                 "status": "In Progress"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
                 "name": "Workshop Fabrication",
@@ -29,38 +29,38 @@
                 "status": "Pending"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
         ]
     },
     "metrics": {
-        "materialConsumption": "Tracking active...",
+        "totalComponents": 0,
         "workforce": [
             "TBD"
         ],
-        "totalComponents": 0
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
         "vendorName": "Plastipack",
-        "vendorLocation": "Faridabad",
+        "profitLoss": -101,
         "dispatchBudget": 0,
         "totalCost": null,
-        "profitLoss": -101,
-        "deliveryFeeMode": null,
-        "poNumber": "QT-18153"
+        "vendorLocation": "Faridabad",
+        "poNumber": "QT-18153",
+        "deliveryFeeMode": null
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18153"

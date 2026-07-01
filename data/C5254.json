@@ -1,91 +1,92 @@
 {
     "projectId": "C5254",
-    "client": "Sonalika",
+    "client": "ITL (SONALIKA)",
     "planning": {
-        "startDate": "2026-06-06",
+        "deliveryTerms": "ToPay",
+        "budget": 262301,
         "poConfirmed": false,
         "value": 374716,
-        "budget": 262301,
-        "deliveryTerms": "ToPay"
+        "startDate": "2026-06-06",
+        "poNumber": ""
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
                 "status": "In Progress",
-                "lead": "Shubham"
+                "lead": "Devanshu & Shubham & Anurag",
+                "name": "Engineering Design"
             },
             {
                 "name": "Machine Processing",
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
                 "status": "Pending"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Painting"
     },
     "metrics": {
+        "materialConsumption": "MJF Black Paint",
         "totalComponents": 36,
         "workforce": [
             "Shubham"
-        ],
-        "materialConsumption": "MJF Black Paint"
+        ]
     },
     "financials": {
-        "vendorName": "Half frm PlastiPack; Half from Rapid Proto",
-        "vendorLocation": "Delhi",
         "dispatchBudget": 0,
         "totalCost": null,
+        "vendorName": "Excel Repid TECH",
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18254"
+        "vendorLocation": "Delhi",
+        "poNumber": null
     },
     "dailyStandup": {
-        "routeTo": "Englabs",
-        "porterPayments": 0,
-        "srNo": "=1+A5",
+        "porterPayments": 2918,
         "routeFrom": "Faridabad",
-        "discussingNotes": "36 | Half frm PlastiPack; Half from Rapid Proto | QC: 9 have reached; 27 will be sent to EngLabs on Friday ; PO Awaited",
-        "preparingPartsDate": "2026-06-23",
+        "preparingPartsDate": "2026-06-27",
+        "supervisor": "Shubham",
+        "routeTo": "Englabs",
         "inputsRequired": "NO",
-        "supervisor": "Shubham"
+        "srNo": "=1+A5",
+        "discussingNotes": "9 parts had already arrived, and the remaining ones have arrived today; a total of 36 parts in Englabs have been received."
     },
     "poRelease": {
-        "customerSalePrice": 374716,
-        "vendorName": "Half frm PlastiPack; Half from Rapid Proto",
-        "vendorLocation": "Delhi",
         "poVendorSent": "N/A",
+        "vendorName": "Excel Repid TECH",
+        "customerSalePrice": 374716,
         "vendorCost": 0,
+        "vendorLocation": "Delhi",
         "releaseDate": "2026-06-06"
     },
     "invoiceRelease": {
-        "gstRate": 18,
+        "paymentTerms": "30 days",
+        "paymentStatus": "Pending",
         "gstValue": 67449,
         "totalInvoiceAmount": 442165,
-        "paymentTerms": "30 days",
-        "invoiceNumber": "QT-18254",
-        "paymentStatus": "Pending"
+        "invoiceNumber": "QTN-5254",
+        "gstRate": 18
     }
 }

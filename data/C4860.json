@@ -2,65 +2,65 @@
     "projectId": "C4860",
     "client": "LABAT ASIA PUR / 2025-26 / WOT-46",
     "planning": {
-        "startDate": "2026-06-02",
-        "value": 57959,
-        "poConfirmed": true,
         "deliveryTerms": "ToPay",
         "budget": 40571,
+        "poConfirmed": true,
+        "value": 57959,
+        "startDate": "2026-06-02",
         "poNumber": "P2100-EL12-PO-70870"
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
-        "totalComponents": 0,
         "workforce": [
             "TBD"
         ],
+        "totalComponents": 0,
         "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "Labat Asia",
-        "vendorLocation": "Hoshiarpur",
-        "dispatchBudget": 0,
-        "totalCost": null,
         "profitLoss": -705,
-        "deliveryFeeMode": null,
-        "poNumber": "QT-17860"
+        "vendorName": "Labat Asia",
+        "totalCost": null,
+        "dispatchBudget": 0,
+        "poNumber": "QT-17860",
+        "vendorLocation": "Hoshiarpur",
+        "deliveryFeeMode": null
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-17860"

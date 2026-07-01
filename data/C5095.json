@@ -2,12 +2,12 @@
     "projectId": "C5095",
     "client": "SARK GROUP",
     "planning": {
+        "value": 1200,
+        "startDate": "2026-06-02",
+        "poConfirmed": true,
         "poNumber": "P2100-EL12-PO-16842",
         "budget": 840,
-        "deliveryTerms": "ToPay",
-        "poConfirmed": true,
-        "value": 1200,
-        "startDate": "2026-06-02"
+        "deliveryTerms": "ToPay"
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -25,8 +25,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
                 "name": "Painting",
@@ -37,8 +37,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
@@ -47,19 +47,19 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
         "workforce": [
             "TBD"
         ],
+        "totalComponents": 0,
         "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "RSD ENTERPRISES",
-        "vendorLocation": "Faridabad",
         "dispatchBudget": null,
         "totalCost": 1200,
+        "vendorName": "RSD ENTERPRISES",
         "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
+        "vendorLocation": "Faridabad",
         "poNumber": "QT-18095"
     },
     "invoiceRelease": {

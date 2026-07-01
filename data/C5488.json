@@ -2,27 +2,27 @@
     "projectId": "C5488",
     "client": "RND Mechanical",
     "planning": {
-        "value": 0,
-        "budget": 0,
         "deliveryTerms": "TBD",
-        "poConfirmed": false,
+        "budget": 0,
+        "value": 0,
         "startDate": "2026-06-17",
+        "poConfirmed": false,
         "poNumber": "PENDING"
     },
     "production": {
         "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
@@ -37,8 +37,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
                 "name": "Final Packaging",
@@ -47,19 +47,19 @@
         ]
     },
     "metrics": {
-        "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "totalComponents": 0,
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "TBD",
+        "deliveryFeeMode": "To pay basis",
         "vendorLocation": "TBD",
+        "poNumber": "PENDING",
         "dispatchBudget": null,
         "totalCost": 0,
-        "profitLoss": null,
-        "deliveryFeeMode": "To pay basis",
-        "poNumber": "PENDING"
+        "vendorName": "TBD",
+        "profitLoss": null
     }
 }

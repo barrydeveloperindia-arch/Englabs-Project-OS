@@ -1,19 +1,24 @@
 {
-    "projectId": "C2718",
-    "client": "THROTTLE AEROSPACE",
+    "metrics": {
+        "totalComponents": 0,
+        "workforce": [
+            "TBD"
+        ],
+        "materialConsumption": "Pending Ingestion"
+    },
+    "dailyStandup": {},
     "planning": {
-        "poNumber": "",
-        "value": 5605,
-        "startDate": "2022-09-05",
-        "poConfirmed": false,
         "deliveryTerms": "ToPay",
-        "budget": 3923
+        "budget": 75000,
+        "poConfirmed": true,
+        "value": 125000,
+        "startDate": "2026-06-24"
     },
     "production": {
         "stages": [
             {
                 "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "Pending"
             },
             {
                 "status": "Pending",
@@ -24,12 +29,12 @@
                 "status": "Pending"
             },
             {
-                "status": "Pending",
-                "name": "Sanding"
+                "name": "Sanding",
+                "status": "Pending"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "status": "Pending",
@@ -46,17 +51,6 @@
         ],
         "currentStage": "Engineering Design"
     },
-    "metrics": {
-        "totalComponents": 0,
-        "workforce": [
-            "TBD"
-        ],
-        "materialConsumption": "Tracking active..."
-    },
-    "invoiceRelease": {
-        "invoiceNumber": "QT-15718"
-    },
-    "financials": {
-        "poNumber": "QT-15718"
-    }
+    "projectId": "C5494",
+    "client": "Amazon Web Services"
 }

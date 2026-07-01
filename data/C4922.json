@@ -2,23 +2,23 @@
     "projectId": "C4922",
     "client": "Aebocode Technologies",
     "planning": {
-        "budget": 40772,
         "poNumber": "P2100-EL12-PO-16864",
-        "deliveryTerms": "ToPay",
+        "startDate": "2026-06-02",
         "value": 58245,
         "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "budget": 40772,
+        "deliveryTerms": "ToPay"
     },
     "production": {
         "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
                 "name": "Workshop Fabrication",
@@ -33,16 +33,16 @@
                 "status": "Pending"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
                 "status": "Pending"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
         ]
     },
@@ -54,13 +54,13 @@
         ]
     },
     "financials": {
-        "vendorName": "PLASTIPACK INDUSTRIES",
-        "vendorLocation": "Faridabad",
-        "dispatchBudget": 0,
-        "totalCost": 58245,
         "profitLoss": -540,
-        "deliveryFeeMode": null,
-        "poNumber": "QT-17922"
+        "vendorName": "PLASTIPACK INDUSTRIES",
+        "totalCost": 58245,
+        "dispatchBudget": 0,
+        "poNumber": "QT-17922",
+        "vendorLocation": "Faridabad",
+        "deliveryFeeMode": null
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-17922"

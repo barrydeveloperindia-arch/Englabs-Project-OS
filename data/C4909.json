@@ -2,12 +2,12 @@
     "projectId": "C4909",
     "client": "ELIN",
     "planning": {
+        "budget": 58016,
         "deliveryTerms": "ToPay",
         "poNumber": "P2100-EL12-PO-16743",
-        "budget": 58016,
+        "value": 82880,
         "startDate": "2026-06-02",
-        "poConfirmed": true,
-        "value": 82880
+        "poConfirmed": true
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -29,8 +29,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
@@ -41,26 +41,26 @@
                 "status": "Pending"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
         ]
     },
     "metrics": {
-        "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "totalComponents": 0,
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "Rapid Proto Tech India Private Limited",
-        "vendorLocation": "Coimbatore",
-        "dispatchBudget": null,
         "totalCost": 82880,
+        "dispatchBudget": null,
         "profitLoss": null,
+        "vendorName": "Rapid Proto Tech India Private Limited",
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-17909"
+        "poNumber": "QT-17909",
+        "vendorLocation": "Coimbatore"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-17909"

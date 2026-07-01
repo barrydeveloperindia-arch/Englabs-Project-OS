@@ -3,11 +3,11 @@
     "client": "Labat Asia",
     "planning": {
         "deliveryTerms": "ToPay",
-        "poNumber": "P2100-EL12-PO-74404",
         "budget": 0,
+        "poNumber": "P2100-EL12-PO-74404",
         "value": 0,
-        "poConfirmed": true,
-        "startDate": "2026-06-02"
+        "startDate": "2026-06-02",
+        "poConfirmed": true
     },
     "production": {
         "currentStage": "Engineering Design",
@@ -22,64 +22,64 @@
                 "status": "Pending"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
                 "status": "Pending"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
         ]
     },
     "metrics": {
+        "totalComponents": 150,
+        "materialConsumption": "VC ABS Grey Painting",
         "workforce": [
             "TBD",
             "Needs",
             "Shubham/Anurag"
-        ],
-        "materialConsumption": "VC ABS Grey Painting",
-        "totalComponents": 150
+        ]
     },
     "financials": {
-        "vendorName": "Excel",
+        "deliveryFeeMode": "To pay basis",
         "vendorLocation": "Delhi",
+        "poNumber": "QT-18195",
         "dispatchBudget": 0,
         "totalCost": null,
-        "profitLoss": null,
-        "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18195"
+        "vendorName": "Excel",
+        "profitLoss": null
     },
     "poRelease": {
-        "customerSalePrice": 110100,
-        "vendorName": "Excel",
+        "releaseDate": "2026-05-05",
         "vendorLocation": "Delhi",
-        "poVendorSent": "P2100-EL12-PO-74404",
         "vendorCost": 0,
-        "releaseDate": "2026-05-05"
+        "poVendorSent": "P2100-EL12-PO-74404",
+        "customerSalePrice": 110100,
+        "vendorName": "Excel"
     },
     "invoiceRelease": {
-        "gstRate": 18,
-        "gstValue": 19818,
-        "totalInvoiceAmount": 129918,
         "paymentTerms": "30 days",
-        "invoiceNumber": "QT-18195",
-        "paymentStatus": "Pending"
+        "paymentStatus": "Pending",
+        "gstValue": 19818,
+        "gstRate": 18,
+        "totalInvoiceAmount": 129918,
+        "invoiceNumber": "QT-18195"
     },
     "dailyStandup": {
         "inputsRequired": "NO",

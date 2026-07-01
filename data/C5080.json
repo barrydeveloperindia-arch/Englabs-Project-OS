@@ -3,34 +3,33 @@
     "client": "PRG TECH",
     "planning": {
         "deliveryTerms": "ToPay",
-        "poNumber": "P2100-EL12-PO-16831",
         "budget": 2793,
-        "value": 3990,
+        "poNumber": "P2100-EL12-PO-16831",
         "poConfirmed": true,
+        "value": 3990,
         "startDate": "2026-06-02"
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
-                "name": "Engineering Design",
-                "status": "In Progress"
+                "status": "In Progress",
+                "name": "Engineering Design"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
-                "name": "Workshop Fabrication",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Workshop Fabrication"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
@@ -41,26 +40,27 @@
                 "status": "Pending"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
-        "totalComponents": 0,
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
-        ]
+        ],
+        "totalComponents": 0,
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "RSD ENTERPRISES",
-        "vendorLocation": "Faridabad",
-        "dispatchBudget": null,
-        "totalCost": 3990,
-        "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18080"
+        "poNumber": "QT-18080",
+        "vendorLocation": "Faridabad",
+        "totalCost": 3990,
+        "dispatchBudget": null,
+        "profitLoss": null,
+        "vendorName": "RSD ENTERPRISES"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18080"

@@ -2,15 +2,14 @@
     "projectId": "C5128",
     "client": "SG ENGINEERING",
     "planning": {
+        "deliveryTerms": "ToPay",
+        "budget": 14171,
+        "value": 20244,
         "startDate": "2026-06-02",
         "poConfirmed": true,
-        "value": 20244,
-        "poNumber": "P2100-EL12-PO-16866",
-        "budget": 14171,
-        "deliveryTerms": "ToPay"
+        "poNumber": "P2100-EL12-PO-16866"
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
@@ -29,8 +28,8 @@
                 "status": "Pending"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
                 "name": "Drying",
@@ -44,23 +43,24 @@
                 "name": "Final Packaging",
                 "status": "Pending"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
-        "materialConsumption": "Tracking active...",
         "workforce": [
             "TBD"
         ],
-        "totalComponents": 0
+        "totalComponents": 0,
+        "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "RSD ENTERPRISES",
+        "poNumber": "QT-18128",
         "vendorLocation": "Faridabad",
-        "dispatchBudget": null,
-        "totalCost": 20244,
-        "profitLoss": null,
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18128"
+        "profitLoss": null,
+        "vendorName": "RSD ENTERPRISES",
+        "totalCost": 20244,
+        "dispatchBudget": null
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18128"

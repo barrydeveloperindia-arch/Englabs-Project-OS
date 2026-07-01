@@ -2,49 +2,49 @@
     "projectId": "C4950",
     "client": "HELLA",
     "planning": {
-        "startDate": "2026-06-02",
-        "poConfirmed": true,
-        "value": 81611.76,
-        "budget": 57128,
         "poNumber": "P2100-EL12-PO-16839",
-        "deliveryTerms": "Included"
+        "startDate": "2026-06-02",
+        "value": 81611.76,
+        "poConfirmed": true,
+        "deliveryTerms": "Included",
+        "budget": 57128
     },
     "production": {
-        "currentStage": "Engineering Design",
         "stages": [
             {
                 "name": "Engineering Design",
                 "status": "In Progress"
             },
             {
-                "name": "Machine Processing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Machine Processing"
             },
             {
                 "name": "Workshop Fabrication",
                 "status": "Pending"
             },
             {
-                "name": "Sanding",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Sanding"
             },
             {
-                "name": "Painting",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Painting"
             },
             {
-                "name": "Drying",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Drying"
             },
             {
-                "name": "Finishing",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Finishing"
             },
             {
-                "name": "Final Packaging",
-                "status": "Pending"
+                "status": "Pending",
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Engineering Design"
     },
     "metrics": {
         "totalComponents": 0,
@@ -54,13 +54,13 @@
         "materialConsumption": "Tracking active..."
     },
     "financials": {
-        "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED",
+        "poNumber": "QT-17950",
         "vendorLocation": "Faridabad",
-        "dispatchBudget": 0,
-        "totalCost": 81611.76,
-        "profitLoss": -375,
         "deliveryFeeMode": "Included--> to pay basis",
-        "poNumber": "QT-17950"
+        "profitLoss": -375,
+        "vendorName": "EXCEL RAPIDTECH PRIVATE LIMITED",
+        "totalCost": 81611.76,
+        "dispatchBudget": 0
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-17950"

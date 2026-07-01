@@ -2,76 +2,76 @@
     "projectId": "C5162",
     "client": "YASH APPLIANCES",
     "planning": {
+        "deliveryTerms": "ToPay",
         "budget": 5537,
         "poNumber": "P2100-EL12-PO-16870",
-        "deliveryTerms": "ToPay",
+        "startDate": "2026-04-28",
         "value": 7910,
-        "poConfirmed": true,
-        "startDate": "2026-04-28"
+        "poConfirmed": true
     },
     "production": {
-        "currentStage": "Workshop Fabrication",
         "stages": [
             {
                 "name": "Engineering Design",
-                "status": "Completed",
-                "lead": "Gaurav Panchal"
+                "lead": "Gaurav Panchal",
+                "status": "Completed"
             },
             {
-                "name": "Machine Processing",
+                "lead": "Paras",
                 "status": "Completed",
-                "lead": "Paras"
+                "name": "Machine Processing"
             },
             {
-                "name": "Workshop Fabrication",
+                "lead": "Parth",
                 "status": "Completed",
-                "lead": "Parth"
+                "name": "Workshop Fabrication"
             },
             {
                 "name": "Sanding",
-                "status": "In Progress",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "In Progress"
             },
             {
-                "name": "Painting",
+                "lead": "Parth",
                 "status": "Pending",
-                "lead": "Parth"
+                "name": "Painting"
             },
             {
-                "name": "Drying",
                 "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "name": "Drying"
             },
             {
                 "name": "Finishing",
-                "status": "Pending",
-                "lead": "Parth"
+                "lead": "Parth",
+                "status": "Pending"
             },
             {
-                "name": "Final Packaging",
+                "lead": "Parth",
                 "status": "Pending",
-                "lead": "Parth"
+                "name": "Final Packaging"
             }
-        ]
+        ],
+        "currentStage": "Workshop Fabrication"
     },
     "metrics": {
         "totalComponents": 58,
+        "materialConsumption": "Aluminum 6061, MS Sheet",
         "workforce": [
             "Gaurav Panchal",
             "Paras",
             "Parth",
             "Sandeep"
-        ],
-        "materialConsumption": "Aluminum 6061, MS Sheet"
+        ]
     },
     "financials": {
-        "vendorName": "ADROITEC INFORMATION SYSTEMS PVT LTD",
-        "vendorLocation": "Noida",
-        "dispatchBudget": null,
         "totalCost": 7910,
+        "dispatchBudget": null,
         "profitLoss": null,
+        "vendorName": "ADROITEC INFORMATION SYSTEMS PVT LTD",
         "deliveryFeeMode": "To pay basis",
-        "poNumber": "QT-18162"
+        "poNumber": "QT-18162",
+        "vendorLocation": "Noida"
     },
     "invoiceRelease": {
         "invoiceNumber": "QT-18162"
