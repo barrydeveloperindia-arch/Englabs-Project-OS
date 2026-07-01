@@ -407,11 +407,19 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
             `👤 *Coordinating Staff:* ${lead}\n` +
             `📦 *Materials:* ${project.metrics.materialConsumption || 'N/A'}\n` +
             `🔢 *Quantity:* ${project.metrics.totalComponents || 0} pcs\n` +
+            `📅 *Date:* ${standup.preparingPartsDate || 'N/A'}\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `🚚 *LOGISTICS & PORTER DETAILS*\n` +
             `📍 *Route:* ${standup.routeFrom || 'N/A'} ➔ ${standup.routeTo || 'N/A'}\n` +
+            `🚚 *Delivery Terms:* ${project.planning.deliveryTerms || 'N/A'}\n` +
             `💰 *Porter Payment:* ₹${standup.porterPayments || 0}\n` +
+            `💵 *Dispatch Budget:* ₹${project.financials?.dispatchBudget || 0}\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `💼 *FINANCIAL BUDGET DETAILS*\n` +
+            `🏬 *Vendor Cost:* ₹${(project.poRelease?.vendorCost || 0).toLocaleString('en-IN')}\n` +
+            `💸 *Client Price:* ₹${(project.poRelease?.customerSalePrice || 0).toLocaleString('en-IN')}\n` +
             `🧾 *Client PO Status:* ${poStatus}\n` +
             `🚨 *Blocker / Inputs Req:* ${standup.inputsRequired || 'None'}\n` +
-            `📅 *Date:* ${standup.preparingPartsDate || 'N/A'}\n` +
             `━━━━━━━━━━━━━━━━━━━━\n` +
             `🌐 _Command OS Forensic Dispatch_`
         );
