@@ -31,6 +31,7 @@ import { AttendanceRegisterForm } from './AttendanceRegisterForm';
 import { STAFF_ROSTER } from '@shared/utils/config/constants';
 import UserManagement, { UserRecord, LoginHistoryRecord } from './UserManagement';
 import { HRDocuments } from './HRDocuments';
+import { SIMCardLedger } from './SIMCardLedger';
 
 
 const SALARY_CONFIG: Record<string, { daily_rate: number; ot_hourly_rate: number; designation: string }> = {
@@ -162,9 +163,10 @@ interface HRDashboardProps {
 }
 
 export const HRDashboard: React.FC<HRDashboardProps> = ({ currentView, setCurrentView }) => {
-    const [activeTab, setActiveTab] = useState<'today' | 'monthly' | 'employees' | 'documents'>(() => {
+    const [activeTab, setActiveTab] = useState<'today' | 'monthly' | 'employees' | 'documents' | 'sim_ledger'>(() => {
         if (currentView === 'HR_MASTER') return 'employees';
         if (currentView === 'HR_DOCUMENTS') return 'documents';
+        if (currentView === 'SIM_LEDGER') return 'sim_ledger';
         return 'today';
     });
 
@@ -173,8 +175,10 @@ export const HRDashboard: React.FC<HRDashboardProps> = ({ currentView, setCurren
             setActiveTab('employees');
         } else if (currentView === 'HR_DOCUMENTS') {
             setActiveTab('documents');
+        } else if (currentView === 'SIM_LEDGER') {
+            setActiveTab('sim_ledger');
         } else if (currentView === 'ATTENDANCE') {
-            setActiveTab(prev => prev === 'monthly' ? 'monthly' : 'today');
+            setActiveTab(prev => (prev === 'monthly' || prev === 'sim_ledger') ? prev : 'today');
         }
     }, [currentView]);
 
@@ -1001,6 +1005,19 @@ export const HRDashboard: React.FC<HRDashboardProps> = ({ currentView, setCurren
                 >
                     HR Documents & Letters
                 </button>
+                <button
+                    onClick={() => {
+                        setActiveTab('sim_ledger');
+                        if (setCurrentView) setCurrentView('SIM_LEDGER');
+                    }}
+                    className={`pb-2 text-sm font-black uppercase tracking-wider border-b-2 transition-all ${
+                        activeTab === 'sim_ledger'
+                            ? 'border-emerald-500 text-emerald-600'
+                            : 'border-transparent text-slate-400 hover:text-slate-600'
+                    }`}
+                >
+                    SIM Card Ledger
+                </button>
             </div>
 
             <main className="flex-1 overflow-y-auto p-10 custom-scrollbar">
@@ -1719,6 +1736,10 @@ export const HRDashboard: React.FC<HRDashboardProps> = ({ currentView, setCurren
 
                     {activeTab === 'documents' && (
                         <HRDocuments />
+                    )}
+
+                    {activeTab === 'sim_ledger' && (
+                        <SIMCardLedger />
                     )}
 
                     {editingCL && (
