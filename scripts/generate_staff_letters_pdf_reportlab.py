@@ -2,7 +2,7 @@ import os
 import sys
 import re
 import copy
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, HRFlowable
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
@@ -41,15 +41,15 @@ class PageNumCanvas(canvas.Canvas):
         self.setFont("Helvetica", 9)
         self.setFillColor(colors.HexColor("#475569"))
         # Move page numbers to top-right, clearing the logo area
-        self.drawRightString(541.27, 810, f"Page {page_num} of {page_count}")
+        self.drawRightString(558, 760, f"Page {page_num} of {page_count}")
         self.restoreState()
 
 def generate_mask_pdf(mask_path, y, height):
     from reportlab.pdfgen import canvas as pdf_canvas
-    c = pdf_canvas.Canvas(mask_path, pagesize=A4)
+    c = pdf_canvas.Canvas(mask_path, pagesize=letter)
     c.setFillColor(colors.white)
     c.setStrokeColor(colors.white)
-    c.rect(0, y, 595.27, height, fill=1, stroke=0)
+    c.rect(0, y, 612, height, fill=1, stroke=0)
     c.showPage()
     c.save()
 
@@ -69,7 +69,7 @@ def md_to_pdf_reportlab(md_path, pdf_path, hide_signature_always=False):
     # - bottomMargin=95 to completely clear the footer address block on all pages
     doc = SimpleDocTemplate(
         temp_pdf,
-        pagesize=A4,
+        pagesize=letter,
         rightMargin=54,
         leftMargin=54,
         topMargin=150,   # Increased from 108 to 150 to clear top letterhead logo & header

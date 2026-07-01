@@ -239,6 +239,33 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
     const [isAddProjectModalOpen, setIsAddProjectModalOpen] = useState(false);
 
+    // Scanned Store Reports states
+    const [scannedReports, setScannedReports] = useState<any[]>([]);
+    const [isFetchingReports, setIsFetchingReports] = useState(false);
+
+    useEffect(() => {
+        if (view === 'CHECK_IN' || view === 'CHECK_OUT') {
+            const fetchReports = async () => {
+                setIsFetchingReports(true);
+                try {
+                    const res = await fetch('/api/store/reports');
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.success && Array.isArray(data.reports)) {
+                            setScannedReports(data.reports);
+                        }
+                    }
+                } catch (e) {
+                    console.error("Failed to fetch store reports:", e);
+                } finally {
+                    setIsFetchingReports(false);
+                }
+            };
+            fetchReports();
+        }
+    }, [view, refreshTrigger]);
+
+
     // Requirements states
     const [requirements, setRequirements] = useState<MaterialRequirement[]>([]);
     const [reqMaterialCode, setReqMaterialCode] = useState('');
@@ -1405,7 +1432,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
 
                     {/* 2. CHECK-IN PAGE */}
                     {view === 'CHECK_IN' && (
-                        <div className="max-w-xl mx-auto bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 md:p-8 animate-in fade-in duration-300">
+                        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 animate-in fade-in duration-300">
+                            <div className="lg:col-span-7 bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 md:p-8">
                             <div className="flex items-center gap-3 mb-6 border-b border-slate-50 pb-4">
                                 <div className="p-3 bg-emerald-50 rounded-2xl text-emerald-600">
                                     <ArrowDownCircle className="w-6 h-6" />
@@ -1930,12 +1958,50 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                     </button>
                                 </form>
                             )}
+                            </div>
+
+                            {/* Right Column: Scanned Slips */}
+                            <div className="lg:col-span-5 bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 flex flex-col min-h-[400px]">
+                                <div className="border-b border-slate-50 pb-4 mb-4 flex items-center justify-between">
+                                    <div>
+                                        <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">Scanned Check-in Slips</h3>
+                                        <p className="text-[9px] text-slate-400 font-bold mt-0.5">Physical files in G:\HR Team Managements\...\Report</p>
+                                    </div>
+                                    {isFetchingReports && <RefreshCcw className="w-3.5 h-3.5 text-slate-400 animate-spin" />}
+                                </div>
+                                <div className="flex-1 overflow-y-auto space-y-3 pr-1 max-h-[550px] no-scrollbar">
+                                    {scannedReports.filter(r => r.type === 'INWARD').length === 0 ? (
+                                        <div className="text-center py-12 text-slate-400 text-xs font-bold bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                                            No scanned check-in slips found.
+                                        </div>
+                                    ) : (
+                                        scannedReports.filter(r => r.type === 'INWARD').map((report, idx) => (
+                                            <a 
+                                                key={idx}
+                                                href={report.url}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="flex items-center gap-3 p-3.5 bg-slate-50 hover:bg-indigo-50/50 border border-slate-100 hover:border-indigo-150 rounded-2xl transition-all group"
+                                            >
+                                                <div className={`p-2.5 rounded-xl text-xs font-black uppercase ${report.fileType === 'pdf' ? 'bg-rose-50 text-rose-600' : 'bg-blue-50 text-blue-600'}`}>
+                                                    {report.fileType === 'pdf' ? 'PDF' : 'IMG'}
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <span className="text-xs font-bold text-slate-800 block truncate group-hover:text-indigo-900">{report.name}</span>
+                                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mt-0.5">{report.date}</span>
+                                                </div>
+                                            </a>
+                                        ))
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     )}
 
                     {/* 3. CHECK-OUT PAGE */}
                     {view === 'CHECK_OUT' && (
-                        <div className="max-w-xl mx-auto bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 md:p-8 animate-in fade-in duration-300">
+                        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 animate-in fade-in duration-300">
+                            <div className="lg:col-span-7 bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 md:p-8">
                             <div className="flex items-center gap-3 mb-6 border-b border-slate-50 pb-4">
                                 <div className="p-3 bg-amber-50 rounded-2xl text-amber-600">
                                     <ArrowUpCircle className="w-6 h-6" />
@@ -2448,6 +2514,43 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                     </button>
                                 </form>
                             )}
+                            </div>
+
+                            {/* Right Column: Scanned Slips */}
+                            <div className="lg:col-span-5 bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 flex flex-col min-h-[400px]">
+                                <div className="border-b border-slate-50 pb-4 mb-4 flex items-center justify-between">
+                                    <div>
+                                        <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">Scanned Check-out Slips</h3>
+                                        <p className="text-[9px] text-slate-400 font-bold mt-0.5">Physical files in G:\HR Team Managements\...\Report</p>
+                                    </div>
+                                    {isFetchingReports && <RefreshCcw className="w-3.5 h-3.5 text-slate-400 animate-spin" />}
+                                </div>
+                                <div className="flex-1 overflow-y-auto space-y-3 pr-1 max-h-[550px] no-scrollbar">
+                                    {scannedReports.filter(r => r.type === 'OUTWARD').length === 0 ? (
+                                        <div className="text-center py-12 text-slate-400 text-xs font-bold bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                                            No scanned check-out slips found.
+                                        </div>
+                                    ) : (
+                                        scannedReports.filter(r => r.type === 'OUTWARD').map((report, idx) => (
+                                            <a 
+                                                key={idx}
+                                                href={report.url}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="flex items-center gap-3 p-3.5 bg-slate-50 hover:bg-indigo-50/50 border border-slate-100 hover:border-indigo-150 rounded-2xl transition-all group"
+                                            >
+                                                <div className={`p-2.5 rounded-xl text-xs font-black uppercase ${report.fileType === 'pdf' ? 'bg-rose-50 text-rose-600' : 'bg-blue-50 text-blue-600'}`}>
+                                                    {report.fileType === 'pdf' ? 'PDF' : 'IMG'}
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <span className="text-xs font-bold text-slate-800 block truncate group-hover:text-indigo-900">{report.name}</span>
+                                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mt-0.5">{report.date}</span>
+                                                </div>
+                                            </a>
+                                        ))
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     )}
 

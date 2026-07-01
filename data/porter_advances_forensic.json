@@ -1,21 +1,11 @@
 [
   {
-    "id": "ADV-2026-0001",
-    "timestamp": "2026-06-10T14:00:00Z",
-    "date": "2026-06-10",
-    "time": "02:00 PM",
-    "porterName": "Gurpreet Singh",
-    "amount": 1058.0,
-    "paymentMode": "UPI",
-    "remarks": "Advance associated with trip PTR-2026-0021 (Electrical)"
-  },
-  {
     "id": "ADV-2026-0002",
     "timestamp": "2026-06-27T13:00:00Z",
     "date": "2026-06-27",
     "time": "01:00 PM",
     "porterName": "Gurpreet Singh",
-    "amount": 1169.0,
+    "amount": 1169,
     "paymentMode": "UPI",
     "transactionId": "130053039997",
     "remarks": "Gurpreet porter final payment 27 June 2026"
@@ -26,7 +16,7 @@
     "date": "2026-05-14",
     "time": "09:00 AM",
     "porterName": "Gurpreet Singh",
-    "amount": 500.0,
+    "amount": 500,
     "paymentMode": "CASH",
     "remarks": "May Advance associated with trip PTR-2026-0001"
   },
@@ -36,7 +26,7 @@
     "date": "2026-05-23",
     "time": "10:00 AM",
     "porterName": "Gurpreet Singh",
-    "amount": 500.0,
+    "amount": 500,
     "paymentMode": "CASH",
     "remarks": "May Advance associated with trip PTR-2026-0009"
   },
@@ -46,7 +36,7 @@
     "date": "2026-05-31",
     "time": "12:00 PM",
     "porterName": "Gurpreet Singh",
-    "amount": 500.0,
+    "amount": 500,
     "paymentMode": "UPI",
     "remarks": "May Advance associated with trip PTR-2026-0014"
   },
@@ -56,7 +46,7 @@
     "date": "2026-06-12",
     "time": "04:49 PM",
     "porterName": "Gurpreet Singh",
-    "amount": 1082.0,
+    "amount": 1082,
     "paymentMode": "UPI",
     "transactionId": "164929955900",
     "remarks": "Gurpreet May full payment"

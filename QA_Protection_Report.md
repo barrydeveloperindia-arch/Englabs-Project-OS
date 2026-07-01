@@ -1,6 +1,6 @@
 # 🛡️ Antigravity Enterprise QA Protection Report
 
-**Timestamp**: 2026-06-27T11:37:08.282Z
+**Timestamp**: 2026-06-30T06:58:38.996Z
 
 ## 1. Test Execution Status
 - **Functional & Unit Tests**: ✅ PASSED
@@ -140,13 +140,14 @@
 | ENGLABS-01.json | `c09b8212` | `c09b8212` | ✅ SECURE |
 | ENGLABS.json | `ad3fff0e` | `ad3fff0e` | ✅ SECURE |
 | forensic_gate_registry.json | `f8ebae82` | `f8ebae82` | ✅ SECURE |
-| handover_state.json | `858d66c3` | `858d66c3` | ✅ SECURE |
+| handover_state.json | `4411beee` | `4411beee` | ✅ SECURE |
 | master_inventory_may_2026.json | `90272297` | `90272297` | ✅ SECURE |
 | master_projects_db.json | `704b6c43` | `704b6c43` | ✅ SECURE |
 | migration_dry_run_report.json | `7b75a4d4` | `7b75a4d4` | ✅ SECURE |
 | outlook_processed_db.json | `e3915bf1` | `e3915bf1` | ✅ SECURE |
-| porter_advances_forensic.json | `ff79ff21` | `ff79ff21` | ✅ SECURE |
-| porter_missions_forensic.json | `507c5ad8` | `507c5ad8` | ✅ SECURE |
+| porter_advances_forensic.json | `13e9f81b` | `13e9f81b` | ✅ SECURE |
+| porter_missions_forensic.json | `744e8fc5` | `744e8fc5` | ✅ SECURE |
+| porter_staff_profiles.json | `722f7df3` | `722f7df3` | ✅ SECURE |
 | project_directory_cache.json | `735f5dd3` | `735f5dd3` | ✅ SECURE |
 
 ## 3. Validation Rules Checked

@@ -73,7 +73,7 @@ const mockHistoryResponse = {
             checkOut: '06:00 PM',
             workingHours: 8.75,
             status: 'LATE',
-            method: 'fingerprint',
+            method: 'face',
             project: 'C4465'
         }
     ]
@@ -192,5 +192,32 @@ describe('HRDashboard Operations and Monthly Attendance Checklist', () => {
         const parsed = JSON.parse(storedCreds!);
         expect(parsed.length).toBeGreaterThan(1);
         expect(parsed[0].pin).toBe('9999'); // Admin Master PIN
+    });
+
+    it('switches to Casual Leaves (CL) sub-tab and renders the CL ledger', async () => {
+        render(<HRDashboard />);
+        
+        // Wait for initial data load first
+        await waitFor(() => {
+            expect(screen.getByText("Gaurav Kumar")).toBeDefined();
+        }, { timeout: 5000 });
+
+        const monthlyTabBtn = screen.getByText("Monthly Registry & Analytics");
+        fireEvent.click(monthlyTabBtn);
+
+        await waitFor(() => {
+            expect(screen.getByText("Casual Leaves (CL)")).toBeDefined();
+        }, { timeout: 5000 });
+
+        const clTabBtn = screen.getByText("Casual Leaves (CL)");
+        fireEvent.click(clTabBtn);
+
+        // Verify the CL table renders
+        await waitFor(() => {
+            expect(screen.getByText("Total CL Used")).toBeDefined();
+            expect(screen.getByText("Remaining Balance")).toBeDefined();
+            expect(screen.getByText("Anurag Panchal")).toBeDefined();
+            expect(screen.getByText("Arjun Tiwari")).toBeDefined();
+        }, { timeout: 5000 });
     });
 });

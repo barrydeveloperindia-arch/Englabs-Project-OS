@@ -248,7 +248,7 @@ export async function processInventoryUpdate(entry: GateEntry) {
     const isOutwardFromMainStore = entry.type === 'OUTWARD' && entry.fromLocation?.toUpperCase().trim() === 'MAIN STORE';
 
     if (!isInwardToMainStore && !isOutwardFromMainStore) {
-        if (import.meta.env.DEV) {
+        if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV) {
             console.log(`Skipping inventory update for Entry ${entry.id}: Route does not target MAIN STORE`);
         }
         return { success: true, message: "Skipped: not MAIN STORE" };
@@ -1181,7 +1181,7 @@ export async function fetchMasterRegister(): Promise<MasterRegisterEntry[]> {
         try {
             const q = query(collection(db, "master_register"), orderBy("timestamp", "desc"));
             const snap = await getDocsWithTimeout(q);
-            txs = snap.docs.map((d: any) => d.data() as MasterRegisterEntry);
+            txs = snap.docs.map((d: any) => ({ id: d.id, ...d.data() } as MasterRegisterEntry));
         } catch (err) {
             console.warn("Firestore fetchMasterRegister failed, falling back to local master register:", err);
             txs = getLocalMasterRegisterFallback();
@@ -1213,7 +1213,7 @@ export async function fetchMonthlyRegister(month: string): Promise<MasterRegiste
         try {
             const q = query(collection(db, "monthly_registers", month, "entries"), orderBy("timestamp", "desc"));
             const snap = await getDocsWithTimeout(q);
-            txs = snap.docs.map((d: any) => d.data() as MasterRegisterEntry);
+            txs = snap.docs.map((d: any) => ({ id: d.id, ...d.data() } as MasterRegisterEntry));
         } catch (err) {
             console.warn("Firestore fetchMonthlyRegister failed, falling back to local monthly register:", err);
             txs = getLocalMonthlyRegisterFallback(month);
@@ -1750,11 +1750,15 @@ export async function deleteTransaction(tx: MasterRegisterEntry): Promise<{ succ
         return { success: false, error: "Database offline" };
     }
     try {
+        if (!tx || !tx.id) {
+            return { success: false, error: "Invalid transaction ID" };
+        }
+
         const months = [
             "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
         ];
-        const txDate = new Date(tx.timestamp);
+        const txDate = tx.timestamp ? new Date(tx.timestamp) : new Date();
         const monthName = months[txDate.getMonth()];
 
         const batch = writeBatch(db);
@@ -1764,46 +1768,58 @@ export async function deleteTransaction(tx: MasterRegisterEntry): Promise<{ succ
         batch.delete(masterRef);
 
         // 2. Query and delete from monthly collection
-        const monthlyQuery = query(
-            collection(db, "monthly_registers", monthName, "entries"),
-            where("timestamp", "==", tx.timestamp),
-            where("itemCode", "==", tx.itemCode)
-        );
-        const monthlySnap = await getDocs(monthlyQuery);
-        monthlySnap.forEach(d => {
-            batch.delete(d.ref);
-        });
-
-        // 3. Adjust stock levels
-        const currentStockRef = doc(db, "current_stock", tx.itemCode);
-        const legacyDocRef = doc(db, STOCK_COLLECTION, tx.itemCode);
-
-        const currentStockSnap = await getDocWithTimeout(currentStockRef);
-        const legacySnap = await getDocWithTimeout(legacyDocRef);
-
-        if (currentStockSnap.exists()) {
-            const currentStockItem = currentStockSnap.data() as CurrentStockItem;
-            if (tx.type === 'INWARD') {
-                currentStockItem.totalInward = Math.max(0, currentStockItem.totalInward - tx.quantity);
-            } else {
-                currentStockItem.totalOutward = Math.max(0, currentStockItem.totalOutward - tx.quantity);
+        if (tx.timestamp && tx.itemCode) {
+            try {
+                const monthlyQuery = query(
+                    collection(db, "monthly_registers", monthName, "entries"),
+                    where("timestamp", "==", tx.timestamp),
+                    where("itemCode", "==", tx.itemCode)
+                );
+                const monthlySnap = await getDocs(monthlyQuery);
+                monthlySnap.forEach(d => {
+                    batch.delete(d.ref);
+                });
+            } catch (queryErr) {
+                console.warn("Failed to query monthly registers for delete:", queryErr);
             }
-            currentStockItem.availableStock = currentStockItem.openingStock + currentStockItem.totalInward - currentStockItem.totalOutward;
-            currentStockItem.lastUpdated = new Date().toISOString();
-            batch.set(currentStockRef, cleanUndefined(currentStockItem));
         }
 
-        if (legacySnap.exists()) {
-            const legacyItem = legacySnap.data() as InventoryItem;
-            if (tx.type === 'INWARD') {
-                legacyItem.currentStock = Math.max(0, legacyItem.currentStock - tx.quantity);
-                legacyItem.totalInward = Math.max(0, legacyItem.totalInward - tx.quantity);
-            } else {
-                legacyItem.currentStock = legacyItem.currentStock + tx.quantity;
-                legacyItem.totalOutward = Math.max(0, legacyItem.totalOutward - tx.quantity);
+        // 3. Adjust stock levels
+        if (tx.itemCode) {
+            try {
+                const currentStockRef = doc(db, "current_stock", tx.itemCode);
+                const legacyDocRef = doc(db, STOCK_COLLECTION, tx.itemCode);
+
+                const currentStockSnap = await getDocWithTimeout(currentStockRef).catch(() => null);
+                const legacySnap = await getDocWithTimeout(legacyDocRef).catch(() => null);
+
+                if (currentStockSnap && currentStockSnap.exists()) {
+                    const currentStockItem = currentStockSnap.data() as CurrentStockItem;
+                    if (tx.type === 'INWARD') {
+                        currentStockItem.totalInward = Math.max(0, currentStockItem.totalInward - tx.quantity);
+                    } else {
+                        currentStockItem.totalOutward = Math.max(0, currentStockItem.totalOutward - tx.quantity);
+                    }
+                    currentStockItem.availableStock = currentStockItem.openingStock + currentStockItem.totalInward - currentStockItem.totalOutward;
+                    currentStockItem.lastUpdated = new Date().toISOString();
+                    batch.set(currentStockRef, cleanUndefined(currentStockItem));
+                }
+
+                if (legacySnap && legacySnap.exists()) {
+                    const legacyItem = legacySnap.data() as InventoryItem;
+                    if (tx.type === 'INWARD') {
+                        legacyItem.currentStock = Math.max(0, legacyItem.currentStock - tx.quantity);
+                        legacyItem.totalInward = Math.max(0, legacyItem.totalInward - tx.quantity);
+                    } else {
+                        legacyItem.currentStock = legacyItem.currentStock + tx.quantity;
+                        legacyItem.totalOutward = Math.max(0, legacyItem.totalOutward - tx.quantity);
+                    }
+                    legacyItem.lastUpdated = new Date().toISOString();
+                    batch.set(legacyDocRef, cleanUndefined(legacyItem));
+                }
+            } catch (stockErr) {
+                console.warn("Failed to adjust stock levels for delete:", stockErr);
             }
-            legacyItem.lastUpdated = new Date().toISOString();
-            batch.set(legacyDocRef, cleanUndefined(legacyItem));
         }
 
         await batch.commit();

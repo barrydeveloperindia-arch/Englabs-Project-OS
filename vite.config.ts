@@ -9,6 +9,15 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
+// Helper to resolve the correct drive (L: or G:) for HR Team Managements
+function resolveHRPath(subPath: string): string {
+  const lPath = path.join('L:\\HR Team Managements', subPath);
+  if (fs.existsSync(lPath)) {
+    return lPath;
+  }
+  return path.join('G:\\HR Team Managements', subPath);
+}
+
 
 // Helper to run python script
 function runPythonScript(args: string[]): Promise<any> {
@@ -99,7 +108,7 @@ const apiPlugin = () => ({
       
       // GET /api/history
       if (req.url === '/api/history' && req.method === 'GET') {
-        const historyFile = 'G:\\HR Team Managements\\Englabs Projects APK\\Patty Cash Details\\update_history.json';
+        const historyFile = resolveHRPath('Englabs Projects APK\\Patty Cash Details\\update_history.json');
         res.writeHead(200, { 'Content-Type': 'application/json' });
         if (fs.existsSync(historyFile)) {
           const content = fs.readFileSync(historyFile, 'utf8');
@@ -389,6 +398,98 @@ const apiPlugin = () => ({
         }
         return;
       }
+      // GET /api/store/reports
+      if (req.url === '/api/store/reports' && req.method === 'GET') {
+        try {
+          const checkInDir = resolveHRPath('Englabs Projects APK\\Store\\Report\\Check In');
+          const checkOutDir = resolveHRPath('Englabs Projects APK\\Store\\Report\\Check out');
+          
+          const filesList: any[] = [];
+
+          const parseDateFromFilename = (filename: string): string => {
+            const match = filename.match(/(\d{2})-(\d{2})-(\d{4})/);
+            if (match) {
+              return `${match[3]}-${match[2]}-${match[1]}`; // YYYY-MM-DD
+            }
+            return new Date().toISOString().split('T')[0]; // fallback
+          };
+
+          if (fs.existsSync(checkInDir)) {
+            fs.readdirSync(checkInDir).forEach((file: string) => {
+              if (file.startsWith('.') || fs.statSync(path.join(checkInDir, file)).isDirectory()) return;
+              filesList.push({
+                name: file,
+                type: 'INWARD',
+                date: parseDateFromFilename(file),
+                fileType: file.endsWith('.pdf') ? 'pdf' : 'image',
+                url: `/api/store/reports/file?type=checkin&file=${encodeURIComponent(file)}`
+              });
+            });
+          }
+
+          if (fs.existsSync(checkOutDir)) {
+            fs.readdirSync(checkOutDir).forEach((file: string) => {
+              if (file.startsWith('.') || fs.statSync(path.join(checkOutDir, file)).isDirectory()) return;
+              filesList.push({
+                name: file,
+                type: 'OUTWARD',
+                date: parseDateFromFilename(file),
+                fileType: file.endsWith('.pdf') ? 'pdf' : 'image',
+                url: `/api/store/reports/file?type=checkout&file=${encodeURIComponent(file)}`
+              });
+            });
+          }
+
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: true, reports: filesList }));
+        } catch (err: any) {
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: false, error: err.message }));
+        }
+        return;
+      }
+
+      // GET /api/store/reports/file
+      if (req.url.startsWith('/api/store/reports/file') && req.method === 'GET') {
+        try {
+          const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+          const type = urlObj.searchParams.get('type');
+          const file = urlObj.searchParams.get('file');
+
+          if (!file || !type) {
+            res.writeHead(400);
+            res.end("File and type parameters are required");
+            return;
+          }
+
+          const baseDir = type === 'checkin' 
+            ? resolveHRPath('Englabs Projects APK\\Store\\Report\\Check In')
+            : resolveHRPath('Englabs Projects APK\\Store\\Report\\Check out');
+          
+          const filePath = path.join(baseDir, file);
+          if (fs.existsSync(filePath)) {
+            const ext = path.extname(file).toLowerCase();
+            const contentType = ext === '.pdf' 
+              ? 'application/pdf' 
+              : ext === '.png' 
+                ? 'image/png' 
+                : 'image/jpeg';
+            
+            res.writeHead(200, { 
+              'Content-Type': contentType,
+              'Content-Disposition': `inline; filename="${file}"`
+            });
+            fs.createReadStream(filePath).pipe(res);
+          } else {
+            res.writeHead(404);
+            res.end("File not found");
+          }
+        } catch (err: any) {
+          res.writeHead(500);
+          res.end("Internal server error: " + err.message);
+        }
+        return;
+      }
 
       // GET /api/staff/photo
       if (req.url.startsWith('/api/staff/photo') && req.method === 'GET') {
@@ -403,13 +504,67 @@ const apiPlugin = () => ({
         return;
       }
 
+      // GET /api/payroll/pdf
+      if (req.url.startsWith('/api/payroll/pdf') && req.method === 'GET') {
+        const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+        const name = urlObj.searchParams.get('name');
+        const type = urlObj.searchParams.get('type'); // 'register' or 'biometric'
+
+        if (!name) {
+          res.writeHead(400);
+          res.end("Employee name is required");
+          return;
+        }
+
+        const subfolder = type === 'register' ? 'Payslips_Register' : 'Payslips_Biometric';
+        const folderPath = resolveHRPath(path.join('Attandence\\June_Reports', subfolder));
+
+        if (!fs.existsSync(folderPath)) {
+          res.writeHead(404);
+          res.end("Payslip folder not found");
+          return;
+        }
+
+        const files = fs.readdirSync(folderPath);
+        const cleanRequestName = name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+        const firstName = name.trim().split(' ')[0].toLowerCase();
+
+        let matchedFile = files.find(file => {
+          const cleanFile = file.toLowerCase().replace(/[^a-z0-9]/g, '');
+          return cleanFile.startsWith(cleanRequestName) || 
+                 cleanFile.includes(cleanRequestName) ||
+                 (firstName.length > 2 && cleanFile.startsWith(firstName));
+        });
+
+        // Second pass: simple startsWith check for name parts
+        if (!matchedFile) {
+          matchedFile = files.find(file => {
+            const cleanFile = file.toLowerCase();
+            return cleanFile.startsWith(firstName);
+          });
+        }
+
+        if (matchedFile) {
+          const filePath = path.join(folderPath, matchedFile);
+          res.writeHead(200, {
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': `attachment; filename="${matchedFile.trim()}"`
+          });
+          fs.createReadStream(filePath).pipe(res);
+        } else {
+          res.writeHead(404);
+          res.end("Payslip PDF not found");
+        }
+        return;
+      }
+
       // GET /api/staff/pdf
       if (req.url.startsWith('/api/staff/pdf') && req.method === 'GET') {
         const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
         const type = urlObj.searchParams.get('type');
         const filePath = type === 'appointment'
-          ? 'G:\\HR Team Managements\\Englabs Projects APK\\Porter Team\\Porter Staff\\Letters\\Appointment_Letter_Gurpreet_Singh.pdf'
-          : 'G:\\HR Team Managements\\Englabs Projects APK\\Porter Team\\Porter Staff\\Letters\\Joining_Letter_Gurpreet_Singh.pdf';
+          ? resolveHRPath('Englabs Projects APK\\Porter Team\\Porter Staff\\Letters\\Appointment_Letter_Gurpreet_Singh.pdf')
+          : resolveHRPath('Englabs Projects APK\\Porter Team\\Porter Staff\\Letters\\Joining_Letter_Gurpreet_Singh.pdf');
         if (fs.existsSync(filePath)) {
           res.writeHead(200, {
             'Content-Type': 'application/pdf',

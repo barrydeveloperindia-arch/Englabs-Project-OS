@@ -114,13 +114,12 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
                     </div>
                     <div className="flex flex-col">
                         <span className="text-lg font-black text-white tracking-tighter leading-none">
-                            {appMode === 'STORE' ? 'ENGLABS STORE' : appMode === 'PORTER_SERVICE' ? 'PORTER SERVICE' : 'ENGLABS PROJECTS'}
+                            {appMode === 'PORTER_SERVICE' ? 'PORTER SERVICE' : 'ENGLABS PROJECTS'}
                         </span>
-                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mt-1">PVT LTD</span>
                     </div>
                 </div>
                 <p className="text-[9px] font-black text-emerald-500/80 tracking-[0.25em] uppercase pl-1">
-                    {appMode === 'STORE' ? 'Enterprise Store OS' : appMode === 'PORTER_SERVICE' ? 'Porter Logistics OS' : 'Enterprise Projects OS'}
+                    {appMode === 'PORTER_SERVICE' ? 'Porter Logistics OS' : 'Enterprise Projects OS'}
                 </p>
                 <div className="mt-4 pl-1">
                     {isAdmin ? (

@@ -42,11 +42,62 @@ service cloud.firestore {
       allow create, update, delete: if isStaff();
     }
 
+    // Gate Entries (Vite App Sync)
+    match /gate_entries/{entryId} {
+      allow read: if isAuthenticated();
+      allow create, update, delete: if isStaff();
+    }
+
+
     // 2. Inventory Ledger (Append Only)
     match /inventory_ledger/{txnId} {
       allow read: if isAuthenticated();
       allow create: if isStaff();
       allow update, delete: if false; // Immutable ledger enforcement
+    }
+
+    match /inventory_logs/{txnId} {
+      allow read: if isAuthenticated();
+      allow create: if isStaff();
+      allow update, delete: if false; // Immutable
+    }
+
+    match /master_register/{docId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isStaff();
+      allow delete: if isAdmin();
+    }
+
+    match /monthly_registers/{month}/entries/{docId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isStaff();
+      allow delete: if isAdmin();
+    }
+
+    match /material_catalog/{itemCode} {
+      allow read: if isAuthenticated();
+      allow write: if isStaff();
+    }
+
+    match /current_stock/{itemCode} {
+      allow read: if isAuthenticated();
+      allow write: if isStaff();
+    }
+
+    match /inventory_stock/{itemCode} {
+      allow read: if isAuthenticated();
+      allow write: if isStaff();
+    }
+
+
+    match /material_requirements/{reqId} {
+      allow read: if isAuthenticated();
+      allow write: if isStaff();
+    }
+
+    match /inventory_sync_locks/{lockId} {
+      allow read: if isAuthenticated();
+      allow write: if isStaff();
     }
 
     // 3. Vendor Master & Ledger
@@ -80,6 +131,18 @@ service cloud.firestore {
       allow create: if isStaff();
       allow update, delete: if false; // Immutable
     }
+
+    match /food_orders/{orderId} {
+      allow read: if isAuthenticated();
+      allow write: if isStaff();
+    }
+
+    match /activity_logs/{logId} {
+      allow read: if isAuthenticated();
+      allow create: if isStaff();
+      allow update, delete: if false; // Immutable
+    }
+
 
     // 7. HR & Staff Management
     match /staff_master/{staffId} {

@@ -712,6 +712,22 @@ const App: React.FC = () => {
         }
     }, []);
 
+    // One-time startup cleanup of old, invalid ADV-2026-0001 (₹1,058) from localStorage
+    useEffect(() => {
+        try {
+            setPorterAdvances(prev => {
+                const updated = prev.filter((a: any) => a.id !== 'ADV-2026-0001');
+                if (updated.length !== prev.length) {
+                    localStorage.setItem('englabs_porter_advances_v1', JSON.stringify(updated));
+                    return updated;
+                }
+                return prev;
+            });
+        } catch (e) {
+            console.error("Cleanup of ghost advance failed:", e);
+        }
+    }, []);
+
     const filteredProjects = projects.filter(p => {
         const matchesSearch = (p.client || '').toLowerCase().includes(searchQuery.toLowerCase()) || 
             p.projectId.toLowerCase().includes(searchQuery.toLowerCase());

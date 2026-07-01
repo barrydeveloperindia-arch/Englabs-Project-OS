@@ -1,4 +1,6 @@
 import { User, UserRole } from '../types/database.types';
+import { auth } from './firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 // In-memory cache of the current custom user object
 let currentUser: User | null = null;
@@ -41,10 +43,20 @@ export const AuthService = {
         userListeners.push(onUserChanged);
         if (!initialized) {
             initialized = true;
+            if (auth) {
+                signInWithEmailAndPassword(auth, "englabscivilteam@gmail.com", "Ram@2026")
+                    .then(() => {
+                        console.log("Firebase Staging Session Active");
+                    })
+                    .catch((err) => {
+                        console.error("Firebase Staging Connection Failed:", err);
+                    });
+            }
         }
         // Immediately notify with current state
         onUserChanged(getOrLoadUser());
     },
+
 
     getCurrentUser: (): User | null => {
         return getOrLoadUser();

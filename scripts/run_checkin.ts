@@ -1,4 +1,6 @@
-import { processInventoryUpdate } from './src/lib/domain/inventory_service';
+import { processInventoryUpdate } from '../src/shared/services/inventory_service';
+import { auth } from '../src/shared/services/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -28,8 +30,11 @@ const entry = {
 };
 
 async function run() {
-    console.log("Checking in items:", entry.items);
+    console.log("🔐 Authenticating with Staff/Admin account...");
     try {
+        await signInWithEmailAndPassword(auth, "englabscivilteam@gmail.com", "Ram@2026");
+        console.log("✅ Authenticated successfully!");
+        console.log("Checking in items:", entry.items);
         const results = await processInventoryUpdate(entry as any);
         console.log("Result:", results);
         process.exit(0);
