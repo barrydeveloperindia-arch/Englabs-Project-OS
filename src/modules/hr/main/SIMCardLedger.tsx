@@ -169,27 +169,54 @@ export const SIMCardLedger: React.FC = () => {
         const border = '━━━━━━━━━━━━━━━━━━━━';
         if (sim) {
             const status = getSimStatus(sim);
-            const daysText = status.daysLeft !== null 
-                ? (status.daysLeft < 0 ? `(Expired ${Math.abs(status.daysLeft)} days ago)` : `(${status.daysLeft} days remaining)`)
-                : '';
-            message = `${border}\n` +
-                      `📶 *ENGLABS SIM RECHARGE DETAILS*\n` +
-                      `${border}\n` +
-                      `• *SIM ID:* ${sim.simId}\n` +
-                      `• *Name:* ${sim.assignedTo}\n` +
-                      `• *Mobile:* ${sim.mobileNumber}\n` +
-                      `• *Operator:* ${sim.operator}\n` +
-                      `• *Department:* ${sim.department}\n` +
-                      `• *Plan:* ${sim.plan || '—'}\n` +
-                      `• *Recharge Date:* ${sim.rechargeDate || '—'}\n` +
-                      `• *Expiry Date:* ${sim.expiryDate || '—'}\n` +
-                      `• *Amount:* ${sim.amount ? `₹${sim.amount}` : '—'}\n` +
-                      `• *Device Type:* ${sim.deviceType || '—'}\n` +
-                      `• *Usage Type:* ${sim.usageType || '—'}\n` +
-                      `• *Status:* ${status.label.toUpperCase()} ${daysText}\n` +
-                      (sim.remarks ? `• *Remarks:* ${sim.remarks}\n` : '') +
-                      `${border}\n` +
-                      `Please take action to recharge outstanding numbers.`;
+            const isExpired = status.label === 'Expired';
+            const actionWord = isExpired ? 'Expired' : 'Expiring';
+            
+            if (sim.operator.toUpperCase() === 'JIO') {
+                message = `Recharge plan ${actionWord} on ${sim.expiryDate || '—'} !\n` +
+                          `Plan Name : ${sim.plan || '—'}\n` +
+                          `Jio Number : ${sim.mobileNumber} (${sim.assignedTo})\n` +
+                          `Recharge using MyJio and enjoy zero convenience charges on all recharges.\n` +
+                          `To recharge - http://tiny.jio.com/dmyjiorchgpl`;
+            } else if (sim.operator.toUpperCase() === 'AIRTEL') {
+                if (sim.plan.toLowerCase().includes('family') || sim.remarks.toLowerCase().includes('postpaid')) {
+                    message = `Dear Customer, your Airtel Postpaid Bill of Rs.${sim.amount || '—'} is due on ${sim.expiryDate || '—'}.\n` +
+                              `Airtel Number : ${sim.mobileNumber} (${sim.assignedTo})\n` +
+                              `Plan Name : ${sim.plan || '—'}\n` +
+                              `Please pay immediately via Airtel Thanks app to avoid late fee charges.\n` +
+                              `To pay - https://www.airtel.in/postpaid-recharge`;
+                } else {
+                    message = `Dear Customer, your Airtel Recharge plan is ${actionWord} on ${sim.expiryDate || '—'}.\n` +
+                              `Plan Name : ${sim.plan || '—'}\n` +
+                              `Airtel Number : ${sim.mobileNumber} (${sim.assignedTo})\n` +
+                              `Please recharge immediately via Airtel Thanks App to continue unlimited services.\n` +
+                              `To recharge - https://www.airtel.in/prepaid-recharge`;
+                }
+            } else if (sim.operator.toUpperCase() === 'VI') {
+                message = `Recharge plan ${actionWord} on ${sim.expiryDate || '—'} !\n` +
+                          `Plan Name : ${sim.plan || '—'}\n` +
+                          `Vi Number : ${sim.mobileNumber} (${sim.assignedTo})\n` +
+                          `Recharge using Vi App and enjoy zero convenience charges.\n` +
+                          `To recharge - https://www.myvi.in/quick-recharge`;
+            } else if (sim.operator.toUpperCase() === 'BSNL') {
+                message = `Dear Customer, BSNL mobile number ${sim.mobileNumber} (${sim.assignedTo}) plan is ${actionWord} on ${sim.expiryDate || '—'}.\n` +
+                          `Plan Name : ${sim.plan || '—'}\n` +
+                          `Please recharge immediately via BSNL portal to avoid service bar.\n` +
+                          `To recharge - https://portal.bsnl.in/`;
+            } else {
+                // Fallback general format
+                message = `${border}\n` +
+                          `📶 *SIM RECHARGE REMINDER*\n` +
+                          `${border}\n` +
+                          `• *Name:* ${sim.assignedTo}\n` +
+                          `• *Mobile:* ${sim.mobileNumber}\n` +
+                          `• *Operator:* ${sim.operator}\n` +
+                          `• *Plan:* ${sim.plan || '—'}\n` +
+                          `• *Expiry:* ${sim.expiryDate || '—'}\n` +
+                          `• *Status:* ${status.label.toUpperCase()}\n` +
+                          `${border}\n` +
+                          `Please recharge immediately!`;
+            }
         } else if (type === 'filtered') {
             message = `${border}\n` +
                       `📋 *ENGLABS SIM STATUS REPORT*\n` +
