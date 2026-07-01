@@ -839,23 +839,25 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
                                                     </div>
                                                 </div>
 
-                                                <div className="flex items-center gap-2.5 text-xs text-slate-655 dark:text-slate-400 min-w-0 col-span-2 md:col-span-1 border-t border-slate-100 dark:border-slate-800 pt-2 mt-1">
-                                                    <DollarSign className="w-4 h-4 text-emerald-500 dark:text-emerald-450 shrink-0" />
-                                                    <div className="truncate">
-                                                        <span className="font-bold block text-[9px] uppercase tracking-wider text-slate-400 dark:text-slate-500">Vnd ➔ Eng Budget:</span>
-                                                        <span className="font-mono font-bold text-slate-800 dark:text-white text-xs">
-                                                            ₹{(p.poRelease?.vendorCost || 0).toLocaleString('en-IN')}
-                                                        </span>
+                                                <div className="col-span-2 grid grid-cols-2 gap-4 border-t border-slate-100 dark:border-slate-800 pt-3 mt-1">
+                                                    <div className="flex items-center gap-2.5 text-xs text-slate-655 dark:text-slate-400 min-w-0">
+                                                        <DollarSign className="w-4 h-4 text-emerald-500 dark:text-emerald-450 shrink-0" />
+                                                        <div className="min-w-0">
+                                                            <span className="font-bold block text-[9px] uppercase tracking-wider text-slate-405 dark:text-slate-500 whitespace-nowrap">Vnd ➔ Eng Budget</span>
+                                                            <span className="font-mono font-bold text-slate-800 dark:text-white text-xs">
+                                                                ₹{(p.poRelease?.vendorCost || 0).toLocaleString('en-IN')}
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                <div className="flex items-center gap-2.5 text-xs text-slate-655 dark:text-slate-400 min-w-0 col-span-2 md:col-span-1 border-t border-slate-100 dark:border-slate-800 pt-2 mt-1">
-                                                    <DollarSign className="w-4 h-4 text-blue-500 dark:text-blue-450 shrink-0" />
-                                                    <div className="truncate">
-                                                        <span className="font-bold block text-[9px] uppercase tracking-wider text-slate-400 dark:text-slate-500">Eng ➔ Client Budget:</span>
-                                                        <span className="font-mono font-bold text-slate-800 dark:text-white text-xs">
-                                                            ₹{(p.poRelease?.customerSalePrice || 0).toLocaleString('en-IN')}
-                                                        </span>
+                                                    <div className="flex items-center gap-2.5 text-xs text-slate-655 dark:text-slate-400 min-w-0">
+                                                        <DollarSign className="w-4 h-4 text-blue-500 dark:text-blue-450 shrink-0" />
+                                                        <div className="min-w-0">
+                                                            <span className="font-bold block text-[9px] uppercase tracking-wider text-slate-405 dark:text-slate-500 whitespace-nowrap">Eng ➔ Client Budget</span>
+                                                            <span className="font-mono font-bold text-slate-800 dark:text-white text-xs">
+                                                                ₹{(p.poRelease?.customerSalePrice || 0).toLocaleString('en-IN')}
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
