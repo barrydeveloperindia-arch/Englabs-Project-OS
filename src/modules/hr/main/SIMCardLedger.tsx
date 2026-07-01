@@ -164,7 +164,7 @@ export const SIMCardLedger: React.FC = () => {
     };
 
     // Share Expiry Details on WhatsApp
-    const shareWhatsApp = (sim?: SIMRecord) => {
+    const shareWhatsApp = (sim?: SIMRecord, type: 'single' | 'summary' | 'filtered' = 'summary') => {
         let message = '';
         if (sim) {
             const status = getSimStatus(sim);
@@ -176,6 +176,16 @@ export const SIMCardLedger: React.FC = () => {
                       `*Status:* ${status.label.toUpperCase()} ${sim.expiryDate ? `(Exp: ${sim.expiryDate})` : ''}\n` +
                       `${sim.remarks ? `*Remarks:* ${sim.remarks}\n` : ''}\n` +
                       `Please recharge immediately!`;
+        } else if (type === 'filtered') {
+            message = `*Englabs SIM Filtered Registry* 📋\n` +
+                      `*Active Filters:* Operator: ${operatorFilter}, Status: ${statusFilter}\n` +
+                      `*Count:* ${filteredSims.length} SIMs\n\n` +
+                      filteredSims.map(s => {
+                          const status = getSimStatus(s);
+                          return `• *${s.assignedTo}* (${s.mobileNumber})\n` +
+                                 `  Operator: ${s.operator} | Exp: ${s.expiryDate || 'N/A'}\n` +
+                                 `  Status: ${status.label}`;
+                      }).join('\n\n');
         } else {
             // General Expiry summary
             const expiredList = sims.filter(s => getSimStatus(s).label === 'Expired');
@@ -500,12 +510,20 @@ export const SIMCardLedger: React.FC = () => {
                     </div>
 
                      <div className="flex gap-4">
-                        <button 
+                         <button 
                             onClick={() => shareWhatsApp()}
                             className="flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba5a] text-white font-black py-3 px-5 rounded-2xl text-xs uppercase tracking-wider transition-colors shadow-sm cursor-pointer border-none"
                         >
                             <Share2 className="w-3.5 h-3.5" />
                             WhatsApp Summary
+                        </button>
+                        <button 
+                            onClick={() => shareWhatsApp(undefined, 'filtered')}
+                            className="flex items-center gap-2 bg-[#128C7E] hover:bg-[#075E54] text-white font-black py-3 px-5 rounded-2xl text-xs uppercase tracking-wider transition-colors shadow-sm cursor-pointer border-none"
+                            title="Share currently filtered list"
+                        >
+                            <Share2 className="w-3.5 h-3.5" />
+                            WhatsApp Filtered ({filteredSims.length})
                         </button>
                         <button 
                             onClick={exportExcel}
@@ -564,7 +582,14 @@ export const SIMCardLedger: React.FC = () => {
                                                 {status.label}
                                             </span>
                                         </td>
-                                        <td className="py-5 px-8 text-right">
+                                        <td className="py-5 px-8 text-right space-x-1">
+                                            <button 
+                                                onClick={() => shareWhatsApp(sim)}
+                                                className="p-2 hover:bg-emerald-50 rounded-lg text-emerald-600 hover:text-emerald-800 transition-all cursor-pointer inline-flex items-center border-none bg-transparent"
+                                                title="Share on WhatsApp"
+                                            >
+                                                <Share2 className="w-3.5 h-3.5" />
+                                            </button>
                                             <button 
                                                 onClick={() => setEditingSim(sim)}
                                                 className="p-2 hover:bg-slate-100 rounded-lg text-slate-500 hover:text-slate-900 transition-all cursor-pointer inline-flex items-center border-none bg-transparent"
