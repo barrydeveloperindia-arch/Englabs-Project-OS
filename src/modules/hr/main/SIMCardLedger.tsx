@@ -166,12 +166,15 @@ export const SIMCardLedger: React.FC = () => {
     // Share Expiry Details on WhatsApp
     const shareWhatsApp = (sim?: SIMRecord, type: 'single' | 'summary' | 'filtered' = 'summary') => {
         let message = '';
+        const border = '━━━━━━━━━━━━━━━━━━━━';
         if (sim) {
             const status = getSimStatus(sim);
             const daysText = status.daysLeft !== null 
                 ? (status.daysLeft < 0 ? `(Expired ${Math.abs(status.daysLeft)} days ago)` : `(${status.daysLeft} days remaining)`)
                 : '';
-            message = `*Englabs SIM Recharge Details* 📱\n\n` +
+            message = `${border}\n` +
+                      `📶 *ENGLABS SIM RECHARGE DETAILS*\n` +
+                      `${border}\n` +
                       `• *SIM ID:* ${sim.simId}\n` +
                       `• *Name:* ${sim.assignedTo}\n` +
                       `• *Mobile:* ${sim.mobileNumber}\n` +
@@ -180,32 +183,44 @@ export const SIMCardLedger: React.FC = () => {
                       `• *Plan:* ${sim.plan || '—'}\n` +
                       `• *Recharge Date:* ${sim.rechargeDate || '—'}\n` +
                       `• *Expiry Date:* ${sim.expiryDate || '—'}\n` +
+                      `• *Amount:* ${sim.amount ? `₹${sim.amount}` : '—'}\n` +
                       `• *Device Type:* ${sim.deviceType || '—'}\n` +
                       `• *Usage Type:* ${sim.usageType || '—'}\n` +
                       `• *Status:* ${status.label.toUpperCase()} ${daysText}\n` +
-                      `${sim.remarks ? `• *Remarks:* ${sim.remarks}\n` : ''}\n` +
+                      (sim.remarks ? `• *Remarks:* ${sim.remarks}\n` : '') +
+                      `${border}\n` +
                       `Please take action to recharge outstanding numbers.`;
         } else if (type === 'filtered') {
-            message = `*Englabs SIM Filtered Registry* 📋\n` +
-                      `*Active Filters:* Operator: ${operatorFilter}, Status: ${statusFilter}\n` +
-                      `*Count:* ${filteredSims.length} SIMs\n\n` +
-                      filteredSims.map(s => {
+            message = `${border}\n` +
+                      `📋 *ENGLABS SIM STATUS REPORT*\n` +
+                      `${border}\n` +
+                      `🔍 *Active Filters:*\n` +
+                      `• Operator: ${operatorFilter}\n` +
+                      `• Status: ${statusFilter}\n` +
+                      `📊 *Total Count:* ${filteredSims.length} SIMs\n` +
+                      `${border}\n\n` +
+                      filteredSims.map((s, idx) => {
                           const status = getSimStatus(s);
                           const daysText = status.daysLeft !== null 
                               ? (status.daysLeft < 0 ? `(Expired ${Math.abs(status.daysLeft)} days ago)` : `(${status.daysLeft} days left)`)
                               : '';
-                          return `• *${s.assignedTo}* (${s.mobileNumber})\n` +
-                                 `  Operator: ${s.operator} | Plan: ${s.plan || '—'}\n` +
-                                 `  Exp: ${s.expiryDate || '—'} | Status: ${status.label} ${daysText}`;
-                      }).join('\n\n');
+                          return `${idx + 1}️⃣ *${s.assignedTo}* (${s.mobileNumber})\n` +
+                                 `   • Operator: ${s.operator}\n` +
+                                 `   • Plan: ${s.plan || '—'}\n` +
+                                 `   • Expiry: ${s.expiryDate || '—'} ${daysText}\n` +
+                                 `   • Status: ${status.label}`;
+                      }).join('\n\n') + `\n\n${border}`;
         } else {
             // General Expiry summary
             const expiredList = sims.filter(s => getSimStatus(s).label === 'Expired');
             const expiringSoonList = sims.filter(s => getSimStatus(s).label === 'Expiring Soon');
             
-            message = `*Englabs SIM Expiry Summary* 🚨\n` +
-                      `*Date:* 01-Jul-2026\n\n` +
-                      `*🚫 EXPIRED SIMS:*\n` +
+            message = `${border}\n` +
+                      `🚨 *ENGLABS SIM EXPIRY SUMMARY*\n` +
+                      `${border}\n` +
+                      `📅 *Date:* 01-Jul-2026\n` +
+                      `${border}\n\n` +
+                      `🚫 *EXPIRED SIMS:*\n` +
                       (expiredList.length > 0 
                           ? expiredList.map(s => `• ${s.assignedTo} (${s.mobileNumber}) - Expired on ${s.expiryDate || 'N/A'}`).join('\n')
                           : 'None') +
@@ -214,8 +229,9 @@ export const SIMCardLedger: React.FC = () => {
                       (expiringSoonList.length > 0 
                           ? expiringSoonList.map(s => `• ${s.assignedTo} (${s.mobileNumber}) - Expires on ${s.expiryDate}`).join('\n')
                           : 'None') +
-                      `\n\n` +
-                      `Please take action to recharge outstanding numbers.`;
+                      `\n\n${border}\n` +
+                      `Please take action to recharge outstanding numbers.\n` +
+                      `${border}`;
         }
         
         const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
