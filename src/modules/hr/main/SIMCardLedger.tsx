@@ -8,7 +8,8 @@ import {
     Download, 
     Edit2, 
     Smartphone, 
-    XCircle
+    XCircle,
+    Share2
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
@@ -160,6 +161,43 @@ export const SIMCardLedger: React.FC = () => {
 
         saveSims(updatedSims);
         setEditingSim(null);
+    };
+
+    // Share Expiry Details on WhatsApp
+    const shareWhatsApp = (sim?: SIMRecord) => {
+        let message = '';
+        if (sim) {
+            const status = getSimStatus(sim);
+            message = `*Englabs SIM Expiry Alert* 🚨\n\n` +
+                      `*Name:* ${sim.assignedTo}\n` +
+                      `*Mobile:* ${sim.mobileNumber}\n` +
+                      `*Operator:* ${sim.operator}\n` +
+                      `*Department:* ${sim.department}\n` +
+                      `*Status:* ${status.label.toUpperCase()} ${sim.expiryDate ? `(Exp: ${sim.expiryDate})` : ''}\n` +
+                      `${sim.remarks ? `*Remarks:* ${sim.remarks}\n` : ''}\n` +
+                      `Please recharge immediately!`;
+        } else {
+            // General Expiry summary
+            const expiredList = sims.filter(s => getSimStatus(s).label === 'Expired');
+            const expiringSoonList = sims.filter(s => getSimStatus(s).label === 'Expiring Soon');
+            
+            message = `*Englabs SIM Expiry Summary* 🚨\n` +
+                      `*Date:* 01-Jul-2026\n\n` +
+                      `*🚫 EXPIRED SIMS:*\n` +
+                      (expiredList.length > 0 
+                          ? expiredList.map(s => `• ${s.assignedTo} (${s.mobileNumber}) - Expired on ${s.expiryDate || 'N/A'}`).join('\n')
+                          : 'None') +
+                      `\n\n` +
+                      `*⚠️ EXPIRING SOON (7 Days):*\n` +
+                      (expiringSoonList.length > 0 
+                          ? expiringSoonList.map(s => `• ${s.assignedTo} (${s.mobileNumber}) - Expires on ${s.expiryDate}`).join('\n')
+                          : 'None') +
+                      `\n\n` +
+                      `Please take action to recharge outstanding numbers.`;
+        }
+        
+        const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+        window.open(url, '_blank');
     };
 
     // Export to Excel
@@ -358,12 +396,21 @@ export const SIMCardLedger: React.FC = () => {
                                     <h4 className="text-sm font-black text-slate-900 mt-1">{s.assignedTo} ({s.mobileNumber})</h4>
                                     <p className="text-[10px] text-slate-400 font-bold mt-0.5">{s.department} • Operator: {s.operator}</p>
                                 </div>
-                                <button 
-                                    onClick={() => setEditingSim(s)}
-                                    className="px-4 py-2 bg-rose-600 text-white rounded-xl text-[10px] font-black uppercase tracking-wider hover:bg-rose-700 transition-colors shadow-sm cursor-pointer border-none"
-                                >
-                                    Recharge Now
-                                </button>
+                                <div className="flex items-center gap-2">
+                                    <button 
+                                        onClick={() => shareWhatsApp(s)}
+                                        className="p-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl hover:scale-105 transition-all shadow-sm cursor-pointer border-none flex items-center justify-center"
+                                        title="Share on WhatsApp"
+                                    >
+                                        <Share2 className="w-3.5 h-3.5" />
+                                    </button>
+                                    <button 
+                                        onClick={() => setEditingSim(s)}
+                                        className="px-4 py-2 bg-rose-600 text-white rounded-xl text-[10px] font-black uppercase tracking-wider hover:bg-rose-700 transition-colors shadow-sm cursor-pointer border-none"
+                                    >
+                                        Recharge Now
+                                    </button>
+                                </div>
                             </div>
                         );
                     })}
@@ -379,12 +426,21 @@ export const SIMCardLedger: React.FC = () => {
                                         <h4 className="text-sm font-black text-slate-900 mt-1">{s.assignedTo} ({s.mobileNumber})</h4>
                                         <p className="text-[10px] text-slate-400 font-bold mt-0.5">{s.department} • Operator: {s.operator}</p>
                                     </div>
-                                    <button 
-                                        onClick={() => setEditingSim(s)}
-                                        className="px-4 py-2 bg-[#0e4368] text-white rounded-xl text-[10px] font-black uppercase tracking-wider hover:bg-slate-800 transition-colors shadow-sm cursor-pointer border-none"
-                                    >
-                                        Recharge Done
-                                    </button>
+                                    <div className="flex items-center gap-2">
+                                        <button 
+                                            onClick={() => shareWhatsApp(s)}
+                                            className="p-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl hover:scale-105 transition-all shadow-sm cursor-pointer border-none flex items-center justify-center"
+                                            title="Share on WhatsApp"
+                                        >
+                                            <Share2 className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button 
+                                            onClick={() => setEditingSim(s)}
+                                            className="px-4 py-2 bg-[#0e4368] text-white rounded-xl text-[10px] font-black uppercase tracking-wider hover:bg-slate-800 transition-colors shadow-sm cursor-pointer border-none"
+                                        >
+                                            Recharge Done
+                                        </button>
+                                    </div>
                                 </div>
                             );
                         }
@@ -443,7 +499,14 @@ export const SIMCardLedger: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="flex gap-4">
+                     <div className="flex gap-4">
+                        <button 
+                            onClick={() => shareWhatsApp()}
+                            className="flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba5a] text-white font-black py-3 px-5 rounded-2xl text-xs uppercase tracking-wider transition-colors shadow-sm cursor-pointer border-none"
+                        >
+                            <Share2 className="w-3.5 h-3.5" />
+                            WhatsApp Summary
+                        </button>
                         <button 
                             onClick={exportExcel}
                             className="flex items-center gap-2 bg-white border border-slate-200 text-slate-700 font-black py-3 px-5 rounded-2xl text-xs uppercase tracking-wider hover:bg-slate-50 transition-colors shadow-sm cursor-pointer"
