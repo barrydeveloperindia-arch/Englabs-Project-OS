@@ -33,7 +33,7 @@ export interface SIMRecord {
 
 const DEFAULT_SIM_DATA: SIMRecord[] = [
     { simId: 'SIM001', assignedTo: 'CB Anand sir', mobileNumber: '9815087934', department: 'CEO', operator: 'Airtel', deviceType: 'A & A', usageType: 'Official', rechargeDate: '2026-05-01', plan: 'Family Pack', amount: '1199', validityDays: 30, expiryDate: '2026-06-01', doneBy: '', remarks: '' },
-    { simId: 'SIM002', assignedTo: 'Swati Mam', mobileNumber: '9815047934', department: 'CEO', operator: 'Airtel', deviceType: 'A & A', usageType: 'Official', rechargeDate: '', plan: '', amount: '', validityDays: 0, expiryDate: '', doneBy: '', remarks: '' },
+    { simId: 'SIM002', assignedTo: 'Swati Mam', mobileNumber: '9815047934', department: 'CEO', operator: 'JIO', deviceType: 'A & A', usageType: 'Official', rechargeDate: '2026-02-28', plan: 'Rs899_90D_2GB/D_20GB', amount: '899', validityDays: 90, expiryDate: '2026-05-29', doneBy: '', remarks: 'Expired' },
     { simId: 'SIM003', assignedTo: 'Salil Sir', mobileNumber: '9876457934', department: 'CEO', operator: 'Airtel', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '2026-05-01', plan: 'Family Pack', amount: 'DONE', validityDays: 30, expiryDate: '2026-06-01', doneBy: '', remarks: '' },
     { simId: 'SIM004', assignedTo: 'Larissa mam', mobileNumber: '8699515403', department: 'CEO', operator: 'Airtel', deviceType: 'Sky5 Hotal', usageType: 'Official', rechargeDate: '2025-09-08', plan: 'yearly', amount: '2249', validityDays: 365, expiryDate: '2026-09-08', doneBy: '', remarks: '' },
     { simId: 'SIM005', assignedTo: 'Bharat Sir', mobileNumber: '9878407934', department: 'CEO', operator: 'Airtel', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '2026-05-01', plan: 'Family Pack', amount: 'DONE', validityDays: 30, expiryDate: '2026-06-01', doneBy: '', remarks: '' },
@@ -49,7 +49,7 @@ const DEFAULT_SIM_DATA: SIMRecord[] = [
     { simId: 'SIM019', assignedTo: 'Arjun Tiwari', mobileNumber: '7837484439', department: 'Store', operator: 'VI', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '2026-05-25', plan: 'Expired Plan', amount: '—', validityDays: 30, expiryDate: '2026-06-25', doneBy: '', remarks: 'Outgoing & Incoming Stopped' },
     { simId: 'SIM019_Sky', assignedTo: 'KEVEL / Reception', mobileNumber: '8146407934', department: 'SKY5', operator: 'SKY5', deviceType: 'Sky5 Hotal', usageType: 'Official', rechargeDate: '', plan: '', amount: '', validityDays: 0, expiryDate: '', doneBy: '', remarks: '' },
     { simId: 'SIM020', assignedTo: 'School Van', mobileNumber: '8901084836', department: 'School Van', operator: 'BSNL', deviceType: 'Bright Kids School', usageType: 'Official', rechargeDate: '2025-11-18', plan: 'yearly', amount: '1499', validityDays: 365, expiryDate: '2026-11-18', doneBy: '', remarks: '' },
-    { simId: 'SIM021', assignedTo: 'Sunny / Reception', mobileNumber: '9876049652', department: 'School', operator: 'Airtel', deviceType: 'Bright Kids School', usageType: 'Official', rechargeDate: '2026-04-05', plan: 'yearly', amount: '2249', validityDays: 365, expiryDate: '2027-04-05', doneBy: '', remarks: '' }
+    { simId: 'SIM021', assignedTo: 'Sunny / Reception', mobileNumber: '9876049652', department: 'School', operator: 'Airtel', deviceType: 'Bright Kids School', usageType: 'Official', rechargeDate: '2026-04-05', plan: 'yearly',                              amount: '2249', validityDays: 365, expiryDate: '2027-04-05', doneBy: '', remarks: '' }
 ];
 
 export const SIMCardLedger: React.FC = () => {
@@ -64,7 +64,7 @@ export const SIMCardLedger: React.FC = () => {
     const currentDate = new Date(currentDateStr);
 
     useEffect(() => {
-        const stored = localStorage.getItem('englabs_sim_ledger_v2');
+        const stored = localStorage.getItem('englabs_sim_ledger_v4');
         if (stored) {
             try {
                 setSims(JSON.parse(stored));
@@ -73,13 +73,13 @@ export const SIMCardLedger: React.FC = () => {
             }
         } else {
             setSims(DEFAULT_SIM_DATA);
-            localStorage.setItem('englabs_sim_ledger_v2', JSON.stringify(DEFAULT_SIM_DATA));
+            localStorage.setItem('englabs_sim_ledger_v4', JSON.stringify(DEFAULT_SIM_DATA));
         }
     }, []);
 
     const saveSims = (newSims: SIMRecord[]) => {
         setSims(newSims);
-        localStorage.setItem('englabs_sim_ledger_v2', JSON.stringify(newSims));
+        localStorage.setItem('englabs_sim_ledger_v4', JSON.stringify(newSims));
     };
 
     // Calculate SIM Status details
