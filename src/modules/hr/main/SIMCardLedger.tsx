@@ -32,16 +32,16 @@ export interface SIMRecord {
 }
 
 const DEFAULT_SIM_DATA: SIMRecord[] = [
-    { simId: 'SIM001', assignedTo: 'CB Anand sir', mobileNumber: '9815087934', department: 'CEO', operator: 'Airtel', deviceType: 'A & A', usageType: 'Official', rechargeDate: '2026-05-01', plan: 'Family Pack', amount: '1199', validityDays: 30, expiryDate: '2026-06-01', doneBy: '', remarks: '' },
+    { simId: 'SIM001', assignedTo: 'CB Anand sir', mobileNumber: '9815087934', department: 'CEO', operator: 'Airtel', deviceType: 'A & A', usageType: 'Official', rechargeDate: '2026-06-21', plan: 'Infinity Family 1199', amount: '2188.90', validityDays: 30, expiryDate: '2026-07-01', doneBy: '', remarks: 'Postpaid Bill due 01-Jul-2026' },
     { simId: 'SIM002', assignedTo: 'Swati Mam', mobileNumber: '9815047934', department: 'CEO', operator: 'JIO', deviceType: 'A & A', usageType: 'Official', rechargeDate: '2026-02-28', plan: 'Rs899_90D_2GB/D_20GB', amount: '899', validityDays: 90, expiryDate: '2026-05-29', doneBy: '', remarks: 'Expired' },
-    { simId: 'SIM003', assignedTo: 'Salil Sir', mobileNumber: '9876457934', department: 'CEO', operator: 'Airtel', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '2026-05-01', plan: 'Family Pack', amount: 'DONE', validityDays: 30, expiryDate: '2026-06-01', doneBy: '', remarks: '' },
+    { simId: 'SIM003', assignedTo: 'Salil Sir', mobileNumber: '9876457934', department: 'CEO', operator: 'Airtel', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '2026-06-21', plan: 'Infinity Family 1199', amount: 'Child (Billed under SIM001)', validityDays: 30, expiryDate: '2026-07-01', doneBy: '', remarks: 'Postpaid Bill due 01-Jul-2026' },
     { simId: 'SIM004', assignedTo: 'Larissa mam', mobileNumber: '8699515403', department: 'CEO', operator: 'Airtel', deviceType: 'Sky5 Hotal', usageType: 'Official', rechargeDate: '2025-09-08', plan: 'yearly', amount: '2249', validityDays: 365, expiryDate: '2026-09-08', doneBy: '', remarks: '' },
-    { simId: 'SIM005', assignedTo: 'Bharat Sir', mobileNumber: '9878407934', department: 'CEO', operator: 'Airtel', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '2026-05-01', plan: 'Family Pack', amount: 'DONE', validityDays: 30, expiryDate: '2026-06-01', doneBy: '', remarks: '' },
+    { simId: 'SIM005', assignedTo: 'Bharat Sir', mobileNumber: '9878407934', department: 'CEO', operator: 'Airtel', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '2026-06-21', plan: 'Infinity Family 1199', amount: 'Child (Billed under SIM001)', validityDays: 30, expiryDate: '2026-07-01', doneBy: '', remarks: 'Postpaid Bill due 01-Jul-2026' },
     { simId: 'SIM006', assignedTo: 'Shreeya Mam', mobileNumber: '9115895673', department: 'CEO', operator: 'VI', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '', plan: '', amount: '', validityDays: 0, expiryDate: '', doneBy: '', remarks: '' },
     { simId: 'SIM007', assignedTo: 'Gaurav', mobileNumber: '9779395934', department: 'DGPS / Civil', operator: 'Airtel', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '2025-12-18', plan: 'yearly', amount: '2249', validityDays: 365, expiryDate: '2026-12-18', doneBy: '', remarks: '' },
     { simId: 'SIM008', assignedTo: 'Gaurav / Shubham', mobileNumber: '8360841498', department: 'HR / Admin / Opretions', operator: 'JIO', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '2026-01-13', plan: 'yearly', amount: '3599', validityDays: 365, expiryDate: '2027-01-13', doneBy: '', remarks: '' },
     { simId: 'SIM009', assignedTo: 'Ratnesh', mobileNumber: '8360585697', department: 'Accounts', operator: 'JIO', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '', plan: 'Monthly', amount: '299', validityDays: 28, expiryDate: '2026-05-21', doneBy: '', remarks: '' },
-    { simId: 'SIM012', assignedTo: 'Shubham', mobileNumber: '9815573934', department: 'Marketing-1', operator: 'JIO', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '', plan: 'yearly', amount: '2249', validityDays: 365, expiryDate: '2027-02-25', doneBy: '', remarks: '' },
+    { simId: 'SIM012', assignedTo: 'Shubham', mobileNumber: '9815573934', department: 'Marketing-1', operator: 'Airtel', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '', plan: 'yearly', amount: '2249', validityDays: 365, expiryDate: '2027-02-25', doneBy: '', remarks: '' },
     { simId: 'SIM013', assignedTo: 'Shubham', mobileNumber: '7814352421', department: 'Marketing-2', operator: 'JIO', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '2026-05-05', plan: 'yearly', amount: '3599', validityDays: 365, expiryDate: '2027-03-20', doneBy: '', remarks: '' },
     { simId: 'SIM014', assignedTo: 'Anurag', mobileNumber: '6284953120', department: 'Machine Room', operator: 'JIO', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '2026-06-04', plan: 'Monthly', amount: '346', validityDays: 28, expiryDate: '2026-07-02', doneBy: '', remarks: '' },
     { simId: 'SIM017', assignedTo: 'Ratnesh', mobileNumber: '7589277985', department: 'Accounts', operator: 'BSNL', deviceType: 'Englabs', usageType: 'Official', rechargeDate: '', plan: '', amount: '', validityDays: 0, expiryDate: '', doneBy: '', remarks: '' },
@@ -64,7 +64,7 @@ export const SIMCardLedger: React.FC = () => {
     const currentDate = new Date(currentDateStr);
 
     useEffect(() => {
-        const stored = localStorage.getItem('englabs_sim_ledger_v5');
+        const stored = localStorage.getItem('englabs_sim_ledger_v6');
         if (stored) {
             try {
                 setSims(JSON.parse(stored));
@@ -73,13 +73,13 @@ export const SIMCardLedger: React.FC = () => {
             }
         } else {
             setSims(DEFAULT_SIM_DATA);
-            localStorage.setItem('englabs_sim_ledger_v5', JSON.stringify(DEFAULT_SIM_DATA));
+            localStorage.setItem('englabs_sim_ledger_v6', JSON.stringify(DEFAULT_SIM_DATA));
         }
     }, []);
 
     const saveSims = (newSims: SIMRecord[]) => {
         setSims(newSims);
-        localStorage.setItem('englabs_sim_ledger_v5', JSON.stringify(newSims));
+        localStorage.setItem('englabs_sim_ledger_v6', JSON.stringify(newSims));
     };
 
     // Calculate SIM Status details
