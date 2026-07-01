@@ -159,6 +159,8 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
     const [poNumber, setPoNumber] = useState('');
     const [poConfirmed, setPoConfirmed] = useState(false);
     const [client, setClient] = useState('');
+    const [vendorCost, setVendorCost] = useState<number | string>(0);
+    const [customerSalePrice, setCustomerSalePrice] = useState<number | string>(0);
 
     // Audio Dictation using Web Speech Recognition API
     const startDictation = () => {
@@ -233,6 +235,10 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
         setPoConfirmed(project.planning.poConfirmed || false);
         setClient(project.client || '');
         
+        // Load budget fields
+        setVendorCost(project.poRelease?.vendorCost !== undefined ? project.poRelease.vendorCost : 0);
+        setCustomerSalePrice(project.poRelease?.customerSalePrice !== undefined ? project.poRelease.customerSalePrice : 0);
+        
         setIsEditModalOpen(true);
         addLog(`Opened editor for Project ${project.projectId}`);
     };
@@ -276,6 +282,11 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
                 porterPayments: Number(porterPayments) || 0,
                 inputsRequired: inputsRequired,
                 preparingPartsDate: preparingPartsDate
+            },
+            poRelease: {
+                ...editingProject.poRelease,
+                vendorCost: Number(vendorCost) || 0,
+                customerSalePrice: Number(customerSalePrice) || 0
             }
         };
 
@@ -819,6 +830,26 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
                                                         <span className="font-semibold text-slate-800 dark:text-white text-xs">{s.preparingPartsDate || '—'}</span>
                                                     </div>
                                                 </div>
+
+                                                <div className="flex items-center gap-2.5 text-xs text-slate-655 dark:text-slate-400 min-w-0 col-span-2 md:col-span-1 border-t border-slate-100 dark:border-slate-800 pt-2 mt-1">
+                                                    <DollarSign className="w-4 h-4 text-emerald-500 dark:text-emerald-450 shrink-0" />
+                                                    <div className="truncate">
+                                                        <span className="font-bold block text-[9px] uppercase tracking-wider text-slate-400 dark:text-slate-500">Vnd ➔ Eng Budget:</span>
+                                                        <span className="font-mono font-bold text-slate-800 dark:text-white text-xs">
+                                                            ₹{(p.poRelease?.vendorCost || 0).toLocaleString('en-IN')}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex items-center gap-2.5 text-xs text-slate-655 dark:text-slate-400 min-w-0 col-span-2 md:col-span-1 border-t border-slate-100 dark:border-slate-800 pt-2 mt-1">
+                                                    <DollarSign className="w-4 h-4 text-blue-500 dark:text-blue-450 shrink-0" />
+                                                    <div className="truncate">
+                                                        <span className="font-bold block text-[9px] uppercase tracking-wider text-slate-400 dark:text-slate-500">Eng ➔ Client Budget:</span>
+                                                        <span className="font-mono font-bold text-slate-800 dark:text-white text-xs">
+                                                            ₹{(p.poRelease?.customerSalePrice || 0).toLocaleString('en-IN')}
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </div>
 
                                             {isBlocked && (
@@ -1140,6 +1171,40 @@ export const DailyStandup: React.FC<DailyStandupProps> = ({ projects, onUpdatePr
                                     <span className="text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer select-none" onClick={() => setPoConfirmed(prev => !prev)}>
                                         Client PO Confirmed
                                     </span>
+                                </div>
+                            </div>
+
+                            {/* Project Budgets */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                    <label className="text-[9px] font-black text-slate-400 dark:text-slate-400 uppercase tracking-wider block">Budget: Vendor to Englabs</label>
+                                    <div className="relative flex items-stretch">
+                                        <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-slate-200 dark:border-slate-800 bg-slate-105 dark:bg-slate-900 text-[10px] font-mono font-black text-slate-500 uppercase tracking-wider">
+                                            VND ➔ ENG
+                                        </span>
+                                        <input 
+                                            type="number"
+                                            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-r-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-emerald-500/50 transition-all font-bold"
+                                            value={vendorCost}
+                                            onChange={(e) => setVendorCost(Number(e.target.value) || 0)}
+                                            placeholder="₹ Vendor Cost..."
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-[9px] font-black text-slate-400 dark:text-slate-400 uppercase tracking-wider block">Budget: Englabs to Client</label>
+                                    <div className="relative flex items-stretch">
+                                        <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-slate-200 dark:border-slate-800 bg-slate-105 dark:bg-slate-900 text-[10px] font-mono font-black text-slate-500 uppercase tracking-wider">
+                                            ENG ➔ CLT
+                                        </span>
+                                        <input 
+                                            type="number"
+                                            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-r-xl p-3 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-emerald-500/50 transition-all font-bold"
+                                            value={customerSalePrice}
+                                            onChange={(e) => setCustomerSalePrice(Number(e.target.value) || 0)}
+                                            placeholder="₹ Sale Price..."
+                                        />
+                                    </div>
                                 </div>
                             </div>
 
