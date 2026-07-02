@@ -78,7 +78,7 @@
       },
       {
         "name": "SBL Black Matt",
-        "itemCode": "ENG-0565",
+        "itemCode": "MAT-005",
         "category": "Paints",
         "currentStock": 28.0,
         "unit": "Pcs",
@@ -283,7 +283,7 @@
       },
       {
         "name": "Rit Black Dye",
-        "itemCode": "ENG-0408",
+        "itemCode": "DYE-022",
         "category": "Chemicals",
         "currentStock": 6.0,
         "unit": "Kg",
@@ -404,7 +404,7 @@
       },
       {
         "name": "Lamination Sheet",
-        "itemCode": "ENG-0366",
+        "itemCode": "LAM-107",
         "category": "Stationery",
         "currentStock": 10.0,
         "unit": "Pcs",
@@ -453,7 +453,7 @@
       },
       {
         "name": "Attendance Register",
-        "itemCode": "ENG-0290",
+        "itemCode": "REG-111",
         "category": "Stationery",
         "currentStock": 1.0,
         "unit": "Pcs",
@@ -538,7 +538,7 @@
       },
       {
         "name": "AA Cell",
-        "itemCode": "ENG-0282",
+        "itemCode": "ENG-0530",
         "category": "General",
         "currentStock": 6.0,
         "unit": "Pcs",
@@ -551,7 +551,7 @@
       },
       {
         "name": "AAA Cell",
-        "itemCode": "ENG-0281",
+        "itemCode": "ENG-0044",
         "category": "General",
         "currentStock": 5.0,
         "unit": "Pcs",
@@ -624,7 +624,7 @@
       },
       {
         "name": "Pencil",
-        "itemCode": "ENG-0399",
+        "itemCode": "PEN-125",
         "category": "Stationery",
         "currentStock": 10.0,
         "unit": "Pcs",
@@ -673,7 +673,7 @@
       },
       {
         "name": "Surgical Blade",
-        "itemCode": "ENG-0432",
+        "itemCode": "BLA-129",
         "category": "General",
         "currentStock": 2.0,
         "unit": "pack",
@@ -782,7 +782,7 @@
       },
       {
         "name": "Inkjet Ink",
-        "itemCode": "ENG-0358",
+        "itemCode": "INK-138",
         "category": "Stationery",
         "currentStock": 1.0,
         "unit": "Pcs",
@@ -843,7 +843,7 @@
       },
       {
         "name": "Fevitite",
-        "itemCode": "ENG-0335",
+        "itemCode": "ADH-143",
         "category": "Chemicals",
         "currentStock": 2.0,
         "unit": "Pcs",
@@ -904,7 +904,7 @@
       },
       {
         "name": "Masking Tape",
-        "itemCode": "ENG-0529",
+        "itemCode": "ENG-0525",
         "category": "Stationery",
         "currentStock": 185.0,
         "unit": "Pcs",
@@ -965,7 +965,7 @@
       },
       {
         "name": "Fevikwik",
-        "itemCode": "ENG-0334",
+        "itemCode": "ENG-0079",
         "category": "Chemicals",
         "currentStock": 116.0,
         "unit": "Pcs",
@@ -974,7 +974,7 @@
         "totalOutward": 0,
         "minThreshold": 10,
         "lastUpdated": "2026-06-04T12:00:00Z",
-        "unitPrice": 54.37
+        "unitPrice": 55.08
       },
       {
         "name": "White Envelopes",
@@ -1002,7 +1002,7 @@
       },
       {
         "name": "Painting Brush",
-        "itemCode": "ENG-0535",
+        "itemCode": "BRU-156",
         "category": "General",
         "currentStock": 2.0,
         "unit": "Pcs",
@@ -1027,7 +1027,7 @@
       },
       {
         "name": "Standard Lac",
-        "itemCode": "ENG-0427",
+        "itemCode": "MIS-158",
         "category": "General",
         "currentStock": 10.0,
         "unit": "Box",
@@ -1148,7 +1148,7 @@
       },
       {
         "name": "Plastic Gloves",
-        "itemCode": "ENG-0402",
+        "itemCode": "ENG-0522",
         "category": "General",
         "currentStock": 5.0,
         "unit": "pack",
@@ -1173,7 +1173,7 @@
       },
       {
         "name": "Rubber Band",
-        "itemCode": "ENG-0410",
+        "itemCode": "MIS-311",
         "category": "General",
         "currentStock": 5.0,
         "unit": "pack",
@@ -1270,7 +1270,7 @@
       },
       {
         "name": "Curtain Rod",
-        "itemCode": "ENG-0317",
+        "itemCode": "MIS-319",
         "category": "General",
         "currentStock": 1.0,
         "unit": "Box",
@@ -1511,7 +1511,7 @@
       },
       {
         "name": "Urinal Matt",
-        "itemCode": "ENG-0438",
+        "itemCode": "MIS-503",
         "category": "General",
         "currentStock": 7.0,
         "unit": "Pcs",
@@ -1584,7 +1584,7 @@
       },
       {
         "name": "Baking Powder",
-        "itemCode": "ENG-0291",
+        "itemCode": "MIS-509",
         "category": "General",
         "currentStock": 1.0,
         "unit": "Pcs",
@@ -1693,7 +1693,7 @@
       },
       {
         "name": "Colin",
-        "itemCode": "ENG-0313",
+        "itemCode": "CHE-607",
         "category": "Chemicals",
         "currentStock": 2.0,
         "unit": "bottle",
@@ -1893,7 +1893,7 @@
       },
       {
         "name": "SBL Black Matt",
-        "itemCode": "ENG-0565",
+        "itemCode": "MAT-005",
         "category": "Paints",
         "currentStock": 28.0,
         "unit": "Pcs",
@@ -2098,7 +2098,7 @@
       },
       {
         "name": "Rit Black Dye",
-        "itemCode": "ENG-0408",
+        "itemCode": "DYE-022",
         "category": "Chemicals",
         "currentStock": 6.0,
         "unit": "Kg",
@@ -2219,7 +2219,7 @@
       },
       {
         "name": "Lamination Sheet",
-        "itemCode": "ENG-0366",
+        "itemCode": "LAM-107",
         "category": "Stationery",
         "currentStock": 10.0,
         "unit": "Pcs",
@@ -2268,7 +2268,7 @@
       },
       {
         "name": "Attendance Register",
-        "itemCode": "ENG-0290",
+        "itemCode": "REG-111",
         "category": "Stationery",
         "currentStock": 1.0,
         "unit": "Pcs",
@@ -2353,7 +2353,7 @@
       },
       {
         "name": "AA Cell",
-        "itemCode": "ENG-0282",
+        "itemCode": "ENG-0530",
         "category": "General",
         "currentStock": 6.0,
         "unit": "Pcs",
@@ -2366,7 +2366,7 @@
       },
       {
         "name": "AAA Cell",
-        "itemCode": "ENG-0281",
+        "itemCode": "ENG-0044",
         "category": "General",
         "currentStock": 5.0,
         "unit": "Pcs",
@@ -2439,7 +2439,7 @@
       },
       {
         "name": "Pencil",
-        "itemCode": "ENG-0399",
+        "itemCode": "PEN-125",
         "category": "Stationery",
         "currentStock": 10.0,
         "unit": "Pcs",
@@ -2488,7 +2488,7 @@
       },
       {
         "name": "Surgical Blade",
-        "itemCode": "ENG-0432",
+        "itemCode": "BLA-129",
         "category": "General",
         "currentStock": 2.0,
         "unit": "pack",
@@ -2597,7 +2597,7 @@
       },
       {
         "name": "Inkjet Ink",
-        "itemCode": "ENG-0358",
+        "itemCode": "INK-138",
         "category": "Stationery",
         "currentStock": 1.0,
         "unit": "Pcs",
@@ -2658,7 +2658,7 @@
       },
       {
         "name": "Fevitite",
-        "itemCode": "ENG-0335",
+        "itemCode": "ADH-143",
         "category": "Chemicals",
         "currentStock": 2.0,
         "unit": "Pcs",
@@ -2719,7 +2719,7 @@
       },
       {
         "name": "Masking Tape",
-        "itemCode": "ENG-0529",
+        "itemCode": "ENG-0525",
         "category": "Stationery",
         "currentStock": 185.0,
         "unit": "Pcs",
@@ -2780,7 +2780,7 @@
       },
       {
         "name": "Fevikwik",
-        "itemCode": "ENG-0334",
+        "itemCode": "ENG-0079",
         "category": "Chemicals",
         "currentStock": 116.0,
         "unit": "Pcs",
@@ -2789,7 +2789,7 @@
         "totalOutward": 0,
         "minThreshold": 10,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 54.37
+        "unitPrice": 55.08
       },
       {
         "name": "White Envelopes",
@@ -2817,7 +2817,7 @@
       },
       {
         "name": "Painting Brush",
-        "itemCode": "ENG-0535",
+        "itemCode": "BRU-156",
         "category": "General",
         "currentStock": 2.0,
         "unit": "Pcs",
@@ -2842,7 +2842,7 @@
       },
       {
         "name": "Standard Lac",
-        "itemCode": "ENG-0427",
+        "itemCode": "MIS-158",
         "category": "General",
         "currentStock": 10.0,
         "unit": "Box",
@@ -2963,7 +2963,7 @@
       },
       {
         "name": "Plastic Gloves",
-        "itemCode": "ENG-0402",
+        "itemCode": "ENG-0522",
         "category": "General",
         "currentStock": 5.0,
         "unit": "pack",
@@ -2988,7 +2988,7 @@
       },
       {
         "name": "Rubber Band",
-        "itemCode": "ENG-0410",
+        "itemCode": "MIS-311",
         "category": "General",
         "currentStock": 5.0,
         "unit": "pack",
@@ -3085,7 +3085,7 @@
       },
       {
         "name": "Curtain Rod",
-        "itemCode": "ENG-0317",
+        "itemCode": "MIS-319",
         "category": "General",
         "currentStock": 1.0,
         "unit": "Box",
@@ -3326,7 +3326,7 @@
       },
       {
         "name": "Urinal Matt",
-        "itemCode": "ENG-0438",
+        "itemCode": "MIS-503",
         "category": "General",
         "currentStock": 7.0,
         "unit": "Pcs",
@@ -3399,7 +3399,7 @@
       },
       {
         "name": "Baking Powder",
-        "itemCode": "ENG-0291",
+        "itemCode": "MIS-509",
         "category": "General",
         "currentStock": 1.0,
         "unit": "Pcs",
@@ -3508,7 +3508,7 @@
       },
       {
         "name": "Colin",
-        "itemCode": "ENG-0313",
+        "itemCode": "CHE-607",
         "category": "Chemicals",
         "currentStock": 2.0,
         "unit": "bottle",
