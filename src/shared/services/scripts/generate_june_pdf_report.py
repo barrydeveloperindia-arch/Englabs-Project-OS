@@ -82,7 +82,6 @@ def main():
     wb = openpyxl.load_workbook(source_excel, data_only=True)
     sheet = wb['Jun_2026']
     
-    # 1. Parse June 2026 details
     category_totals = {
         'Maintenance': 0.0,
         'Emergency': 0.0,
@@ -161,7 +160,6 @@ def main():
             'pdr': pdr_val
         })
         
-    # Get courier budgets mapping for project-wise section
     courier_budgets = {
         'C5023': (2500, 2500),
         'C5195': (1200, 0),
@@ -178,7 +176,6 @@ def main():
         'C5286': (2500, 1000)
     }
     
-    # 2. Build PDF report
     doc = SimpleDocTemplate(
         output_pdf,
         pagesize=A4,
@@ -191,6 +188,10 @@ def main():
     story = []
     styles = getSampleStyleSheet()
     
+    # Theme colors matching Slate Navy
+    navy_hex = '#1E293B'
+    emerald_hex = '#059669'
+    
     # Custom styles
     title_style = ParagraphStyle(
         name='TitleStyle',
@@ -198,7 +199,7 @@ def main():
         fontName='Helvetica-Bold',
         fontSize=24,
         leading=28,
-        textColor=colors.HexColor('#0E4368'),
+        textColor=colors.HexColor(navy_hex),
         spaceAfter=15
     )
     subtitle_style = ParagraphStyle(
@@ -207,7 +208,7 @@ def main():
         fontName='Helvetica-Bold',
         fontSize=12,
         leading=15,
-        textColor=colors.HexColor('#059669'),
+        textColor=colors.HexColor(emerald_hex),
         spaceAfter=30
     )
     section_title_style = ParagraphStyle(
@@ -216,7 +217,7 @@ def main():
         fontName='Helvetica-Bold',
         fontSize=11,
         leading=14,
-        textColor=colors.HexColor('#0E4368'),
+        textColor=colors.HexColor(navy_hex),
         spaceBefore=14,
         spaceAfter=8
     )
@@ -227,14 +228,6 @@ def main():
         fontSize=9.5,
         leading=13,
         textColor=colors.HexColor('#475569')
-    )
-    meta_style = ParagraphStyle(
-        name='MetaStyle',
-        parent=styles['Normal'],
-        fontName='Helvetica-Bold',
-        fontSize=10,
-        leading=14,
-        textColor=colors.HexColor('#1E293B')
     )
     cell_normal_style = ParagraphStyle(
         name='CellNormalStyle',
@@ -287,7 +280,6 @@ def main():
     story.append(Paragraph("ENGLABS PROJECTS", title_style))
     story.append(Paragraph("PETTY CASH AUDIT & COURIER PERFORMANCE REPORT", subtitle_style))
     
-    # Metadata block
     meta_data = [
         [Paragraph("Reporting Period:", cell_bold_style), Paragraph("June 2026", body_style)],
         [Paragraph("Document Type:", cell_bold_style), Paragraph("Monthly Financial Performance & Budget Variance Audit", body_style)],
@@ -315,7 +307,6 @@ def main():
     # ── Page 2: Summary Dashboard ──
     story.append(Paragraph("I. Cash Outflow & Category Summary", section_title_style))
     
-    # Outflow totals Table
     outflow_data = [
         [Paragraph("Category Name", cell_header_style), Paragraph("Total Spent (₹)", cell_header_style)],
         [Paragraph("Maintenance", cell_normal_style), Paragraph(f"₹ {category_totals['Maintenance']:,.2f}", cell_normal_style)],
@@ -332,12 +323,12 @@ def main():
     
     outflow_table = Table(outflow_data, colWidths=[280, 245])
     t_style = TableStyle([
-        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#0E4368')),
+        ('BACKGROUND', (0,0), (-1,0), colors.HexColor(navy_hex)),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
         ('BOTTOMPADDING', (0,0), (-1,0), 5),
         ('TOPPADDING', (0,0), (-1,0), 5),
         ('INNERGRID', (0,0), (-1,-1), 0.5, colors.HexColor('#E2E8F0')),
-        ('BOX', (0,0), (-1,-1), 0.8, colors.HexColor('#0E4368')),
+        ('BOX', (0,0), (-1,-1), 0.8, colors.HexColor(navy_hex)),
     ])
     for idx in range(1, len(outflow_data) - 3):
         bg = colors.HexColor('#F8FAFC') if idx % 2 == 0 else colors.white
@@ -351,111 +342,81 @@ def main():
     story.append(outflow_table)
     story.append(Spacer(1, 10))
     
-    # II. Project summary vs budgets table
-    story.append(Paragraph("II. June Project Payments vs Courier Budgets", section_title_style))
+    # II. Project summary vs budgets table (Consolidated Audit Table)
+    story.append(Paragraph("II. June Project Courier Budget & Expenditure Audit", section_title_style))
+    story.append(Paragraph("This table consolidates the project-specific June expenditure with pre-defined courier budgets to identify financial variances.", body_style))
+    story.append(Spacer(1, 5))
     
-    proj_headers = [
+    audit_headers = [
         Paragraph("Project ID", cell_header_style),
         Paragraph("Client Name", cell_header_style),
-        Paragraph("Actual Dr. (₹)", cell_header_style),
-        Paragraph("VND ➔ ENG Budget (₹)", cell_header_style),
-        Paragraph("ENG ➔ CLT Budget (₹)", cell_header_style)
-    ]
-    proj_rows = [proj_headers]
-    
-    sorted_pids = sorted(project_totals.items(), key=lambda x: x[1], reverse=True)
-    for pid, tot in sorted_pids:
-        bud_v2e, bud_e2c = courier_budgets.get(pid, (None, None))
-        v2e_str = f"₹{bud_v2e:,.2f}" if bud_v2e is not None else "-"
-        e2c_str = f"₹{bud_e2c:,.2f}" if bud_e2c is not None else "-"
-        
-        proj_rows.append([
-            Paragraph(pid, cell_bold_style),
-            Paragraph(get_client_name(pid), cell_normal_style),
-            Paragraph(f"₹{tot:,.2f}", cell_normal_style),
-            Paragraph(v2e_str, cell_normal_style),
-            Paragraph(e2c_str, cell_normal_style)
-        ])
-        
-    proj_table = Table(proj_rows, colWidths=[75, 170, 90, 95, 95])
-    proj_t_style = TableStyle([
-        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#0E4368')),
-        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ('BOTTOMPADDING', (0,0), (-1,0), 5),
-        ('TOPPADDING', (0,0), (-1,0), 5),
-        ('INNERGRID', (0,0), (-1,-1), 0.5, colors.HexColor('#E2E8F0')),
-        ('BOX', (0,0), (-1,-1), 0.8, colors.HexColor('#0E4368')),
-    ])
-    for idx in range(1, len(proj_rows)):
-        bg = colors.HexColor('#F8FAFC') if idx % 2 == 0 else colors.white
-        proj_t_style.add('BACKGROUND', (0, idx), (-1, idx), bg)
-        proj_t_style.add('BOTTOMPADDING', (0, idx), (-1, idx), 4)
-        proj_t_style.add('TOPPADDING', (0, idx), (-1, idx), 4)
-    proj_table.setStyle(proj_t_style)
-    story.append(proj_table)
-    story.append(PageBreak())
-    
-    # ── Page 3: Budget Variance Analysis ──
-    story.append(Paragraph("III. Project Courier Budget Variance Analysis", section_title_style))
-    story.append(Paragraph("This section highlights projects that have exceeded their total assigned courier budgets.", body_style))
-    story.append(Spacer(1, 10))
-    
-    var_headers = [
-        Paragraph("Project ID", cell_header_style),
-        Paragraph("Client Name", cell_header_style),
-        Paragraph("Total Budget (₹)", cell_header_style),
+        Paragraph("VND ➔ ENG Budget", cell_header_style),
+        Paragraph("ENG ➔ CLT Budget", cell_header_style),
         Paragraph("Actual Dr. (₹)", cell_header_style),
         Paragraph("Variance (₹)", cell_header_style),
         Paragraph("Status", cell_header_style)
     ]
-    var_rows = [var_headers]
+    audit_rows = [audit_headers]
     
+    # Filter projects to only those with actual spent or with budget configured
+    sorted_pids = sorted(project_totals.items(), key=lambda x: x[1], reverse=True)
     for pid, tot in sorted_pids:
         bud_v2e, bud_e2c = courier_budgets.get(pid, (None, None))
-        if bud_v2e is None and bud_e2c is None:
-            continue  # Only evaluate projects with budget
+        
+        # Skip if no actual expenses and no budget configured (e.g. clean up empty rows)
+        if tot == 0 and bud_v2e is None and bud_e2c is None:
+            continue
             
+        v2e_str = f"₹{bud_v2e:,.2f}" if bud_v2e is not None else "-"
+        e2c_str = f"₹{bud_e2c:,.2f}" if bud_e2c is not None else "-"
+        
+        # Calculate Variance
         total_budget = (bud_v2e or 0) + (bud_e2c or 0)
         variance = total_budget - tot
         
-        if variance < 0:
-            status_para = Paragraph("<b>🔴 OVER BUDGET</b>", cell_red_bold_style)
+        if bud_v2e is None and bud_e2c is None:
+            # No budget set
+            var_para = Paragraph("-", cell_normal_style)
+            status_para = Paragraph("No Budget", cell_normal_style)
+        elif variance < 0:
             var_str = f"-₹{abs(variance):,.2f}"
             var_para = Paragraph(var_str, cell_red_bold_style)
+            status_para = Paragraph("🔴 Over Budget", cell_red_bold_style)
         else:
-            status_para = Paragraph("<b>🟢 UNDER BUDGET</b>", cell_green_bold_style)
             var_str = f"+₹{variance:,.2f}"
             var_para = Paragraph(var_str, cell_green_bold_style)
+            status_para = Paragraph("🟢 Under Budget", cell_green_bold_style)
             
-        var_rows.append([
+        audit_rows.append([
             Paragraph(pid, cell_bold_style),
             Paragraph(get_client_name(pid), cell_normal_style),
-            Paragraph(f"₹{total_budget:,.2f}", cell_normal_style),
-            Paragraph(f"₹{tot:,.2f}", cell_normal_style),
+            Paragraph(v2e_str, cell_normal_style),
+            Paragraph(e2c_str, cell_normal_style),
+            Paragraph(f"₹{tot:,.2f}", cell_bold_style if tot > 0 else cell_normal_style),
             var_para,
             status_para
         ])
         
-    var_table = Table(var_rows, colWidths=[70, 150, 95, 75, 80, 55])
-    var_t_style = TableStyle([
-        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#0E4368')),
+    audit_table = Table(audit_rows, colWidths=[55, 120, 75, 75, 65, 70, 65])
+    audit_t_style = TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), colors.HexColor(navy_hex)),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
         ('BOTTOMPADDING', (0,0), (-1,0), 5),
         ('TOPPADDING', (0,0), (-1,0), 5),
         ('INNERGRID', (0,0), (-1,-1), 0.5, colors.HexColor('#E2E8F0')),
-        ('BOX', (0,0), (-1,-1), 0.8, colors.HexColor('#0E4368')),
+        ('BOX', (0,0), (-1,-1), 0.8, colors.HexColor(navy_hex)),
     ])
-    for idx in range(1, len(var_rows)):
+    for idx in range(1, len(audit_rows)):
         bg = colors.HexColor('#F8FAFC') if idx % 2 == 0 else colors.white
-        var_t_style.add('BACKGROUND', (0, idx), (-1, idx), bg)
-        var_t_style.add('BOTTOMPADDING', (0, idx), (-1, idx), 5)
-        var_t_style.add('TOPPADDING', (0, idx), (-1, idx), 5)
-    var_table.setStyle(var_t_style)
-    story.append(var_table)
+        audit_t_style.add('BACKGROUND', (0, idx), (-1, idx), bg)
+        audit_t_style.add('BOTTOMPADDING', (0, idx), (-1, idx), 4)
+        audit_t_style.add('TOPPADDING', (0, idx), (-1, idx), 4)
+    audit_table.setStyle(audit_t_style)
+    story.append(audit_table)
     story.append(PageBreak())
     
-    # ── Page 4+: Date-wise Transaction Details ──
-    story.append(Paragraph("IV. Date-wise Detailed Transactions Log", section_title_style))
+    # ── Page 3+: Date-wise Transaction Details ──
+    story.append(Paragraph("III. Date-wise Detailed Transactions Log", section_title_style))
     
     log_headers = [
         Paragraph("Date", cell_header_style),
@@ -482,14 +443,15 @@ def main():
             Paragraph(pdr_str, cell_normal_style)
         ])
         
-    log_table = Table(log_rows, colWidths=[45, 230, 60, 60, 65, 65], repeatRows=1)
+    # Balanced Column widths: Date=40pt, Desc=250pt, Cr=50pt, Dr=50pt, ProjID=60pt, ProjDr=75pt
+    log_table = Table(log_rows, colWidths=[40, 250, 50, 50, 60, 75], repeatRows=1)
     log_t_style = TableStyle([
-        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#0E4368')),
+        ('BACKGROUND', (0,0), (-1,0), colors.HexColor(navy_hex)),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
         ('BOTTOMPADDING', (0,0), (-1,0), 4),
         ('TOPPADDING', (0,0), (-1,0), 4),
         ('INNERGRID', (0,0), (-1,-1), 0.5, colors.HexColor('#E2E8F0')),
-        ('BOX', (0,0), (-1,-1), 0.8, colors.HexColor('#0E4368')),
+        ('BOX', (0,0), (-1,-1), 0.8, colors.HexColor(navy_hex)),
     ])
     for idx in range(1, len(log_rows)):
         bg = colors.HexColor('#F8FAFC') if idx % 2 == 0 else colors.white

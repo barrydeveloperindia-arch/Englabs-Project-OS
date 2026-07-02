@@ -52,6 +52,23 @@ def safe_copy_styles(src_cell, dest_cell):
     if src_cell.number_format:
         dest_cell.number_format = src_cell.number_format
 
+def autofit_sheet_columns(ws, min_width=12, desc_col_idx=None, desc_width=35):
+    for col in ws.columns:
+        col_letter = get_column_letter(col[0].column)
+        max_len = 0
+        for cell in col:
+            # Skip merged cells value calculations if they are formulas starting with =
+            if cell.value:
+                val_str = str(cell.value)
+                if not val_str.startswith('='):
+                    max_len = max(max_len, len(val_str))
+        
+        # If it's a description column, set larger width
+        if desc_col_idx and col[0].column == desc_col_idx:
+            ws.column_dimensions[col_letter].width = desc_width
+        else:
+            ws.column_dimensions[col_letter].width = max(max_len + 3, min_width)
+
 def main():
     source_excel = 'G:\\HR Team Managements\\Englabs Projects APK\\Patty Cash Details\\Englabs Patty Cash.xlsx'
     output_dir = 'G:\\HR Team Managements\\Englabs Projects APK\\Patty Cash Details'
@@ -227,22 +244,23 @@ def main():
     # Create new workbook
     new_wb = openpyxl.Workbook()
     
-    # Styles
-    navy_fill = PatternFill(start_color='0E4368', end_color='0E4368', fill_type='solid')
-    light_blue_fill = PatternFill(start_color='F8FAFC', end_color='F8FAFC', fill_type='solid')
-    light_green_fill = PatternFill(start_color='ECFDF5', end_color='ECFDF5', fill_type='solid')
+    # Theme Styles (Slate Navy theme)
+    navy_fill = PatternFill(start_color='1E293B', end_color='1E293B', fill_type='solid') # Slate 800
+    sub_header_fill = PatternFill(start_color='475569', end_color='475569', fill_type='solid') # Slate 600
+    light_blue_fill = PatternFill(start_color='F1F5F9', end_color='F1F5F9', fill_type='solid') # Slate 100
+    light_green_fill = PatternFill(start_color='ECFDF5', end_color='ECFDF5', fill_type='solid') # Emerald 50
     header_font = Font(name='Segoe UI', size=11, bold=True, color='FFFFFF')
-    title_font = Font(name='Segoe UI', size=16, bold=True, color='0E4368')
-    bold_font = Font(name='Segoe UI', size=10, bold=True)
-    normal_font = Font(name='Segoe UI', size=10)
+    title_font = Font(name='Segoe UI', size=16, bold=True, color='1E293B')
+    bold_font = Font(name='Segoe UI', size=10, bold=True, color='1E293B')
+    normal_font = Font(name='Segoe UI', size=10, color='334155')
     kpi_title_font = Font(name='Segoe UI', size=9, color='64748B', bold=True)
-    kpi_value_font = Font(name='Segoe UI', size=16, bold=True, color='0E4368')
+    kpi_value_font = Font(name='Segoe UI', size=16, bold=True, color='1E293B')
     kpi_green_font = Font(name='Segoe UI', size=16, bold=True, color='059669')
     center_align = Alignment(horizontal='center', vertical='center')
     left_align = Alignment(horizontal='left', vertical='center')
     right_align = Alignment(horizontal='right', vertical='center')
     border_thin = Side(style='thin', color='CBD5E1')
-    border_double = Side(style='double', color='0E4368')
+    border_double = Side(style='double', color='1E293B')
     grid_border = Border(left=border_thin, right=border_thin, top=border_thin, bottom=border_thin)
     total_border = Border(top=border_thin, bottom=border_double)
     
@@ -254,41 +272,38 @@ def main():
     ws_ov['A1'] = "Englabs Petty Cash 2026 - Consolidated Overview"
     ws_ov['A1'].font = title_font
     
-    # ── KPI Cards Setup ──
-    # Card 1: Total Credit
+    # KPI Cards Setup
     ws_ov.merge_cells("A3:C3")
     ws_ov["A3"] = "TOTAL CREDIT RECEIVED"
     ws_ov["A3"].font = kpi_title_font
     ws_ov["A3"].alignment = center_align
     ws_ov["A3"].fill = light_blue_fill
     ws_ov.merge_cells("A4:C5")
-    ws_ov["A4"] = "=B16"  # Link to Total Credit in Table Row 16
+    ws_ov["A4"] = "=B16"
     ws_ov["A4"].font = kpi_value_font
     ws_ov["A4"].alignment = center_align
     ws_ov["A4"].number_format = '₹#,##0.00'
     ws_ov["A4"].fill = light_blue_fill
     
-    # Card 2: Total Debit
     ws_ov.merge_cells("D3:F3")
     ws_ov["D3"] = "TOTAL DEBIT OUTFLOW"
     ws_ov["D3"].font = kpi_title_font
     ws_ov["D3"].alignment = center_align
     ws_ov["D3"].fill = light_blue_fill
     ws_ov.merge_cells("D4:F5")
-    ws_ov["D4"] = "=C16"  # Link to Total Debit in Table Row 16
+    ws_ov["D4"] = "=C16"
     ws_ov["D4"].font = kpi_value_font
     ws_ov["D4"].alignment = center_align
     ws_ov["D4"].number_format = '₹#,##0.00'
     ws_ov["D4"].fill = light_blue_fill
     
-    # Card 3: Net Balance
     ws_ov.merge_cells("G3:I3")
     ws_ov["G3"] = "CURRENT NET BALANCE"
     ws_ov["G3"].font = kpi_title_font
     ws_ov["G3"].alignment = center_align
     ws_ov["G3"].fill = light_green_fill
     ws_ov.merge_cells("G4:I5")
-    ws_ov["G4"] = "=D16"  # Link to Total Balance in Table Row 16
+    ws_ov["G4"] = "=D16"
     ws_ov["G4"].font = kpi_green_font
     ws_ov["G4"].alignment = center_align
     ws_ov["G4"].number_format = '₹#,##0.00'
@@ -299,7 +314,7 @@ def main():
         for c in range(1, 10):
             ws_ov.cell(row=r, column=c).border = grid_border
             
-    # Overview Table Headers (Row 8)
+    # Table Headers
     ov_headers = ["Month", "Credit (Cr.)", "Debit (Dr.)", "Net Balance", "Maintenance", "Emergency", "Zepto / Blinkit", "Sky5 Hotel", "Mr. Behl", "Gurpreet Porter", "Project Dr."]
     for col_idx, h in enumerate(ov_headers, 1):
         cell = ws_ov.cell(row=8, column=col_idx, value=h)
@@ -343,10 +358,8 @@ def main():
         cell.number_format = '₹#,##0.00'
         cell.border = total_border
         
-    for col_idx in range(1, 12):
-        ws_ov.column_dimensions[get_column_letter(col_idx)].width = 18
-        
-    # ── Add Charts ──
+    autofit_sheet_columns(ws_ov, min_width=16)
+    
     # Column Chart: Credit vs Debit
     chart = BarChart()
     chart.type = "col"
@@ -354,7 +367,7 @@ def main():
     chart.title = "Monthly Cash Flow (Credit vs Debit)"
     chart.y_axis.title = "Amount (Rs.)"
     chart.x_axis.title = "Month"
-    chart.width = 15
+    chart.width = 16
     chart.height = 10
     
     data = Reference(ws_ov, min_col=2, min_row=8, max_col=3, max_row=15)
@@ -366,11 +379,11 @@ def main():
     # Pie Chart: Category distribution
     pie = PieChart()
     pie.title = "Expense Distribution by Category"
-    pie.width = 15
+    pie.width = 16
     pie.height = 10
     
     labels = Reference(ws_ov, min_col=5, min_row=8, max_col=11, max_row=8)
-    data_pie = Reference(ws_ov, min_col=5, min_row=16, max_col=11, max_row=16) # Sum totals row
+    data_pie = Reference(ws_ov, min_col=5, min_row=16, max_col=11, max_row=16)
     pie.add_data(data_pie, from_rows=True, titles_from_data=False)
     pie.set_categories(labels)
     ws_ov.add_chart(pie, "G19")
@@ -381,7 +394,6 @@ def main():
     ws_proj['A1'] = "Consolidated Project-wise Petty Cash Expenses 2026"
     ws_proj['A1'].font = title_font
     
-    # Project summary headers
     proj_headers = ["Project ID", "Client Name", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Cumulative Total"]
     for col_idx, h in enumerate(proj_headers, 1):
         cell = ws_proj.cell(row=3, column=col_idx, value=h)
@@ -399,6 +411,7 @@ def main():
     
     for pid, cumul in project_cumulatives:
         ws_proj.cell(row=current_row, column=1, value=pid).font = bold_font
+        ws_proj.cell(row=current_row, column=1).alignment = center_align
         ws_proj.cell(row=current_row, column=2, value=get_client_name(pid)).font = normal_font
         
         for col_idx, m_name in enumerate(months, 3):
@@ -428,11 +441,8 @@ def main():
         cell.number_format = '₹#,##0.00'
         cell.border = total_border
         
-    ws_proj.column_dimensions['A'].width = 15
-    ws_proj.column_dimensions['B'].width = 30
-    for c in range(3, 11):
-        ws_proj.column_dimensions[get_column_letter(c)].width = 15
-        
+    autofit_sheet_columns(ws_proj, min_width=14)
+    
     # Sheet 3: Project_Filter_Lookup
     ws_look = new_wb.create_sheet(title="Project_Filter_Lookup")
     ws_look.views.sheetView[0].showGridLines = True
@@ -456,10 +466,10 @@ def main():
     ws_look.add_data_validation(dv)
     dv.add(ws_look['B2'])
     
-    ws_look['B2'].font = Font(name='Segoe UI', size=11, bold=True, color='0E4368')
-    ws_look['B2'].border = Border(left=Side(style='medium', color='0E4368'), right=Side(style='medium', color='0E4368'),
-                                   top=Side(style='medium', color='0E4368'), bottom=Side(style='medium', color='0E4368'))
-    ws_look['B2'].fill = PatternFill(start_color='F1F5F9', end_color='F1F5F9', fill_type='solid')
+    ws_look['B2'].font = Font(name='Segoe UI', size=11, bold=True, color='1E293B')
+    ws_look['B2'].border = Border(left=Side(style='medium', color='1E293B'), right=Side(style='medium', color='1E293B'),
+                                   top=Side(style='medium', color='1E293B'), bottom=Side(style='medium', color='1E293B'))
+    ws_look['B2'].fill = PatternFill(start_color='F8FAFC', end_color='F8FAFC', fill_type='solid')
     ws_look['B2'].alignment = center_align
     
     lookup_headers = ["Month", "Date", "From", "Payment Mode", "Received By", "Transaction Details", "Credit (Cr.)", "Debit (Dr.)", 
@@ -474,9 +484,8 @@ def main():
     formula_filter = f'=FILTER(CHOOSECOLS(All_Transactions!A4:Q{len(all_transactions)+10}, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17), All_Transactions!P4:P{len(all_transactions)+10} = B2, "No transactions found")'
     ws_look.cell(row=5, column=1, value=formula_filter)
     
-    for c in range(1, 17):
-        ws_look.column_dimensions[get_column_letter(c)].width = 18
-        
+    autofit_sheet_columns(ws_look, min_width=14, desc_col_idx=6, desc_width=35)
+    
     # Sheet 4: All_Transactions
     ws_all = new_wb.create_sheet(title="All_Transactions")
     ws_all.views.sheetView[0].showGridLines = True
@@ -521,9 +530,7 @@ def main():
                 
         current_row += 1
         
-    for c in range(1, 18):
-        max_len = max(len(str(ws_all.cell(row=r, column=c).value or '')) for r in range(3, min(current_row, 30)))
-        ws_all.column_dimensions[get_column_letter(c)].width = max(max_len + 3, 15)
+    autofit_sheet_columns(ws_all, min_width=14, desc_col_idx=6, desc_width=35)
 
     # 5. Copy individual month sheets exactly as tabs
     for name in months:
