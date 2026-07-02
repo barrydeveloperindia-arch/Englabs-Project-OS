@@ -308,7 +308,8 @@ def main():
     story.append(Paragraph("I. Cash Outflow & Category Summary", section_title_style))
     
     outflow_data = [
-        [Paragraph("Category Name", cell_header_style), Paragraph("Total Spent (₹)", cell_header_style)],
+        [Paragraph("Category / Balance Description", cell_header_style), Paragraph("Amount (₹)", cell_header_style)],
+        [Paragraph("Opening Balance (Brought Forward from May 2026)", cell_bold_style), Paragraph("₹ 1,892.00", cell_bold_style)],
         [Paragraph("Maintenance", cell_normal_style), Paragraph(f"₹ {category_totals['Maintenance']:,.2f}", cell_normal_style)],
         [Paragraph("Emergency", cell_normal_style), Paragraph(f"₹ {category_totals['Emergency']:,.2f}", cell_normal_style)],
         [Paragraph("Zepto / Blinkit", cell_normal_style), Paragraph(f"₹ {category_totals['Zepto / Blinkit']:,.2f}", cell_normal_style)],
@@ -317,8 +318,8 @@ def main():
         [Paragraph("Gurpreet Porter", cell_normal_style), Paragraph(f"₹ {category_totals['Gurpreet Porter']:,.2f}", cell_normal_style)],
         [Paragraph("Project Dr. (Direct Project Expenses)", cell_normal_style), Paragraph(f"₹ {category_totals['Project Dr.']:,.2f}", cell_normal_style)],
         [Paragraph("Total Outflow (Debit)", cell_bold_style), Paragraph(f"₹ {total_dr:,.2f}", cell_bold_style)],
-        [Paragraph("Total Credit (Cr.)", cell_bold_style), Paragraph(f"₹ {total_cr:,.2f}", cell_bold_style)],
-        [Paragraph("Net Balance", cell_bold_style), Paragraph(f"₹ {total_cr - total_dr:,.2f}", cell_bold_style)]
+        [Paragraph("Total Credit Received (including opening balance)", cell_bold_style), Paragraph(f"₹ {total_cr:,.2f}", cell_bold_style)],
+        [Paragraph("June Closing Balance (Carried Forward to July 2026)", cell_green_bold_style), Paragraph(f"₹ {total_cr - total_dr:,.2f}", cell_green_bold_style)]
     ]
     
     outflow_table = Table(outflow_data, colWidths=[280, 245])
