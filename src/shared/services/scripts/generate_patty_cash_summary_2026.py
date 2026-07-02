@@ -352,7 +352,10 @@ def main():
     
     for c in range(2, 12):
         col_let = get_column_letter(c)
-        cell = ws_ov.cell(row=current_row, column=c, value=f"=SUM({col_let}9:{col_let}{current_row-1})")
+        if c == 4: # Column D is Net Balance
+            cell = ws_ov.cell(row=current_row, column=c, value=f"={col_let}{current_row-1}")
+        else:
+            cell = ws_ov.cell(row=current_row, column=c, value=f"=SUM({col_let}9:{col_let}{current_row-1})")
         cell.font = bold_font
         cell.alignment = right_align
         cell.number_format = '₹#,##0.00'
