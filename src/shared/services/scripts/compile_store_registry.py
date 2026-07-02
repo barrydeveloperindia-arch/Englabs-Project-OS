@@ -23,15 +23,13 @@ log_path = 'c:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\Englabs_In
 logo_path = 'c:\\Users\\SAM\\Documents\\Antigravity\\Englabs Projects\\src\\assets\\englabs_logo.png'
 
 output_excel = 'G:\\HR Team Managements\\Englabs Projects APK\\Store\\Rate List Record\\Englabs_Store_Rate_Registry_2026.xlsx'
-output_pdf = 'G:\\HR Team Managements\\Englabs Projects APK\\Store\\Rate List Record\\Englabs_Store_Rate_Registry_Report.pdf'
+output_pdf = 'G:\\HR Team Managements\\Englabs Projects APK\\Store\\Rate List Record\\Englabs_Store_Rate_Registry_Report_Detailed.pdf'
 
 # Load data
 with open(pdf_items_path, 'r', encoding='utf-8') as f:
     stock_items = json.load(f)
-    
 with open(db_materials_path, 'r', encoding='utf-8') as f:
     db_materials = json.load(f)
-    
 with open(accounts_rates_path, 'r', encoding='utf-8') as f:
     accounts_rates = json.load(f)
 
@@ -155,13 +153,11 @@ for item in stock_items:
     category = item['category']
     n_name = norm(name)
     
-    # Defaults
     item_code = 'N/A'
     location = 'MAIN STORE'
     unit = 'Pcs'
     min_q = 2.0
     
-    # 1. Match from June Stock Excel
     if n_name in june_stock_details:
         det = june_stock_details[n_name]
         item_code = det['code']
@@ -170,7 +166,6 @@ for item in stock_items:
         unit = det['unit']
         min_q = det['min_q']
     else:
-        # Try substring match
         matched_june = None
         for k, v in june_stock_details.items():
             if k in n_name or n_name in k:
@@ -188,7 +183,6 @@ for item in stock_items:
             unit = db_norm[n_name].get('unit', unit)
             min_q = float(db_norm[n_name].get('minThreshold', min_q))
             
-    # Normalize unit from quantity if needed
     if 'kgs' in qty_str.lower() or 'kg' in qty_str.lower():
         unit = 'Kg'
     elif 'ream' in qty_str.lower() or 'rim' in qty_str.lower():
@@ -198,12 +192,10 @@ for item in stock_items:
     elif 'pack' in qty_str.lower():
         unit = 'pack'
         
-    # Get latest inward date (purchase date)
-    inward_date = '2026-04-01' # Default opening stock date
+    inward_date = '2026-04-01'
     if item_code != 'N/A' and item_code.upper() in inward_dates:
         inward_date = inward_dates[item_code.upper()]
         
-    # Get previous purchase rate
     p_rate = None
     note = "Valuation Rate"
     
@@ -306,7 +298,6 @@ ws_dash['E5'] = len([i for i in compiled_list if i['category'].lower() not in ['
 ws_dash['E5'].font = card_val_font
 ws_dash['E5'].alignment = Alignment(horizontal="center")
 
-# Apply card styles
 for row in [4, 5]:
     for col in range(1, 7):
         cell = ws_dash.cell(row=row, column=col)
@@ -339,19 +330,17 @@ thin_border = Border(
     bottom=Side(style='thin', color='E2E8F0')
 )
 
-# Write data rows
 for r_idx, item in enumerate(compiled_list, 2):
     ws_reg.cell(row=r_idx, column=1, value=r_idx - 1).alignment = Alignment(horizontal="center")
     ws_reg.cell(row=r_idx, column=2, value=item['code']).alignment = Alignment(horizontal="center")
     ws_reg.cell(row=r_idx, column=3, value=item['name']).alignment = Alignment(horizontal="left")
     ws_reg.cell(row=r_idx, column=4, value=item['category']).alignment = Alignment(horizontal="center")
     ws_reg.cell(row=r_idx, column=5, value=item['qty']).alignment = Alignment(horizontal="center")
-    ws_reg.cell(row=r_idx, column=6, value=item['qty']).alignment = Alignment(horizontal="center") # Stock qty
+    ws_reg.cell(row=r_idx, column=6, value=item['qty']).alignment = Alignment(horizontal="center")
     ws_reg.cell(row=r_idx, column=7, value=item['unit']).alignment = Alignment(horizontal="center")
     ws_reg.cell(row=r_idx, column=8, value=item['min_q']).alignment = Alignment(horizontal="center")
     ws_reg.cell(row=r_idx, column=9, value=item['inward_date']).alignment = Alignment(horizontal="center")
     
-    # Rates
     c_cell = ws_reg.cell(row=r_idx, column=10, value=item['c_rate'])
     c_cell.number_format = '₹#,##0.00'
     c_cell.alignment = Alignment(horizontal="right")
@@ -368,17 +357,15 @@ for r_idx, item in enumerate(compiled_list, 2):
     pct_cell.number_format = '0.00%'
     pct_cell.alignment = Alignment(horizontal="right")
     
-    # Colors for rate changes
     if item['change'] > 0:
-        ch_cell.font = Font(name="Calibri", size=10, bold=True, color="DC2626") # Red text
+        ch_cell.font = Font(name="Calibri", size=10, bold=True, color="DC2626")
         pct_cell.font = Font(name="Calibri", size=10, bold=True, color="DC2626")
     elif item['change'] < 0:
-        ch_cell.font = Font(name="Calibri", size=10, bold=True, color="16A34A") # Green text
+        ch_cell.font = Font(name="Calibri", size=10, bold=True, color="16A34A")
         pct_cell.font = Font(name="Calibri", size=10, bold=True, color="16A34A")
         
     ws_reg.cell(row=r_idx, column=14, value=item['note']).alignment = Alignment(horizontal="left")
     
-    # Alternating row fill
     bg_color = "F8FAFC" if r_idx % 2 == 0 else "FFFFFF"
     fill = PatternFill(start_color=bg_color, end_color=bg_color, fill_type="solid")
     for col_idx in range(1, len(headers) + 1):
@@ -387,7 +374,6 @@ for r_idx, item in enumerate(compiled_list, 2):
         if col_idx not in [12, 13] or item['change'] == 0:
             c.fill = fill
 
-# Auto-fit columns
 for col in ws_reg.columns:
     max_len = 0
     col_let = get_column_letter(col[0].column)
@@ -401,14 +387,14 @@ for col in ws_reg.columns:
                 max_len = val_len
     ws_reg.column_dimensions[col_let].width = max(max_len + 3, 10)
 
-ws_reg.column_dimensions['C'].width = 35 # Item name fixed width
-ws_reg.column_dimensions['N'].width = 35 # Remarks fixed width
+ws_reg.column_dimensions['C'].width = 35
+ws_reg.column_dimensions['N'].width = 35
 
 wb.save(output_excel)
-print("SUCCESS: Englabs_Store_Rate_Registry_2026.xlsx compiled successfully.")
+print("SUCCESS: Englabs_Store_Rate_Registry_2026.xlsx compiled.")
 
 # ==========================================
-# WRITE REPORTLAB PDF
+# WRITE REPORTLAB PDF (STABLE RENDER & NO OVERLAPS)
 # ==========================================
 class NumberedCanvas(canvas.Canvas):
     def __init__(self, *args, **kwargs):
@@ -429,8 +415,8 @@ class NumberedCanvas(canvas.Canvas):
 
     def draw_page_number(self, page_count):
         self.saveState()
-        self.setFont("Helvetica", 8)
-        self.setFillColor(colors.HexColor("#475569"))
+        self.setFont("Helvetica-Bold", 8)
+        self.setFillColor(colors.HexColor("#092A42"))
         
         # Header
         self.setStrokeColor(colors.HexColor("#E2E8F0"))
@@ -457,7 +443,7 @@ def build_pdf():
     
     styles = getSampleStyleSheet()
     
-    # Custom styles
+    # Custom styles (Industrial Navy & Corporate White color palette)
     title_style = ParagraphStyle(
         'DocTitle',
         parent=styles['Normal'],
@@ -465,7 +451,7 @@ def build_pdf():
         fontSize=18,
         leading=22,
         textColor=colors.HexColor('#092A42'),
-        spaceAfter=4
+        spaceAfter=2
     )
     
     meta_style = ParagraphStyle(
@@ -489,13 +475,14 @@ def build_pdf():
         spaceAfter=8
     )
     
+    # Standard cell style
     cell_style = ParagraphStyle(
         'CellText',
         parent=styles['Normal'],
         fontName='Helvetica',
         fontSize=7,
         leading=9,
-        textColor=colors.HexColor('#334155')
+        textColor=colors.HexColor('#1E293B') # Dark Slate text
     )
     
     cell_style_bold = ParagraphStyle(
@@ -507,18 +494,35 @@ def build_pdf():
     cell_style_center = ParagraphStyle(
         'CellTextCenter',
         parent=cell_style,
-        alignment=1 # Center
+        alignment=1
     )
     
     cell_style_right = ParagraphStyle(
         'CellTextRight',
         parent=cell_style,
-        alignment=2 # Right
+        alignment=2
+    )
+    
+    # Header styles - strictly white text!
+    header_style = ParagraphStyle(
+        'HeaderStyle',
+        parent=styles['Normal'],
+        fontName='Helvetica-Bold',
+        fontSize=8,
+        leading=10,
+        textColor=colors.white,
+        alignment=1 # Center
+    )
+    
+    header_style_left = ParagraphStyle(
+        'HeaderStyleLeft',
+        parent=header_style,
+        alignment=0 # Left
     )
 
     story = []
     
-    # Add Logo at top left
+    # Logo
     logo_w = 40
     logo_h = 40
     if os.path.exists(logo_path):
@@ -530,14 +534,25 @@ def build_pdf():
     story.append(Paragraph("Englabs Store Rate Registry Report", title_style))
     story.append(Paragraph("Detailed Performance, Rack Locations & Procurement Dates Diagnostics (Live 2026)", meta_style))
     
-    # KPI Grid
+    # KPI Grid - Separating Labels and Values to completely avoid text overlaps
     gen_cnt = len([i for i in compiled_list if i['category'].lower() in ['general', 'stationery', 'paints', 'chemicals']])
     raw_cnt = len([i for i in compiled_list if i['category'].lower() not in ['general', 'stationery', 'paints', 'chemicals']])
+    
+    kpi_title_style = ParagraphStyle('KPITitle', parent=cell_style_center, fontName='Helvetica-Bold', fontSize=8, textColor=colors.HexColor('#475569'))
+    kpi_val_style_navy = ParagraphStyle('KPIValNavy', parent=cell_style_center, fontName='Helvetica-Bold', fontSize=18, leading=20, textColor=colors.HexColor('#092A42'))
+    kpi_val_style_emerald = ParagraphStyle('KPIValEmer', parent=cell_style_center, fontName='Helvetica-Bold', fontSize=18, leading=20, textColor=colors.HexColor('#10B981'))
+    kpi_val_style_blue = ParagraphStyle('KPIValBlue', parent=cell_style_center, fontName='Helvetica-Bold', fontSize=18, leading=20, textColor=colors.HexColor('#0284C7'))
+    
     kpi_data = [
         [
-            Paragraph("<b>TOTAL UNIQUE ITEMS</b><br/><font size=14 color='#092A42'><b>304</b></font>", cell_style_center),
-            Paragraph("<b>GENERAL CONSUMABLES</b><br/><font size=14 color='#10B981'><b>" + str(gen_cnt) + "</b></font>", cell_style_center),
-            Paragraph("<b>RAW MATERIALS</b><br/><font size=14 color='#0284C7'><b>" + str(raw_cnt) + "</b></font>", cell_style_center),
+            Paragraph("TOTAL UNIQUE ITEMS", kpi_title_style),
+            Paragraph("GENERAL CONSUMABLES", kpi_title_style),
+            Paragraph("RAW MATERIALS", kpi_title_style),
+        ],
+        [
+            Paragraph("304", kpi_val_style_navy),
+            Paragraph(str(gen_cnt), kpi_val_style_emerald),
+            Paragraph(str(raw_cnt), kpi_val_style_blue),
         ]
     ]
     kpi_table = Table(kpi_data, colWidths=[174, 174, 174])
@@ -545,8 +560,8 @@ def build_pdf():
         ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#F8FAFC')),
         ('BOX', (0,0), (-1,-1), 1, colors.HexColor('#E2E8F0')),
         ('INNERGRID', (0,0), (-1,-1), 0.5, colors.HexColor('#E2E8F0')),
-        ('TOPPADDING', (0,0), (-1,-1), 8),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 8),
+        ('TOPPADDING', (0,0), (-1,-1), 6),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 6),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
     ]))
     story.append(kpi_table)
@@ -554,18 +569,17 @@ def build_pdf():
     
     story.append(Paragraph("Master Store Item Registry", section_style))
     
-    # Table headers (9 columns to prevent width conflict and fit A4 nicely)
-    # Printable width: 523pt
+    # Table headers with white text styles
     table_data = [[
-        Paragraph("<b>S.No.</b>", cell_style_bold),
-        Paragraph("<b>Material Code</b>", cell_style_bold),
-        Paragraph("<b>Material Name</b>", cell_style_bold),
-        Paragraph("<b>Rack</b>", cell_style_bold),
-        Paragraph("<b>Qty / Unit</b>", cell_style_bold),
-        Paragraph("<b>Inward Date</b>", cell_style_bold),
-        Paragraph("<b>Current Rate</b>", cell_style_bold),
-        Paragraph("<b>Prev Rate</b>", cell_style_bold),
-        Paragraph("<b>Rate Change</b>", cell_style_bold),
+        Paragraph("<b>S.No.</b>", header_style),
+        Paragraph("<b>Material Code</b>", header_style),
+        Paragraph("<b>Material Name</b>", header_style_left),
+        Paragraph("<b>Rack</b>", header_style),
+        Paragraph("<b>Qty / Unit</b>", header_style),
+        Paragraph("<b>Inward Date</b>", header_style),
+        Paragraph("<b>Current Rate</b>", header_style),
+        Paragraph("<b>Prev Rate</b>", header_style),
+        Paragraph("<b>Rate Change</b>", header_style),
     ]]
     
     for idx, item in enumerate(compiled_list, 1):
@@ -600,8 +614,7 @@ def build_pdf():
     col_widths = [20, 50, 153, 50, 55, 55, 45, 45, 50]
     
     t_style = TableStyle([
-        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#092A42')),
-        ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#092A42')), # Header background
         ('ALIGN', (0,0), (-1,-1), 'LEFT'),
         ('BOTTOMPADDING', (0,0), (-1,0), 6),
         ('TOPPADDING', (0,0), (-1,0), 6),
@@ -609,10 +622,6 @@ def build_pdf():
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
     ])
     
-    # White header text
-    for i in range(len(table_data[0])):
-        table_data[0][i].style.textColor = colors.white
-        
     for i in range(1, len(table_data)):
         bg = colors.HexColor('#F8FAFC') if i % 2 == 0 else colors.white
         t_style.add('BACKGROUND', (0, i), (-1, i), bg)
@@ -624,6 +633,6 @@ def build_pdf():
     story.append(main_table)
     
     doc.build(story, canvasmaker=NumberedCanvas)
-    print("SUCCESS: Englabs_Store_Rate_Registry_Report.pdf compiled successfully.")
+    print("SUCCESS: Englabs_Store_Rate_Registry_Report.pdf compiled.")
 
 build_pdf()
