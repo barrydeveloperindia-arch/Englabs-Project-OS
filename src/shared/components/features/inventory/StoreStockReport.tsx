@@ -2863,6 +2863,8 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                 )}
                                                 <th className="py-4 px-4 text-center">Available Qty</th>
                                                 <th className="py-4 px-4">Unit</th>
+                                                <th className="py-4 px-4 text-right">Rate (₹)</th>
+                                                <th className="py-4 px-4 text-right">Prev Rate (₹)</th>
                                                 <th className="py-4 px-4 text-center">Status</th>
                                                 <th className="py-4 px-4 text-center print:hidden">Actions</th>
                                             </tr>
@@ -2917,6 +2919,12 @@ const StoreStockReport: React.FC<StoreStockReportProps> = ({
                                                             )}
                                                             <td className="py-4 px-4 text-center font-black text-sm">{item.availableStock}</td>
                                                             <td className="py-4 px-4 font-bold text-slate-500 uppercase">{item.unit}</td>
+                                                            <td className="py-4 px-4 text-right font-bold text-slate-800">
+                                                                {item.unitPrice !== undefined ? `₹${item.unitPrice.toFixed(2)}` : '—'}
+                                                            </td>
+                                                            <td className="py-4 px-4 text-right font-bold text-slate-500">
+                                                                {item.previousRate !== undefined ? `₹${item.previousRate.toFixed(2)}` : '—'}
+                                                            </td>
                                                             <td className="py-4 px-4 text-center">
                                                                 {isLowStock ? (
                                                                     <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[8px] font-black uppercase bg-rose-50 text-rose-600 border border-rose-100">
