@@ -87,7 +87,7 @@
         "totalOutward": 0,
         "minThreshold": 2,
         "lastUpdated": "2026-06-04T12:00:00Z",
-        "unitPrice": 557
+        "unitPrice": 557.0
       },
       {
         "name": "SBL P.P. Primer",
@@ -413,7 +413,7 @@
         "totalOutward": 0,
         "minThreshold": 10,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 8
+        "unitPrice": 8.0
       },
       {
         "name": "L. Clear Folder",
@@ -462,7 +462,7 @@
         "totalOutward": 0,
         "minThreshold": 1,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 150
+        "unitPrice": 150.0
       },
       {
         "name": "Half Day Book",
@@ -538,16 +538,16 @@
       },
       {
         "name": "AA Cell",
-        "itemCode": "ENG-0530",
+        "itemCode": "ENG-0516",
         "category": "General",
-        "currentStock": 6.0,
+        "currentStock": -6.0,
         "unit": "Pcs",
         "location": "Rack-2",
         "totalInward": 8,
         "totalOutward": 0,
         "minThreshold": 10,
         "lastUpdated": "2026-06-04T12:00:00Z",
-        "unitPrice": 12
+        "unitPrice": 12.0
       },
       {
         "name": "AAA Cell",
@@ -560,7 +560,7 @@
         "totalOutward": 0,
         "minThreshold": 10,
         "lastUpdated": "2026-06-04T12:00:00Z",
-        "unitPrice": 10
+        "unitPrice": 10.0
       },
       {
         "name": "Big Size Battery",
@@ -633,7 +633,7 @@
         "totalOutward": 0,
         "minThreshold": 10,
         "lastUpdated": "2026-06-04T12:00:00Z",
-        "unitPrice": 18
+        "unitPrice": 18.0
       },
       {
         "name": "Sticki Notes (Flag)",
@@ -675,14 +675,14 @@
         "name": "Surgical Blade",
         "itemCode": "BLA-129",
         "category": "General",
-        "currentStock": 2.0,
+        "currentStock": 1.0,
         "unit": "pack",
         "location": "Rack-2",
         "totalInward": 35,
         "totalOutward": 0,
         "minThreshold": 10,
         "lastUpdated": "2026-06-04T12:00:00Z",
-        "unitPrice": 450
+        "unitPrice": 450.0
       },
       {
         "name": "White Board Marker",
@@ -791,7 +791,7 @@
         "totalOutward": 0,
         "minThreshold": 1,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 3000
+        "unitPrice": 3000.0
       },
       {
         "name": "Punching Machine",
@@ -852,7 +852,7 @@
         "totalOutward": 0,
         "minThreshold": 2,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 485
+        "unitPrice": 485.0
       },
       {
         "name": "Plastic Reban",
@@ -904,7 +904,7 @@
       },
       {
         "name": "Masking Tape",
-        "itemCode": "ENG-0525",
+        "itemCode": "ENG-0526",
         "category": "Stationery",
         "currentStock": 185.0,
         "unit": "Pcs",
@@ -1036,7 +1036,7 @@
         "totalOutward": 0,
         "minThreshold": 1,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 100
+        "unitPrice": 100.0
       },
       {
         "name": "Black Matt Spray",
@@ -1148,7 +1148,7 @@
       },
       {
         "name": "Plastic Gloves",
-        "itemCode": "ENG-0522",
+        "itemCode": "GLO-309",
         "category": "General",
         "currentStock": 5.0,
         "unit": "pack",
@@ -1279,7 +1279,7 @@
         "totalOutward": 0,
         "minThreshold": 1,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 758
+        "unitPrice": 758.0
       },
       {
         "name": "Paint Wall",
@@ -1902,7 +1902,7 @@
         "totalOutward": 0,
         "minThreshold": 2,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 557
+        "unitPrice": 557.0
       },
       {
         "name": "SBL P.P. Primer",
@@ -2228,7 +2228,7 @@
         "totalOutward": 0,
         "minThreshold": 10,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 8
+        "unitPrice": 8.0
       },
       {
         "name": "L. Clear Folder",
@@ -2277,7 +2277,7 @@
         "totalOutward": 0,
         "minThreshold": 1,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 150
+        "unitPrice": 150.0
       },
       {
         "name": "Half Day Book",
@@ -2353,16 +2353,16 @@
       },
       {
         "name": "AA Cell",
-        "itemCode": "ENG-0530",
+        "itemCode": "ENG-0516",
         "category": "General",
-        "currentStock": 6.0,
+        "currentStock": -6.0,
         "unit": "Pcs",
         "location": "Rack-2",
         "totalInward": 8,
         "totalOutward": 0,
         "minThreshold": 10,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 12
+        "unitPrice": 12.0
       },
       {
         "name": "AAA Cell",
@@ -2375,7 +2375,7 @@
         "totalOutward": 0,
         "minThreshold": 10,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 10
+        "unitPrice": 10.0
       },
       {
         "name": "Big Size Battery",
@@ -2448,7 +2448,7 @@
         "totalOutward": 0,
         "minThreshold": 10,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 18
+        "unitPrice": 18.0
       },
       {
         "name": "Sticki Notes (Flag)",
@@ -2490,14 +2490,14 @@
         "name": "Surgical Blade",
         "itemCode": "BLA-129",
         "category": "General",
-        "currentStock": 2.0,
+        "currentStock": 1.0,
         "unit": "pack",
         "location": "Rack-2",
         "totalInward": 35,
         "totalOutward": 0,
         "minThreshold": 10,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 450
+        "unitPrice": 450.0
       },
       {
         "name": "White Board Marker",
@@ -2606,7 +2606,7 @@
         "totalOutward": 0,
         "minThreshold": 1,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 3000
+        "unitPrice": 3000.0
       },
       {
         "name": "Punching Machine",
@@ -2667,7 +2667,7 @@
         "totalOutward": 0,
         "minThreshold": 2,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 485
+        "unitPrice": 485.0
       },
       {
         "name": "Plastic Reban",
@@ -2719,7 +2719,7 @@
       },
       {
         "name": "Masking Tape",
-        "itemCode": "ENG-0525",
+        "itemCode": "ENG-0526",
         "category": "Stationery",
         "currentStock": 185.0,
         "unit": "Pcs",
@@ -2851,7 +2851,7 @@
         "totalOutward": 0,
         "minThreshold": 1,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 100
+        "unitPrice": 100.0
       },
       {
         "name": "Black Matt Spray",
@@ -2963,7 +2963,7 @@
       },
       {
         "name": "Plastic Gloves",
-        "itemCode": "ENG-0522",
+        "itemCode": "GLO-309",
         "category": "General",
         "currentStock": 5.0,
         "unit": "pack",
@@ -3094,7 +3094,7 @@
         "totalOutward": 0,
         "minThreshold": 1,
         "lastUpdated": "2026-05-14T12:00:00Z",
-        "unitPrice": 758
+        "unitPrice": 758.0
       },
       {
         "name": "Paint Wall",
