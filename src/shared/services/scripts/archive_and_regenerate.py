@@ -3,7 +3,8 @@ import shutil
 import datetime
 
 # Directories
-target_dir = 'G:\\HR Team Managements\\Englabs Projects APK\\Store\\Rate List Record'
+base_dir = 'G:\\HR Team Managements\\Englabs Projects APK\\Store\\Rate List Record'
+target_dir = os.path.join(base_dir, 'Rate List')
 old_dir = os.path.join(target_dir, 'OLD')
 
 # Ensure OLD directory exists
