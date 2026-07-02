@@ -4,7 +4,7 @@ android {
     namespace = "com.englabs.os"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.englabs.projects"
+        applicationId "com.englabs.store"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2
