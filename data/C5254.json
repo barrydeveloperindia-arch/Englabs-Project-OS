@@ -1,6 +1,6 @@
 {
     "projectId": "C5254",
-    "client": "ITL (SONALIKA)",
+    "client": "ITL",
     "planning": {
         "deliveryTerms": "ToPay",
         "budget": 262301,
@@ -75,9 +75,9 @@
     },
     "poRelease": {
         "poVendorSent": "N/A",
-        "vendorName": "Excel Repid TECH",
-        "customerSalePrice": 374716,
-        "vendorCost": 0,
+        "vendorName": "Plastipack",
+        "customerSalePrice": 1000,
+        "vendorCost": 1000,
         "vendorLocation": "Delhi",
         "releaseDate": "2026-06-06"
     },

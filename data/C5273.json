@@ -1,6 +1,6 @@
 {
     "projectId": "C5273",
-    "client": "HC ROBOTIC",
+    "client": "HC Robotics",
     "planning": {
         "poNumber": "",
         "value": 128352,
@@ -78,7 +78,7 @@
         "vendorCost": 1000,
         "releaseDate": "2026-06-12",
         "poVendorSent": "N/A",
-        "vendorName": "Excel",
+        "vendorName": "Excel Rapidtech",
         "customerSalePrice": 3500
     },
     "invoiceRelease": {

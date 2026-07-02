@@ -67,10 +67,10 @@
     },
     "poRelease": {
         "poVendorSent": "",
-        "customerSalePrice": 286754,
+        "customerSalePrice": 8500,
         "vendorName": "Objectify",
         "releaseDate": "2026-06-25",
-        "vendorCost": 286754,
+        "vendorCost": 0,
         "vendorLocation": ""
     },
     "invoiceRelease": {

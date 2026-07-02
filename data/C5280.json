@@ -1,6 +1,6 @@
 {
     "projectId": "C5280",
-    "client": "ITL (SONALIKA)",
+    "client": "ITL",
     "planning": {
         "startDate": "2026-06-23",
         "value": 103425,
@@ -79,7 +79,7 @@
         "vendorLocation": "Delhi",
         "releaseDate": "2026-06-23",
         "poVendorSent": "16944",
-        "vendorName": "excel Rapid Tech",
+        "vendorName": "Excel Rapidtech",
         "customerSalePrice": 1000
     },
     "invoiceRelease": {

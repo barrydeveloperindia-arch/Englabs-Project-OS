@@ -74,9 +74,9 @@
     },
     "poRelease": {
         "vendorName": "Adroitec",
-        "customerSalePrice": 0,
+        "customerSalePrice": 2100,
         "poVendorSent": "",
-        "vendorCost": 0,
+        "vendorCost": 1000,
         "vendorLocation": "",
         "releaseDate": "2026-06-22"
     },

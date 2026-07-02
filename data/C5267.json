@@ -1,6 +1,6 @@
 {
     "projectId": "C5267",
-    "client": "ITL (SONALIKA)",
+    "client": "ITL",
     "planning": {
         "budget": 72926,
         "deliveryTerms": "ToPay",
@@ -80,7 +80,7 @@
         "vendorCost": 1000,
         "vendorLocation": "Delhi",
         "customerSalePrice": 1000,
-        "vendorName": "excel Rapid Tech",
+        "vendorName": "Excel Rapidtech",
         "poVendorSent": "N/A"
     },
     "invoiceRelease": {

@@ -47,7 +47,7 @@
         ]
     },
     "metrics": {
-        "totalComponents": 7,
+        "totalComponents": 5,
         "materialConsumption": "Scanning Modelling",
         "workforce": [
             "Shubham"
@@ -74,8 +74,8 @@
     },
     "poRelease": {
         "poVendorSent": "N/A",
-        "customerSalePrice": 33650,
-        "vendorName": "CICU;",
+        "customerSalePrice": 0,
+        "vendorName": "CICU",
         "releaseDate": "2026-05-26",
         "vendorLocation": "nil",
         "vendorCost": 0

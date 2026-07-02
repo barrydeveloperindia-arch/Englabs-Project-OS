@@ -1,6 +1,6 @@
 {
     "projectId": "C5023",
-    "client": "AV MACHINING",
+    "client": "AV Machining",
     "planning": {
         "deliveryTerms": "ToPay",
         "budget": 28924,
@@ -48,7 +48,7 @@
         "currentStage": "Engineering Design"
     },
     "metrics": {
-        "totalComponents": 90,
+        "totalComponents": 135,
         "materialConsumption": "VC P.P. Inserts",
         "workforce": [
             "Devanshu"
@@ -73,11 +73,11 @@
         "preparingPartsDate": "2026-06-20"
     },
     "poRelease": {
-        "vendorCost": 0,
+        "vendorCost": 2500,
         "vendorLocation": "Delhi",
         "releaseDate": "2026-05-23",
-        "vendorName": "Excel",
-        "customerSalePrice": 41320,
+        "vendorName": "Excel Rapidtech/ Rapid Proto",
+        "customerSalePrice": 2500,
         "poVendorSent": "P2100-EL-12-PO-16911"
     },
     "invoiceRelease": {

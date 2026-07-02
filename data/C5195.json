@@ -68,10 +68,10 @@
     "poRelease": {
         "releaseDate": "2026-05-05",
         "vendorLocation": "Delhi",
-        "vendorCost": 0,
+        "vendorCost": 1200,
         "poVendorSent": "P2100-EL12-PO-74404",
-        "customerSalePrice": 110100,
-        "vendorName": "Excel"
+        "customerSalePrice": 0,
+        "vendorName": "Excel Rapidtech"
     },
     "invoiceRelease": {
         "paymentTerms": "30 days",

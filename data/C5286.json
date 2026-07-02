@@ -1,6 +1,6 @@
 {
     "projectId": "C5286",
-    "client": "Sonalika",
+    "client": "ITL",
     "planning": {
         "startDate": "2026-06-23",
         "value": 0,
@@ -76,10 +76,10 @@
     },
     "poRelease": {
         "poVendorSent": "N/A",
-        "vendorName": "idemi",
-        "customerSalePrice": 0,
+        "vendorName": "Institute for design",
+        "customerSalePrice": 1000,
         "vendorLocation": "Delhi",
-        "vendorCost": 0,
+        "vendorCost": 2500,
         "releaseDate": "2026-06-23"
     },
     "invoiceRelease": {

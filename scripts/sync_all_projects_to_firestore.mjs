@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
@@ -15,8 +16,18 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 async function syncAll() {
+    console.log("Authenticating as admin...");
+    try {
+        await signInWithEmailAndPassword(auth, "englabscivilteam@gmail.com", "Ram@2026");
+        console.log("Authentication successful!");
+    } catch (e) {
+        console.error("Auth failed:", e.message);
+        return;
+    }
+
     const dataDir = './data';
     const files = fs.readdirSync(dataDir).filter(f => f.startsWith('C') && f.endsWith('.json'));
     console.log(`Found ${files.length} project files to sync.`);

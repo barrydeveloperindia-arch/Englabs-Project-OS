@@ -1,6 +1,6 @@
 {
     "projectId": "C5251",
-    "client": "Sonalika",
+    "client": "ITL",
     "planning": {
         "budget": 46844,
         "deliveryTerms": "ToPay",
@@ -77,9 +77,9 @@
     "poRelease": {
         "releaseDate": "2026-06-05",
         "vendorLocation": "Delhi",
-        "vendorCost": 0,
-        "customerSalePrice": 66920,
-        "vendorName": "Rapid Proto;",
+        "vendorCost": 6000,
+        "customerSalePrice": 5000,
+        "vendorName": "Rapid proto",
         "poVendorSent": "N/A"
     },
     "invoiceRelease": {

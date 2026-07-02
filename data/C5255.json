@@ -73,11 +73,11 @@
     },
     "poRelease": {
         "poVendorSent": "P2100-EL12-PO-16953",
-        "customerSalePrice": 9010,
-        "vendorName": "Excel",
+        "customerSalePrice": 700,
+        "vendorName": "Excel Rapidtech",
         "releaseDate": "2026-06-23",
         "vendorLocation": "Delhi",
-        "vendorCost": 6725
+        "vendorCost": 700
     },
     "invoiceRelease": {
         "gstValue": 1621.8,
