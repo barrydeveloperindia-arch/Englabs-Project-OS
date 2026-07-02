@@ -35,27 +35,16 @@ async function run() {
         console.log("✅ Authenticated!");
 
         // Load original compiled list
-        const listPath = 'scratch/compiled_detailed_list.json';
+        const listPath = 'scratch/compiled_detailed_list_coded.json';
         if (!fs.existsSync(listPath)) {
-            console.error("compiled_detailed_list.json not found.");
+            console.error("compiled_detailed_list_coded.json not found.");
             process.exit(1);
         }
-        const originalList = JSON.parse(fs.readFileSync(listPath, 'utf8'));
+        const finalCodedList = JSON.parse(fs.readFileSync(listPath, 'utf8'));
         
-        let nextId = 276;
-        const finalCodedList = [];
         const validCodes = new Set();
-        
-        // 1. Process codes: Keep original if not N/A, assign ENG-xxxx if N/A
-        for (const item of originalList) {
-            let code = item.code;
-            if (!code || code === 'N/A') {
-                code = `ENG-${String(nextId).padStart(4, '0')}`;
-                nextId++;
-            }
-            item.code = code;
-            validCodes.add(code);
-            finalCodedList.push(item);
+        for (const item of finalCodedList) {
+            validCodes.add(item.code);
         }
         
         console.log(`Prepared ${finalCodedList.length} items. Enforcing Firestore sync...`);
@@ -106,7 +95,8 @@ async function run() {
                 unit: item.unit,
                 currentRate: item.c_rate,
                 previousRate: item.p_rate,
-                lastInwardDate: item.inward_date
+                lastInwardDate: item.inward_date,
+                unitPrice: item.c_rate
             };
             
             const stockPayload = {
@@ -123,6 +113,7 @@ async function run() {
                 currentRate: item.c_rate,
                 previousRate: item.p_rate,
                 lastInwardDate: item.inward_date,
+                unitPrice: item.c_rate,
                 lastUpdated: new Date().toISOString()
             };
             
@@ -142,6 +133,7 @@ async function run() {
                             lastInwardDate: item.inward_date,
                             location: item.location,
                             availableStock: parsedQty,
+                            unitPrice: item.c_rate,
                             lastUpdated: new Date().toISOString()
                         }, { merge: true });
                     } else {
