@@ -119,6 +119,7 @@ export interface CurrentStockItem {
     location?: string;
     minThreshold?: number;
     unitPrice?: number;
+    previousRate?: number;
 }
 
 // Build a name -> itemCode mapping from master inventory
